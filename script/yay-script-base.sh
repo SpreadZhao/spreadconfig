@@ -1,0 +1,1 @@
+yay -S base-devel git vim network-manager-applet zsh linuxqq wechat-universal-bwrap tlp pacman-contrib noto-fonts-emoji
