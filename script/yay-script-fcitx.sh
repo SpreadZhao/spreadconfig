@@ -1,0 +1,1 @@
+yay -S fcitx5-im fcitx5-chinese-addons
