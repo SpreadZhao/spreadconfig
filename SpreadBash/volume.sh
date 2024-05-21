@@ -10,4 +10,4 @@ case $1 in
 esac
 
 amixer -q set Master $target unmute
-$SDWM/update-status-bar.sh
+# $SDWM/update-status-bar.sh
