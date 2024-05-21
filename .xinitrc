@@ -16,6 +16,7 @@ fcitx5 &
 /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 &
 flameshot &
 slstatus &
+dunst &
 
 export SDWM=$HOME/SpreadBash
 exec dwm
