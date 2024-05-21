@@ -1,1 +1,1 @@
-yay -S openssh flameshot base-devel lazygit scrcpy libreoffice-still obsidian android-studio code intellij-idea-community-edition obs-studio libxcrypt-compat linuxqq wechat-universal-bwrap tlp pacman-contrib ranger alacritty dunst libnotify
+yay -S openssh flameshot lazygit scrcpy libreoffice-still obsidian android-studio code intellij-idea-community-edition-no-jre obs-studio libxcrypt-compat linuxqq wechat-universal-bwrap tlp pacman-contrib alacritty dunst libnotify alsa-utils
