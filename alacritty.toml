@@ -5,17 +5,17 @@ import = [
 size = 18
 
 [font.bold]
-family = "Terminus (TTF)"
+family = "Terminess Nerd Font"
 style = "Bold"
 
 [font.bold_italic]
-family = "Terminus (TTF)"
+family = "Terminess Nerd Font"
 style = "Bold Italic"
 
 [font.italic]
-family = "Terminus (TTF)"
+family = "Terminess Nerd Font"
 style = "Italic"
 
 [font.normal]
-family = "Terminus (TTF)"
+family = "Terminess Nerd Font"
 style = "Regular"
