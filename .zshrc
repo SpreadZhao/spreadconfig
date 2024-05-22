@@ -115,6 +115,7 @@ alias wk="cd ~/workspaces"
 alias lg="lazygit"
 alias sdwm="cd ~/workspaces/other/spreaddwm"
 alias nh="cd ~/workspaces/obsidianws/notes_homeworks"
+alias vim="nvim"
 
 export PATH=$PATH:/usr/local/texlive/2024/bin/x86_64-linux
 # https://youtrack.jetbrains.com/issue/JBR-1370/White-square-when-running-on-dwm-or-bspwm
