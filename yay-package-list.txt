@@ -17,6 +17,7 @@ fcitx5-chinese-addons
 fcitx5-configtool
 fcitx5-gtk
 fcitx5-qt
+feishu-bin
 flameshot
 github-cli
 grub
@@ -43,6 +44,7 @@ obs-studio
 obsidian
 openssh
 pacman-contrib
+peek
 pipewire
 pipewire-alsa
 pipewire-jack
@@ -56,6 +58,7 @@ scrcpy
 sof-firmware
 tlp
 udisks2
+ueberzugpp
 unzip
 v2ray
 v2raya
