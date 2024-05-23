@@ -116,7 +116,23 @@ alias lg="lazygit"
 alias sdwm="cd ~/workspaces/other/spreaddwm"
 alias nh="cd ~/workspaces/obsidianws/notes_homeworks"
 alias vim="nvim"
+alias eg="microsoft-edge-stable"
 
+# PATH
 export PATH=$PATH:/usr/local/texlive/2024/bin/x86_64-linux
+
+
+
+# config for ranger
+export RANGER_LOAD_DEFAULT_RC=false
+# see https://unix.stackexchange.com/questions/367452/how-to-change-the-default-text-editor-in-ranger
+export EDITOR=nvim
+
+
+
+
+
+
+
 # https://youtrack.jetbrains.com/issue/JBR-1370/White-square-when-running-on-dwm-or-bspwm
 # export _JAVA_AWT_WM_NONREPARENTING=1
