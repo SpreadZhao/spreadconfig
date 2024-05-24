@@ -22,5 +22,11 @@ export _JAVA_AWT_WM_NONREPARENTING=1
 export AWT_TOOLKIT=MToolkit
 wmname LG3D
 
+# touchpad
+xinput set-prop 12 327 1
+xinput set-prop 12 298 1
+xinput set-prop 12 309 0.4
+
+
 export SDWM=$HOME/SpreadBash
 exec dwm
