@@ -23,9 +23,10 @@ export AWT_TOOLKIT=MToolkit
 wmname LG3D
 
 # touchpad
-xinput set-prop 12 327 1
-xinput set-prop 12 298 1
-xinput set-prop 12 309 0.4
+TOUCHPAD_ID=$(xinput list | grep Touchpad | grep -oP 'id=\K\d+')
+xinput set-prop $TOUCHPAD_ID "libinput Tapping Enabled" 1
+xinput set-prop $TOUCHPAD_ID "libinput Natural Scrolling Enabled" 1
+xinput set-prop $TOUCHPAD_ID "libinput Accel Speed" 0.4
 
 
 export SDWM=$HOME/SpreadBash
