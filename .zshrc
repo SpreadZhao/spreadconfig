@@ -136,3 +136,10 @@ export EDITOR=nvim
 
 # https://youtrack.jetbrains.com/issue/JBR-1370/White-square-when-running-on-dwm-or-bspwm
 # export _JAVA_AWT_WM_NONREPARENTING=1
+
+# source /usr/share/nvm/init-nvm.sh
+export http_proxy=127.0.0.1:20171
+export https_proxy=$http_proxy
+export ftp_proxy=$http_proxy
+export rsync_proxy=$http_proxy
+export no_proxy="localhost.127.0.0.1"
