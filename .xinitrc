@@ -22,6 +22,10 @@ export _JAVA_AWT_WM_NONREPARENTING=1
 export AWT_TOOLKIT=MToolkit
 wmname LG3D
 
+# auto lock using xautolock
+xautolock -time 10 -locker slock &
+
+
 # touchpad
 TOUCHPAD_ID=$(xinput list | grep Touchpad | grep -oP 'id=\K\d+')
 xinput set-prop $TOUCHPAD_ID "libinput Tapping Enabled" 1
