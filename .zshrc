@@ -117,9 +117,15 @@ alias sdwm="cd ~/workspaces/other/spreaddwm"
 alias nh="cd ~/workspaces/obsidianws/notes_homeworks"
 alias vim="nvim"
 alias eg="microsoft-edge-stable"
+alias notes="cd ~/workspaces/obsidianws/notes_homeworks"
+alias ra="ranger"
+alias lc="cd ~/workspaces/other/Leetcode"
+alias y="yazi"
+alias svim="sudo -E -s nvim"
 
 # PATH
 export PATH=$PATH:/usr/local/texlive/2024/bin/x86_64-linux
+export PATH=$PATH:/home/spreadzhao/.local/bin/
 
 
 
@@ -143,3 +149,4 @@ export https_proxy=$http_proxy
 export ftp_proxy=$http_proxy
 export rsync_proxy=$http_proxy
 export no_proxy="localhost.127.0.0.1"
+source /usr/share/nvm/init-nvm.sh
