@@ -117,10 +117,10 @@ alias sdwm="cd ~/workspaces/other/spreaddwm"
 alias nh="cd ~/workspaces/obsidianws/notes_homeworks"
 alias vim="nvim"
 alias eg="microsoft-edge-stable"
-alias notes="cd ~/workspaces/obsidianws/notes_homeworks"
-alias ra="ranger"
+# alias notes="cd ~/workspaces/obsidianws/notes_homeworks"
+# alias ra="ranger"
 alias lc="cd ~/workspaces/other/Leetcode"
-alias y="yazi"
+# alias y="yazi"
 alias svim="sudo -E -s nvim"
 
 # PATH
@@ -130,9 +130,9 @@ export PATH=$PATH:/home/spreadzhao/.local/bin/
 
 
 # config for ranger
-export RANGER_LOAD_DEFAULT_RC=false
+# export RANGER_LOAD_DEFAULT_RC=false
 # see https://unix.stackexchange.com/questions/367452/how-to-change-the-default-text-editor-in-ranger
-export EDITOR=nvim
+# export EDITOR=nvim
 
 
 
@@ -150,3 +150,13 @@ export ftp_proxy=$http_proxy
 export rsync_proxy=$http_proxy
 export no_proxy="localhost.127.0.0.1"
 source /usr/share/nvm/init-nvm.sh
+
+# yazi shell wrapper that provides the ability to change the current working directory when exiting yazi.
+function yy() {
+	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")"
+	yazi "$@" --cwd-file="$tmp"
+	if cwd="$(cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
+		builtin cd -- "$cwd"
+	fi
+	rm -f -- "$tmp"
+}
