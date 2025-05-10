@@ -1,0 +1,9 @@
+- AceJump
+- GitToolBox
+- IdeaVim
+- IdeaVim-EasyMotion
+- Key Promoter X
+- Lingma
+- Rainbow Brackets
+- Statistic
+- VSCode Theme
