@@ -1,0 +1,12 @@
+#!/bin/bash
+
+export XDG_SESSION_DESKTOP="sway"
+if [ "$XDG_SESSION_DESKTOP" = "sway" ]; then
+    # https://github.com/swaywm/sway/issues/595
+    export _JAVA_AWT_WM_NONREPARENTING=1
+fi
+export _JAVA_AWT_WM_NONREPARENTING=1
+
+# PATH
+export PATH=$PATH:$HOME/scripts
+export PATH=$PATH:$HOME/.local/bin
