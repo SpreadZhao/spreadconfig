@@ -1,0 +1,46 @@
+# i3blocks configuration file
+#
+# The i3blocks man page describes the usage of the binary,
+# and its website describes the configuration:
+#
+#     https://vivien.github.io/i3blocks
+
+
+# Global properties
+separator=true
+separator_block_width=15
+
+[screenrecord]
+command=~/scripts/get_screenrecord_time.sh
+interval=1
+
+[curr-win]
+align=center
+command=~/scripts/get_curr_window_title.sh
+interval=1
+
+[brightness]
+align=center
+command=~/scripts/get_brightness.sh
+interval=1
+
+[volume]
+align=center
+command=~/scripts/audio.sh
+interval=1
+
+[battery]
+align=center
+command=~/scripts/get_battery.sh
+interval=10
+
+[time]
+align=center
+command=~/scripts/get_time.sh
+interval=1
+signal=10
+
+# [tray]
+# full_text=""
+# command=~/scripts/start_tray.sh
+# signal=11
