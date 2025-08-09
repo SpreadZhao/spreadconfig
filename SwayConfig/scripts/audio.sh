@@ -1,13 +1,15 @@
 #!/bin/bash
 
+display=$(/usr/bin/python ~/scripts/get_display_from_click.py)
+
 # Switch the audio output sink using a Python script
 change_audio_sink() {
-    /usr/bin/python ~/scripts/change_audio_sink.py
+    /usr/bin/python ~/scripts/change_audio_sink.py "$display"
 }
 
 # Switch the audio input source using a Python script
 change_audio_source() {
-    /usr/bin/python ~/scripts/change_audio_source.py
+    /usr/bin/python ~/scripts/change_audio_source.py "$display"
 }
 
 # Handle mouse button clicks

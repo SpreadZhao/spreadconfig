@@ -1,5 +1,6 @@
 #!/usr/bin/env python 
 import subprocess
+import sys
 
 # function to parse output of command "wpctl status" and return a dictionary of sinks with their id and name.
 def parse_wpctl_status():
@@ -47,11 +48,11 @@ for item in sinks:
         output += f" {item['sink_id']}: {item['sink_name']}\n"
 
 # Call wofi and show the list. take the selected sink name and set it as the default sink
-wofi_command = f"echo '{output}' | wofi --show=dmenu --hide-scroll --allow-markup --define=prompt=\"Select Sink\" --location=top_right --height=200 --xoffset=-60"
+wofi_command = f"echo '{output}' | wofi --show=dmenu  --hide-scroll --allow-markup --define=prompt=\"Select Sink\" --location=top_right --height=200 --xoffset=-60"
 wofi_process = subprocess.run(wofi_command, shell=True, encoding='utf-8', stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
 if wofi_process.returncode != 0:
-    print("User cancelled the operation.")
+    # print("User cancelled the operation.")
     exit(0)
 
 selected_sink_name = wofi_process.stdout.strip()

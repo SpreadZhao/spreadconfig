@@ -8,6 +8,7 @@ clang
 cliphist
 cmake
 diff-so-fancy
+duf
 dunst
 eza
 fastfetch
@@ -37,6 +38,7 @@ nwg-look
 obs-studio
 obsidian
 onefetch
+progress
 scrcpy
 shfmt
 sof-firmware
