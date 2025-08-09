@@ -20,26 +20,20 @@ clear_nvim_gitignore() {
     gitignore_file="$nvim_dest/.gitignore"
 
     if [ -f "$gitignore_file" ]; then
-        # 读每一行，忽略空行和注释行
         while IFS= read -r line; do
-            # 去掉前后空白
-            pattern="$(echo "$line" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
-
-            # 跳过空行和注释行
+            pattern="$(echo "$line" | tr -d '\r' | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
             if [[ -z "$pattern" || "$pattern" == \#* ]]; then
                 continue
             fi
 
-            # 生成要删除的文件路径（相对路径转成绝对路径）
             target_path="$nvim_dest/$pattern"
-
-            # 使用 glob 扩展匹配多文件
-            # shellcheck disable=SC2086
             files=($target_path)
 
             for file in "${files[@]}"; do
                 if [ -e "$file" ]; then
-                    rm -i "$file"
+                    rip "$file"
+                else
+                    echo "未找到文件: $file"
                 fi
             done
         done <"$gitignore_file"

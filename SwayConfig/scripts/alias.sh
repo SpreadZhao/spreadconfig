@@ -6,7 +6,7 @@
 alias cat="bat"
 alias df="duf"
 alias du="gdu"
-alias rm="rip"
+alias rm="rip -i"
 
 alias ls="eza --icons"
 alias ll="eza -l --git --icons"
