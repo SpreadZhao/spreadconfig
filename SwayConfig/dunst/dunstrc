@@ -11,7 +11,7 @@
     separator_color = auto
     sort = yes
     idle_threshold = 120
-    font = Martian Mono, 14
+    font = CaskaydiaCove Nerd Font Mono, 18
     line_height = 0
     markup = full
     format = "<b>%s</b>\n%b"
@@ -45,7 +45,7 @@
     background = "#000c"
     foreground = "#fffa"
     frame_color = "#999"
-    timeout = 10
+    timeout = 20
 [urgency_critical]
     background = "#300c"
     foreground = "#f95"

@@ -5,6 +5,6 @@ TEMP_LINE=$(sensors | grep -E "Package id 0|Tctl|CPU Temp" | head -n 1)
 
 # 提取温度值（只保留数字部分）
 TEMP=$(echo "$TEMP_LINE" | grep -oP '\+?\d+(\.\d+)?°C' | head -n 1)
-
-# 输出到 i3blocks
-echo "$TEMP"
+TEMP=${TEMP#+}            # 去掉前缀 "+"
+TEMP=${TEMP//°C/}         # 去掉 "°C"
+echo "$TEMP"

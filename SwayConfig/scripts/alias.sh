@@ -2,7 +2,7 @@
 
 # alias
 
-# utils
+# replace utils
 alias cat="bat"
 alias df="duf"
 alias du="gdu"
@@ -18,11 +18,13 @@ alias n="nvim ."
 alias lg="lazygit"
 alias tt="tray-tui"
 
-# quick cd
+# quick action
 alias wk="cd ~/workspaces"
 alias nh="cd ~/workspaces/obsidianws/notes_homeworks"
 alias st="cd ~/workspaces/SpreadStudy/"
 alias lc="cd ~/workspaces/SpreadStudy/Leetcode/LeetcodeCpp/ && n"
+
+alias shuffle="mpv --shuffle --force-window ."
 
 # safe
 alias mv="mv -iv"
