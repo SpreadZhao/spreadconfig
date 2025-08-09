@@ -8,5 +8,20 @@ fi
 export _JAVA_AWT_WM_NONREPARENTING=1
 
 # PATH
-export PATH=$PATH:$HOME/scripts
-export PATH=$PATH:$HOME/.local/bin
+append_path() {
+    for p in "$@"; do
+        p="${p%/}"
+        if [ -d "$p" ] && [[ ":$PATH:" != *":$p:"* ]]; then
+            PATH="$PATH:$p"
+        fi
+    done
+}
+
+PATH_HOME=(
+    "$HOME/scripts"
+    "$HOME/.local/bin"
+)
+
+append_path "${PATH_HOME[@]}"
+
+export PATH

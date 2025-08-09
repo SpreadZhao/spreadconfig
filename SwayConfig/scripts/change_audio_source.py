@@ -44,7 +44,7 @@ wofi_command = f"echo '{output}' | wofi --show=dmenu --hide-scroll --allow-marku
 wofi_process = subprocess.run(wofi_command, shell=True, encoding='utf-8', stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
 if wofi_process.returncode != 0:
-    print("User cancelled the operation.")
+    # print("User cancelled the operation.")
     exit(0)
 
 selected_source_name = wofi_process.stdout.strip()

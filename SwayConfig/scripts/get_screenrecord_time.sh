@@ -13,5 +13,5 @@ if [ -f "$PIDFILE" ]; then
 fi
 
 # Not recording
-echo "⏹"
+# echo "⏹"
 exit 0
