@@ -23,6 +23,8 @@ for_window [app_id="clash-verge"] floating enable, resize set width 30 ppt heigh
 for_window [app_id="float-terminal"] floating enable, move position 2700 0
 # thunar file manager
 for_window [title="File Operation Progress"] floating enable
+for_window [title="Welcome to Android Studio"] floating enable
+for_window [instance="scrcpy"] floating enable
 no_focus [class="wechat"]
 
 #-----------#
@@ -246,6 +248,7 @@ output eDP-1 resolution 2880x1800 position 3440,600 scale 2.0
 #------#
 bar {
     # swaybar_command waybar
+    height 30
     font "CaskaydiaCove Nerd Font Mono 14"
     position top
     status_command i3blocks
