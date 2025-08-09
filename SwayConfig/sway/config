@@ -153,8 +153,8 @@ workspace 9 output HDMI-A-1
     bindsym $mod+Shift+8 move container to workspace number 8
     bindsym $mod+Shift+9 move container to workspace number 9
     bindsym $mod+Shift+0 move container to workspace number 10
-    bindsym $mod+Shift+period move container to workspace next, workspace next
-    bindsym $mod+Shift+comma  move container to workspace prev, workspace next
+    # bindsym $mod+Shift+period move container to workspace next, workspace next
+    # bindsym $mod+Shift+comma  move container to workspace prev, workspace next
     bindsym $mod+tab workspace back_and_forth
     bindsym $mod+n workspace next_on_output
     bindsym $mod+p workspace prev_on_output
