@@ -1,5 +1,6 @@
 amd-ucode
 amdgpu_top
+autotiling
 base
 bluetui
 btop

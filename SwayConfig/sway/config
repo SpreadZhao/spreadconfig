@@ -43,6 +43,7 @@ exec wl-paste --type image --watch cliphist store
 # exec ~/scripts/curr_window_title.sh
 # auto tiling
 # exec autotiling-rs
+exec_always autotiling
 
 #-----------#
 # Idle&Lock #
@@ -168,7 +169,7 @@ workspace 9 output HDMI-A-1
     # bindsym $mod+s layout stacking
     # bindsym $mod+t layout tabbed
     # bindsym $mod+s layout toggle split
-    bindsym $mod+t layout toggle all
+    # bindsym $mod+t layout toggle all
 
     # Make the current focus fullscreen
     bindsym $mod+f fullscreen
