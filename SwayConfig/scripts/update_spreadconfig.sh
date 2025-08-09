@@ -32,8 +32,6 @@ clear_nvim_gitignore() {
             for file in "${files[@]}"; do
                 if [ -e "$file" ]; then
                     rip "$file"
-                else
-                    echo "未找到文件: $file"
                 fi
             done
         done <"$gitignore_file"
