@@ -10,6 +10,10 @@
 separator=true
 separator_block_width=15
 
+[scratchpad]
+command=~/scripts/scratchpad_count.sh
+interval=5
+
 [screenrecord]
 command=~/scripts/get_screenrecord_time.sh
 interval=1
@@ -39,6 +43,12 @@ align=center
 command=~/scripts/get_time.sh
 interval=1
 signal=10
+
+# [test]
+# full_text=test
+# align=center
+# command=~/scripts/get_display_from_click.sh
+# interval=1
 
 # [tray]
 # full_text=""
