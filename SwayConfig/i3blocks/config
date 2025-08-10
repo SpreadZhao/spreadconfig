@@ -23,10 +23,20 @@ align=center
 command=~/scripts/get_curr_window_title.sh
 interval=1
 
-[info]
+# [info]
+# align=center
+# command=~/scripts/round_info.sh
+# interval=30
+
+[temperature]
 align=center
-command=~/scripts/round_info.sh
-interval=30
+command=~/scripts/get_temperature.sh
+interval=5
+
+[brightness]
+align=center
+command=~/scripts/get_brightness.sh
+interval=5
 
 [volume]
 align=center
