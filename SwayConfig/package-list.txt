@@ -16,8 +16,8 @@ fastfetch
 fcitx5-chinese-addons
 fcitx5-configtool
 fcitx5-gtk
+fcitx5-mozc
 feh
-firefox
 fzf
 gdb
 gdu
@@ -34,6 +34,7 @@ lsof
 lua-language-server
 mpv
 neovim
+networkmanager
 nvm
 nwg-look
 obs-studio
@@ -50,6 +51,7 @@ telegram-desktop
 tlp
 ttf-cascadia-code-nerd
 ttf-martian-mono-nerd
+vivaldi
 wf-recorder
 wget
 xdg-user-dirs
