@@ -24,7 +24,9 @@ alias nh="cd ~/workspaces/obsidianws/notes_homeworks"
 alias st="cd ~/workspaces/SpreadStudy/"
 alias lc="cd ~/workspaces/SpreadStudy/Leetcode/LeetcodeCpp/ && n"
 
-alias shuffle="mpv --shuffle --force-window ."
+alias shuffle="mpv --shuffle --force-window --autofit-smaller=800x800 ."
+
+alias q="exit"
 
 # safe
 alias mv="mv -iv"

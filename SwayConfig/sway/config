@@ -19,8 +19,10 @@ set $menu wofi
 for_window [class="feh"] floating enable
 for_window [class="QQ"] floating enable
 for_window [class="wechat"] floating enable
-for_window [app_id="clash-verge"] floating enable, resize set width 30 ppt height 50 ppt
+for_window [class="Vivaldi-stable"] inhibit_idle focus
+for_window [app_id="clash-verge"] floating enable, resize set width 80 ppt height 80 ppt
 for_window [app_id="float-terminal"] floating enable, move position 2700 0
+for_window [app_id="mpv"] floating enable
 # thunar file manager
 for_window [title="File Operation Progress"] floating enable
 for_window [title="Welcome to Android Studio"] floating enable
@@ -49,8 +51,8 @@ exec_always autotiling
 # Idle&Lock #
 #-----------#
 exec swayidle -w \
-	timeout 600 'swaylock -c 1f1e33 -f' \
-	timeout 605 'swaymsg "output * power off"' \
+	timeout 1800 'swaylock -c 1f1e33 -f' \
+	timeout 1900 'swaymsg "output * power off"' \
 		resume 'swaymsg "output * power on"'
 
 #------------#
@@ -259,7 +261,6 @@ output eDP-1 resolution 2880x1800 position 3440,600 scale 2.0
 # Bars #
 #------#
 bar {
-    # swaybar_command waybar
     height 30
     font "CaskaydiaCove Nerd Font Mono 14"
     position top
@@ -271,10 +272,8 @@ bar {
         inactive_workspace #00000030 #00000030 #FFFFFF
         focused_workspace #FFFFFF80 #FFFFFF80 #000000 
     }
-    # hidden_state hide
-    # mode hide
-    # modifier Mod4
-    # tray_output none
+    tray_output HDMI-A-1
+    mode dock
 }
 
 #-----------#
