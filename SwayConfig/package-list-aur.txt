@@ -3,4 +3,5 @@ jetbrains-toolbox
 linuxqq
 paru
 paru-debug
+ttf-lxgw-wenkai
 wechat-bin
