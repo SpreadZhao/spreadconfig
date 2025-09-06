@@ -16,7 +16,6 @@ fastfetch
 fcitx5-chinese-addons
 fcitx5-configtool
 fcitx5-gtk
-fcitx5-mozc
 feh
 fzf
 gdb
@@ -29,6 +28,7 @@ inter-font
 jdk8-openjdk
 jq
 lazygit
+libbsd
 linux-lts
 lsof
 lua-language-server
