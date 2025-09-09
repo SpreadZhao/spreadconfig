@@ -29,6 +29,7 @@ jdk8-openjdk
 jq
 lazygit
 libbsd
+libva-utils
 linux-lts
 lsof
 lua-language-server
@@ -40,7 +41,9 @@ nwg-look
 obs-studio
 obsidian
 onefetch
+polkit-gnome
 progress
+radeontop
 scrcpy
 shfmt
 sof-firmware
@@ -51,7 +54,9 @@ telegram-desktop
 tlp
 ttf-cascadia-code-nerd
 ttf-martian-mono-nerd
+v4l2loopback-utils
 vivaldi
+vulkan-tools
 wf-recorder
 wget
 xdg-user-dirs
