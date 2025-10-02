@@ -50,16 +50,17 @@ paru -Qqem >"$CONFIG_DIR/package-list-aur-temp.txt"
 
 # dotfiles
 config_subdirs=(
-    dunst
-    foot
-    i3blocks
+    # dunst
+    # foot
+    ghostty
+    # i3blocks
     lazygit
     niri
     nwg-look
     nvim
     paru
     swappy
-    sway
+    # sway
     wofi
     waybar
 )

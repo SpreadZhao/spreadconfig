@@ -14,9 +14,9 @@ fcitx5-chinese-addons
 fcitx5-configtool
 fcitx5-gtk
 feh
-foot
 fzf
 gdu
+ghostty
 github-cli
 grim
 intel-ucode
@@ -37,7 +37,6 @@ polkit-gnome
 scrcpy
 slurp
 swappy
-thunar
 ttf-cascadia-code-nerd
 v4l2loopback-utils
 vivaldi
