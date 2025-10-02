@@ -1,0 +1,7 @@
+clash-verge-rev-bin
+feishu-bin
+jetbrains-toolbox
+linuxqq
+paru
+paru-debug
+wechat-bin

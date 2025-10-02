@@ -1,0 +1,6 @@
+mode=drun
+allow_images=true
+image_size=30
+term=foot
+insensitive=true
+location=center
