@@ -17,6 +17,7 @@ alias l="eza -lah --git --icons"
 alias n="nvim ."
 alias lg="lazygit"
 alias tt="tray-tui"
+alias t="tmux"
 
 # quick action
 alias wk="cd ~/workspaces"
