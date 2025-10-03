@@ -37,6 +37,7 @@ polkit-gnome
 scrcpy
 slurp
 swappy
+telegram-desktop
 ttf-cascadia-code-nerd
 v4l2loopback-utils
 vivaldi

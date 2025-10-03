@@ -1,5 +1,6 @@
 abseil-cpp
 acl
+ada
 adwaita-cursors
 adwaita-fonts
 adwaita-icon-theme
@@ -102,6 +103,7 @@ flac
 flex
 fmt
 fontconfig
+freeglut
 freetype2
 fribidi
 fuse-common
@@ -131,6 +133,7 @@ glib2
 glibc
 glibmm
 glslang
+glu
 glycin
 gmp
 gnome-autoar
@@ -176,6 +179,7 @@ harfbuzz-icu
 hicolor-icon-theme
 hidapi
 highway
+hunspell
 hwdata
 hyphen
 iana-etc
@@ -188,6 +192,7 @@ iptables
 iputils
 iso-codes
 jansson
+jasper
 java-environment-common
 java-runtime-common
 jbigkit
@@ -204,6 +209,7 @@ json-c
 json-glib
 jsoncpp
 kbd
+kcoreaddons
 kdbusaddons
 keyutils
 kitemviews
@@ -255,8 +261,10 @@ libdatachannel
 libdatrie
 libdbusmenu-glib
 libdbusmenu-gtk3
+libde265
 libdecor
 libdeflate
+libdispatch
 libdisplay-info
 libdovi
 libdrm
@@ -284,6 +292,7 @@ libgpg-error
 libgsf
 libgudev
 libgxps
+libheif
 libice
 libidn2
 libiec61883
@@ -306,6 +315,7 @@ libluv
 libmanette
 libmd
 libmm-glib
+libmng
 libmnl
 libmodplug
 libmpc
@@ -500,6 +510,7 @@ openal
 opencc
 opencore-amr
 openexr
+openh264
 openjpeg2
 openslide
 openssh
@@ -549,6 +560,7 @@ psmisc
 python
 qt6-base
 qt6-declarative
+qt6-imageformats
 qt6-positioning
 qt6-svg
 qt6-translations
@@ -593,6 +605,7 @@ systemd
 systemd-libs
 systemd-sysvcompat
 tar
+telegram-desktop
 texinfo
 tinysparql
 tmux
