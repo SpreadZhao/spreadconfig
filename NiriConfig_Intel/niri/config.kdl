@@ -104,12 +104,26 @@ clipboard {
 window-rule {
     match app-id="feh" title=".*\/tmp.*"
     match app-id="wechat" title=".*Photos.*"
+    match app-id="org.telegram.desktop" title="Media viewer"
     open-floating true
+    open-fullscreen false
 }
 
 window-rule {
     match app-id="wechat"
     open-focused false
+}
+
+window-rule {
+    match app-id="org.telegram.desktop"
+    default-column-width { fixed 456; }
+}
+
+window-rule {
+    match app-id="org.telegram.desktop" title="Media viewer"
+    open-floating false
+    open-fullscreen false
+    max-width 200
 }
 
 binds {
@@ -220,6 +234,7 @@ binds {
 
     Mod+Shift+Minus { set-window-height "-10%"; }
     Mod+Shift+Equal { set-window-height "+10%"; }
+    Mod+Ctrl+Equal { expand-column-to-available-width; }
 
     Mod+Shift+F       { toggle-window-floating; }
     Mod+Ctrl+F { switch-focus-between-floating-and-tiling; }
