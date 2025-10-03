@@ -45,8 +45,9 @@ clear_nvim_gitignore() {
 copy_to_config_dir "$HOME/scripts"
 
 # pacman & aur
-paru -Qqetn >"$CONFIG_DIR/package-list-temp.txt"
-paru -Qqem >"$CONFIG_DIR/package-list-aur-temp.txt"
+paru -Qqetn > "$CONFIG_DIR/package-list-temp.txt"
+paru -Qqem > "$CONFIG_DIR/package-list-aur-temp.txt"
+paru -Qq > "$CONFIG_DIR/package-list-all.txt"
 
 # dotfiles
 config_subdirs=(

@@ -20,7 +20,7 @@ ghostty
 github-cli
 grim
 intel-ucode
-jq
+jdk8-openjdk
 lazygit
 lsof
 mpv
