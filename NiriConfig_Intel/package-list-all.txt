@@ -45,6 +45,7 @@ cairo
 cairomm
 calcurse
 cfitsio
+cifs-utils
 clang
 clash-verge-rev-bin
 cliphist
@@ -173,6 +174,8 @@ gupnp
 gupnp-dlna
 gupnp-igd
 gvfs
+gvfs-mtp
+gvfs-smb
 gzip
 harfbuzz
 harfbuzz-icu
@@ -221,6 +224,7 @@ l-smash
 lame
 lazygit
 lcms2
+ldb
 leancrypto
 less
 libadwaita
@@ -398,6 +402,7 @@ libvpl
 libvpx
 libvterm
 libwacom
+libwbclient
 libwebp
 libwireplumber
 libx11
@@ -587,6 +592,7 @@ shadow
 shared-mime-info
 slang
 slurp
+smbclient
 snappy
 sndio
 sord
@@ -604,8 +610,11 @@ swappy
 systemd
 systemd-libs
 systemd-sysvcompat
+talloc
 tar
+tdb
 telegram-desktop
+tevent
 texinfo
 tinysparql
 tmux
