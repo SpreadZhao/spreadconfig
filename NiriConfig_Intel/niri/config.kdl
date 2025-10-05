@@ -141,6 +141,8 @@ binds {
     XF86MonBrightnessUp allow-when-locked=true { spawn "brightnessctl" "--class=backlight" "set" "+10%"; }
     XF86MonBrightnessDown allow-when-locked=true { spawn "brightnessctl" "--class=backlight" "set" "10%-"; }
 
+    Mod+B { spawn-sh "killall -SIGUSR1 waybar"; }
+
     Mod+O repeat=false { toggle-overview; }
 
     Mod+Shift+C repeat=false { close-window; }
