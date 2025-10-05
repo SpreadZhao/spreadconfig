@@ -22,6 +22,7 @@ grim
 intel-ucode
 jdk8-openjdk
 lazygit
+libreoffice-still
 lsof
 mpv
 neovim
@@ -36,6 +37,7 @@ onefetch
 polkit-gnome
 scrcpy
 slurp
+sqlitebrowser
 swappy
 telegram-desktop
 ttf-cascadia-code-nerd

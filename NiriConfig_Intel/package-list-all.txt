@@ -14,6 +14,7 @@ android-udev
 aom
 appstream
 archlinux-keyring
+argon2
 at-spi2-core
 atkmm
 attr
@@ -49,10 +50,12 @@ cifs-utils
 clang
 clash-verge-rev-bin
 cliphist
+clucene
 cmake
 compiler-rt
 coreutils
 cppdap
+cracklib
 cryptsetup
 curl
 dav1d
@@ -115,6 +118,7 @@ gawk
 gc
 gcc
 gcc-libs
+gcr
 gcr-4
 gdb
 gdb-common
@@ -140,6 +144,7 @@ gmp
 gnome-autoar
 gnome-desktop-4
 gnome-desktop-common
+gnome-keyring
 gnulib-l10n
 gnupg
 gnutls
@@ -227,12 +232,14 @@ lcms2
 ldb
 leancrypto
 less
+libabw
 libadwaita
 libarchive
 libass
 libassuan
 libasyncns
 libatasmart
+libatomic_ops
 libavc1394
 libavif
 libayatana-appindicator
@@ -255,8 +262,10 @@ libcap
 libcap-ng
 libcdio
 libcdio-paranoia
+libcdr
 libcgif
 libcloudproviders
+libcmis
 libcolord
 libcue
 libcups
@@ -274,18 +283,23 @@ libdovi
 libdrm
 libdvdnav
 libdvdread
+libe-book
 libebur128
 libedit
 libei
 libelf
 libepoxy
+libepubgen
+libetonyek
 libevdev
 libevent
 libexif
+libexttextcat
 libfdk-aac
 libffi
 libfontenc
 libfreeaptx
+libfreehand
 libfyaml
 libgcrypt
 libgexiv2
@@ -296,6 +310,7 @@ libgpg-error
 libgsf
 libgudev
 libgxps
+libhandy
 libheif
 libice
 libidn2
@@ -308,10 +323,12 @@ libinih
 libinput
 libiptcdata
 libisl
+libixion
 libjpeg-turbo
 libjuice
 libjxl
 libksba
+liblangtag
 liblc3
 libldac
 libldap
@@ -324,7 +341,9 @@ libmnl
 libmodplug
 libmpc
 libmpdclient
+libmspub
 libmtp
+libmwaw
 libmysofa
 libnautilus-extension
 libndp
@@ -340,11 +359,15 @@ libnl
 libnm
 libnotify
 libnsl
+libnumbertext
 libnvme
+libodfgen
 libogg
 libopenmpt
+liborcus
 libosinfo
 libp11-kit
+libpagemaker
 libpcap
 libpciaccess
 libpgm
@@ -358,7 +381,11 @@ libportal-gtk4
 libproxy
 libpsl
 libpulse
+libpwquality
+libqxp
 libraw1394
+libreoffice-still
+librevenge
 librsvg
 libsamplerate
 libsasl
@@ -374,6 +401,7 @@ libsoxr
 libsrtp
 libssh
 libssh2
+libstaroffice
 libstemmer
 libsysprof-capture
 libtasn1
@@ -382,6 +410,7 @@ libthai
 libtheora
 libtiff
 libtirpc
+libtommath
 libtool
 libunibreak
 libunistring
@@ -396,6 +425,7 @@ libva
 libvdpau
 libverto
 libvips
+libvisio
 libvlc
 libvorbis
 libvpl
@@ -405,6 +435,8 @@ libwacom
 libwbclient
 libwebp
 libwireplumber
+libwpd
+libwps
 libx11
 libxau
 libxcb
@@ -437,6 +469,7 @@ libxtst
 libxv
 libxxf86vm
 libyuv
+libzmf
 licenses
 lilv
 linux-api-headers
@@ -461,6 +494,7 @@ llvm-libs
 lm_sensors
 lmdb
 localsearch
+lpsolve
 lsof
 lua
 lua51-lpeg
@@ -491,6 +525,7 @@ mtdev
 mujs
 nautilus
 ncurses
+neon
 neovim
 nettle
 networkmanager
@@ -563,6 +598,12 @@ procps-ng
 protobuf
 psmisc
 python
+qcustomplot
+qhexedit2
+qscintilla-qt5
+qt5-base
+qt5-svg
+qt5-translations
 qt6-base
 qt6-declarative
 qt6-imageformats
@@ -572,9 +613,12 @@ qt6-translations
 qt6-wayland
 qt6-webchannel
 qt6-webengine
+raptor
+rasqal
 rav1e
 re2
 readline
+redland
 rhash
 rnnoise
 rtkit
@@ -584,6 +628,7 @@ sbc
 scrcpy
 sdl2-compat
 sdl3
+seahorse
 seatd
 sed
 serd
@@ -601,7 +646,9 @@ spdlog
 speex
 speexdsp
 spirv-tools
+sqlcipher
 sqlite
+sqlitebrowser
 sratom
 srt
 sudo
@@ -612,6 +659,7 @@ systemd-libs
 systemd-sysvcompat
 talloc
 tar
+tcl
 tdb
 telegram-desktop
 tevent
@@ -682,6 +730,7 @@ xdg-user-dirs
 xdg-user-dirs-gtk
 xdg-utils
 xkeyboard-config
+xmlsec
 xorg-fonts-encodings
 xorg-server-common
 xorg-setxkbmap
@@ -703,3 +752,4 @@ zlib
 zlib-ng
 zsh
 zstd
+zxing-cpp
