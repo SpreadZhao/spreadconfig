@@ -5,3 +5,4 @@ linuxqq
 paru
 paru-debug
 wechat-bin
+yutto
