@@ -620,6 +620,7 @@ python-typing-inspection
 python-typing_extensions
 qcustomplot
 qhexedit2
+qrcodegencpp-cmake
 qscintilla-qt5
 qt5-base
 qt5-svg
@@ -655,6 +656,7 @@ serd
 shaderc
 shadow
 shared-mime-info
+simde
 slang
 slurp
 smbclient
