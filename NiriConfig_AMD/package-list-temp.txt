@@ -48,6 +48,7 @@ radeontop
 scrcpy
 shfmt
 sof-firmware
+sqlitebrowser
 stylua
 swappy
 sway
