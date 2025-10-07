@@ -21,7 +21,7 @@ alias t="tmux"
 
 # quick action
 alias wk="cd ~/workspaces"
-alias nh="cd ~/workspaces/notes_homeworks"
+alias nh="cd ~/workspaces/obsidianws/notes_homeworks"
 alias st="cd ~/workspaces/SpreadStudy/"
 alias lc="cd ~/workspaces/SpreadStudy/Leetcode/LeetcodeCpp/ && n"
 

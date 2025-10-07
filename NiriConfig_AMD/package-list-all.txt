@@ -673,6 +673,7 @@ sqlite
 sqlitebrowser
 sratom
 srt
+starship
 stylua
 sudo
 suitesparse
@@ -791,4 +792,6 @@ zlib
 zlib-ng
 zram-generator
 zsh
+zsh-autosuggestions
+zsh-syntax-highlighting
 zstd
