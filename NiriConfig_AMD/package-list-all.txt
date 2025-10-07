@@ -103,6 +103,7 @@ feishu-bin
 ffmpeg
 fftw
 file
+file-roller
 filesystem
 findutils
 flac
@@ -749,7 +750,6 @@ wofi
 wpa_supplicant
 x264
 x265
-xarchiver
 xcb-imdkit
 xcb-proto
 xcb-util
