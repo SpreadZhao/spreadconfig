@@ -49,13 +49,12 @@ scrcpy
 shfmt
 sof-firmware
 sqlitebrowser
+starship
 stylua
 swappy
 sway
 telegram-desktop
 tlp
-ttf-cascadia-code-nerd
-ttf-martian-mono-nerd
 v4l2loopback-utils
 vivaldi
 vulkan-tools
@@ -66,3 +65,5 @@ wofi
 xarchiver
 xorg-xrdb
 zram-generator
+zsh-autosuggestions
+zsh-syntax-highlighting

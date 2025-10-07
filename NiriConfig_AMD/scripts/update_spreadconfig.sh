@@ -6,11 +6,15 @@ copy_to_config_dir() {
     local dest_dir="$CONFIG_DIR"
     mkdir -p "$dest_dir"
 
-    for src_dir in "$@"; do
-        if [ -d "$src_dir" ]; then
-            cp -r "$src_dir" "$dest_dir/"
+    for src in "$@"; do
+        if [ -d "$src" ]; then
+            # 复制整个目录
+            cp -r "$src" "$dest_dir/"
+        elif [ -f "$src" ]; then
+            # 复制单个文件
+            cp "$src" "$dest_dir/"
         else
-            echo "警告: 源目录不存在或不是目录: $src_dir" >&2
+            echo "警告: 源路径不存在或不是文件/目录: $src" >&2
         fi
     done
 }
@@ -61,6 +65,7 @@ config_subdirs=(
     nvim
     paru
     swappy
+    starship.toml
     # sway
     wofi
     waybar
