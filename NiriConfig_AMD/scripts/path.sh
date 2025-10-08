@@ -1,5 +1,8 @@
 #!/bin/bash
 
+export EDITOR=nvim
+export VISUAL=nvim
+
 export XDG_SESSION_DESKTOP="sway"
 if [ "$XDG_SESSION_DESKTOP" = "sway" ]; then
     # https://github.com/swaywm/sway/issues/595

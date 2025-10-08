@@ -32,6 +32,7 @@ base
 base-devel
 bash
 bat
+bind
 binutils
 bison
 blas
@@ -60,6 +61,7 @@ cmake
 compiler-rt
 coreutils
 cppdap
+cracklib
 cryptsetup
 curl
 dav1d
@@ -77,10 +79,12 @@ diff-so-fancy
 diffutils
 dkms
 dnsmasq
+dnssec-anchors
 double-conversion
 duf
 duktape
 dunst
+dust
 e2fsprogs
 efibootmgr
 efivar
@@ -131,6 +135,7 @@ gdk-pixbuf2
 gdu
 gegl
 gettext
+gflags
 ghostty
 ghostty-shell-integration
 ghostty-terminfo
@@ -150,12 +155,14 @@ gmp
 gnome-autoar
 gnome-desktop-4
 gnome-desktop-common
+gnome-disk-utility
 gnome-keyring
 gnu-free-fonts
 gnulib-l10n
 gnupg
 gnutls
 gobject-introspection-runtime
+google-glog
 gperftools
 gpgme
 gpgmepp
@@ -196,6 +203,7 @@ hdparm
 hicolor-icon-theme
 hidapi
 highway
+hsa-rocr
 hunspell
 hwdata
 hyphen
@@ -219,6 +227,7 @@ jdk11-openjdk
 jdk17-openjdk
 jdk21-openjdk
 jdk8-openjdk
+jemalloc
 jetbrains-toolbox
 jq
 jre8-openjdk
@@ -269,6 +278,7 @@ libbpf
 libbs2b
 libbsd
 libbytesize
+libcanberra
 libcap
 libcap-ng
 libcdio
@@ -314,6 +324,7 @@ libgpg-error
 libgsf
 libgudev
 libgxps
+libhandy
 libheif
 libice
 libidn2
@@ -336,6 +347,7 @@ libldap
 libliftoff
 libluv
 libmanette
+libmaxminddb
 libmd
 libmm-glib
 libmng
@@ -378,6 +390,7 @@ libportal-gtk4
 libproxy
 libpsl
 libpulse
+libpwquality
 libraw
 libraw1394
 librsvg
@@ -409,6 +422,7 @@ libtool
 libunibreak
 libunistring
 libunwind
+liburcu
 liburing
 libusb
 libusbmuxd
@@ -481,6 +495,7 @@ linux-firmware-whence
 linux-lts
 linux-lts-headers
 linuxqq
+lld
 llhttp
 llvm-libs
 lm_sensors
@@ -499,6 +514,7 @@ mailcap
 make
 man-db
 marisa
+maturin
 mbedtls
 md4c
 mdadm
@@ -530,6 +546,8 @@ noto-fonts-extra
 npth
 nspr
 nss
+ntfs-3g
+numactl
 nvm
 nwg-look
 obs-studio
@@ -596,6 +614,7 @@ python-annotated-types
 python-anyio
 python-argcomplete
 python-biliass
+python-build
 python-certifi
 python-click
 python-dict2xml
@@ -609,11 +628,14 @@ python-httpx
 python-hyperframe
 python-i3ipc
 python-idna
+python-installer
+python-maturin
 python-packaging
 python-pipx
 python-platformdirs
 python-pydantic
 python-pydantic-core
+python-pyproject-hooks
 python-returns
 python-six
 python-sniffio
@@ -621,6 +643,8 @@ python-socksio
 python-typing-inspection
 python-typing_extensions
 python-userpath
+python-uv-build
+python-wheel
 python-xlib
 qcustomplot
 qhexedit2
@@ -644,8 +668,13 @@ re2
 readline
 rhash
 rnnoise
+rocm-core
+rocm-device-libs
+rocm-smi-lib
+rocprofiler-register
 rtkit
 rubberband
+rust
 sbc
 scrcpy
 sdl2-compat
@@ -664,6 +693,7 @@ snappy
 sndio
 sof-firmware
 sord
+sound-theme-freedesktop
 source-highlight
 spdlog
 speex
@@ -689,6 +719,7 @@ systemd-libs
 systemd-sysvcompat
 tar
 tcl
+tdb
 telegram-desktop
 texinfo
 tinysparql
