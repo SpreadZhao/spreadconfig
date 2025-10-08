@@ -2,6 +2,7 @@ amd-ucode
 amdgpu_top
 autotiling
 base
+bind
 bluetui
 btop
 calcurse
@@ -11,6 +12,7 @@ cmake
 diff-so-fancy
 duf
 dunst
+dust
 eza
 fastfetch
 fcitx5-chinese-addons
@@ -19,11 +21,11 @@ fcitx5-gtk
 feh
 file-roller
 fzf
-gdb
 gdu
 ghostty
 gimp
 github-cli
+gnome-disk-utility
 grub
 i3blocks
 inter-font
