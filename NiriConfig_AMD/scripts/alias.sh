@@ -5,7 +5,7 @@
 # replace utils
 alias cat="bat"
 alias df="duf"
-alias du="gdu"
+alias du="dust"
 # alias rm="rip -i"
 
 alias ls="eza --icons"
