@@ -18,6 +18,7 @@ alias n="nvim ."
 alias lg="lazygit"
 alias tt="tray-tui"
 alias t="tmux"
+alias c="clear"
 
 # quick action
 alias wk="cd ~/workspaces"
