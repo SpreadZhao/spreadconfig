@@ -20,7 +20,6 @@ fcitx5-configtool
 fcitx5-gtk
 feh
 file-roller
-fzf
 gdb
 gdu
 ghostty
@@ -68,6 +67,7 @@ wf-recorder
 wget
 wofi
 xorg-xrdb
+zoxide
 zram-generator
 zsh-autosuggestions
 zsh-syntax-highlighting
