@@ -806,6 +806,7 @@ zip
 zix
 zlib
 zlib-ng
+zoxide
 zram-generator
 zsh
 zsh-autosuggestions
