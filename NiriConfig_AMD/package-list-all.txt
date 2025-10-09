@@ -16,7 +16,6 @@ android-tools
 android-udev
 aom
 appstream
-appstream-glib
 archlinux-keyring
 at-spi2-core
 atkmm
@@ -88,7 +87,6 @@ dust
 e2fsprogs
 efibootmgr
 efivar
-electron34
 electron37
 enchant
 exempi
@@ -125,7 +123,6 @@ gawk
 gc
 gcc
 gcc-libs
-gcc14-libs
 gcr
 gcr-4
 gdb
@@ -232,7 +229,6 @@ jetbrains-toolbox
 jq
 jre8-openjdk
 jre8-openjdk-headless
-js128
 js140
 json-c
 json-glib
@@ -403,7 +399,6 @@ libsixel
 libsm
 libsndfile
 libsodium
-libsoup
 libsoup3
 libsoxr
 libspiro
@@ -475,7 +470,6 @@ libxt
 libxtst
 libxv
 libxxf86vm
-libyaml
 libyuv
 licenses
 lilv
@@ -495,12 +489,12 @@ linux-firmware-whence
 linux-lts
 linux-lts-headers
 linuxqq
-lld
 llhttp
 llvm-libs
 lm_sensors
 lmdb
 localsearch
+lostfiles
 lsof
 lua
 lua-language-server
@@ -514,7 +508,6 @@ mailcap
 make
 man-db
 marisa
-maturin
 mbedtls
 md4c
 mdadm
@@ -614,7 +607,6 @@ python-annotated-types
 python-anyio
 python-argcomplete
 python-biliass
-python-build
 python-certifi
 python-click
 python-dict2xml
@@ -628,14 +620,11 @@ python-httpx
 python-hyperframe
 python-i3ipc
 python-idna
-python-installer
-python-maturin
 python-packaging
 python-pipx
 python-platformdirs
 python-pydantic
 python-pydantic-core
-python-pyproject-hooks
 python-returns
 python-six
 python-sniffio
@@ -643,8 +632,6 @@ python-socksio
 python-typing-inspection
 python-typing_extensions
 python-userpath
-python-uv-build
-python-wheel
 python-xlib
 qcustomplot
 qhexedit2
@@ -674,7 +661,6 @@ rocm-smi-lib
 rocprofiler-register
 rtkit
 rubberband
-rust
 sbc
 scrcpy
 sdl2-compat
@@ -765,7 +751,6 @@ vulkan-radeon
 vulkan-tools
 waybar
 wayland
-webkit2gtk
 webkit2gtk-4.1
 webrtc-audio-processing-1
 wechat-bin
