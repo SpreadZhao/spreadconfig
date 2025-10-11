@@ -60,6 +60,7 @@ config_subdirs=(
     ghostty
     # i3blocks
     lazygit
+    mako
     niri
     nwg-look
     nvim
