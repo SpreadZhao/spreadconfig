@@ -6,6 +6,7 @@
 alias cat="bat"
 alias df="duf"
 alias du="dust"
+alias cd="z"
 # alias rm="rip -i"
 
 alias ls="eza --icons"
