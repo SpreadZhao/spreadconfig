@@ -14,6 +14,11 @@ HIDE_CURSOR=true   # true to hide the cursor while freezing, false to show
 # === Globals ===
 TMPFILE=""
 
+notify() {
+    local message="$1"
+    notify-send --app-name "screenshot" -u normal "" "$message"
+}
+
 # --- Function: Initialize temporary file for screenshot ---
 init_tempfile() {
     TMPFILE=$(mktemp --suffix=.png)
@@ -53,11 +58,11 @@ capture_screenshot() {
     freeze_screen
     if grim -g "$(slurp -d)" "$TMPFILE"; then
         unfreeze_screen
-        notify-send "Screenshot" "Capture successful ✅"
+        notify "Capture successful ✅"
         return 0
     else
         unfreeze_screen
-        notify-send "Screenshot" "Capture failed ❌"
+        notify "Capture failed ❌"
         cleanup
         return 1
     fi
@@ -77,9 +82,9 @@ handle_choice() {
     case "$1" in
     "$OPTION_CLIPBOARD")
         if wl-copy --type image/png <"$TMPFILE"; then
-            notify-send "Clipboard" "Image copied to clipboard 📋"
+            notify "Image copied to clipboard 📋"
         else
-            notify-send "Clipboard" "Failed to copy image to clipboard ❌"
+            notify "Failed to copy image to clipboard ❌"
         fi
         ;;
     "$OPTION_PIN")
@@ -90,23 +95,23 @@ handle_choice() {
         timestamp=$(date '+%Y%m%d_%H%M%S')
         local savepath="$HOME/Pictures/Screenshot_${timestamp}.png"
         if mv "$TMPFILE" "$savepath"; then
-            notify-send "Screenshot" "Saved to $savepath 📁"
+            notify "Saved to $savepath 📁"
             # Prevent cleanup after move
             TMPFILE=""
         else
-            notify-send "Screenshot" "Failed to save screenshot ❌"
+            notify "Failed to save screenshot ❌"
             cleanup
         fi
         ;;
     "$OPTION_EDIT")
         if swappy -f "$TMPFILE"; then
-            notify-send "Swappy" "Editing completed ✏️"
+            notify "Editing completed ✏️"
         else
-            notify-send "Swappy" "Editing cancelled or failed ❌"
+            notify "Editing cancelled or failed ❌"
         fi
         ;;
     *)
-        notify-send "Screenshot" "Operation cancelled 🚫"
+        notify "Operation cancelled 🚫"
         ;;
     esac
 }

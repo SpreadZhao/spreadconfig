@@ -82,7 +82,6 @@ dnssec-anchors
 double-conversion
 duf
 duktape
-dunst
 dust
 e2fsprogs
 efibootmgr
@@ -506,6 +505,7 @@ lzo
 m4
 mailcap
 make
+mako
 man-db
 marisa
 mbedtls

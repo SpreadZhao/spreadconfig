@@ -80,6 +80,7 @@ layout {
 spawn-at-startup "waybar"
 spawn-at-startup "fcitx5"
 spawn-at-startup "clash-verge"
+spawn-at-startup "mako"
 spawn-at-startup "/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1"
 
 spawn-sh-at-startup "wl-paste --type text --watch cliphist store"
@@ -113,8 +114,9 @@ window-rule {
     open-fullscreen false
 }
 
+// wechat bug for some floating windows
 window-rule {
-    match app-id="wechat"
+    match app-id="wechat" title="wechat"
     open-focused false
 }
 
