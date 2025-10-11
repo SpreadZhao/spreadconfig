@@ -17,20 +17,8 @@ input {
 
 }
 
-output "eDP-1" {
-    // off
-    scale 2
-    position x=3440 y=600
-}
-
-output "HDMI-A-1" {
-    scale 1
-    position x=0 y=0
-    focus-at-startup
-}
-
 layout {
-    gaps 1
+    gaps 5
     background-color "#000000"
     center-focused-column "never"
     preset-column-widths {
@@ -40,9 +28,9 @@ layout {
     }
     default-column-width { proportion 0.5; }
     focus-ring {
-        width 4
-        active-color "#7fc8ff"
-        inactive-color "#505050"
+        width 2
+        active-color "#ffffff"
+        inactive-color "#3d3d3d"
     }
     border {
         off
@@ -58,10 +46,10 @@ layout {
         color "#0007"
     }
     tab-indicator {
-        hide-when-single-tab
+        // hide-when-single-tab
         place-within-column
         gap 5
-        width 4
+        width 6
         length total-proportion=1.0
         position "left"
         gaps-between-tabs 5
@@ -70,11 +58,30 @@ layout {
         urgent-color "red"
     }
     struts {
-        left 10
-        right 10
-        top 0
-        bottom 0
+        left 0
+        right 0
+        top -5
+        bottom -5
     }
+}
+
+output "eDP-1" {
+    // off
+    scale 2
+    position x=3440 y=600
+    // you can do this since next release
+    // layout {
+    //     default-column-width { proportion 1.0; }
+    // }
+}
+
+output "HDMI-A-1" {
+    scale 1
+    position x=0 y=0
+    focus-at-startup
+    // layout {
+    //     default-column-width { proportion 0.5; }
+    // }
 }
 
 spawn-at-startup "waybar"
