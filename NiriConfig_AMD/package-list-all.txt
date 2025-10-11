@@ -723,9 +723,7 @@ tree-sitter-vimdoc
 tslib
 ttf-cascadia-code-nerd
 ttf-liberation
-ttf-lxgw-wenkai
 ttf-martian-mono-nerd
-ttf-yozai-font
 tzdata
 uchardet
 udisks2
