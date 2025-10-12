@@ -1,9 +1,11 @@
 * {
     border: none;
     border-radius: 0;
-    font-family: "CaskaydiaCove NFM";
-    font-size: 16px;
+    font-family: "AcPlusIBMVGA8x 14 Nerd Font";
+    font-size: 25px;
     min-height: 0;
+    padding: 0;
+    margin: -1;
 }
 
 window#waybar {
@@ -12,8 +14,8 @@ window#waybar {
 }
 
 #window {
-    font-weight: bold;
-    font-family: "CaskaydiaCove NFM";
+    /* font-weight: bold; */
+    font-family: "AcPlusIBMVGA8x 14 Nerd Font";
 }
 /*
 #workspaces {
