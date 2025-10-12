@@ -4,5 +4,6 @@ jetbrains-toolbox
 linuxqq
 paru
 paru-debug
+ttf-zpix
 wechat-bin
 yutto
