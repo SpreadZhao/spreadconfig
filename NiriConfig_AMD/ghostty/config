@@ -1,10 +1,10 @@
 theme = Dark Pastel
 font-family = SpreadNerd
 font-family = Zpix Mono
-font-style = Regular
-font-style-bold = Bold
-font-style-italic = Italic
-font-style-bold-italic = Bold Italic
+# font-style = Regular
+# font-style-bold = Bold
+# font-style-italic = Italic
+# font-style-bold-italic = Bold Italic
 font-size = 20
 # bold-color = #b00000
 cursor-style = block
