@@ -56,6 +56,7 @@ paru -Qq > "$CONFIG_DIR/package-list-all.txt"
 # dotfiles
 config_subdirs=(
     # dunst
+    fontconfig
     # foot
     ghostty
     # i3blocks
