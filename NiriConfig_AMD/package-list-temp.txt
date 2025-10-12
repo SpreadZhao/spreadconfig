@@ -18,7 +18,8 @@ fcitx5-chinese-addons
 fcitx5-configtool
 fcitx5-gtk
 feh
-file-roller
+font-manager
+fontforge
 gdb
 gdu
 ghostty
@@ -37,6 +38,7 @@ lsof
 lua-language-server
 mpv
 neovim
+net-tools
 networkmanager
 niri
 nvm
