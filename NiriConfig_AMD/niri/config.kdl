@@ -18,7 +18,7 @@ input {
 }
 
 layout {
-    gaps 5
+    gaps 0
     background-color "#000000"
     center-focused-column "never"
     preset-column-widths {
@@ -58,10 +58,10 @@ layout {
         urgent-color "red"
     }
     struts {
-        left 0
-        right 0
-        top -5
-        bottom -5
+        left 4
+        right 4
+        top 0
+        bottom 4
     }
 }
 
@@ -82,6 +82,13 @@ output "HDMI-A-1" {
     // layout {
     //     default-column-width { proportion 0.5; }
     // }
+}
+
+environment {
+    XMODIFIERS "@im=fcitx"
+    QT_IM_MODULE "fcitx"
+    QT_QPA_PLATFORM "wayland"
+    ELECTRON_OZONE_PLATFORM_HINT "wayland"
 }
 
 spawn-at-startup "waybar"

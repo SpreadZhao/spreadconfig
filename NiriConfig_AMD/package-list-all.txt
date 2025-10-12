@@ -431,7 +431,6 @@ libva-utils
 libvdpau
 libverto
 libvips
-libvlc
 libvorbis
 libvpl
 libvpx
@@ -756,7 +755,6 @@ wayland
 webkit2gtk-4.1
 webkitgtk-6.0
 webrtc-audio-processing-1
-wechat-bin
 wev
 wf-recorder
 wget
