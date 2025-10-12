@@ -33,6 +33,7 @@ lsof
 man-db
 mpv
 neovim
+net-tools
 noto-fonts
 noto-fonts-cjk
 noto-fonts-emoji
