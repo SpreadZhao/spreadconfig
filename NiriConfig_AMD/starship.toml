@@ -3,10 +3,13 @@ $username\
 $hostname\
 $directory\
 $git_branch\
+$git_commit\
 $git_state\
 $git_status\
+$git_metrics\
+$fill\
 $cmd_duration\
-$line_break\
+$time
 $python\
 $character"""
 
@@ -46,3 +49,12 @@ style = "yellow"
 [python]
 format = "[$virtualenv]($style) "
 style = "bright-black"
+
+[fill]
+symbol = '-'
+style = 'bright-black'
+
+[time]
+disabled = false
+format = '[$time]($style)'
+time_format = '%H:%M:%S%.3f'

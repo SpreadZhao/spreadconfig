@@ -1,8 +1,8 @@
 * {
     border: none;
     border-radius: 0;
-    font-family: "AcPlusIBMVGA8x 14 Nerd Font";
-    font-size: 25px;
+    font-family: "SpreadNerd";
+    font-size: 22px;
     min-height: 0;
     padding: 0;
     margin: -1;
@@ -12,16 +12,6 @@ window#waybar {
     background: transparent;
     color: white;
 }
-
-#window {
-    /* font-weight: bold; */
-    font-family: "AcPlusIBMVGA8x 14 Nerd Font";
-}
-/*
-#workspaces {
-    padding: 0 5px;
-}
-*/
 
 #workspaces button {
     padding: 0 5px;

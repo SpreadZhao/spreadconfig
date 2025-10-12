@@ -10,7 +10,7 @@ max-icon-size=64
 default-timeout=20000
 ignore-timeout=1
 text-alignment=center
-font=CaskaydiaCove Nerd Font Mono 16
+font=SpreadNerd 16
 format=<b>[%a]%s</b>\n%b
 
 [urgency=low]

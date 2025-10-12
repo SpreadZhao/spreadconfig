@@ -726,10 +726,8 @@ tree-sitter-query
 tree-sitter-vim
 tree-sitter-vimdoc
 tslib
-ttf-bigblueterminal-nerd
-ttf-cascadia-code-nerd
 ttf-liberation
-ttf-terminus-nerd
+ttf-zpix
 tzdata
 uchardet
 udisks2

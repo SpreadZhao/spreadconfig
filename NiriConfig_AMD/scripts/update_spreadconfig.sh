@@ -59,6 +59,8 @@ config_subdirs=(
     fontconfig
     # foot
     ghostty
+    gtk-3.0
+    gtk-4.0
     # i3blocks
     lazygit
     mako
