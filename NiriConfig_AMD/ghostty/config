@@ -1,6 +1,11 @@
 theme = Dark Pastel
-font-family = CaskaydiaCove Nerd Font Mono
-font-size = 16
+font-family = AcPlusIBMVGA8x 14 Nerd Font
+font-family-italic = Terminess Nerd Font Mono
+font-family-bold-italic = Terminess Nerd Font Mono
+window-title-font-family = AcPlusIBMVGA8x 14 Nerd Font
+font-size = 22
+bold-color = #b00000
 cursor-style = block
 cursor-style-blink = false
+cursor-color = #5e5e5e
 shell-integration-features = no-cursor
