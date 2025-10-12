@@ -110,7 +110,9 @@ findutils
 flac
 flex
 fmt
+font-manager
 fontconfig
+fontforge
 freeglut
 freetype2
 fribidi
@@ -414,6 +416,7 @@ libtiff
 libtirpc
 libtool
 libunibreak
+libuninameslist
 libunistring
 libunwind
 liburcu
@@ -527,6 +530,7 @@ mypaint-brushes1
 nautilus
 ncurses
 neovim
+net-tools
 nettle
 networkmanager
 nftables
@@ -596,6 +600,7 @@ poppler-data
 poppler-glib
 popt
 portaudio
+potrace
 pps-tools
 procps-ng
 progress
@@ -721,9 +726,10 @@ tree-sitter-query
 tree-sitter-vim
 tree-sitter-vimdoc
 tslib
+ttf-bigblueterminal-nerd
 ttf-cascadia-code-nerd
 ttf-liberation
-ttf-martian-mono-nerd
+ttf-terminus-nerd
 tzdata
 uchardet
 udisks2
@@ -750,6 +756,7 @@ vulkan-tools
 waybar
 wayland
 webkit2gtk-4.1
+webkitgtk-6.0
 webrtc-audio-processing-1
 wechat-bin
 wev
