@@ -55,6 +55,7 @@ paru -Qq > "$CONFIG_DIR/package-list-all.txt"
 
 # dotfiles
 config_subdirs=(
+    btop
     # dunst
     fontconfig
     # foot
