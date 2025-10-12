@@ -139,6 +139,13 @@ window-rule {
     max-width 200
 }
 
+window-rule {
+    match app-id="org.gnome.FileRoller"
+    open-floating true
+    default-column-width { proportion 0.34; }
+    default-window-height { proportion 0.75; }
+}
+
 binds {
     Mod+Shift+Slash { show-hotkey-overlay; }
 
