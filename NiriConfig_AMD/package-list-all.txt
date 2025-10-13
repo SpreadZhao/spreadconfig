@@ -530,6 +530,7 @@ neovim
 net-tools
 nettle
 networkmanager
+newsboat
 nftables
 ninja
 niri
@@ -693,6 +694,7 @@ sqlitebrowser
 sratom
 srt
 starship
+stfl
 stylua
 sudo
 suitesparse

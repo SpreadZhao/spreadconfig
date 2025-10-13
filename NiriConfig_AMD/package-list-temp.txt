@@ -39,6 +39,7 @@ mpv
 neovim
 net-tools
 networkmanager
+newsboat
 niri
 nvm
 nwg-look
