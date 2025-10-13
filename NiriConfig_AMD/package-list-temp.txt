@@ -22,7 +22,6 @@ font-manager
 fontforge
 gdb
 gdu
-ghostty
 gimp
 github-cli
 gnome-disk-utility
