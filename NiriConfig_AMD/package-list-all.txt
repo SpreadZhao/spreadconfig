@@ -94,6 +94,7 @@ expat
 eza
 fakeroot
 fastfetch
+fcft
 fcitx5
 fcitx5-chinese-addons
 fcitx5-configtool
@@ -113,6 +114,7 @@ fmt
 font-manager
 fontconfig
 fontforge
+foot
 freeglut
 freetype2
 fribidi
@@ -134,9 +136,6 @@ gdu
 gegl
 gettext
 gflags
-ghostty
-ghostty-shell-integration
-ghostty-terminfo
 giflib
 gimp
 git
@@ -185,7 +184,6 @@ gtk-layer-shell
 gtk-update-icon-cache
 gtk3
 gtk4
-gtk4-layer-shell
 gtkmm3
 guile
 gupnp
