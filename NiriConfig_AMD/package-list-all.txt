@@ -135,6 +135,7 @@ gdk-pixbuf2
 gdu
 gegl
 gettext
+gexiv2
 gflags
 giflib
 gimp
@@ -339,7 +340,6 @@ libksba
 liblc3
 libldac
 libldap
-libliftoff
 libluv
 libmanette
 libmaxminddb
@@ -700,7 +700,6 @@ sudo
 suitesparse
 svt-av1
 swappy
-sway
 swaybg
 swayidle
 swaylock
@@ -761,7 +760,6 @@ wget
 which
 wireplumber
 wl-clipboard
-wlroots0.19
 woff2
 wofi
 wpa_supplicant
@@ -771,7 +769,6 @@ xcb-imdkit
 xcb-proto
 xcb-util
 xcb-util-cursor
-xcb-util-errors
 xcb-util-image
 xcb-util-keysyms
 xcb-util-renderutil

@@ -93,7 +93,7 @@ handle_choice() {
     "$OPTION_SAVE")
         local timestamp
         timestamp=$(date '+%Y%m%d_%H%M%S')
-        local savepath="$HOME/Pictures/Screenshot_${timestamp}.png"
+        local savepath="$HOME/Pictures/screenshot/Screenshot_${timestamp}.png"
         if mv "$TMPFILE" "$savepath"; then
             notify "Saved to $savepath 📁"
             # Prevent cleanup after move

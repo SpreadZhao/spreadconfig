@@ -90,3 +90,23 @@ window#waybar {
 
 #tray {
 }
+
+#custom-temperature {
+    color: #13ed22;
+}
+
+#custom-brightness {
+    color: #1b5982;
+}
+
+#custom-audio {
+    color: #207343;
+}
+
+#custom-battery {
+    color: #b02727;
+}
+
+#custom-time {
+    color: #acbd97;
+}
