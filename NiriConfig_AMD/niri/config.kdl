@@ -87,8 +87,9 @@ output "HDMI-A-1" {
 environment {
     XMODIFIERS "@im=fcitx"
     QT_IM_MODULE "fcitx"
-    QT_QPA_PLATFORM "wayland"
-    ELECTRON_OZONE_PLATFORM_HINT "wayland"
+    // GTK_IM_MODULE "fcitx"
+    // QT_QPA_PLATFORM "wayland"
+    // ELECTRON_OZONE_PLATFORM_HINT "auto"
 }
 
 spawn-at-startup "waybar"
