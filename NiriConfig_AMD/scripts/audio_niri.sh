@@ -91,4 +91,4 @@ get_sink_volume() {
 }
 
 # Print sink volume + icon and mic volume + icon, separated by space
-echo "$(get_sink_volume) $(get_mic_volume)"
+echo "$(get_sink_volume)$(get_mic_volume)"
