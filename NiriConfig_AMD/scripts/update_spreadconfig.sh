@@ -58,8 +58,8 @@ config_subdirs=(
     btop
     # dunst
     fontconfig
-    # foot
-    ghostty
+    foot
+    # ghostty
     gtk-3.0
     gtk-4.0
     # i3blocks
