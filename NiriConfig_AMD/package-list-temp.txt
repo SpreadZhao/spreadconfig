@@ -4,6 +4,7 @@ autotiling
 base
 bind
 bluetui
+brightnessctl
 btop
 calcurse
 clang
@@ -20,6 +21,7 @@ fcitx5-gtk
 feh
 font-manager
 fontforge
+foot
 gdb
 gdu
 gimp
@@ -56,7 +58,7 @@ sqlitebrowser
 starship
 stylua
 swappy
-sway
+swayidle
 telegram-desktop
 tlp
 v4l2loopback-utils

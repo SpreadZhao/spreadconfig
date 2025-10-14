@@ -8,74 +8,28 @@
     // Choose the order of the modules
     "modules-left": [
         "niri/workspaces",
-        "custom/screen-record-time"
     ],
     "modules-center": [
         "niri/window"
     ],
     "modules-right": [
-        // "wireplumber",
-        // // "power-profiles-daemon",
-        // // "backlight",
-        // "battery",
-        // "battery#bat2",
-        // "clock",
-        "custom/temperature",
-        "custom/brightness",
-        "custom/audio",
-        "custom/battery",
-        "custom/time",
-        "custom/spacer",
+        "wireplumber",
+        // "power-profiles-daemon",
+        // "backlight",
+        "battery",
+        "battery#bat2",
+        "clock",
         "tray"
     ],
-    "custom/spacer": {
-        "format": "|"
-    },
-    "custom/screen-record-time": {
-        "format": "|{}",
-        "exec": "/home/spreadzhao/scripts/get_screenrecord_time.sh",
-        "interval": 1,
-        "hide-empty-text": true
-    },
-    "custom/temperature": {
-        // "format": "{}|",
-        "exec": "/home/spreadzhao/scripts/get_temperature.sh",
-        "interval": 10
-    },
-    "custom/brightness": {
-        // "format": "{}|",
-        "exec": "/home/spreadzhao/scripts/get_brightness.sh",
-        "interval": "once",
-        "signal": 8
-    },
-    "custom/audio": {
-        // "format": "{}|",
-        "exec": "/home/spreadzhao/scripts/audio_niri.sh",
-        "interval": "once",
-        "signal": 7
-    },
-    "custom/battery": {
-        // "format": "{}|",
-        "exec": "/home/spreadzhao/scripts/get_battery.sh",
-        "interval": 10
-    },
-    "custom/time": {
-        // "format": "{}|",
-        "exec": "/home/spreadzhao/scripts/get_time.sh",
-        "interval": 1,
-        "on-click": "[ -e /tmp/toggle_time_format ] && rm /tmp/toggle_time_format || touch /tmp/toggle_time_format",
-        "tooltip": false
-    },
     "tray": {
-        "format": "|{}",
         "icon-size": 25,
         "spacing": 10
     },
     "clock": {
         // "timezone": "America/New_York",
-        // "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
-        "format": "{:%Y-%m-%d %H:%M %a}|",
-        "format-alt": "{:%H:%M}|"
+        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
+        "format": "{:%H:%M}|",
+        "format-alt": "{:%Y-%m-%d %H:%M %a}|"
     },
     "temperature": {
         // "thermal-zone": 2,
