@@ -1,0 +1,51 @@
+" .ideavimrc is a configuration file for IdeaVim plugin. It uses
+"   the same commands as the original .vimrc configuration.
+" You can find a list of commands here: https://jb.gg/h38q75
+" Find more examples here: https://jb.gg/share-ideavimrc
+
+
+"" -- Suggested options --
+" Show a few lines of context around the cursor. Note that this makes the
+" text scroll if you mouse-click near the start or end of the window.
+set scrolloff=5
+set relativenumber
+" Do incremental searching.
+set incsearch
+set ignorecase
+set smartcase
+set clipboard+=unnamedplus
+
+" Don't use Ex mode, use Q for formatting.
+map Q gq
+
+" --- Enable IdeaVim plugins https://jb.gg/ideavim-plugins
+
+" Highlight copied text
+Plug 'machakann/vim-highlightedyank'
+" Commentary plugin
+Plug 'tpope/vim-commentary'
+Plug 'easymotion/vim-easymotion'
+Plug 'preservim/nerdtree'
+Plug 'vim-scripts/argtextobj.vim'
+Plug 'tpope/vim-surround'
+set which-key
+set notimeout
+set easymotion
+let mapleader = " "
+
+nmap <leader>si <Action>(SelectInProjectView)
+nmap <leader>ge <Action>(RecentFiles)
+nmap gi <action>(GotoImplementation)
+nmap gu <Action>(GotoSuperMethod)
+nmap gk <Action>(Back)
+nmap gj <Action>(Forward)
+nmap <leader>fu <Action>(FindUsages)
+nmap <leader>ns <Action>(NextSplitter)
+nmap <leader>a <Action>(Annotate)
+nmap <leader>p "+p
+nmap <leader>y "+y
+nmap grn <Action>(RenameElement)
+nmap ' $
+nmap <leader>; <leader><leader>s
+nmap <leader>lb <Action>(ToggleLineBreakpoint)
+nmap <leader>d <Action>(QuickJavaDoc)
