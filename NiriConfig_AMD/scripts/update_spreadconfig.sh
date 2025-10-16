@@ -66,6 +66,7 @@ copy_to_config_dir /etc/environment
 # dotfiles
 config_subdirs=(
     btop
+    cliphist
     # dunst
     fontconfig
     foot
