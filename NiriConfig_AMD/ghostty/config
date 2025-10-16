@@ -1,11 +1,13 @@
-theme = Dark Pastel
-font-family = SpreadNerd
-font-family = Zpix Mono
+# theme = Dark Pastel
+# theme = Adventure
+theme = Builtin Tango Dark
+font-family = Maple Mono NF CN
+# font-family = Zpix Mono
 # font-style = Regular
 # font-style-bold = Bold
 # font-style-italic = Italic
 # font-style-bold-italic = Bold Italic
-font-size = 20
+font-size = 16
 # bold-color = #b00000
 cursor-style = block
 cursor-style-blink = false
