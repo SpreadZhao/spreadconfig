@@ -16,7 +16,7 @@ TMPFILE=""
 
 notify() {
     local message="$1"
-    notify-send --app-name "screenshot" -u normal "" "$message"
+    notify-send --app-name "screenshot" -u normal "$message"
 }
 
 # --- Function: Initialize temporary file for screenshot ---
@@ -58,7 +58,7 @@ capture_screenshot() {
     freeze_screen
     if grim -g "$(slurp -d)" "$TMPFILE"; then
         unfreeze_screen
-        notify "Capture successful ✅"
+        # notify "Capture successful ✅"
         return 0
     else
         unfreeze_screen

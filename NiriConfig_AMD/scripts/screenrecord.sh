@@ -9,7 +9,7 @@ REGION_PROMPT="Select area to record"
 
 notify() {
     local message="$1"
-    notify-send --app-name "screen record" -u normal "" "$message"
+    notify-send --app-name "screen record" -u normal "$message"
 }
 
 # === Initialize save directory ===
@@ -26,13 +26,13 @@ stop_recording() {
         if [ -f "$LAST_FILE" ]; then
             local lastpath
             lastpath=$(cat "$LAST_FILE")
-            notify "Recording stopped ⏹️\nSaved to:\n$lastpath"
+            notify "Recording stopped⏹️Saved to:$lastpath"
             rm -f "$LAST_FILE"
         else
-            notify-send "Recording stopped ⏹️"
+            notify "Recording stopped ⏹️"
         fi
     else
-        notify-send "Failed to stop recording ❌"
+        notify "Failed to stop recording ❌"
         rm -f "$PID_FILE"
     fi
 }
@@ -41,10 +41,6 @@ stop_recording() {
 select_region() {
     local region
     region=$(slurp -d)
-    if [ -z "$region" ]; then
-        notify-send "No region selected ❌"
-        exit 1
-    fi
     echo "$region"
 }
 
@@ -61,7 +57,7 @@ start_recording() {
     local output_file="$2"
 
     echo "$output_file" >"$LAST_FILE"
-    notify-send "Recording started 🎬Press the shortcut again to stop."
+    notify "Recording started 🎬 Press the shortcut again to stop."
     wf-recorder -g "$region" -f "$output_file" &
 
     echo $! >"$PID_FILE"
@@ -78,6 +74,11 @@ main() {
 
     local region
     region=$(select_region)
+
+    if [ -z "$region" ]; then
+        notify "No region selected ❌"
+        exit 0
+    fi
 
     local output_file
     output_file=$(generate_output_file)
