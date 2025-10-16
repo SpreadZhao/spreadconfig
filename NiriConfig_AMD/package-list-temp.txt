@@ -1,5 +1,6 @@
 amd-ucode
 amdgpu_top
+archlinuxcn-keyring
 autotiling
 base
 bind
@@ -8,6 +9,7 @@ brightnessctl
 btop
 calcurse
 clang
+clash-verge-rev
 cliphist
 cmake
 diff-so-fancy
@@ -48,6 +50,8 @@ nwg-look
 obs-studio
 obsidian
 onefetch
+paru
+paru-debug
 polkit-gnome
 progress
 radeontop
@@ -61,6 +65,9 @@ swappy
 swayidle
 telegram-desktop
 tlp
+ttf-maplemono-nf-cn-unhinted
+ttf-maplemono-nf-unhinted
+ttf-yozai-font
 v4l2loopback-utils
 vivaldi
 vulkan-tools

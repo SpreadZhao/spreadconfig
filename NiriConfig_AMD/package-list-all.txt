@@ -17,6 +17,7 @@ android-udev
 aom
 appstream
 archlinux-keyring
+archlinuxcn-keyring
 at-spi2-core
 atkmm
 attr
@@ -54,7 +55,8 @@ cairomm
 calcurse
 cfitsio
 clang
-clash-verge-rev-bin
+clash-geoip
+clash-verge-rev
 cliphist
 cmake
 compiler-rt
@@ -512,6 +514,7 @@ mbedtls
 md4c
 mdadm
 mesa
+mihomo
 minizip
 mkinitcpio
 mkinitcpio-busybox
@@ -725,6 +728,11 @@ tree-sitter-vim
 tree-sitter-vimdoc
 tslib
 ttf-liberation
+ttf-maplemono-nf-cn-unhinted
+ttf-maplemono-nf-unhinted
+ttf-nerd-fonts-symbols-common
+ttf-nerd-fonts-symbols-mono
+ttf-yozai-font
 ttf-zpix
 tzdata
 uchardet
