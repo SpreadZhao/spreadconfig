@@ -1,7 +1,7 @@
 * {
     border: none;
     border-radius: 0;
-    font-family: "SpreadNerd";
+    font-family: "Maple Mono NF CN";
     font-size: 22px;
     min-height: 0;
     padding: 0;
@@ -100,7 +100,7 @@ window#waybar {
 }
 
 #custom-audio {
-    color: #207343;
+    color: #1b5982;
 }
 
 #custom-battery {
@@ -108,5 +108,5 @@ window#waybar {
 }
 
 #custom-time {
-    color: #acbd97;
+    color: #207343;
 }

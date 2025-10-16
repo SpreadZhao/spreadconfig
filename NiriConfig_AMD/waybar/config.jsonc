@@ -21,9 +21,13 @@
         // "battery#bat2",
         // "clock",
         "custom/temperature",
-        "custom/brightness",
+        "custom/spacer",
+        // "custom/brightness",
+        // "custom/spacer",
         "custom/audio",
+        "custom/spacer",
         "custom/battery",
+        "custom/spacer",
         "custom/time",
         "custom/spacer",
         "tray"
@@ -51,7 +55,7 @@
     "custom/audio": {
         // "format": "{}|",
         "exec": "/home/spreadzhao/scripts/audio_niri.sh",
-        "interval": "once",
+        "interval": 3,
         "signal": 7
     },
     "custom/battery": {

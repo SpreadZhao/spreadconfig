@@ -1,5 +1,5 @@
 * {
-  font-family: "SpreadNerd";
+  font-family: "Yozai";
   font-size: 36px;
 }
 window {
@@ -9,5 +9,5 @@ window {
   background-color: black;
 }
 #entry:selected {
-  background-color: #1f1e33;
+  background-color: #6e6e6e;
 }
