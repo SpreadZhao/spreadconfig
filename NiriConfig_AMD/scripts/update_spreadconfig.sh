@@ -54,6 +54,15 @@ paru -Qqetn > "$CONFIG_DIR/package-list-temp.txt"
 paru -Qqem > "$CONFIG_DIR/package-list-aur-temp.txt"
 paru -Qq > "$CONFIG_DIR/package-list-all.txt"
 
+# IdeaVim
+copy_to_config_dir "$HOME/.ideavimrc"
+
+# zshrc
+copy_to_config_dir "$HOME/.zshrc"
+
+# system env
+copy_to_config_dir /etc/environment
+
 # dotfiles
 config_subdirs=(
     btop
@@ -73,6 +82,7 @@ config_subdirs=(
     swappy
     starship.toml
     # sway
+    vivaldi_custom_css
     wofi
     waybar
 )
