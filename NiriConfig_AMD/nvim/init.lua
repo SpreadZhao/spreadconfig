@@ -39,6 +39,7 @@ require('lazy').setup {
     require 'plugins.todo-comments',
     require 'plugins.toggleterm',
     require 'plugins.which-key',
+    require 'plugins.log-highlight',
     -- require 'plugins.copilot',
     -- LSP Plugins
     require 'plugins.lsp.lazydev',
