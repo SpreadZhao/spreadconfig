@@ -20,7 +20,7 @@ style = "blue"
 
 [character]
 success_symbol = "[❯](yellow)"
-error_symbol = "[❯](red)"
+error_symbol = "[X](red)"
 vimcmd_symbol = "[❮](white)"
 
 [git_branch]
@@ -57,4 +57,5 @@ style = 'bright-black'
 [time]
 disabled = false
 format = '[$time]($style)'
-time_format = '%H:%M:%S%.3f'
+# time_format = '%H:%M:%S%.3f'
+time_format = '%H:%M:%S'
