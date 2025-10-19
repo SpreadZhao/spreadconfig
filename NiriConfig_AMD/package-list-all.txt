@@ -413,6 +413,7 @@ libssh2
 libstemmer
 libsysprof-capture
 libtasn1
+libtatsu
 libteam
 libthai
 libtheora
