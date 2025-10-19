@@ -81,6 +81,7 @@ diffutils
 dkms
 dnsmasq
 dnssec-anchors
+dosfstools
 double-conversion
 duf
 duktape
@@ -213,6 +214,7 @@ iana-etc
 icu
 imath
 imlib2
+impression
 inter-font
 iproute2
 iptables
@@ -751,6 +753,7 @@ v4l-utils
 v4l2loopback-dkms
 v4l2loopback-utils
 vapoursynth
+ventoy-bin
 vid.stab
 vivaldi
 vmaf
