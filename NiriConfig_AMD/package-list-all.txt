@@ -140,9 +140,6 @@ gegl
 gettext
 gexiv2
 gflags
-ghostty
-ghostty-shell-integration
-ghostty-terminfo
 giflib
 gimp
 git
@@ -191,7 +188,6 @@ gtk-layer-shell
 gtk-update-icon-cache
 gtk3
 gtk4
-gtk4-layer-shell
 gtkmm3
 guile
 gupnp

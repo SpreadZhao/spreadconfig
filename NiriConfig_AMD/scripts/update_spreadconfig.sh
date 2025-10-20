@@ -67,13 +67,13 @@ copy_to_config_dir /etc/environment
 config_subdirs=(
     btop
     cliphist
-    # dunst
+    dunst
     fontconfig
-    # foot
+    foot
     ghostty
     gtk-3.0
     gtk-4.0
-    # i3blocks
+    i3blocks
     lazygit
     mako
     niri
@@ -82,7 +82,7 @@ config_subdirs=(
     paru
     swappy
     starship.toml
-    # sway
+    sway
     vivaldi_custom_css
     wofi
     waybar
