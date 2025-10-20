@@ -26,7 +26,6 @@ fontforge
 foot
 gdb
 gdu
-ghostty
 gimp
 github-cli
 gnome-disk-utility
