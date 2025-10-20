@@ -23,6 +23,7 @@ fcitx5-gtk
 feh
 font-manager
 fontforge
+foot
 gdb
 gdu
 ghostty
