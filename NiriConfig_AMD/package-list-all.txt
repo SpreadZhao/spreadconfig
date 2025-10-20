@@ -97,6 +97,7 @@ expat
 eza
 fakeroot
 fastfetch
+fcft
 fcitx5
 fcitx5-chinese-addons
 fcitx5-configtool
@@ -116,6 +117,7 @@ fmt
 font-manager
 fontconfig
 fontforge
+foot
 freeglut
 freetype2
 fribidi
@@ -738,7 +740,6 @@ ttf-maplemono-nf-unhinted
 ttf-nerd-fonts-symbols-common
 ttf-nerd-fonts-symbols-mono
 ttf-yozai-font
-ttf-zpix
 tzdata
 uchardet
 udisks2

@@ -1,6 +1,5 @@
 feishu-bin
 jetbrains-toolbox
 linuxqq
-ttf-zpix
 ventoy-bin
 yutto
