@@ -686,6 +686,7 @@ slang
 slurp
 snappy
 sndio
+socat
 sof-firmware
 sord
 sound-theme-freedesktop

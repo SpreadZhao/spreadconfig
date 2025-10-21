@@ -8,7 +8,8 @@
     // Choose the order of the modules
     "modules-left": [
         "niri/workspaces",
-        "custom/screen-record-time"
+        "custom/window-indicator",
+        "custom/screen-record-time",
     ],
     "modules-center": [
         "niri/window"
@@ -35,8 +36,15 @@
     "custom/spacer": {
         "format": "|"
     },
+    "custom/window-indicator": {
+        "format": "| {}",
+        "exec": "/home/spreadzhao/scripts/niri_windows.sh",
+        // "interval": 1,
+        "hide-empty-text": true,
+        // "return-type": "json"
+    },
     "custom/screen-record-time": {
-        "format": "|{}",
+        "format": "| {}",
         "exec": "/home/spreadzhao/scripts/get_screenrecord_time.sh",
         "interval": 1,
         "hide-empty-text": true
