@@ -58,6 +58,7 @@ progress
 radeontop
 scrcpy
 shfmt
+socat
 sof-firmware
 sqlitebrowser
 starship
