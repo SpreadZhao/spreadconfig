@@ -48,8 +48,8 @@ layout {
     tab-indicator {
         // hide-when-single-tab
         place-within-column
-        gap 5
-        width 6
+        gap 4
+        width 4
         length total-proportion=1.0
         position "left"
         gaps-between-tabs 5
@@ -58,10 +58,10 @@ layout {
         urgent-color "red"
     }
     struts {
-        left 4
-        right 4
-        top 0
-        bottom 4
+        left 2
+        right 2
+        top 2
+        bottom 2
     }
 }
 
