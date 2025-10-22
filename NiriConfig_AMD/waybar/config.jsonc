@@ -63,7 +63,7 @@
     "custom/audio": {
         // "format": "{}|",
         "exec": "/home/spreadzhao/scripts/audio_niri.sh",
-        "interval": 3,
+        // "interval": 3,
         "signal": 7
     },
     "custom/battery": {
