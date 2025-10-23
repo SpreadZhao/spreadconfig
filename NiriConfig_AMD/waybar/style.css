@@ -1,9 +1,9 @@
 * {
     border: none;
     border-radius: 0;
-    font-family: "Yozai", "Symbols Nerd Font Mono";
+    font-family: "Inter", "Symbols Nerd Font Mono";
     font-size: 20px;
-    font-weight: bolder;
+    font-weight: normal;
     min-height: 0px;
 }
 
