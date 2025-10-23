@@ -81,7 +81,6 @@ diffutils
 dkms
 dnsmasq
 dnssec-anchors
-dosfstools
 double-conversion
 duf
 duktape
@@ -677,6 +676,7 @@ sdl3
 seatd
 sed
 serd
+serie
 shaderc
 shadow
 shared-mime-info
@@ -752,7 +752,6 @@ v4l-utils
 v4l2loopback-dkms
 v4l2loopback-utils
 vapoursynth
-ventoy-bin
 vid.stab
 vivaldi
 vmaf

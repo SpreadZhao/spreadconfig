@@ -17,6 +17,7 @@ alias l="eza -lah --git --icons"
 # shortcut
 alias n="nvim ."
 alias lg="lazygit"
+alias lgc="serie"
 alias tt="tray-tui"
 alias t="tmux"
 alias c="clear"
