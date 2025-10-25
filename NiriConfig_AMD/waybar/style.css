@@ -35,6 +35,10 @@ window#waybar {
     color: #1b5982;
 }
 
+#network {
+    color: #456d2f
+}
+
 #custom-audio {
     color: #1b5982;
 }
