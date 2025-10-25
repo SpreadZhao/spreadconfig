@@ -5,7 +5,9 @@ clang
 cliphist
 cmake
 diff-so-fancy
+dosfstools
 duf
+exfatprogs
 eza
 fastfetch
 fcitx5
