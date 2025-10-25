@@ -13,12 +13,12 @@ window#waybar {
 }
 
 #window {
-    margin-left: 20;
-    margin-right: 20;
+    /* margin-left: 20; */
+    /* margin-right: 20; */
 }
 
 #workspaces button {
-    padding: 0 5px;
+    padding: 0 0;
     background: transparent;
     color: white;
 }
