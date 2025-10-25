@@ -94,7 +94,7 @@ environment {
 
 spawn-at-startup "waybar"
 spawn-at-startup "fcitx5 -d"
-spawn-at-startup "clash-verge"
+// spawn-at-startup "clash-verge"
 spawn-at-startup "mako"
 spawn-at-startup "/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1"
 
