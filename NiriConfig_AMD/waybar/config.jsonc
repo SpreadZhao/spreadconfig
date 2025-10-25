@@ -10,9 +10,10 @@
         "niri/workspaces",
         "custom/window-indicator",
         "custom/screen-record-time",
+        "custom/spacer",
+        "niri/window"
     ],
     "modules-center": [
-        "niri/window"
     ],
     "modules-right": [
         // "wireplumber",
@@ -39,7 +40,7 @@
         "format": "|"
     },
     "custom/window-indicator": {
-        "format": "| {}",
+        "format": "|{}",
         "exec": "/home/spreadzhao/scripts/niri_windows.sh",
         // "interval": 1,
         "hide-empty-text": true,
@@ -132,13 +133,13 @@
     },
     "network": {
         "interface": "wlo1",
-        "format": "{ifname}",
-        "format-wifi": "{signalStrength}",
-        "format-ethernet": "󰈀",
+        "format": "{bandwidthDownBytes}{bandwidthUpBytes}",
+        // "format-wifi": "{bandwidthDownBytes}{bandwidthUpBytes}",
+        // "format-ethernet": "{bandwidthDownBytes}{bandwidthUpBytes}",
         "format-disconnected": "󰯡",
         "tooltip-format": "{ifname} via {gwaddr} 󰊗",
         "tooltip-format-wifi": "{essid} ({signalStrength}%) ",
-        "tooltip-format-ethernet": "{ifname} ",
+        "tooltip-format-ethernet": "{ifname} 󰈀",
         "tooltip-format-disconnected": "Disconnected",
         "max-length": 50
     }
