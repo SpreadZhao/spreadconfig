@@ -81,6 +81,7 @@ diffutils
 dkms
 dnsmasq
 dnssec-anchors
+dosfstools
 double-conversion
 duf
 duktape
@@ -91,6 +92,7 @@ efivar
 electron37
 enchant
 exempi
+exfatprogs
 exiv2
 expat
 eza
