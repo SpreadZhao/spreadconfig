@@ -115,6 +115,5 @@ get_active_workspace_windows_json() {
     # Step 5: Output each window as a JSON object
     echo "$sorted_windows" | jq -c '.[] | {text: .app_id, class: (if .is_focused then "focused" else "unfocused" end)}'
 }
-niri msg event-stream | while read -r line; do
-    get_active_workspace_app_ids_sorted
-done
+
+get_active_workspace_app_ids_sorted
