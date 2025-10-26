@@ -209,7 +209,6 @@ hsa-rocr
 hunspell
 hwdata
 hyphen
-i3blocks
 iana-etc
 icu
 imath
@@ -676,6 +675,7 @@ sbc
 scrcpy
 sdl2-compat
 sdl3
+seahorse
 seatd
 sed
 serd
