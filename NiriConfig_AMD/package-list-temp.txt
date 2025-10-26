@@ -31,7 +31,6 @@ gimp
 github-cli
 gnome-disk-utility
 grub
-i3blocks
 impression
 inter-font
 jdk8-openjdk

@@ -7,6 +7,7 @@ cmake
 diff-so-fancy
 dosfstools
 duf
+dust
 exfatprogs
 eza
 fastfetch
@@ -18,7 +19,6 @@ fcitx5-qt
 feh
 fzf
 gdu
-ghostty
 git
 github-cli
 grim
@@ -39,11 +39,9 @@ net-tools
 noto-fonts
 noto-fonts-cjk
 noto-fonts-emoji
+ntfs-3g
 nwg-look
-obs-studio
-obsidian
 onefetch
-polkit-gnome
 rocm-smi-lib
 scrcpy
 slurp
@@ -53,12 +51,13 @@ unrar
 unzip
 v4l2loopback-dkms
 v4l2loopback-utils
-vivaldi
 wev
+wf-recorder
 wget
 wireplumber
 wl-clipboard
-wofi
-xarchiver
 zip
+zoxide
 zsh
+zsh-autosuggestions
+zsh-syntax-highlighting
