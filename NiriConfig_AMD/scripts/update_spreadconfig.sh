@@ -105,6 +105,7 @@ desktop_whitelist=(
     change_audio
     reboot
     shutdown
+    obsidian
 )
 
 mkdir -p "$desktop_dest"
