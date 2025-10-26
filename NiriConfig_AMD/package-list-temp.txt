@@ -51,6 +51,10 @@ nwg-look
 obs-studio
 obsidian
 onefetch
+openjdk11-src
+openjdk17-src
+openjdk21-src
+openjdk8-src
 paru
 paru-debug
 polkit-gnome

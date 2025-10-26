@@ -22,10 +22,6 @@ gdu
 git
 github-cli
 grim
-jdk11-openjdk
-jdk17-openjdk
-jdk21-openjdk
-jdk8-openjdk
 lazygit
 less
 libnotify
