@@ -24,7 +24,7 @@ require('lazy').setup {
     require 'plugins.vscode',
     -- Git
     require 'plugins.gitsigns',
-    -- require 'plugins.lazygit',
+    require 'plugins.lazygit',
     -- File Manage
     require 'plugins.oil',
     -- Basic Functionalities
