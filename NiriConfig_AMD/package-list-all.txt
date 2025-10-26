@@ -32,6 +32,7 @@ base
 base-devel
 bash
 bat
+bc
 bind
 binutils
 bison

@@ -3,6 +3,7 @@ amdgpu_top
 archlinuxcn-keyring
 autotiling
 base
+bc
 bind
 bluetui
 brightnessctl
