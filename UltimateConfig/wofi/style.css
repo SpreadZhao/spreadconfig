@@ -1,0 +1,13 @@
+* {
+  font-family: "Inter";
+  font-size: 36px;
+}
+window {
+  background-color: black;
+}
+#input {
+  background-color: black;
+}
+#entry:selected {
+  background-color: #6e6e6e;
+}
