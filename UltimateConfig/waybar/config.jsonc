@@ -1,0 +1,147 @@
+// -*- mode: jsonc -*-
+{
+    // "layer": "top", // Waybar at top layer
+    // "position": "bottom", // Waybar position (top|bottom|left|right)
+    "height": 30, // Waybar height (to be removed for auto height)
+    // "width": 1280, // Waybar width
+    "spacing": 1, // Gaps between modules (4px)
+    // Choose the order of the modules
+    "modules-left": [
+        "niri/workspaces",
+        "custom/window-indicator",
+        "custom/screen-record-time",
+        "custom/spacer",
+        "niri/window"
+    ],
+    "modules-center": [
+    ],
+    "modules-right": [
+        // "wireplumber",
+        // // "power-profiles-daemon",
+        // // "backlight",
+        // "battery",
+        // "battery#bat2",
+        // "clock",
+        "custom/temperature",
+        "custom/spacer",
+        "network",
+        "custom/spacer",
+        // "custom/brightness",
+        // "custom/spacer",
+        "custom/audio",
+        "custom/spacer",
+        "custom/battery",
+        "custom/spacer",
+        "custom/time",
+        "custom/spacer",
+        "tray"
+    ],
+    "custom/spacer": {
+        "format": "|"
+    },
+    "custom/window-indicator": {
+        "format": "|{}",
+        "exec": "/home/spreadzhao/scripts/niri_windows.sh",
+        "interval": "once",
+        "signal": 8,
+        // "interval": 1,
+        "hide-empty-text": true,
+        // "return-type": "json"
+    },
+    "custom/screen-record-time": {
+        "format": "| {}",
+        "exec": "/home/spreadzhao/scripts/get_screenrecord_time.sh",
+        "interval": 1,
+        "hide-empty-text": true
+    },
+    "custom/temperature": {
+        // "format": "{}|",
+        "exec": "/home/spreadzhao/scripts/get_temperature.sh",
+        "interval": 10
+    },
+    "custom/brightness": {
+        // "format": "{}|",
+        "exec": "/home/spreadzhao/scripts/get_brightness.sh",
+        "interval": "once"
+    },
+    "custom/audio": {
+        // "format": "{}|",
+        "exec": "/home/spreadzhao/scripts/audio_niri.sh",
+        // "interval": 3,
+        "signal": 7
+    },
+    "custom/battery": {
+        // "format": "{}|",
+        "exec": "/home/spreadzhao/scripts/get_battery.sh",
+        "interval": 10
+    },
+    "custom/time": {
+        // "format": "{}|",
+        "exec": "/home/spreadzhao/scripts/get_time.sh",
+        "interval": 1,
+        "on-click": "[ -e /tmp/toggle_time_format ] && rm /tmp/toggle_time_format || touch /tmp/toggle_time_format",
+        "tooltip": false
+    },
+    "tray": {
+        "format": "|{}",
+        "icon-size": 25,
+        "spacing": 0
+    },
+    "clock": {
+        // "timezone": "America/New_York",
+        // "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
+        "format": "{:%Y-%m-%d %H:%M %a}|",
+        "format-alt": "{:%H:%M}|"
+    },
+    "temperature": {
+        // "thermal-zone": 2,
+        // "hwmon-path": "/sys/class/hwmon/hwmon2/temp1_input",
+        "critical-threshold": 80,
+        // "format-critical": "{temperatureC}°C {icon}",
+        "format": "{temperatureC}°C {icon}",
+        "format-icons": ["", "", ""]
+    },
+    "backlight": {
+        "format": "{percent}% {icon}",
+        "format-icons": [""]
+    },
+    "battery": {
+        "states": {
+            // "good": 95,
+            "warning": 30,
+            "critical": 15
+        },
+        "interval": 60,
+        "format": "{capacity}%󰁹|",
+        "format-full": "{capacity}%󰁹|",
+        "format-charging": "{capacity}%󰂄|",
+        "format-plugged": "{capacity}%|",
+        "format-alt": "{time}󰂃|",
+        // "format-good": "", // An empty format will hide the module
+        // "format-full": "",
+        "format-icons": ["", "", "", "", ""]
+    },
+    "battery#bat2": {
+        "bat": "BAT2"
+    },
+    "wireplumber": {
+        "format": "{volume}%{icon}|",
+        "format-muted": "",
+        "on-click": "helvum",
+        "max-volume": 150,
+        "scroll-step": 5,
+        "format-icons": ["", "", ""]
+    },
+    "network": {
+        "interface": "wlo1",
+        // "format": "",
+        "format-wifi": "",
+        "format-ethernet": "󰈀",
+        "format-disconnected": "󰯡",
+        "tooltip-format": "{ifname} via {gwaddr} 󰊗",
+        "tooltip-format-wifi": "{essid} ({signalStrength}%) ",
+        "tooltip-format-ethernet": "{ifname} 󰈀",
+        "tooltip-format-disconnected": "Disconnected",
+        "max-length": 50
+    }
+}
