@@ -194,6 +194,7 @@ jdk11-openjdk
 jdk17-openjdk
 jdk21-openjdk
 jdk8-openjdk
+jetbrains-toolbox
 jq
 jre8-openjdk
 jre8-openjdk-headless
