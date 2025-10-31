@@ -1,6 +1,7 @@
 #!/usr/bin/bash
 
-CONFIG_DIR="$HOME/workspaces/spreadconfig/UltimateConfig"
+CONFIG_ROOT="$HOME/workspaces/spreadconfig"
+CONFIG_DIR="$CONFIG_ROOT/UltimateConfig"
 
 copy_to_config_dir() {
     local dest_dir="$CONFIG_DIR"
@@ -55,7 +56,7 @@ paru -Qqem > "$CONFIG_DIR/package-list-aur-temp.txt"
 paru -Qq > "$CONFIG_DIR/package-list-all.txt"
 
 # IdeaVim
-# copy_to_config_dir "$HOME/.ideavimrc"
+cp "$HOME/.ideavimrc" "$CONFIG_ROOT/Jetbrains/"
 
 # zshrc
 copy_to_config_dir "$HOME/.zshrc"
