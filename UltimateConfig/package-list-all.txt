@@ -1,3 +1,4 @@
+7zip
 abseil-cpp
 acl
 adwaita-cursors
