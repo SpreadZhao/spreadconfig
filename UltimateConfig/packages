@@ -42,6 +42,7 @@ jq
 lazygit
 less
 linux-lts-headers
+lostfiles
 lsof
 mako
 man-db
@@ -68,6 +69,7 @@ pipewire-audio
 pipewire-jack
 pipewire-pulse
 polkit-gnome
+rocm-smi-lib
 rustup
 scrcpy
 seahorse
