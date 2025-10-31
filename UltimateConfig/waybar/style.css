@@ -32,31 +32,31 @@ window#waybar {
 }
 
 #custom-temperature {
-    font-family: "Maple Mono NF CN";
+    font-family: "Maple Mono NF";
     color: #13ed22;
 }
 
 #custom-brightness {
-    font-family: "Maple Mono NF CN";
+    font-family: "Maple Mono NF";
     color: #1b5982;
 }
 
 #network {
-    font-family: "Symbols Nerd Font Mono", "Maple Mono NF CN";
+    font-family: "Symbols Nerd Font Mono", "Maple Mono NF";
     color: #456d2f
 }
 
 #custom-audio {
-    font-family: "Maple Mono NF CN";
+    font-family: "Maple Mono NF";
     color: #1b5982;
 }
 
 #custom-battery {
-    font-family: "Maple Mono NF CN";
+    font-family: "Maple Mono NF";
     color: #b02727;
 }
 
 #custom-time {
-    font-family: "Maple Mono NF CN";
+    font-family: "Maple Mono NF";
     color: #207343;
 }
