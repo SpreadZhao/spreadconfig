@@ -18,12 +18,15 @@ window#waybar {
 }
 
 #workspaces button {
+    font-family: "Inter";
     padding: 0 0;
     background: transparent;
     color: white;
 }
 
 #workspaces button.focused {
+    font-family: "Inter";
+    border-top: 2px solid;
     color: #c9545d;
 }
 

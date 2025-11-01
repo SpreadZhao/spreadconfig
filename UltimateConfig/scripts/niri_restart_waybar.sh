@@ -1,2 +1,4 @@
 #!/usr/bin/bash
-pkill -9 waybar && niri msg action spawn -- waybar
+pkill -9 waybar
+sleep 1
+niri msg action spawn -- waybar
