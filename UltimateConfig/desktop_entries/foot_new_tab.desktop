@@ -1,0 +1,5 @@
+[Desktop Entry]
+Type=Application
+Name=Foot New Tab
+Exec=/home/spreadzhao/scripts/foot_new_tab.sh
+Terminal=false
