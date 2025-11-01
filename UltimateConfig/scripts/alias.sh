@@ -19,7 +19,7 @@ alias n="nvim ."
 alias lg="lazygit"
 alias lgc="serie"
 alias tt="tray-tui"
-alias t="tmux"
+# alias t="tmux"
 alias c="clear"
 
 # quick action
@@ -27,6 +27,7 @@ alias wk="cd ~/workspaces"
 alias nh="cd ~/workspaces/notes_homeworks"
 alias st="cd ~/workspaces/SpreadStudy/"
 alias lc="cd ~/workspaces/SpreadStudy/Leetcode/LeetcodeCpp/ && n"
+alias f="~/scripts/foot_new_tab.sh"
 
 alias shuffle="mpv --shuffle --force-window --autofit-smaller=800x500 ."
 

@@ -103,6 +103,7 @@ desktop_whitelist=(
     reboot
     shutdown
     obsidian
+    foot_new_tab
 )
 
 mkdir -p "$desktop_dest"
