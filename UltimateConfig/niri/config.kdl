@@ -1,3 +1,7 @@
+animations {
+    off
+}
+
 gestures {
     hot-corners {
         off
@@ -11,6 +15,7 @@ input {
 
     touchpad {
         tap
+        dwt
         natural-scroll
         accel-speed 0.5
     }
@@ -68,7 +73,8 @@ layout {
 output "eDP-1" {
     // off
     scale 2
-    position x=3440 y=600
+    // position x=3440 y=600
+    position x=3440 y=1439          // ensure monitor has left/right relationship
     // you can do this since next release
     // layout {
     //     default-column-width { proportion 1.0; }

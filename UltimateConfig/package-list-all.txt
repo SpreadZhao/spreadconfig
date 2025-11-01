@@ -1,6 +1,7 @@
 7zip
 abseil-cpp
 acl
+ada
 adwaita-cursors
 adwaita-fonts
 adwaita-icon-theme
@@ -28,6 +29,8 @@ bash
 bat
 binutils
 bison
+bluetui
+bluez
 bluez-libs
 boost-libs
 brotli
@@ -101,6 +104,7 @@ fmt
 font-manager
 fontconfig
 foot
+freeglut
 freetype2
 fribidi
 fuse-common
@@ -127,6 +131,7 @@ glib2
 glibc
 glibmm
 glslang
+glu
 glycin
 gmp
 gnome-autoar
@@ -175,6 +180,7 @@ hicolor-icon-theme
 hidapi
 highway
 hsa-rocr
+hunspell
 hwdata
 hyphen
 iana-etc
@@ -187,6 +193,7 @@ iptables
 iputils
 iso-codes
 jansson
+jasper
 java-environment-common
 java-runtime-common
 jbigkit
@@ -202,6 +209,7 @@ json-c
 json-glib
 jsoncpp
 kbd
+kcoreaddons
 kdbusaddons
 keyutils
 kitemviews
@@ -251,8 +259,10 @@ libdatachannel
 libdatrie
 libdbusmenu-glib
 libdbusmenu-gtk3
+libde265
 libdecor
 libdeflate
+libdispatch
 libdisplay-info
 libdovi
 libdrm
@@ -280,6 +290,7 @@ libgsf
 libgudev
 libgxps
 libhandy
+libheif
 libice
 libidn2
 libiec61883
@@ -301,6 +312,7 @@ libluv
 libmanette
 libmd
 libmm-glib
+libmng
 libmnl
 libmodplug
 libmpc
@@ -372,7 +384,6 @@ libunwind
 liburing
 libusb
 libusbmuxd
-libutempter
 libutf8proc
 libuv
 libva
@@ -492,6 +503,7 @@ oniguruma
 openal
 opencc
 opencore-amr
+openh264
 openjdk11-src
 openjdk17-src
 openjdk21-src
@@ -545,9 +557,11 @@ python
 qrcodegencpp-cmake
 qt6-base
 qt6-declarative
+qt6-imageformats
 qt6-positioning
 qt6-svg
 qt6-translations
+qt6-wayland
 qt6-webchannel
 qt6-webengine
 rav1e
@@ -596,9 +610,9 @@ systemd-libs
 systemd-sysvcompat
 tar
 tdb
+telegram-desktop
 texinfo
 tinysparql
-tmux
 totem-pl-parser
 tpm2-tss
 tree-sitter
