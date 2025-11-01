@@ -33,6 +33,7 @@ bluetui
 bluez
 bluez-libs
 boost-libs
+brightnessctl
 brotli
 btop
 btrfs-progs
