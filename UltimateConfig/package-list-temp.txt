@@ -1,6 +1,7 @@
 amd-ucode
 archlinuxcn-keyring
 base
+bluetui
 btop
 calcurse
 clang
@@ -48,6 +49,7 @@ polkit-gnome
 scrcpy
 starship
 swappy
+telegram-desktop
 ttf-maplemono-nf-unhinted
 ttf-maplemononl-nf-cn-unhinted
 v4l2loopback-utils
