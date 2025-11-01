@@ -2,6 +2,7 @@ amd-ucode
 archlinuxcn-keyring
 base
 bluetui
+brightnessctl
 btop
 calcurse
 clang
