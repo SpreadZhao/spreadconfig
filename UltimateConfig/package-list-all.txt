@@ -624,6 +624,9 @@ tree-sitter-query
 tree-sitter-vim
 tree-sitter-vimdoc
 tslib
+ttf-ibm-plex
+ttf-ibm-plex-sans-sc
+ttf-ibmplex-mono-nerd
 ttf-maplemono-nf-unhinted
 ttf-maplemononl-nf-cn-unhinted
 ttf-nerd-fonts-symbols-common

@@ -10,7 +10,6 @@
         "niri/workspaces",
         "custom/window-indicator",
         "custom/screen-record-time",
-        "custom/spacer",
         "niri/window"
     ],
     "modules-center": [
@@ -22,7 +21,7 @@
         // "battery",
         // "battery#bat2",
         // "clock",
-        "custom/temperature",
+        "custom/info",
         "custom/spacer",
         "network",
         "custom/spacer",
@@ -48,15 +47,19 @@
         "hide-empty-text": true,
         // "return-type": "json"
     },
+    "niri/window": {
+        "format": "|{}",
+        "hide-empty-text": true
+    },
     "custom/screen-record-time": {
         "format": "| {}",
         "exec": "/home/spreadzhao/scripts/get_screenrecord_time.sh",
         "interval": 1,
         "hide-empty-text": true
     },
-    "custom/temperature": {
+    "custom/info": {
         // "format": "{}|",
-        "exec": "/home/spreadzhao/scripts/get_temperature.sh",
+        "exec": "/home/spreadzhao/scripts/round_info.sh",
         "interval": 10
     },
     "custom/brightness": {

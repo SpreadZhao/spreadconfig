@@ -12,54 +12,54 @@ window#waybar {
 }
 
 #window {
-    font-family: "Inter";
+    font-family: "IBM Plex Sans";
     /* margin-left: 20; */
     /* margin-right: 20; */
 }
 
 #workspaces button {
-    font-family: "Inter";
+    font-family: "IBM Plex Sans";
     padding: 0 0;
     background: transparent;
     color: white;
 }
 
 #workspaces button.focused {
-    font-family: "Inter";
+    font-family: "IBM Plex Sans";
     border-top: 2px solid;
     color: #c9545d;
 }
 
 #custom-window-indicator {
-    font-family: "Inter";
+    font-family: "IBM Plex Sans";
 }
 
-#custom-temperature {
-    font-family: "Maple Mono NF";
+#custom-info {
+    font-family: "BlexMono Nerd Font Proto";
     color: #13ed22;
 }
 
 #custom-brightness {
-    font-family: "Maple Mono NF";
+    font-family: "BlexMono Nerd Font Mono";
     color: #1b5982;
 }
 
 #network {
-    font-family: "Symbols Nerd Font Mono", "Maple Mono NF";
+    font-family: "BlexMono Nerd Font Proto";
     color: #456d2f
 }
 
 #custom-audio {
-    font-family: "Maple Mono NF";
+    font-family: "BlexMono Nerd Font Mono";
     color: #1b5982;
 }
 
 #custom-battery {
-    font-family: "Maple Mono NF";
+    font-family: "BlexMono Nerd Font Mono";
     color: #b02727;
 }
 
 #custom-time {
-    font-family: "Maple Mono NF";
+    font-family: "BlexMono Nerd Font Mono";
     color: #207343;
 }
