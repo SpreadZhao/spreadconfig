@@ -80,7 +80,7 @@ config_subdirs=(
     paru
     swappy
     starship.toml
-    # vivaldi_custom_css
+    vivaldi_custom
     wofi
     waybar
 )
