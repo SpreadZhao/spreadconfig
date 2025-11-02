@@ -164,7 +164,7 @@ window-rule {
 binds {
     Mod+Shift+Slash { show-hotkey-overlay; }
 
-    Mod+Return hotkey-overlay-title="Open a Terminal" { spawn-sh "footclient || foot"; }
+    Mod+Return hotkey-overlay-title="Open a Terminal" { spawn-sh "footclient"; }
     Mod+space hotkey-overlay-title="Run an Application" { spawn "wofi"; }
     Super+Alt+L hotkey-overlay-title="Lock the Screen: swaylock" { spawn "swaylock"; }
 
@@ -175,6 +175,8 @@ binds {
 
     XF86MonBrightnessUp allow-when-locked=true { spawn-sh "brightnessctl --class=backlight set +10%"; }
     XF86MonBrightnessDown allow-when-locked=true { spawn-sh "brightnessctl --class=backlight set 10%-"; }
+
+    Mod+D { power-off-monitors; }
 
     Mod+B { spawn-sh "killall -SIGUSR1 waybar"; }
 

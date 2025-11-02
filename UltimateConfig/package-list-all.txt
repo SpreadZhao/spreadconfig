@@ -563,6 +563,13 @@ procps-ng
 protobuf
 psmisc
 python
+python-argcomplete
+python-click
+python-distro
+python-packaging
+python-pipx
+python-platformdirs
+python-userpath
 qrcodegencpp-cmake
 qt6-base
 qt6-declarative
