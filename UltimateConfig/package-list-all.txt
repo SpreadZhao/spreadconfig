@@ -189,7 +189,6 @@ iana-etc
 icu
 imlib2
 impression
-inter-font
 iproute2
 iptables
 iputils
@@ -494,6 +493,7 @@ niri
 noto-fonts
 noto-fonts-cjk
 noto-fonts-emoji
+noto-fonts-extra
 npth
 nspr
 nss
