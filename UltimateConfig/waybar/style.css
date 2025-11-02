@@ -12,54 +12,49 @@ window#waybar {
 }
 
 #window {
-    font-family: "IBM Plex Sans";
+    /* font-family: "Noto Sans", ""; */
     /* margin-left: 20; */
     /* margin-right: 20; */
 }
 
 #workspaces button {
-    font-family: "IBM Plex Sans";
+    /* font-family: "IBM Plex Sans"; */
     padding: 0 0;
     background: transparent;
     color: white;
 }
 
 #workspaces button.focused {
-    font-family: "IBM Plex Sans";
+    /* font-family: "IBM Plex Sans"; */
     border-top: 2px solid;
     color: #c9545d;
 }
 
 #custom-window-indicator {
-    font-family: "IBM Plex Sans";
+    /* font-family: "IBM Plex Sans"; */
 }
 
 #custom-info {
-    font-family: "BlexMono Nerd Font Proto";
+    font-family: "Noto Sans Mono", "Symbols Nerd Font Mono";
     color: #13ed22;
 }
 
-#custom-brightness {
-    font-family: "BlexMono Nerd Font Mono";
-    color: #1b5982;
-}
-
 #network {
-    font-family: "BlexMono Nerd Font Proto";
+    font-family: "Noto Sans Mono", "Symbols Nerd Font Mono";
     color: #456d2f
 }
 
 #custom-audio {
-    font-family: "BlexMono Nerd Font Mono";
+    font-family: "Noto Sans Mono", "Symbols Nerd Font Mono";
     color: #1b5982;
 }
 
 #custom-battery {
-    font-family: "BlexMono Nerd Font Mono";
+    font-family: "Noto Sans Mono", "Symbols Nerd Font Mono";
     color: #b02727;
 }
 
 #custom-time {
-    font-family: "BlexMono Nerd Font Mono";
+    font-family: "Noto Sans Mono", "Symbols Nerd Font Mono";
     color: #207343;
 }

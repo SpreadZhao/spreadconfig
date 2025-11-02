@@ -34,7 +34,6 @@ gvfs
 gvfs-dnssd
 gvfs-mtp
 impression
-inter-font
 jdk11-openjdk
 jdk17-openjdk
 jdk21-openjdk
@@ -52,9 +51,6 @@ neovim
 net-tools
 networkmanager
 niri
-noto-fonts
-noto-fonts-cjk
-noto-fonts-emoji
 ntfs-3g
 nwg-look
 obs-studio
@@ -77,10 +73,6 @@ seahorse
 slurp
 starship
 swappy
-ttf-maplemono-nf-unhinted
-ttf-maplemononl-nf-cn-unhinted
-ttf-nerd-fonts-symbols-common
-ttf-nerd-fonts-symbols-mono
 unrar
 unzip
 v4l2loopback-utils

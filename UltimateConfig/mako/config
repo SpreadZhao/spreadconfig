@@ -10,7 +10,7 @@ max-icon-size=64
 default-timeout=20000
 ignore-timeout=1
 text-alignment=center
-font=IBM Plex Sans 18
+font=Noto Sans 18
 format=[%a]\n%s\n%b
 
 [urgency=low]
