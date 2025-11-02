@@ -492,6 +492,7 @@ neovim
 net-tools
 nettle
 networkmanager
+ninja
 niri
 noto-fonts
 noto-fonts-cjk
