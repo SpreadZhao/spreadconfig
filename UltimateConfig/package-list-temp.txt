@@ -25,7 +25,6 @@ github-cli
 gnome-disk-utility
 grim
 impression
-inter-font
 jdk8-openjdk
 lazygit
 linux-lts
