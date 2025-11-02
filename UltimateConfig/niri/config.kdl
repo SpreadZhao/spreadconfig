@@ -91,8 +91,6 @@ output "HDMI-A-1" {
 }
 
 environment {
-    XMODIFIERS "@im=fcitx"
-    QT_IM_MODULE "fcitx"
     // GTK_IM_MODULE "fcitx"
     // QT_QPA_PLATFORM "wayland"
     // ELECTRON_OZONE_PLATFORM_HINT "auto"
@@ -108,6 +106,7 @@ spawn-sh-at-startup "wl-paste --type text --watch cliphist store"
 spawn-sh-at-startup "wl-paste --type image --watch cliphist store"
 spawn-sh-at-startup "~/scripts/detect_audio_change.sh"
 spawn-sh-at-startup "~/scripts/detect_niri_window_change.sh"
+spawn-sh-at-startup "~/scripts/start_foot_server.sh"
 
 hotkey-overlay {
     skip-at-startup
@@ -165,7 +164,7 @@ window-rule {
 binds {
     Mod+Shift+Slash { show-hotkey-overlay; }
 
-    Mod+Return hotkey-overlay-title="Open a Terminal" { spawn "foot"; }
+    Mod+Return hotkey-overlay-title="Open a Terminal" { spawn-sh "footclient || foot"; }
     Mod+space hotkey-overlay-title="Run an Application" { spawn "wofi"; }
     Super+Alt+L hotkey-overlay-title="Lock the Screen: swaylock" { spawn "swaylock"; }
 
