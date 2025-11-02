@@ -23,6 +23,7 @@ audit
 autoconf
 automake
 avahi
+ayatana-ido
 base
 base-devel
 bash
@@ -232,6 +233,8 @@ libasyncns
 libatasmart
 libavc1394
 libavif
+libayatana-appindicator
+libayatana-indicator
 libb2
 libblockdev
 libblockdev-crypto
@@ -451,6 +454,7 @@ llvm-libs
 lm_sensors
 lmdb
 localsearch
+localsend
 lostfiles
 lsof
 lua
@@ -624,11 +628,6 @@ tree-sitter-query
 tree-sitter-vim
 tree-sitter-vimdoc
 tslib
-ttf-ibm-plex
-ttf-ibm-plex-sans-sc
-ttf-ibmplex-mono-nerd
-ttf-maplemono-nf-unhinted
-ttf-maplemononl-nf-cn-unhinted
 ttf-nerd-fonts-symbols-common
 ttf-nerd-fonts-symbols-mono
 tzdata

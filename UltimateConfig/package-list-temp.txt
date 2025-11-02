@@ -29,6 +29,7 @@ inter-font
 jdk8-openjdk
 lazygit
 linux-lts
+localsend
 lostfiles
 lsof
 mpv
@@ -51,8 +52,6 @@ scrcpy
 starship
 swappy
 telegram-desktop
-ttf-maplemono-nf-unhinted
-ttf-maplemononl-nf-cn-unhinted
 v4l2loopback-utils
 vivaldi
 wev
