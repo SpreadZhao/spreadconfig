@@ -19,6 +19,9 @@ local rtp = vim.opt.rtp
 rtp:prepend(lazypath)
 
 require('lazy').setup {
+  rocks = {
+    enabled = false
+  },
   spec = {
     -- Theme
     require 'plugins.vscode',

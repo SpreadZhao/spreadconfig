@@ -24,6 +24,7 @@ file-roller
 font-manager
 foot
 fzf
+gdb
 gdu
 git
 github-cli
@@ -66,6 +67,7 @@ pipewire-audio
 pipewire-jack
 pipewire-pulse
 polkit-gnome
+ripgrep
 rocm-smi-lib
 rustup
 scrcpy

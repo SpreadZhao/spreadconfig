@@ -119,6 +119,8 @@ gcc
 gcc-libs
 gcr
 gcr-4
+gdb
+gdb-common
 gdbm
 gdk-pixbuf2
 gdu
@@ -457,6 +459,7 @@ localsend
 lostfiles
 lsof
 lua
+lua-language-server
 lua51-lpeg
 luajit
 lv2
@@ -573,6 +576,7 @@ rav1e
 re2
 readline
 rhash
+ripgrep
 rnnoise
 rocm-core
 rocm-device-libs
@@ -599,6 +603,7 @@ snappy
 sndio
 sord
 sound-theme-freedesktop
+source-highlight
 spdlog
 speex
 speexdsp
