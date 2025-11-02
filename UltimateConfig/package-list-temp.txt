@@ -31,6 +31,7 @@ linux-lts
 localsend
 lostfiles
 lsof
+lua-language-server
 mpv
 neovim
 net-tools
@@ -47,6 +48,7 @@ openjdk8-src
 paru
 paru-debug
 polkit-gnome
+ripgrep
 scrcpy
 starship
 swappy

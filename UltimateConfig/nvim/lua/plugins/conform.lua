@@ -41,7 +41,7 @@ return { -- Autoformat
       html = { 'prettierd', 'prettier', stop_after_first = true },
       xml = { 'prettierd' },
       rust = { 'rustfmt', lsp_format = 'fallback' },
-      lua = { 'stylua' },
+      -- lua = { 'stylua' },
       json = { 'fixjson', lsp_format = 'fallback' },
     },
   },
