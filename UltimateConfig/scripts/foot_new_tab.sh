@@ -10,4 +10,4 @@ niri msg action set-column-display tabbed
     done
 ) &
 
-niri msg action spawn -- foot
+niri msg action spawn -- footclient
