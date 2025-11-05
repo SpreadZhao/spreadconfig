@@ -70,6 +70,7 @@ device-mapper
 diff-so-fancy
 diffutils
 dkms
+dnsmasq
 dosfstools
 double-conversion
 duf
@@ -94,6 +95,7 @@ fcitx5-configtool
 fcitx5-gtk
 fcitx5-qt
 feh
+feishu-bin
 ffmpeg
 fftw
 file
@@ -492,6 +494,7 @@ neovim
 net-tools
 nettle
 networkmanager
+nftables
 ninja
 niri
 noto-fonts

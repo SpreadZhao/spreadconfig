@@ -1,1 +1,2 @@
+feishu-bin
 jetbrains-toolbox
