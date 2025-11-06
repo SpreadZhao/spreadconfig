@@ -1,5 +1,5 @@
 gui:
   nerdFontsVersion: "3"
 git:
-  paging:
-    pager: "diff-so-fancy"
+  pagers:
+    - pager: "diff-so-fancy"
