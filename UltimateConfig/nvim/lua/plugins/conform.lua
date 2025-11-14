@@ -42,7 +42,7 @@ return { -- Autoformat
       xml = { 'prettierd' },
       rust = { 'rustfmt', lsp_format = 'fallback' },
       -- lua = { 'stylua' },
-      json = { 'fixjson', lsp_format = 'fallback' },
+      json = { 'jq', lsp_format = 'fallback' },
     },
   },
 }

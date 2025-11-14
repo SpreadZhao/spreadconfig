@@ -5,7 +5,7 @@ STATE_FILE="/tmp/round_info_index_$WAYBAR_OUTPUT_NAME"
 
 # 所有要轮播的脚本（按顺序写）
 SCRIPTS=(
-    "$HOME/scripts/get_brightness.sh"
+    # "$HOME/scripts/get_brightness.sh"
     "$HOME/scripts/get_temperature.sh"
     "$HOME/scripts/get_cpu_usage.sh"
     "$HOME/scripts/get_mem_usage.sh"
