@@ -35,26 +35,26 @@ window#waybar {
 }
 
 #custom-info {
-    font-family: "Noto Sans Mono", "Symbols Nerd Font Mono";
+    /* font-family: "Noto Sans Mono", "Symbols Nerd Font Mono"; */
     color: #13ed22;
 }
 
 #network {
-    font-family: "Noto Sans Mono", "Symbols Nerd Font Mono";
+    /* font-family: "Noto Sans Mono", "Symbols Nerd Font Mono"; */
     color: #456d2f
 }
 
 #custom-audio {
-    font-family: "Noto Sans Mono", "Symbols Nerd Font Mono";
+    /* font-family: "Noto Sans Mono", "Symbols Nerd Font Mono"; */
     color: #1b5982;
 }
 
 #custom-battery {
-    font-family: "Noto Sans Mono", "Symbols Nerd Font Mono";
+    /* font-family: "Noto Sans Mono", "Symbols Nerd Font Mono"; */
     color: #b02727;
 }
 
 #custom-time {
-    font-family: "Noto Sans Mono", "Symbols Nerd Font Mono";
+    /* font-family: "Noto Sans Mono", "Symbols Nerd Font Mono"; */
     color: #207343;
 }

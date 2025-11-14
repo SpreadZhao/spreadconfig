@@ -119,7 +119,13 @@ build_display_list() {
         local app_id is_focused col display
         app_id=$(echo "$w" | jq -r '.app_id')
         is_focused=$(echo "$w" | jq -r '.is_focused')
+        is_floating=$(echo "$w" | jq -r '.is_floating')
         col=$(echo "$w" | jq -r '.layout.pos_in_scrolling_layout[0]')
+
+        # Skip floating but unfocused windows
+        if [[ "$is_floating" == "true" && "$is_focused" == "false" ]]; then
+            continue
+        fi
 
         # Use alias/icon if available
         if [ "$USE_ALIAS" = "true" ] && [[ -n "${APP_ICONS[$app_id]}" ]]; then
