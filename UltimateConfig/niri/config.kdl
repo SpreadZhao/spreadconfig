@@ -118,6 +118,7 @@ screenshot-path null
 
 cursor {
     xcursor-size 72
+    hide-after-inactive-ms 5000
 }
 
 clipboard {
