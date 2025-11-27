@@ -44,6 +44,7 @@ require('lazy').setup {
     require 'plugins.which-key',
     require 'plugins.log-highlight',
     require 'plugins.render-markdown',
+    require 'plugins.outline',
     -- require 'plugins.copilot',
     -- LSP Plugins
     require 'plugins.lsp.lazydev',
