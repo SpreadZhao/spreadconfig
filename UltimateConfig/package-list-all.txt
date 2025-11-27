@@ -577,6 +577,7 @@ python-distro
 python-packaging
 python-pipx
 python-platformdirs
+python-pyelftools
 python-shtab
 python-termcolor
 python-userpath
@@ -638,6 +639,7 @@ sqlitebrowser
 sratom
 srt
 starship
+stylua
 sudo
 svt-av1
 swappy
