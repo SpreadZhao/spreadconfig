@@ -23,7 +23,9 @@ font-manager
 foot
 gdu
 github-cli
+gitoxide
 gnome-disk-utility
+go
 grim
 impression
 jdk8-openjdk
@@ -63,6 +65,7 @@ wev
 wf-recorder
 wget
 wofi
+xmlstarlet
 zoxide
 zsh-autosuggestions
 zsh-syntax-highlighting

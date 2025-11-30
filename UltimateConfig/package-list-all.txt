@@ -135,6 +135,7 @@ gflags
 giflib
 git
 github-cli
+gitoxide
 glib-networking
 glib2
 glibc
@@ -151,6 +152,7 @@ gnome-keyring
 gnulib-l10n
 gnupg
 gnutls
+go
 google-glog
 gperftools
 gpgme
@@ -716,6 +718,7 @@ xdg-user-dirs
 xdg-user-dirs-gtk
 xdg-utils
 xkeyboard-config
+xmlstarlet
 xorg-fonts-encodings
 xorg-server-common
 xorg-setxkbmap
