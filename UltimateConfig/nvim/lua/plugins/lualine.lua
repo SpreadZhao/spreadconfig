@@ -35,6 +35,18 @@ return {
       return last_search .. '(' .. searchcount.current .. '/' .. searchcount.total .. ')'
     end
 
+    local function fmt(str, left)
+      if str == nil or str == '' then
+        return str
+      end
+
+      if left then
+        return '|' .. str
+      else
+        return str .. '|'
+      end
+    end
+
     local function modified()
       if vim.bo.modified then
         return '+'
@@ -62,22 +74,51 @@ return {
           },
         },
         lualine_b = {
-          'branch',
-          'diff',
+          {
+            'branch',
+            fmt = function(str)
+              return fmt(str, true)
+            end,
+            padding = 0,
+            icons_enabled = false,
+            icon = nil,
+            draw_empty = false,
+          },
+          {
+            'diff',
+            fmt = function(str)
+              return fmt(str, true)
+            end,
+            padding = 0,
+            draw_empty = false,
+          },
           {
             'diagnostics',
             source = { 'nvim' },
             sections = { 'error' },
-            diagnostics_color = { error = { bg = colors.red, fg = colors.white } },
+            diagnostics_color = { error = { bg = colors.red, fg = colors.black } },
+            padding = 0,
           },
           {
             'diagnostics',
             source = { 'nvim' },
             sections = { 'warn' },
-            diagnostics_color = { warn = { bg = colors.orange, fg = colors.white } },
+            diagnostics_color = { warn = { bg = colors.orange, fg = colors.black } },
+            padding = 0,
+            fmt = function(str)
+              if str == nil or str == '' then
+                return '|'
+              end
+              return str
+            end,
           },
-          { 'filename', file_status = false, path = 0 },
-          { modified, color = { bg = colors.red } },
+          {
+            'filename',
+            file_status = false,
+            path = 0,
+            padding = 0,
+          },
+          { modified, color = { bg = colors.red }, padding = 0 },
           {
             '%w',
             cond = function()
@@ -99,8 +140,35 @@ return {
         },
         lualine_c = {},
         lualine_x = {},
-        lualine_y = { search_result, 'filetype' },
-        lualine_z = { '%l:%c', '%p%%/%L' },
+        lualine_y = {
+          {
+            search_result,
+            padding = 0,
+            fmt = function(str)
+              return fmt(str, false)
+            end,
+          },
+          {
+            'filetype',
+            padding = 0,
+            fmt = function(str)
+              return fmt(str, false)
+            end,
+          },
+        },
+        lualine_z = {
+          {
+            '%l:%c',
+            padding = 0,
+            fmt = function(str)
+              return fmt(str, false)
+            end,
+          },
+          {
+            '%p%%/%L',
+            padding = 0,
+          },
+        },
       },
       inactive_sections = {
         lualine_c = { '%f %y %m' },
