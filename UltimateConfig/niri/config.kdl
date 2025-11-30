@@ -129,9 +129,9 @@ window-rule {
     match app-id="feh" title=".*\/tmp.*"
     match app-id="wechat" title=".*Photos.*"
     match app-id="org.telegram.desktop" title="Media viewer"
-    match app-id="QQ" title=".*聊天记录.*"
-    match app-id="QQ" title=".*图片查看器.*"
-    match app-id="QQ" title=".*视频播放器.*"
+    // match app-id="QQ" title=".*聊天记录.*"
+    // match app-id="QQ" title=".*图片查看器.*"
+    // match app-id="QQ" title=".*视频播放器.*"
     match app-id=".*jetbrains.*" title=".*Welcome.*"
     open-floating true
     open-fullscreen false

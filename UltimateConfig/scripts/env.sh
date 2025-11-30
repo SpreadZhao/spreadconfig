@@ -24,6 +24,7 @@ PATH_HOME=(
     "$HOME/scripts"
     "$HOME/.local/bin"
     "$HOME/.cargo/bin"
+    "$HOME/go/bin"
 )
 
 append_path "${PATH_HOME[@]}"
