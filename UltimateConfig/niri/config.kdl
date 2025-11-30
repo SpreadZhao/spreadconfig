@@ -1,6 +1,6 @@
-// animations {
-//     off
-// }
+animations {
+    off
+}
 
 gestures {
     hot-corners {
