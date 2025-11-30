@@ -1,6 +1,6 @@
-animations {
-    off
-}
+// animations {
+//     off
+// }
 
 gestures {
     hot-corners {
@@ -30,6 +30,7 @@ layout {
         proportion 0.33333
         proportion 0.5
         proportion 0.66667
+        proportion 1.0
     }
     default-column-width { proportion 0.5; }
     focus-ring {
@@ -76,9 +77,13 @@ output "eDP-1" {
     position x=3440 y=600
     // position x=3440 y=1439          // ensure monitor has left/right relationship
     // you can do this since next release
-    // layout {
-    //     default-column-width { proportion 1.0; }
-    // }
+    layout {
+        default-column-width { proportion 1.0; }
+        preset-column-widths {
+            proportion 0.5
+            proportion 1.0
+        }
+    }
 }
 
 output "HDMI-A-1" {
@@ -96,10 +101,10 @@ environment {
     // ELECTRON_OZONE_PLATFORM_HINT "auto"
 }
 
-spawn-at-startup "waybar"
+// spawn-at-startup "waybar"
 spawn-at-startup "fcitx5 -d"
 // spawn-at-startup "clash-verge"
-spawn-at-startup "mako"
+// spawn-at-startup "mako"
 spawn-at-startup "/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1"
 
 spawn-sh-at-startup "wl-paste --type text --watch cliphist store"
@@ -269,6 +274,7 @@ binds {
     Mod+F { maximize-column; }
     Mod+F11 { fullscreen-window; }
     Mod+Shift+F11 { toggle-windowed-fullscreen; }
+    Mod+M { maximize-window-to-edges; }
 
     Mod+C { center-column; }
 
