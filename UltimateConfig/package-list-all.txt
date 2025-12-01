@@ -623,6 +623,7 @@ serd
 shaderc
 shadow
 shared-mime-info
+shfmt
 simde
 slang
 slurp

@@ -4,6 +4,7 @@ vim.lsp.enable 'kotlin-lsp'
 vim.lsp.enable 'rust_analyzer'
 vim.lsp.enable 'asm-lsp'
 vim.lsp.enable 'gopls'
+vim.lsp.enable 'bashls'
 
 vim.api.nvim_create_autocmd('LspAttach', {
   group = vim.api.nvim_create_augroup('lsp-attach', { clear = true }),
