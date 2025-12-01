@@ -53,6 +53,7 @@ paru-debug
 polkit-gnome
 ripgrep
 scrcpy
+shfmt
 sqlitebrowser
 starship
 stylua
