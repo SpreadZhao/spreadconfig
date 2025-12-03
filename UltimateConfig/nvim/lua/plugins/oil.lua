@@ -18,11 +18,13 @@ return {
     },
   },
   opts = {
-    colums = {
+    columns = {
       'icon',
-      'permissions',
-      'size',
-      'mtime',
+      -- 'permissions',
+      -- 'size',
+      -- 'mtime',
     },
+    delete_to_trash = true,
+    cleanup_delay_ms = 100,
   },
 }
