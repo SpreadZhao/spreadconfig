@@ -23,14 +23,11 @@ require('lazy').setup {
     enabled = false
   },
   spec = {
-    -- Theme
     require 'plugins.vscode',
-    -- Git
     require 'plugins.gitsigns',
     require 'plugins.lazygit',
-    -- File Manage
     require 'plugins.oil',
-    -- Basic Functionalities
+    -- require 'plugins.nvim-tree',
     require 'plugins.autopairs',
     require 'plugins.blink-cmp',
     require 'plugins.conform',
@@ -47,7 +44,6 @@ require('lazy').setup {
     require 'plugins.outline',
     require 'plugins.trouble',
     -- require 'plugins.copilot',
-    -- LSP Plugins
     require 'plugins.lsp.lazydev',
     require 'plugins.lsp.fidget',
     -- Debugger
