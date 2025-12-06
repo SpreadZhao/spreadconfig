@@ -40,12 +40,13 @@ layout {
     }
     border {
         off
-        width 4
+        width 2
         active-color "#ffc87f"
         inactive-color "#505050"
         urgent-color "#9b0000"
     }
     shadow {
+        off
         softness 30
         spread 5
         offset x=0 y=5
@@ -99,6 +100,14 @@ environment {
     // GTK_IM_MODULE "fcitx"
     // QT_QPA_PLATFORM "wayland"
     // ELECTRON_OZONE_PLATFORM_HINT "auto"
+}
+
+recent-windows {
+    off
+}
+
+overview {
+    backdrop-color "black"
 }
 
 // spawn-at-startup "waybar"
