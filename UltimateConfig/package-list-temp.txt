@@ -69,4 +69,5 @@ wofi
 xmlstarlet
 zoxide
 zsh-autosuggestions
+zsh-completions
 zsh-syntax-highlighting

@@ -5,17 +5,7 @@ HISTFILE=~/.histfile
 HISTSIZE=5000
 SAVEHIST=5000
 
-# enable vim mode in zsh
-bindkey -v
-
-# End of lines configured by zsh-newuser-install
-# The following lines were added by compinstall
-zstyle :compinstall filename '/home/spreadzhao/.zshrc'
-
-autoload -Uz compinit
-compinit
-# End of lines added by compinstall
-
+source ~/scripts/config_zsh_vim.zsh
 
 eval "$(starship init zsh)"
 

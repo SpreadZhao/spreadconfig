@@ -86,6 +86,3 @@ xdg-desktop-portal-gnome
 xwayland-satellite
 zip
 zoxide
-zsh
-zsh-autosuggestions
-zsh-syntax-highlighting
