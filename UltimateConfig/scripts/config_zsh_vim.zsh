@@ -2,7 +2,6 @@
 
 # enable vim mode in zsh
 bindkey -v
-export KEYTIMEOUT=1
 
 # cursor
 cursor_mode() {
