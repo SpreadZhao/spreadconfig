@@ -10,7 +10,6 @@ $git_metrics\
 $fill\
 $cmd_duration\
 $time
-$python\
 $character"""
 
 add_newline = false
@@ -43,10 +42,6 @@ disabled = false
 [cmd_duration]
 format = "[$duration]($style) "
 style = "yellow"
-
-[python]
-format = "[$virtualenv]($style) "
-style = "bright-black"
 
 [fill]
 symbol = '-'
