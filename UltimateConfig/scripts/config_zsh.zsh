@@ -5,6 +5,7 @@ HISTFILE=~/.histfile
 HISTSIZE=5000
 SAVEHIST=5000
 
+export KEYTIMEOUT=1
 source ~/scripts/config_zsh_vim.zsh
 
 # surrounding
