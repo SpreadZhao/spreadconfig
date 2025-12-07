@@ -47,6 +47,7 @@ ca-certificates-utils
 cairo
 cairomm
 calcurse
+capnproto
 clang
 cliphist
 cmake
@@ -93,10 +94,11 @@ fakeroot
 fastfetch
 fcft
 fcitx5
-fcitx5-chinese-addons
 fcitx5-configtool
 fcitx5-gtk
+fcitx5-mozc-ut
 fcitx5-qt
+fcitx5-rime
 feh
 feishu-bin
 ffmpeg
@@ -135,7 +137,6 @@ gflags
 giflib
 git
 github-cli
-gitoxide
 glib-networking
 glib2
 glibc
@@ -218,6 +219,7 @@ jre8-openjdk-headless
 json-c
 json-glib
 jsoncpp
+jujutsu
 kbd
 kcoreaddons
 kdbusaddons
@@ -233,6 +235,7 @@ lazygit
 lcms2
 leancrypto
 less
+leveldb
 libadwaita
 libarchive
 libass
@@ -307,7 +310,6 @@ libheif
 libice
 libidn2
 libiec61883
-libime
 libimobiledevice
 libimobiledevice-glue
 libinih
@@ -366,6 +368,8 @@ libpsl
 libpulse
 libpwquality
 libraw1394
+librime
+librime-data
 librsvg
 libsamplerate
 libsasl
@@ -487,6 +491,7 @@ minizip
 mkinitcpio
 mkinitcpio-busybox
 mobile-broadband-provider-info
+mozc-ut
 mpdecimal
 mpfr
 mpg123
@@ -593,16 +598,20 @@ qt5-translations
 qt6-base
 qt6-declarative
 qt6-imageformats
-qt6-positioning
 qt6-svg
 qt6-translations
 qt6-wayland
-qt6-webchannel
-qt6-webengine
 rav1e
-re2
 readline
 rhash
+rime-bopomofo
+rime-cangjie
+rime-essay
+rime-ice-git
+rime-luna-pinyin
+rime-prelude
+rime-stroke
+rime-terra-pinyin
 ripgrep
 rnnoise
 rocm-core
@@ -732,6 +741,7 @@ xvidcore
 xwayland-satellite
 xxhash
 xz
+yaml-cpp
 yyjson
 zeromq
 zimg
