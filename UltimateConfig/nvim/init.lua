@@ -20,7 +20,7 @@ rtp:prepend(lazypath)
 
 require('lazy').setup {
   rocks = {
-    enabled = false
+    enabled = false,
   },
   spec = {
     require 'plugins.vscode',
@@ -43,6 +43,7 @@ require('lazy').setup {
     require 'plugins.render-markdown',
     require 'plugins.outline',
     require 'plugins.trouble',
+    require 'plugins.nvim-surround',
     -- require 'plugins.copilot',
     require 'plugins.lsp.lazydev',
     require 'plugins.lsp.fidget',
