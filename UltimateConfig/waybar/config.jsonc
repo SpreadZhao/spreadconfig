@@ -49,7 +49,8 @@
     },
     "niri/window": {
         "format": "|{}",
-        "hide-empty-text": true
+        "hide-empty-text": true,
+        "separate-outputs": true
     },
     "custom/screen-record-time": {
         "format": "| {}",
