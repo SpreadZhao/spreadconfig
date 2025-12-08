@@ -1,6 +1,6 @@
 [Desktop Entry]
 Name=󰘑 wechat
-Exec=env QT_IM_MODULE="fcitx" XMODIFIERS="@im=fcitx" /home/spreadzhao/Applications/Wechat/WeChatLinux_x86_64.AppImage %U
+Exec=env QT_IM_MODULE="fcitx" XMODIFIERS="@im=fcitx" QT_SCREEN_SCALE_FACTORS="eDP-1=2.0;HDMI-A-1=1.0;DP-2=1.0" /home/spreadzhao/Applications/Wechat/WeChatLinux_x86_64.AppImage %U
 StartupNotify=true
 Terminal=false
 Icon=/usr/share/icons/hicolor/256x256/apps/wechat.png
