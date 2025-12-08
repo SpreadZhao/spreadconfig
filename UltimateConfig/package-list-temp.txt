@@ -67,6 +67,7 @@ wf-recorder
 wget
 wofi
 xmlstarlet
+xorg-xeyes
 zoxide
 zsh-autosuggestions
 zsh-completions

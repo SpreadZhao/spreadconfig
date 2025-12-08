@@ -732,6 +732,7 @@ xmlstarlet
 xorg-fonts-encodings
 xorg-server-common
 xorg-setxkbmap
+xorg-xeyes
 xorg-xkbcomp
 xorg-xprop
 xorg-xset
