@@ -5,6 +5,7 @@ vim.lsp.enable 'rust_analyzer'
 vim.lsp.enable 'asm-lsp'
 vim.lsp.enable 'gopls'
 vim.lsp.enable 'bashls'
+vim.lsp.enable 'yamlls'
 
 vim.api.nvim_create_autocmd('LspAttach', {
   group = vim.api.nvim_create_augroup('lsp-attach', { clear = true }),
