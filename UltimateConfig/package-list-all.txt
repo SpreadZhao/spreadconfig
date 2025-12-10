@@ -16,6 +16,7 @@ aom
 appstream
 archlinux-keyring
 archlinuxcn-keyring
+asm-lsp
 at-spi2-core
 atkmm
 attr
@@ -651,7 +652,6 @@ sqlitebrowser
 sratom
 srt
 starship
-stylua
 sudo
 svt-av1
 swappy
