@@ -47,6 +47,7 @@ clear_nvim_gitignore() {
 
 
 # scripts
+rm -r "$CONFIG_DIR/scripts"
 copy_to_config_dir "$HOME/scripts"
 
 # pacman & aur

@@ -27,6 +27,7 @@ gnome-disk-utility
 go
 grim
 impression
+inotify-tools
 jdk8-openjdk
 jujutsu
 lazygit
@@ -49,7 +50,6 @@ openjdk17-src
 openjdk21-src
 openjdk8-src
 paru
-paru-debug
 polkit-gnome
 rime-ice-git
 ripgrep
@@ -58,8 +58,8 @@ shfmt
 sqlitebrowser
 starship
 swappy
+tealdeer
 telegram-desktop
-tldr
 v4l2loopback-utils
 vivaldi
 wev

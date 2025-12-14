@@ -200,6 +200,7 @@ iana-etc
 icu
 imlib2
 impression
+inotify-tools
 iproute2
 iptables
 iputils
@@ -325,6 +326,7 @@ liblc3
 libldac
 libldap
 libluv
+libmakepkg-dropins
 libmanette
 libmd
 libmm-glib
@@ -548,7 +550,6 @@ pango
 pangomm
 parted
 paru
-paru-debug
 patch
 pciutils
 pcre
@@ -580,14 +581,11 @@ psmisc
 python
 python-argcomplete
 python-click
-python-colorama
 python-distro
 python-packaging
 python-pipx
 python-platformdirs
 python-pyelftools
-python-shtab
-python-termcolor
 python-userpath
 qcustomplot
 qhexedit2
@@ -661,10 +659,10 @@ systemd-sysvcompat
 tar
 tcl
 tdb
+tealdeer
 telegram-desktop
 texinfo
 tinysparql
-tldr
 totem-pl-parser
 tpm2-tss
 tree-sitter

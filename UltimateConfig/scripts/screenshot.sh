@@ -18,6 +18,7 @@ KEEP_TMPFILE=false
 # === Globals ===
 TMPFILE=""
 FREEZE_PID=""
+SAVE_PATH="$HOME/Pictures/screenshot"
 
 notify() {
     notify-send \
@@ -98,21 +99,17 @@ case "$choice" in
     fi
     ;;
 "$OPTION_EDIT")
-    if swappy -f "$TMPFILE"; then
-        notify "Editing completed ✏️"
-    else
-        notify "Editing cancelled ❌"
-    fi
+    swappy -f "$TMPFILE"
     ;;
 "$OPTION_PIN")
     feh -Z -j --auto-zoom "$TMPFILE"
     ;;
 "$OPTION_SAVE")
     timestamp=$(date '+%Y%m%d_%H%M%S')
-    savepath="$HOME/Pictures/screenshot/Screenshot_${timestamp}.png"
-    if mv "$TMPFILE" "$savepath"; then
+    pic="$SAVE_PATH/Screenshot_${timestamp}.png"
+    if mv "$TMPFILE" "$pic"; then
         KEEP_TMPFILE=true
-        notify "Saved to $savepath 📁"
+        notify "Saved to $pic 📁"
     else
         notify "Failed to save screenshot ❌"
     fi
