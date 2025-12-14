@@ -5,18 +5,18 @@ HISTFILE=~/.histfile
 HISTSIZE=5000
 SAVEHIST=5000
 
-export KEYTIMEOUT=30
+export KEYTIMEOUT=1
 source ~/scripts/config_zsh_vim.zsh
 
 # surrounding
-autoload -Uz surround
-zle -N delete-surround surround
-zle -N add-surround surround
-zle -N change-surround surround
-bindkey -M vicmd cs change-surround
-bindkey -M vicmd ds delete-surround
-bindkey -M vicmd ys add-surround
-bindkey -M visual S add-surround
+# autoload -Uz surround
+# zle -N delete-surround surround
+# zle -N add-surround surround
+# zle -N change-surround surround
+# bindkey -M vicmd cs change-surround
+# bindkey -M vicmd ds delete-surround
+# bindkey -M vicmd ys add-surround
+# bindkey -M visual S add-surround
 
 eval "$(starship init zsh)"
 
