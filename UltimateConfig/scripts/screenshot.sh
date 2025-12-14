@@ -1,4 +1,6 @@
 #!/bin/bash
+set -euo pipefail
+IFS=$'\n\t'
 
 # === Option definitions ===
 OPTION_CLIPBOARD="Copy to Clipboard"
@@ -8,125 +10,114 @@ OPTION_EDIT="Edit"
 PROMPT="Select Screenshot Action"
 
 # === User-configurable options ===
-ENABLE_FREEZE=true # true to freeze the screen during screenshot, false to disable
-HIDE_CURSOR=true   # true to hide the cursor while freezing, false to show
+NIRI_NATIVE=false  # true to use niri msg instead of grim + slurp
+ENABLE_FREEZE=true # true to freeze the screen during screenshot
+HIDE_CURSOR=true   # true to hide the cursor while freezing
+KEEP_TMPFILE=false
 
 # === Globals ===
 TMPFILE=""
+FREEZE_PID=""
 
 notify() {
-    local message="$1"
-    notify-send --app-name "screenshot" -u normal "$message"
+    notify-send \
+        --app-name "screenshot" \
+        -u normal \
+        -t 2000 \
+        "$1"
 }
 
-# --- Function: Initialize temporary file for screenshot ---
-init_tempfile() {
-    TMPFILE=$(mktemp --suffix=.png)
-}
-
-# --- Function: Cleanup temporary file ---
 cleanup() {
-    rm -f "$TMPFILE"
+    if [ "$KEEP_TMPFILE" = false ] && [ -n "$TMPFILE" ]; then
+        rm -f -- "$TMPFILE"
+    fi
 }
 trap cleanup EXIT
 
-# --- Function: Freeze the screen if enabled ---
-freeze_screen() {
-    if [ "$ENABLE_FREEZE" = true ]; then
-        local args=()
-        if [ "$HIDE_CURSOR" = true ]; then
-            args+=(--hide-cursor)
+# === Init tempfile ===
+TMPFILE=$(mktemp --suffix=.png)
+
+# === Capture screenshot ===
+if [ "$NIRI_NATIVE" = true ]; then
+    # --- niri native screenshot ---
+    if ! niri msg action screenshot --path "$TMPFILE"; then
+        notify "Capture failed ❌"
+        exit 1
+    fi
+
+    # Wait until file is actually written (max ~5s)
+    for _ in {1..50}; do
+        if [ -s "$TMPFILE" ]; then
+            break
         fi
+        sleep 0.1
+    done
+
+    if [ ! -s "$TMPFILE" ]; then
+        notify "Screenshot cancelled ❌"
+        exit 1
+    fi
+else
+    # --- grim + slurp with optional freeze ---
+    if [ "$ENABLE_FREEZE" = true ]; then
+        args=()
+        [ "$HIDE_CURSOR" = true ] && args+=(--hide-cursor)
         wayfreeze "${args[@]}" &
-        PID=$!
-        # Allow some time for freeze to take effect
+        FREEZE_PID=$!
         sleep 0.1
     fi
-}
 
-# --- Function: Unfreeze the screen if it was frozen ---
-unfreeze_screen() {
-    if [ "$ENABLE_FREEZE" = true ]; then
-        kill "$PID" 2>/dev/null
-        # Clear the trap since unfreeze happened
-        trap - EXIT
-    fi
-}
-
-# --- Function: Capture screenshot ---
-capture_screenshot() {
-    freeze_screen
-    if grim -g "$(slurp -d)" "$TMPFILE"; then
-        unfreeze_screen
-        # notify "Capture successful ✅"
-        return 0
-    else
-        unfreeze_screen
+    if ! grim -g "$(slurp -d)" "$TMPFILE"; then
+        [ -n "$FREEZE_PID" ] && kill "$FREEZE_PID" 2>/dev/null
         notify "Capture failed ❌"
-        cleanup
-        return 1
+        exit 1
     fi
-}
 
-# --- Function: Show action menu and get choice ---
-show_menu() {
+    [ -n "$FREEZE_PID" ] && kill "$FREEZE_PID" 2>/dev/null
+fi
+
+# === Show menu ===
+choice=$(
     printf "%s\n%s\n%s\n%s" \
         "$OPTION_CLIPBOARD" \
         "$OPTION_EDIT" \
         "$OPTION_PIN" \
-        "$OPTION_SAVE" | wofi --dmenu --prompt "$PROMPT" --cache-file /dev/null
-}
+        "$OPTION_SAVE" |
+        wofi --dmenu --prompt "$PROMPT" --cache-file /dev/null
+)
 
-# --- Function: Handle the selected menu option ---
-handle_choice() {
-    case "$1" in
-    "$OPTION_CLIPBOARD")
-        if wl-copy --type image/png <"$TMPFILE"; then
-            notify "Image copied to clipboard 📋"
-        else
-            notify "Failed to copy image to clipboard ❌"
-        fi
-        ;;
-    "$OPTION_PIN")
-        feh -. -Z -j ~/Pictures/ "$TMPFILE"
-        ;;
-    "$OPTION_SAVE")
-        local timestamp
-        timestamp=$(date '+%Y%m%d_%H%M%S')
-        local savepath="$HOME/Pictures/screenshot/Screenshot_${timestamp}.png"
-        if mv "$TMPFILE" "$savepath"; then
-            notify "Saved to $savepath 📁"
-            # Prevent cleanup after move
-            TMPFILE=""
-        else
-            notify "Failed to save screenshot ❌"
-            cleanup
-        fi
-        ;;
-    "$OPTION_EDIT")
-        if swappy -f "$TMPFILE"; then
-            notify "Editing completed ✏️"
-        else
-            notify "Editing cancelled or failed ❌"
-        fi
-        ;;
-    *)
-        notify "Operation cancelled 🚫"
-        ;;
-    esac
-}
+[ -z "$choice" ] && exit 0
 
-# === Main script execution ===
-init_tempfile
-
-if capture_screenshot; then
-    choice=$(show_menu)
-    handle_choice "$choice"
-else
-    exit 1
-fi
-
-# Clean up temporary file if it still exists
-if [ -n "$TMPFILE" ] && [ -f "$TMPFILE" ]; then
-    cleanup
-fi
+# === Handle choice ===
+case "$choice" in
+"$OPTION_CLIPBOARD")
+    if wl-copy --type image/png <"$TMPFILE"; then
+        notify "Image copied to clipboard 📋"
+    else
+        notify "Failed to copy image ❌"
+    fi
+    ;;
+"$OPTION_EDIT")
+    if swappy -f "$TMPFILE"; then
+        notify "Editing completed ✏️"
+    else
+        notify "Editing cancelled ❌"
+    fi
+    ;;
+"$OPTION_PIN")
+    feh -Z -j --auto-zoom "$TMPFILE"
+    ;;
+"$OPTION_SAVE")
+    timestamp=$(date '+%Y%m%d_%H%M%S')
+    savepath="$HOME/Pictures/screenshot/Screenshot_${timestamp}.png"
+    if mv "$TMPFILE" "$savepath"; then
+        KEEP_TMPFILE=true
+        notify "Saved to $savepath 📁"
+    else
+        notify "Failed to save screenshot ❌"
+    fi
+    ;;
+*)
+    notify "Operation cancelled 🚫"
+    ;;
+esac
