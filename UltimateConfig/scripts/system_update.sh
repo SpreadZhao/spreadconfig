@@ -26,10 +26,10 @@ set -o pipefail
 # -----------------------------------------------
 COMMANDS=(
   "System packages (paru)|paru -Syu"
-  "Rust toolchain self-update|rustup self update"
+  # "Rust toolchain self-update|rustup self update"
   "Rust toolchain components|rustup update"
   "Cargo global packages|cargo install-update -ag"
-  "Python pipx packages|pipx upgrade-all"
+  # "Python pipx packages|pipx upgrade-all"
   "Global npm packages|npm update -g"
 )
 
