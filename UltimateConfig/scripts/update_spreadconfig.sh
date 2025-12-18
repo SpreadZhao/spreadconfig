@@ -106,6 +106,7 @@ desktop_whitelist=(
     shutdown
     obsidian
     foot_new_tab
+    ghidra
 )
 
 mkdir -p "$desktop_dest"

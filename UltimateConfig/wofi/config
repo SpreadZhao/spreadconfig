@@ -4,3 +4,4 @@ image_size=30
 term=foot
 insensitive=true
 location=center
+line_wrap=word

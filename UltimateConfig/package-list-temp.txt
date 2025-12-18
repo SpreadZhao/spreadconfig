@@ -22,6 +22,7 @@ feh
 font-manager
 foot
 gdu
+ghidra
 github-cli
 gnome-disk-utility
 go

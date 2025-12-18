@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Ghidra
+Exec=env _JAVA_AWT_WM_NONREPARENTING=1 /usr/bin/ghidra %U
+StartupNotify=true
+Terminal=false
+Type=Application
+Categories=Development;

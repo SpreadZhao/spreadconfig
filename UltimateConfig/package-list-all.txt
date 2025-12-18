@@ -135,6 +135,7 @@ gdu
 gettext
 gexiv2
 gflags
+ghidra
 giflib
 git
 github-cli
@@ -579,14 +580,7 @@ procps-ng
 protobuf
 psmisc
 python
-python-argcomplete
-python-click
-python-distro
-python-packaging
-python-pipx
-python-platformdirs
 python-pyelftools
-python-userpath
 qcustomplot
 qhexedit2
 qrcodegencpp-cmake
