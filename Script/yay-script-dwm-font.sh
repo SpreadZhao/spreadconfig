@@ -1,1 +1,0 @@
-yay -S adobe-source-han-sans-cn-fonts noto-fonts-emoji

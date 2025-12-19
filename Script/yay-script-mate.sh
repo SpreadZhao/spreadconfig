@@ -1,1 +1,0 @@
-yay -S mate caja-open-terminal engrampa mate-power-manager mate-system-monitor mate-terminal mate-utils mozo eom mate-tweak mate-applets mate-sensors-applet mate-menu lightdm lightdm-gtk-greeter mate-media

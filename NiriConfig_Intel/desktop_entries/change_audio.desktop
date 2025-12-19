@@ -1,6 +1,0 @@
-[Desktop Entry]
-Name=Change Audio Device
-Comment=Switch between audio sinks and sources using wofi
-Exec=/usr/bin/python3 /home/spreadzhao/scripts/change_audio.py
-Type=Application
-Categories=AudioVideo;Utility;

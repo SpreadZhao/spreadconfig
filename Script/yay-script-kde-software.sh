@@ -1,1 +1,0 @@
-yay -S libreoffice-still obsidian android-studio code intellij-idea-community-edition obs-studio linuxqq wechat-universal-bwrap
