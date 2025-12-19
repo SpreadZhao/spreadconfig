@@ -99,7 +99,7 @@ case "$choice" in
     fi
     ;;
 "$OPTION_EDIT")
-    swappy -f "$TMPFILE"
+    satty -f "$TMPFILE"
     ;;
 "$OPTION_PIN")
     feh -Z -j --auto-zoom "$TMPFILE"

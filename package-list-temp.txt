@@ -55,6 +55,7 @@ paru
 polkit-gnome
 rime-ice-git
 ripgrep
+satty
 scrcpy
 shfmt
 sqlitebrowser

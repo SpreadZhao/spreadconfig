@@ -619,6 +619,7 @@ rocprofiler-register
 rtkit
 rubberband
 rustup
+satty
 sbc
 scrcpy
 sdl2-compat
