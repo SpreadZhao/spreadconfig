@@ -84,6 +84,7 @@ clear_nvim_gitignore() {
 
 find "$CONFIG_DIR" -mindepth 1 \
     ! -path "$CONFIG_DIR/.git*" \
+    ! -path "$CONFIG_DIR/packages*" \
     -exec rm -rf {} +
 
 # scripts
