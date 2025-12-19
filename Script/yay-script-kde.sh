@@ -1,1 +1,0 @@
-yay -S sddm plasma-meta konsole

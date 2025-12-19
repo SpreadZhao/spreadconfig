@@ -1,4 +1,0 @@
-feishu-bin
-jetbrains-toolbox
-linuxqq
-yutto

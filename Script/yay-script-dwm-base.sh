@@ -1,1 +1,0 @@
-yay -S base-devel git vim xorg xorg-xinit libx11 libxft libxinerama

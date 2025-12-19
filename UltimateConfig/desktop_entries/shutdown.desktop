@@ -1,5 +1,0 @@
-[Desktop Entry]
-Type=Application
-Name=shutdown
-Exec=shutdown -h now
-Terminal=false

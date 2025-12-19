@@ -1,9 +1,0 @@
-clash-verge-rev-bin
-feishu-bin
-jetbrains-toolbox
-linuxqq
-paru
-paru-debug
-ttf-lxgw-wenkai
-ttf-yozai-font
-wechat-bin
