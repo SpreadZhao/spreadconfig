@@ -27,7 +27,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
         map('gri', require('fzf-lua').lsp_implementations, '[G]oto [I]mplementation')
         map('gd', require('fzf-lua').lsp_definitions, '[G]oto [D]efinition')
         map('gD', require('fzf-lua').lsp_declarations, '[G]oto [D]eclaration')
-        map('<leader>q', require('fzf-lua').diagnostics_document, "Diagnostics")
+        map('<leader>q', require('fzf-lua').diagnostics_document, "questions")
 
         map('<leader>d', vim.lsp.buf.hover, '[D]ocumentation')
 
