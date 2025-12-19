@@ -118,7 +118,8 @@ config_subdirs=(
     nwg-look
     nvim
     paru
-    swappy
+    satty
+    # swappy
     starship.toml
     systemd
     vivaldi_custom
