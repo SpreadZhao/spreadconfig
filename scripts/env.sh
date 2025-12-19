@@ -13,13 +13,13 @@ append_path() {
     done
 }
 
-PATH_HOME=(
+PATH_LIST=(
     "$HOME/scripts"
     "$HOME/.local/bin"
     "$HOME/.cargo/bin"
     "$HOME/go/bin"
 )
 
-append_path "${PATH_HOME[@]}"
+append_path "${PATH_LIST[@]}"
 
 export PATH
