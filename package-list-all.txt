@@ -652,7 +652,6 @@ srt
 starship
 sudo
 svt-av1
-swappy
 systemd
 systemd-libs
 systemd-sysvcompat

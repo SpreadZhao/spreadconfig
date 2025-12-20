@@ -1,7 +1,9 @@
 org.gnome.Nautilus=files
 org.gnome.DiskUtility=disks
+org.gnome.SoundRecorder=recorder
 org.telegram.desktop=telegram
 vivaldi-stable=vivaldi
 jetbrains-studio=android-studio
 jetbrains-idea-ce=idea
 com.obsproject.Studio=obs
+com.gabm.satty=satty

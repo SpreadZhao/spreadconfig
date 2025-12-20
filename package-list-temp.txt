@@ -60,7 +60,6 @@ scrcpy
 shfmt
 sqlitebrowser
 starship
-swappy
 tealdeer
 telegram-desktop
 v4l2loopback-utils
