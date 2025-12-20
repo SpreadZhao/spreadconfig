@@ -149,6 +149,7 @@ desktop_whitelist=(
     foot_new_tab
     ghidra
     jadx
+    toggle_monitor
 )
 
 mkdir -p "$desktop_dest"

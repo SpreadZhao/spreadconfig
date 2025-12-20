@@ -10,7 +10,7 @@ initial-tool = "brush"
 # Configure the command to be called on copy, for example `wl-copy`
 copy-command = "wl-copy"
 # Increase or decrease the size of the annotations
-annotation-size-factor = 0.5
+annotation-size-factor = 1
 # Filename to use for saving action. Omit to disable saving to file. Might contain format specifiers: https://docs.rs/chrono/latest/chrono/format/strftime/index.html
 # starting with 0.20.0, can contain leading tilde (~) for home directory
 output-filename = "~/Pictures/satty/satty-%Y%m%d-%H%M%S.png"
