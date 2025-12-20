@@ -85,7 +85,6 @@ clear_nvim_gitignore() {
 find "$CONFIG_DIR" -mindepth 1 \
     ! -path "$CONFIG_DIR/.git*" \
     ! -path "$CONFIG_DIR/packages*" \
-    ! -path "$CONFIG_DIR/obs*" \
     -exec rm -rf {} +
 
 # scripts
@@ -173,3 +172,6 @@ if [ -d "$desktop_src" ]; then
 else
     echo "警告：未找到目录 $desktop_src，跳过 desktop entries 复制"
 fi
+
+# obs profiles
+copy_to_config_dir -d "$CONFIG_DIR/config/obs" "$HOME/.config/obs-studio/basic/profiles"
