@@ -85,6 +85,7 @@ clear_nvim_gitignore() {
 find "$CONFIG_DIR" -mindepth 1 \
     ! -path "$CONFIG_DIR/.git*" \
     ! -path "$CONFIG_DIR/packages*" \
+    ! -path "$CONFIG_DIR/obs*" \
     -exec rm -rf {} +
 
 # scripts

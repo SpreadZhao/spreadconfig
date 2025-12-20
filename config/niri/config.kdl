@@ -154,6 +154,7 @@ window-rule {
     // match app-id="QQ" title=".*图片查看器.*"
     // match app-id="QQ" title=".*视频播放器.*"
     match app-id=".*jetbrains.*" title=".*Welcome.*"
+    match app-id="com.gabm.satty"
     open-floating true
     open-fullscreen false
 }
