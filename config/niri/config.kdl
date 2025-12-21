@@ -147,9 +147,15 @@ clipboard {
 }
 
 window-rule {
+    match app-id="feh"
+    match app-id="vivaldi-stable"
+    open-fullscreen false
+}
+
+window-rule {
     match app-id="feh" title=".*\/tmp.*"
     match app-id="wechat" title=".*Photos.*"
-    match app-id="org.telegram.desktop" title="Media viewer"
+    // match app-id="org.telegram.desktop" title="Media viewer"
     // match app-id="QQ" title=".*聊天记录.*"
     // match app-id="QQ" title=".*图片查看器.*"
     // match app-id="QQ" title=".*视频播放器.*"
@@ -165,10 +171,10 @@ window-rule {
     open-focused false
 }
 
-window-rule {
-    match app-id="org.telegram.desktop"
-    default-column-width { fixed 456; }
-}
+// window-rule {
+//     match app-id="org.telegram.desktop"
+//     default-column-width { fixed 456; }
+// }
 
 window-rule {
     match app-id="org.telegram.desktop" title="Media viewer"
@@ -177,12 +183,12 @@ window-rule {
     max-width 200
 }
 
-window-rule {
-    match app-id="org.gnome.FileRoller"
-    open-floating true
-    default-column-width { proportion 0.34; }
-    default-window-height { proportion 0.75; }
-}
+// window-rule {
+//     match app-id="org.gnome.FileRoller"
+//     open-floating true
+//     default-column-width { proportion 0.34; }
+//     default-window-height { proportion 0.75; }
+// }
 
 binds {
     Mod+Shift+Slash { show-hotkey-overlay; }
@@ -247,6 +253,9 @@ binds {
     Mod+Shift+Ctrl+J     { move-column-to-monitor-down; }
     Mod+Shift+Ctrl+K     { move-column-to-monitor-up; }
     Mod+Shift+Ctrl+L     { move-column-to-monitor-right; }
+
+    Mod+Alt+P   { move-workspace-up; }
+    Mod+Alt+N   { move-workspace-down; }
 
     Mod+N              { focus-workspace-down; }
     Mod+P              { focus-workspace-up; }
