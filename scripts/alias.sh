@@ -28,6 +28,7 @@ alias sb="cd ~/workspaces/SecondBrain/"
 alias st="cd ~/workspaces/SpreadStudy/"
 alias lc="cd ~/workspaces/SpreadStudy/Leetcode/LeetcodeCpp/ && n"
 alias f="~/scripts/foot_new_tab.sh"
+alias sud="~/scripts/system_update.sh"
 
 alias shuffle="mpv --shuffle --force-window --autofit-smaller=800x500 ."
 

@@ -256,6 +256,8 @@ binds {
 
     Mod+Alt+P   { move-workspace-up; }
     Mod+Alt+N   { move-workspace-down; }
+    Mod+Alt+L   { move-workspace-to-monitor-right; }
+    Mod+Alt+H   { move-workspace-to-monitor-left; }
 
     Mod+N              { focus-workspace-down; }
     Mod+P              { focus-workspace-up; }
