@@ -31,7 +31,6 @@ impression
 inotify-tools
 jadx
 jdk8-openjdk
-jujutsu
 lazygit
 linux-lts
 localsend

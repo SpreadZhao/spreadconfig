@@ -226,7 +226,6 @@ jre8-openjdk-headless
 json-c
 json-glib
 jsoncpp
-jujutsu
 kbd
 kcoreaddons
 kdbusaddons
