@@ -3,6 +3,7 @@ org.gnome.DiskUtility=disks
 org.gnome.SoundRecorder=recorder
 org.gnome.FileRoller=FileRoller
 org.telegram.desktop=telegram
+footclient=footc
 vivaldi-stable=vivaldi
 jetbrains-studio=android-studio
 jetbrains-idea-ce=idea
