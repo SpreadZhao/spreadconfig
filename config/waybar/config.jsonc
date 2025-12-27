@@ -137,7 +137,7 @@
         "format-icons": ["", "", ""]
     },
     "network": {
-        "interface": "wlo1",
+        // "interface": "wlo1",
         // "format": "",
         "format-wifi": "",
         "format-ethernet": "󰈀",
