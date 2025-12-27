@@ -150,6 +150,7 @@ desktop_whitelist=(
     ghidra
     jadx
     toggle_monitor
+    nvim
 )
 
 mkdir -p "$desktop_dest"
