@@ -8,6 +8,7 @@ alias df="duf"
 alias du="dust"
 alias cd="z"
 # alias rm="rip -i"
+alias rm="rm -Iv"
 
 alias ls="eza --icons"
 alias ll="eza -l --git --icons"
