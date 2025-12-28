@@ -109,6 +109,7 @@ paru -Qq >"$CONFIG_DIR/package-list-all.txt"
 config_subdirs=(
     # btop
     cliphist
+    feh
     fontconfig
     foot
     gtk-3.0
@@ -122,6 +123,7 @@ config_subdirs=(
     satty
     # swappy
     starship.toml
+    swaylock
     systemd
     vivaldi_custom
     wofi
