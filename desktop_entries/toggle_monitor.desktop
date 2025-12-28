@@ -1,6 +1,6 @@
 [Desktop Entry]
 Name=Toggle Monitor
 Comment=Toggle Monitor on and off
-Exec=/home/spreadzhao/scripts/niri_toggle_output.sh
+Exec=/home/spreadzhao/scripts/niri/niri_toggle_output.sh
 Type=Application
 Categories=AudioVideo;Utility;

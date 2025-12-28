@@ -1,17 +1,78 @@
-# from https://github.com/Phantas0s/.dotfiles/blob/master/zsh/completion.zsh
-  # ____ ___  __  __ ____  _     _____ _____ ___ ___  _   _ 
-#  / ___/ _ \|  \/  |  _ \| |   | ____|_   _|_ _/ _ \| \ | |
-# | |  | | | | |\/| | |_) | |   |  _|   | |  | | | | |  \| |
-# | |__| |_| | |  | |  __/| |___| |___  | |  | | |_| | |\  |
-#  \____\___/|_|  |_|_|   |_____|_____| |_| |___\___/|_| \_|
- #
+#!/usr/bin/zsh
 
-# +---------+
-# | General |
-# +---------+
+# Lines configured by zsh-newuser-install
+HISTFILE=~/.histfile
+HISTSIZE=5000
+SAVEHIST=5000
 
-# source ./gambit.zsh
+# export KEYTIMEOUT=1
 
+# enable vim mode in zsh
+bindkey -v
+
+# cursor
+cursor_mode() {
+    # See https://ttssh2.osdn.jp/manual/4/en/usage/tips/vim.html for cursor shapes
+    cursor_block='\e[2 q'
+    cursor_beam='\e[6 q'
+
+    function zle-keymap-select {
+        if [[ ${KEYMAP} == vicmd ]] ||
+            [[ $1 = 'block' ]]; then
+            echo -ne $cursor_block
+        elif [[ ${KEYMAP} == main ]] ||
+            [[ ${KEYMAP} == viins ]] ||
+            [[ ${KEYMAP} = '' ]] ||
+            [[ $1 = 'beam' ]]; then
+            echo -ne $cursor_beam
+        fi
+    }
+
+    zle-line-init() {
+        echo -ne $cursor_beam
+    }
+
+    zle -N zle-keymap-select
+    zle -N zle-line-init
+}
+cursor_mode
+
+# using ctrl-e to edit your command in $VISUAL
+autoload -Uz edit-command-line
+zle -N edit-command-line
+bindkey -M vicmd ^E edit-command-line
+
+# surrounding
+autoload -Uz surround
+zle -N delete-surround surround
+zle -N add-surround surround
+zle -N change-surround surround
+bindkey -M vicmd cs change-surround
+bindkey -M vicmd ds delete-surround
+bindkey -M vicmd ys add-surround
+bindkey -M visual S add-surround
+
+# text objects
+autoload -Uz select-bracketed select-quoted
+zle -N select-quoted
+zle -N select-bracketed
+for km in viopp visual; do
+  bindkey -M $km -- '-' vi-up-line-or-history
+  for c in {a,i}${(s..)^:-\'\"\`\|,./:;=+@}; do
+    bindkey -M $km $c select-quoted
+  done
+  for c in {a,i}${(s..)^:-'()[]{}<>bB'}; do
+    bindkey -M $km $c select-bracketed
+  done
+done
+
+eval "$(starship init zsh)"
+
+source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+
+# completion start
+# https://github.com/Phantas0s/.dotfiles/blob/master/zsh/completion.zsh
 # Load more completions
 fpath=(/usr/share/zsh/site-functions $fpath)
 
@@ -101,7 +162,7 @@ zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 
 zstyle ':completion:*' keep-prefix true
 
 zstyle -e ':completion:*:(ssh|scp|sftp|rsh|rsync):hosts' hosts 'reply=(${=${${(f)"$(cat {/etc/ssh_,~/.ssh/known_}hosts(|2)(N) /dev/null)"}%%[# ]*}//,/ })'
+# completion end
 
-## For kubernetes
-# source $DOTFILES/zsh/plugins/kubectl-completion/_kubectl
-# zstyle ':completion:*:*:kubectl:*' list-grouped false
+# add after compinit
+eval "$(zoxide init zsh)"

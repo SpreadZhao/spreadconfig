@@ -16,3 +16,20 @@ add-zsh-hook -Uz chpwd chpwd-osc7-pwd
 function preexec {
     print -Pn "\e]0;${(q)1}(foot)\e\\"
 }
+
+# pipe last command output
+# https://codeberg.org/dnkl/foot/wiki#zsh-2
+# autoload -Uz add-zsh-hook
+#
+# _precmd_osc133() {
+#     if ! builtin zle; then
+#         print -n "\e]133;D\e\\"
+#     fi
+# }
+#
+# _preexec_osc133() {
+#     print -n "\e]133;C\e\\"
+# }
+#
+# add-zsh-hook precmd  _precmd_osc133
+# add-zsh-hook preexec _preexec_osc133

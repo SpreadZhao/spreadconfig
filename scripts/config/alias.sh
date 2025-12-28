@@ -1,7 +1,3 @@
-#!/bin/bash
-
-# alias
-
 # replace utils
 alias cat="bat"
 alias df="duf"
@@ -30,21 +26,13 @@ alias st="cd ~/workspaces/SpreadStudy/"
 alias lc="cd ~/workspaces/SpreadStudy/Leetcode/LeetcodeCpp/ && n"
 alias f="~/scripts/foot_new_tab.sh"
 alias sud="~/scripts/system_update.sh"
-
 alias shuffle="mpv --shuffle --force-window --autofit-smaller=800x500 ."
-
 alias q="exit"
-
 alias ca="mpv /dev/video0"
-
 alias feh="feh --theme fit"
+alias cdgvfs="cd /run/usr/$(id -u)/gvfs"
 
 # safe
 alias mv="mv -iv"
 alias cp="cp -iv"
 alias mkdir="mkdir -v"
-
-# functions
-cdgvfs() {
-    source ~/scripts/cd_gvfs_webdav.sh
-}
