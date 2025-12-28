@@ -62,7 +62,7 @@ return {
             desc = '[F]ind Helps',
         },
         {
-            '<leader>ge',
+            '<leader>fe',
             function()
                 require('fzf-lua').grep_visual()
             end,
