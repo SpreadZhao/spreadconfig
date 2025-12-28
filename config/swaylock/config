@@ -1,0 +1,63 @@
+# 基础功能配置
+ignore-empty-password
+show-failed-attempts
+daemonize
+
+# 背景与图片设置
+color=1A1A2E
+scaling=fit
+
+# 字体配置
+font=Noto Sans
+font-size=30
+
+# 指示器核心样式
+indicator-radius=200
+# indicator-thickness=8
+# indicator-x-position=center
+# indicator-y-position=center
+indicator-idle-visible
+
+# 指示器内部颜色
+# inside-color=2E2E44
+# inside-clear-color=4CC9F0
+# inside-caps-lock-color=F72585
+# inside-ver-color=4361EE
+# inside-wrong-color=F72585
+
+# 指示器外环颜色
+# ring-color=4A4A6A
+# ring-clear-color=4CC9F0
+# ring-caps-lock-color=F72585
+# ring-ver-color=4361EE
+# ring-wrong-color=F72585
+
+# 线条样式（使用外环颜色）
+# line-uses-ring
+# line-color=4A4A6A
+# line-clear-color=4CC9F0
+# line-caps-lock-color=F72585
+# line-ver-color=4361EE
+# line-wrong-color=F72585
+
+# 按键高亮样式
+# key-hl-color=4CC9F0
+# bs-hl-color=3A0CA3
+# caps-lock-key-hl-color=F72585
+# caps-lock-bs-hl-color=F72585
+# separator-color=6C6C9D
+
+# 文本样式
+text-color=F5F5F7
+text-clear-color=F5F5F7
+text-caps-lock-color=F5F5F7
+text-ver-color=F5F5F7
+text-wrong-color=F5F5F7
+disable-caps-lock-text
+indicator-caps-lock
+
+# 键盘布局显示
+# show-keyboard-layout
+# layout-bg-color=2E2E44
+# layout-border-color=4CC9F0
+# layout-text-color=F5F5F7
