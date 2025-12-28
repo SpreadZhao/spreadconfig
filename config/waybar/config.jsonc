@@ -5,7 +5,6 @@
     "modules-left": [
         "niri/workspaces",
         "custom/window-indicator",
-        "custom/screen-record-time",
         "niri/window"
     ],
     "modules-center": [
@@ -45,7 +44,7 @@
     "custom/screen-record-time": {
         "format": "| {}",
         "exec": "/home/spreadzhao/scripts/util/get_screenrecord_time.sh",
-        "interval": 1,
+        "signal": 10,
         "hide-empty-text": true
     },
     "custom/info": {

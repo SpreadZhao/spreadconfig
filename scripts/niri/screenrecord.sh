@@ -84,6 +84,7 @@ main() {
     output_file=$(generate_output_file)
 
     start_recording "$region" "$output_file"
+
 }
 
 main
