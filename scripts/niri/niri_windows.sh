@@ -25,7 +25,7 @@ USE_ALIAS=true
 # Returns:
 #   None (populates APP_ICONS)
 load_app_aliases() {
-    local icon_config="${HOME}/scripts/niri_app_alias"
+    local icon_config="$SCRIPT_HOME/niri/niri_app_alias"
 
     declare -gA APP_ICONS  # global associative array
 
