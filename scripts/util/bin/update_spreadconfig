@@ -122,7 +122,6 @@ config_subdirs=(
     satty
     starship.toml
     swaylock
-    systemd
     vivaldi_custom
     wofi
     waybar
