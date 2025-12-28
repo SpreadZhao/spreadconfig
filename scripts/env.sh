@@ -3,6 +3,12 @@
 export EDITOR=nvim
 export VISUAL=nvim
 
+# xdg
+export XDG_CONFIG_HOME=$HOME/.config
+export XDG_CACHE_HOME=$HOME/.cache
+export XDG_DATA_HOME=$HOME/.local/share
+export XDG_STATE_HOME=$HOME/.local/state
+
 # PATH
 append_path() {
     for p in "$@"; do
@@ -21,5 +27,7 @@ PATH_LIST=(
 )
 
 append_path "${PATH_LIST[@]}"
+
+unset -f append_path
 
 export PATH

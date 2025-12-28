@@ -651,6 +651,8 @@ srt
 starship
 sudo
 svt-av1
+swayidle
+swaylock
 systemd
 systemd-libs
 systemd-sysvcompat
