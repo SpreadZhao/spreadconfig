@@ -1,4 +1,4 @@
 #!/bin/sh
 
-source "$SCRIPT_HOME/config/env.sh"
-exec niri-session
+source "$HOME/scripts/config/env.sh"
+exec /usr/bin/niri-session
