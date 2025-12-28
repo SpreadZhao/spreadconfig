@@ -107,7 +107,6 @@ paru -Qq >"$CONFIG_DIR/package-list-all.txt"
 
 # dotfiles
 config_subdirs=(
-    # btop
     cliphist
     feh
     fontconfig
@@ -121,7 +120,6 @@ config_subdirs=(
     nvim
     paru
     satty
-    # swappy
     starship.toml
     swaylock
     systemd

@@ -125,9 +125,9 @@ spawn-at-startup "/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1"
 
 spawn-sh-at-startup "wl-paste --type text --watch cliphist store"
 spawn-sh-at-startup "wl-paste --type image --watch cliphist store"
-spawn-sh-at-startup "~/scripts/detect_audio_change.sh"
-spawn-sh-at-startup "~/scripts/detect_niri_window_change.sh"
-spawn-sh-at-startup "~/scripts/start_foot_server.sh"
+spawn-sh-at-startup "~/scripts/niri/detect_audio_change.sh"
+spawn-sh-at-startup "~/scripts/niri/detect_niri_window_change.sh"
+spawn-sh-at-startup "~/scripts/niri/start_foot_server.sh"
 
 hotkey-overlay {
     skip-at-startup
@@ -205,7 +205,7 @@ binds {
     XF86MonBrightnessUp allow-when-locked=true { spawn-sh "brightnessctl --class=backlight set +10%"; }
     XF86MonBrightnessDown allow-when-locked=true { spawn-sh "brightnessctl --class=backlight set 10%-"; }
 
-    Mod+D { power-off-monitors; }
+    Mod+D { spawn-sh "~/scripts/niri/niri_lock.sh"; }
 
     Mod+B { spawn-sh "killall -SIGUSR1 waybar"; }
 
@@ -320,8 +320,8 @@ binds {
 
     Mod+T { toggle-column-tabbed-display; }
 
-    Ctrl+Shift+A { spawn-sh "~/scripts/screenshot.sh";  }
-    Ctrl+Shift+S { spawn-sh "~/scripts/screenrecord.sh";  }
+    Ctrl+Shift+A { spawn-sh "~/scripts/niri/screenshot.sh";  }
+    Ctrl+Shift+S { spawn-sh "~/scripts/niri/screenrecord.sh";  }
 
     Mod+Shift+V { spawn-sh "cliphist list | wofi -S dmenu | cliphist decode | wl-copy"; }
 
