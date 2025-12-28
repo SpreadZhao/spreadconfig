@@ -37,6 +37,8 @@ alias q="exit"
 
 alias ca="mpv /dev/video0"
 
+alias feh="feh --theme fit"
+
 # safe
 alias mv="mv -iv"
 alias cp="cp -iv"

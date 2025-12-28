@@ -102,7 +102,7 @@ case "$choice" in
     satty -f "$TMPFILE"
     ;;
 "$OPTION_PIN")
-    feh -Z -j --auto-zoom "$TMPFILE"
+    feh --theme "fit" --output-dir "/home/spreadzhao/Pictures/screenshot" "$TMPFILE"
     ;;
 "$OPTION_SAVE")
     timestamp=$(date '+%Y%m%d_%H%M%S')
