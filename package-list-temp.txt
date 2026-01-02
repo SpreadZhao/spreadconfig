@@ -52,6 +52,7 @@ openjdk21-src
 openjdk8-src
 paru
 polkit-gnome
+qemu-base
 rime-ice-git
 ripgrep
 satty

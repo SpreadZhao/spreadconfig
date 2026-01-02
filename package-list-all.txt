@@ -49,6 +49,7 @@ cairo
 cairomm
 calcurse
 capnproto
+capstone
 chmlib
 clang
 cliphist
@@ -76,10 +77,12 @@ dkms
 dnsmasq
 dosfstools
 double-conversion
+dtc
 duf
 duktape
 dust
 e2fsprogs
+edk2-ovmf
 efibootmgr
 efivar
 electron37
@@ -204,6 +207,7 @@ iana-etc
 icu
 imlib2
 impression
+iniparser
 inotify-tools
 iproute2
 iptables
@@ -243,6 +247,7 @@ leancrypto
 less
 leveldb
 libadwaita
+libaio
 libarchive
 libass
 libassuan
@@ -270,6 +275,7 @@ libbytesize
 libcanberra
 libcap
 libcap-ng
+libcbor
 libcdio
 libcdio-paranoia
 libcloudproviders
@@ -385,6 +391,7 @@ libseccomp
 libsecret
 libsigc++
 libsixel
+libslirp
 libsm
 libsndfile
 libsodium
@@ -403,6 +410,8 @@ libtheora
 libtiff
 libtirpc
 libtool
+libtraceevent
+libtracefs
 libunibreak
 libunistring
 libunwind
@@ -430,6 +439,7 @@ libxcursor
 libxcvt
 libxdamage
 libxdmcp
+libxdp
 libxext
 libxfixes
 libxfont2
@@ -452,6 +462,7 @@ libxt
 libxtst
 libxv
 libxxf86vm
+libyaml
 libyuv
 licenses
 lilv
@@ -509,6 +520,7 @@ mtdev
 mujs
 nautilus
 ncurses
+ndctl
 neovim
 net-tools
 nettle
@@ -586,6 +598,13 @@ psmisc
 python
 python-pyelftools
 qcustomplot
+qemu-base
+qemu-common
+qemu-img
+qemu-system-x86
+qemu-system-x86-firmware
+qemu-ui-gtk
+qemu-ui-opengl
 qhexedit2
 qrcodegencpp-cmake
 qscintilla-qt5
@@ -599,6 +618,7 @@ qt6-svg
 qt6-translations
 qt6-wayland
 rav1e
+rdma-core
 readline
 rhash
 rime-bopomofo
@@ -623,6 +643,7 @@ sbc
 scrcpy
 sdl2-compat
 sdl3
+seabios
 seahorse
 seatd
 sed
@@ -689,10 +710,14 @@ v4l-utils
 v4l2loopback-dkms
 v4l2loopback-utils
 vapoursynth
+vde2
 vid.stab
+virtiofsd
 vivaldi
 vmaf
 volume_key
+vte-common
+vte3
 vulkan-icd-loader
 waybar
 wayland
@@ -706,6 +731,7 @@ wireplumber
 wl-clipboard
 woff2
 wofi
+wolfssl
 wpa_supplicant
 wxwidgets-common
 wxwidgets-gtk3
