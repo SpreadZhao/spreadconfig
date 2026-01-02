@@ -21,6 +21,7 @@ fcitx5-rime
 feh
 font-manager
 foot
+fzf-tab-git
 gdu
 ghidra
 github-cli
