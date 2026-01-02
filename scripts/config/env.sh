@@ -30,5 +30,6 @@ PATH_LIST=(
 append_path "${PATH_LIST[@]}"
 
 unset -f append_path
+unset -v PATH_LIST
 
 export PATH
