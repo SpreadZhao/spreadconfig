@@ -125,6 +125,7 @@ fuse-common
 fuse2
 fuse3
 fzf
+fzf-tab-git
 gawk
 gc
 gcc
