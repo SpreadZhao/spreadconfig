@@ -16,7 +16,7 @@
 # ===============================================
 
 # Enable strict error handling for internal checks (but not fatal for each command)
-set -u  # treat unset variables as errors
+set -u # treat unset variables as errors
 set -o pipefail
 
 # -----------------------------------------------
@@ -25,12 +25,13 @@ set -o pipefail
 # Format: "description|command"
 # -----------------------------------------------
 COMMANDS=(
-  "System packages (paru)|paru -Syu"
-  # "Rust toolchain self-update|rustup self update"
-  "Rust toolchain components|rustup update"
-  "Cargo global packages|cargo install-update -ag"
-  # "Python pipx packages|pipx upgrade-all"
-  "Global npm packages|npm update -g"
+    "Keyring|paru -Sy --needed archlinux-keyring archlinuxcn-keyring"
+    "System packages (paru)|paru -Syu"
+    # "Rust toolchain self-update|rustup self update"
+    "Rust toolchain components|rustup update"
+    "Cargo global packages|cargo install-update -ag"
+    # "Python pipx packages|pipx upgrade-all"
+    "Global npm packages|npm update -g"
 )
 
 # -----------------------------------------------
@@ -49,25 +50,25 @@ RESET="\033[0m"
 #   $2 -> actual command
 # -----------------------------------------------
 run_command() {
-  local desc="$1"
-  local cmd="$2"
+    local desc="$1"
+    local cmd="$2"
 
-  echo -e "${YELLOW}==> Running: ${desc}${RESET}"
-  echo "Command: ${cmd}"
-  echo "---------------------------------------------"
+    echo -e "${YELLOW}==> Running: ${desc}${RESET}"
+    echo "Command: ${cmd}"
+    echo "---------------------------------------------"
 
-  # Run the command (allow user interaction if needed)
-  eval "$cmd"
-  local status=$?
+    # Run the command (allow user interaction if needed)
+    eval "$cmd"
+    local status=$?
 
-  if [ $status -eq 0 ]; then
-    echo -e "${GREEN}✓ SUCCESS:${RESET} ${desc}"
-  else
-    echo -e "${RED}✗ FAILED:${RESET} ${desc} (exit code: $status)"
-  fi
+    if [ $status -eq 0 ]; then
+        echo -e "${GREEN}✓ SUCCESS:${RESET} ${desc}"
+    else
+        echo -e "${RED}✗ FAILED:${RESET} ${desc} (exit code: $status)"
+    fi
 
-  echo "---------------------------------------------"
-  echo
+    echo "---------------------------------------------"
+    echo
 }
 
 # -----------------------------------------------
@@ -79,8 +80,8 @@ echo "=============================================="
 echo
 
 for entry in "${COMMANDS[@]}"; do
-  IFS='|' read -r desc cmd <<< "$entry"
-  run_command "$desc" "$cmd"
+    IFS='|' read -r desc cmd <<<"$entry"
+    run_command "$desc" "$cmd"
 done
 
 echo "=============================================="
