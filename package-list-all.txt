@@ -1,4 +1,5 @@
 7zip
+aalib
 abseil-cpp
 acl
 ada
@@ -50,6 +51,7 @@ cairomm
 calcurse
 capnproto
 capstone
+cdparanoia
 chmlib
 clang
 cliphist
@@ -179,11 +181,14 @@ gsettings-system-schemas
 gsm
 gssdp
 gst-plugins-bad-libs
+gst-plugins-base
 gst-plugins-base-libs
+gst-plugins-good
 gstreamer
 gtest
 gtk-layer-shell
 gtk-update-icon-cache
+gtk-vnc
 gtk3
 gtk4
 gtkmm3
@@ -273,6 +278,8 @@ libbpf
 libbs2b
 libbsd
 libbytesize
+libcaca
+libcacard
 libcanberra
 libcap
 libcap-ng
@@ -295,6 +302,7 @@ libdispatch
 libdisplay-info
 libdovi
 libdrm
+libdv
 libdvdnav
 libdvdread
 libebur128
@@ -314,6 +322,7 @@ libgcrypt
 libgexiv2
 libgit2
 libglvnd
+libgovirt
 libgpg-error
 libgsf
 libgudev
@@ -350,6 +359,7 @@ libmspack
 libmtp
 libmysofa
 libnautilus-extension
+libnbd
 libndp
 libnet
 libnetfilter_conntrack
@@ -358,6 +368,7 @@ libnfnetlink
 libnftnl
 libnghttp2
 libnghttp3
+libngtcp2
 libnice
 libnl
 libnm
@@ -383,6 +394,7 @@ libpsl
 libpulse
 libpwquality
 libraw1394
+librest
 librime
 librime-data
 librsvg
@@ -390,6 +402,7 @@ libsamplerate
 libsasl
 libseccomp
 libsecret
+libshout
 libsigc++
 libsixel
 libslirp
@@ -424,6 +437,8 @@ libuv
 libva
 libvdpau
 libverto
+libvirt
+libvirt-glib
 libvorbis
 libvpl
 libvpx
@@ -577,6 +592,7 @@ perl
 perl-error
 perl-mailtools
 perl-timedate
+phodav
 pinentry
 pipewire
 pipewire-alsa
@@ -600,12 +616,15 @@ python
 python-pyelftools
 qcustomplot
 qemu-base
+qemu-chardev-spice
 qemu-common
 qemu-img
 qemu-system-x86
 qemu-system-x86-firmware
 qemu-ui-gtk
 qemu-ui-opengl
+qemu-ui-spice-app
+qemu-ui-spice-core
 qhexedit2
 qrcodegencpp-cmake
 qscintilla-qt5
@@ -664,6 +683,10 @@ source-highlight
 spdlog
 speex
 speexdsp
+spice
+spice-gtk
+spice-protocol
+spice-vdagent
 spirv-tools
 sqlcipher
 sqlite
@@ -678,6 +701,7 @@ swaylock
 systemd
 systemd-libs
 systemd-sysvcompat
+taglib
 tar
 tcl
 tdb
@@ -697,6 +721,7 @@ tree-sitter-vimdoc
 tslib
 ttf-nerd-fonts-symbols-common
 ttf-nerd-fonts-symbols-mono
+twolame
 tzdata
 uchardet
 udisks2
@@ -704,6 +729,7 @@ unibilium
 unrar
 unzip
 upower
+usbredir
 uthash
 util-linux
 util-linux-libs
@@ -713,6 +739,7 @@ v4l2loopback-utils
 vapoursynth
 vde2
 vid.stab
+virt-viewer
 virtiofsd
 vivaldi
 vmaf
@@ -720,6 +747,7 @@ volume_key
 vte-common
 vte3
 vulkan-icd-loader
+wavpack
 waybar
 wayland
 webkitgtk-6.0
