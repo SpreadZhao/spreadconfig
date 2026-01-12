@@ -1,0 +1,8 @@
+- AceJump
+- GitToolBox
+- IdeaVim
+- IdeaVim-EasyMotion
+- Key Promoter X
+- Rainbow Brackets
+- Statistic
+- True Dark
