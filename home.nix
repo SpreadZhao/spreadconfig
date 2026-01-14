@@ -265,7 +265,7 @@
       hosts = {
         "github.com" = {
           user = "SpreadZhao";
-          oauth_token = "xxx";
+          oauth_token = lib.strings.trim (builtins.readFile ./secrets/gh_token);
           git_protocol = "https";
         };
       };
