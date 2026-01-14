@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+eval "nix-env -u --always"
+eval "sudo rm /nix/var/nix/gcroots/auto/*"
+eval "nix-collect-garbage -d"

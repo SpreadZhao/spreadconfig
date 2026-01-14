@@ -1,0 +1,4 @@
+#/usr/bin/env bash
+
+clean
+sudo nixos-rebuild switch
