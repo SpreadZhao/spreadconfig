@@ -180,6 +180,7 @@
     jdk11
     jdk8
     python3
+    gdu
   ];
   environment.shellAliases = lib.mkForce {};
   users.defaultUserShell = pkgs.zsh;
