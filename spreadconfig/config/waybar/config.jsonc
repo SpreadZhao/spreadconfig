@@ -1,0 +1,123 @@
+// -*- mode: jsonc -*-
+{
+    "height": 30,
+    "spacing": 1,
+    "modules-left": [
+        "niri/workspaces",
+        "custom/window-indicator",
+        "niri/window"
+    ],
+    "modules-center": [
+    ],
+    "modules-right": [
+        "cpu",
+        "custom/spacer",
+        "memory",
+        "custom/spacer",
+        "temperature",
+        "custom/spacer",
+        "network",
+        "custom/spacer",
+        "custom/audio",
+        "custom/spacer",
+        "custom/battery",
+        "custom/spacer",
+        "custom/time",
+        "custom/spacer",
+        "tray"
+    ],
+    "custom/spacer": {
+        "format": "|"
+    },
+    "custom/window-indicator": {
+        "format": "|{}",
+        "exec": "/home/spreadzhao/scripts/niri/niri_windows.sh",
+        "interval": "once",
+        "signal": 8,
+        "hide-empty-text": true
+    },
+    "niri/window": {
+        "format": "|{}",
+        "hide-empty-text": true,
+        "separate-outputs": true
+    },
+    "custom/screen-record-time": {
+        "format": "| {}",
+        "exec": "/home/spreadzhao/scripts/util/get_screenrecord_time.sh",
+        "signal": 10,
+        "hide-empty-text": true
+    },
+    "custom/info": {
+        "exec": "/home/spreadzhao/scripts/util/round_info.sh",
+        "interval": 10
+    },
+    "custom/brightness": {
+        "exec": "/home/spreadzhao/scripts/util/get_brightness.sh",
+        "interval": "once"
+    },
+    "custom/audio": {
+        "exec": "/home/spreadzhao/scripts/niri/audio_niri.sh",
+        "interval": 10,
+        "signal": 7
+    },
+    "custom/battery": {
+        "exec": "/home/spreadzhao/scripts/util/get_battery.sh",
+        "interval": 10
+    },
+    "custom/time": {
+        "exec": "/home/spreadzhao/scripts/util/get_time.sh",
+        "interval": 31,
+        "on-click": "[ -e /tmp/toggle_time_format ] && rm /tmp/toggle_time_format || touch /tmp/toggle_time_format; pkill -RTMIN+9 waybar",
+        "signal": 9,
+        "tooltip": false
+    },
+    "tray": {
+        "format": "{}",
+        "icon-size": 25,
+        "spacing": 0
+    },
+    "clock": {
+        "format": "{:%Y-%m-%d %H:%M %a}|",
+        "format-alt": "{:%H:%M}|"
+    },
+    "cpu": {
+        "interval": 10,
+        "format": "{}"
+    },
+    "memory": {
+        "interval": 10,
+        "format": "{}"
+    },
+    "temperature": {
+        "interval": 10,
+        "hwmon-path-abs": "/sys/devices/pci0000:00/0000:00:18.3/hwmon",
+        "input-filename": "temp1_input",
+        "tooltip": false,
+        "warning-threshold": 60,
+        "critical-threshold": 80,
+        "format": "{temperatureC}{icon}",
+        "format-icons": ["", "", "", "", ""]
+    },
+    "backlight": {
+        "format": "{percent}% {icon}",
+        "format-icons": [""]
+    },
+    "wireplumber": {
+        "format": "{volume}%{icon}|",
+        "format-muted": "",
+        "on-click": "helvum",
+        "max-volume": 150,
+        "scroll-step": 5,
+        "format-icons": ["", "", ""]
+    },
+    "network": {
+        "format-wifi": "",
+        "format-ethernet": "󰈀",
+        "format-disconnected": "󰯡",
+        "tooltip-format": "{ifname} via {gwaddr} 󰊗",
+        "tooltip-format-wifi": "{essid} ({signalStrength}%) ",
+        "tooltip-format-ethernet": "{ifname} 󰈀",
+        "tooltip-format-disconnected": "Disconnected",
+        "max-length": 50
+    }
+}

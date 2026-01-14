@@ -1,0 +1,330 @@
+animations {
+    off
+}
+
+gestures {
+    hot-corners {
+        off
+    }
+}
+
+input {
+    keyboard {
+        numlock
+    }
+
+    touchpad {
+        tap
+        dwt
+        natural-scroll
+        accel-speed 0.5
+    }
+
+}
+
+layout {
+    gaps 0
+    background-color "#000000"
+    center-focused-column "never"
+    preset-column-widths {
+        proportion 0.5
+        proportion 1.0
+    }
+    default-column-width { proportion 0.5; }
+    focus-ring {
+        width 2
+        active-color "#ffffff"
+        inactive-color "#3d3d3d"
+    }
+    border {
+        off
+        width 2
+        active-color "#ffc87f"
+        inactive-color "#505050"
+        urgent-color "#9b0000"
+    }
+    shadow {
+        off
+        softness 30
+        spread 5
+        offset x=0 y=5
+        color "#0007"
+    }
+    tab-indicator {
+        // hide-when-single-tab
+        place-within-column
+        gap 4
+        width 4
+        length total-proportion=1.0
+        position "left"
+        gaps-between-tabs 5
+        active-color "yellow"
+        inactive-color "gray"
+        urgent-color "red"
+    }
+    struts {
+        left 2
+        right 2
+        top 2
+        bottom 2
+    }
+}
+
+output "eDP-1" {
+    // off
+    scale 2
+    position x=5360 y=500
+    // position x=3440 y=1439          // ensure monitor has left/right relationship
+    // you can do this since next release
+    layout {
+        default-column-width { proportion 1.0; }
+        preset-column-widths {
+            proportion 0.5
+            proportion 1.0
+        }
+    }
+}
+
+output "HDMI-A-1" {
+    scale 1
+    position x=0 y=0
+}
+
+output "DP-2" {
+    scale 1
+    position x=3440 y=180
+    focus-at-startup
+    layout {
+        default-column-width { proportion 1.0; }
+        preset-column-widths {
+            proportion 0.5
+            proportion 1.0
+        }
+    }
+}
+
+environment {
+    // GTK_IM_MODULE "fcitx"
+    // QT_QPA_PLATFORM "wayland"
+    // ELECTRON_OZONE_PLATFORM_HINT "auto"
+}
+
+recent-windows {
+    off
+}
+
+overview {
+    backdrop-color "black"
+}
+
+// spawn-at-startup "waybar"
+spawn-at-startup "fcitx5 -d"
+// spawn-at-startup "clash-verge"
+// spawn-at-startup "mako"
+// spawn-at-startup "/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1"
+
+spawn-sh-at-startup "wl-paste --type text --watch cliphist store"
+spawn-sh-at-startup "wl-paste --type image --watch cliphist store"
+spawn-sh-at-startup "~/scripts/niri/detect_audio_change.sh"
+spawn-sh-at-startup "~/scripts/niri/detect_niri_window_change.sh"
+spawn-sh-at-startup "~/scripts/niri/start_foot_server.sh"
+spawn-sh-at-startup "~/scripts/niri/auto_lock.sh"
+
+hotkey-overlay {
+    skip-at-startup
+}
+
+prefer-no-csd
+
+screenshot-path null
+
+cursor {
+    xcursor-size 72
+    hide-after-inactive-ms 5000
+}
+
+clipboard {
+    disable-primary
+}
+
+window-rule {
+    match app-id="feh"
+    match app-id="vivaldi-stable"
+    open-fullscreen false
+}
+
+window-rule {
+    match app-id="feh" title=".*\/tmp.*"
+    match app-id="wechat" title=".*Photos.*"
+    // match app-id="org.telegram.desktop" title="Media viewer"
+    // match app-id="QQ" title=".*聊天记录.*"
+    // match app-id="QQ" title=".*图片查看器.*"
+    // match app-id="QQ" title=".*视频播放器.*"
+    match app-id=".*jetbrains.*" title=".*Welcome.*"
+    match app-id="com.gabm.satty"
+    open-floating true
+    open-fullscreen false
+}
+
+// wechat bug for some floating windows
+window-rule {
+    match app-id="wechat" title="wechat"
+    open-focused false
+}
+
+// window-rule {
+//     match app-id="org.telegram.desktop"
+//     default-column-width { fixed 456; }
+// }
+
+window-rule {
+    match app-id="org.telegram.desktop" title="Media viewer"
+    open-floating false
+    open-fullscreen false
+    max-width 200
+}
+
+// window-rule {
+//     match app-id="org.gnome.FileRoller"
+//     open-floating true
+//     default-column-width { proportion 0.34; }
+//     default-window-height { proportion 0.75; }
+// }
+
+binds {
+    Mod+Shift+Slash { show-hotkey-overlay; }
+
+    Mod+Return hotkey-overlay-title="Open a Terminal" { spawn-sh "footclient"; }
+    Mod+space hotkey-overlay-title="Run an Application" { spawn "wofi"; }
+    // Super+Alt+L hotkey-overlay-title="Lock the Screen: swaylock" { spawn "swaylock"; }
+
+    XF86AudioRaiseVolume allow-when-locked=true { spawn-sh "wpctl set-volume -l 1.5 @DEFAULT_SINK@ 5%+ && pkill -RTMIN+7 waybar"; }
+    XF86AudioLowerVolume allow-when-locked=true { spawn-sh "wpctl set-volume @DEFAULT_SINK@ 5%- && pkill -RTMIN+7 waybar"; }
+    XF86AudioMute        allow-when-locked=true { spawn-sh "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle && pkill -RTMIN+7 waybar"; }
+    XF86AudioMicMute     allow-when-locked=true { spawn-sh "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle && pkill -RTMIN+7 waybar"; }
+
+    XF86MonBrightnessUp allow-when-locked=true { spawn-sh "brightnessctl --class=backlight set +10%"; }
+    XF86MonBrightnessDown allow-when-locked=true { spawn-sh "brightnessctl --class=backlight set 10%-"; }
+
+    Mod+D { spawn-sh "~/scripts/niri/niri_lock.sh"; }
+
+    Mod+B { spawn-sh "killall -SIGUSR1 waybar"; }
+
+    Mod+O repeat=false { toggle-overview; }
+
+    Mod+Shift+C repeat=false { close-window; }
+
+    Mod+Left  { focus-column-or-monitor-left; }
+    Mod+Down  { focus-window-or-monitor-down; }
+    Mod+Up    { focus-window-or-monitor-up; }
+    Mod+Right { focus-column-or-monitor-right; }
+    Mod+H     { focus-column-or-monitor-left; }
+    Mod+J     { focus-window-or-monitor-down; }
+    Mod+K     { focus-window-or-monitor-up; }
+    Mod+L     { focus-column-or-monitor-right; }
+
+    Mod+Shift+Left  { move-column-left-or-to-monitor-left; }
+    Mod+Shift+Down  { move-window-down-or-to-workspace-down; }
+    Mod+Shift+Up    { move-window-up-or-to-workspace-up; }
+    Mod+Shift+Right { move-column-right-or-to-monitor-right; }
+    Mod+Shift+H     { move-column-left-or-to-monitor-left; }
+    Mod+Shift+J     { move-window-down-or-to-workspace-down; }
+    Mod+Shift+K     { move-window-up-or-to-workspace-up; }
+    Mod+Shift+L     { move-column-right-or-to-monitor-right; }
+
+    Mod+Home { focus-column-first; }
+    Mod+End  { focus-column-last; }
+    Mod+Shift+Home { move-column-to-first; }
+    Mod+Shift+End  { move-column-to-last; }
+
+    Mod+Ctrl+Left  { focus-monitor-left; }
+    Mod+Ctrl+Down  { focus-monitor-down; }
+    Mod+Ctrl+Up    { focus-monitor-up; }
+    Mod+Ctrl+Right { focus-monitor-right; }
+    Mod+Ctrl+H     { focus-monitor-left; }
+    Mod+Ctrl+J     { focus-monitor-down; }
+    Mod+Ctrl+K     { focus-monitor-up; }
+    Mod+Ctrl+L     { focus-monitor-right; }
+
+    Mod+Shift+Ctrl+Left  { move-column-to-monitor-left; }
+    Mod+Shift+Ctrl+Down  { move-column-to-monitor-down; }
+    Mod+Shift+Ctrl+Up    { move-column-to-monitor-up; }
+    Mod+Shift+Ctrl+Right { move-column-to-monitor-right; }
+    Mod+Shift+Ctrl+H     { move-column-to-monitor-left; }
+    Mod+Shift+Ctrl+J     { move-column-to-monitor-down; }
+    Mod+Shift+Ctrl+K     { move-column-to-monitor-up; }
+    Mod+Shift+Ctrl+L     { move-column-to-monitor-right; }
+
+    Mod+Alt+P   { move-workspace-up; }
+    Mod+Alt+N   { move-workspace-down; }
+    Mod+Alt+L   { move-workspace-to-monitor-right; }
+    Mod+Alt+H   { move-workspace-to-monitor-left; }
+
+    Mod+N              { focus-workspace-down; }
+    Mod+P              { focus-workspace-up; }
+    Mod+Shift+N         { move-column-to-workspace-down; }
+    Mod+Shift+P         { move-column-to-workspace-up; }
+    Mod+WheelScrollDown cooldown-ms=150 { focus-workspace-down; }
+    Mod+WheelScrollUp   cooldown-ms=150 { focus-workspace-up; }
+    Mod+WheelScrollRight                { focus-column-or-monitor-right; }
+    Mod+WheelScrollLeft                 { focus-column-or-monitor-left; }
+
+    Mod+1 { focus-workspace 1; }
+    Mod+2 { focus-workspace 2; }
+    Mod+3 { focus-workspace 3; }
+    Mod+4 { focus-workspace 4; }
+    Mod+5 { focus-workspace 5; }
+    Mod+6 { focus-workspace 6; }
+    Mod+7 { focus-workspace 7; }
+    Mod+8 { focus-workspace 8; }
+    Mod+9 { focus-workspace 9; }
+    Mod+Shift+1 { move-column-to-workspace 1; }
+    Mod+Shift+2 { move-column-to-workspace 2; }
+    Mod+Shift+3 { move-column-to-workspace 3; }
+    Mod+Shift+4 { move-column-to-workspace 4; }
+    Mod+Shift+5 { move-column-to-workspace 5; }
+    Mod+Shift+6 { move-column-to-workspace 6; }
+    Mod+Shift+7 { move-column-to-workspace 7; }
+    Mod+Shift+8 { move-column-to-workspace 8; }
+    Mod+Shift+9 { move-column-to-workspace 9; }
+
+    Mod+Tab { focus-window-previous; }
+    Mod+Shift+Tab { focus-workspace-previous; }
+
+    Mod+Shift+Comma  { consume-or-expel-window-left; }
+    Mod+Shift+Period { consume-or-expel-window-right; }
+
+    Mod+Comma  { consume-window-into-column; }
+    Mod+Period { expel-window-from-column; }
+
+    Mod+R { switch-preset-column-width; }
+    Mod+Shift+R { switch-preset-window-height; }
+    Mod+Ctrl+R { reset-window-height; }
+    Mod+F { maximize-column; }
+    Mod+F11 { fullscreen-window; }
+    Mod+Shift+F11 { toggle-windowed-fullscreen; }
+    Mod+M { maximize-window-to-edges; }
+
+    Mod+C { center-column; }
+
+    Mod+Ctrl+C { center-visible-columns; }
+
+    Mod+Minus { set-column-width "-10%"; }
+    Mod+Equal { set-column-width "+10%"; }
+
+    Mod+Shift+Minus { set-window-height "-10%"; }
+    Mod+Shift+Equal { set-window-height "+10%"; }
+    Mod+Ctrl+Equal { expand-column-to-available-width; }
+
+    Mod+Shift+F       { toggle-window-floating; }
+    Mod+Ctrl+F { switch-focus-between-floating-and-tiling; }
+
+    Mod+T { toggle-column-tabbed-display; }
+
+    Ctrl+Shift+A { spawn-sh "~/scripts/niri/screenshot.sh";  }
+    Ctrl+Shift+S { spawn-sh "~/scripts/niri/screenrecord.sh";  }
+
+    Mod+Shift+V { spawn-sh "cliphist list | wofi -S dmenu | cliphist decode | wl-copy"; }
+
+    Mod+Shift+Q { quit; }
+}
