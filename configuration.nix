@@ -11,6 +11,10 @@
       # ./fcitx5-rime.nix
     ];
 
+  hardware = {
+    bluetooth.enable = true;
+  };
+
   nixpkgs = {
     config = {
       allowUnfree = true;
@@ -181,6 +185,7 @@
     jdk8
     python3
     gdu
+    bluetui
   ];
   environment.shellAliases = lib.mkForce {};
   users.defaultUserShell = pkgs.zsh;

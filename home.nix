@@ -67,7 +67,6 @@
       wf-recorder
       libnotify
       wl-clipboard
-      bluetui
     ];
   };
   systemd.user.services.polkit-gnome-authentication-agent-1 = {
