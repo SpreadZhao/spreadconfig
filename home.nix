@@ -18,6 +18,7 @@
       # ".config/vivaldi_custom".source = ./spreadconfig/config/vivaldi_custom;
       "${config.xdg.configHome}/starship.toml".source = ./spreadconfig/config/starship.toml;
       "${config.xdg.configHome}/swaylock".source = ./spreadconfig/config/swaylock;
+      "${config.xdg.dataHome}/fcitx5/rime/rime-data".source = "${pkgs.rime-ice}/share/rime-data";
       "${config.xdg.dataHome}/fcitx5/rime/default.custom.yaml".source = ./spreadconfig/input/default;
       "${config.xdg.configHome}/obs-studio/basic/profiles/Video".source = ./spreadconfig/config/obs/profiles/Video;
       "${config.xdg.configHome}/obs-studio/basic/profiles/Audio".source = ./spreadconfig/config/obs/profiles/Audio;
@@ -67,6 +68,8 @@
       wf-recorder
       libnotify
       wl-clipboard
+      qrencode
+      pastel
     ];
   };
   systemd.user.services.polkit-gnome-authentication-agent-1 = {
@@ -639,7 +642,7 @@
           settings = {
             colums = ["icon"];
             delete_to_trash = true;
-            cleanup_delay_ms = 100;
+            cleanup_delay_ms = 10000;
           };
         };
         which-key = {
@@ -1035,6 +1038,139 @@
           # };
         };
       };
+      lsp = {
+        onAttach = ''
+          local client = vim.lsp.get_client_by_id(event.data.client_id)
+          local map = function(keys, func, desc, mode)
+              mode = mode or 'n'
+              vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = 'LSP: ' .. desc })
+          end
+          local function client_supports_method(client, method, bufnr)
+              return client:supports_method(method, bufnr)
+          end
+
+          require('fzf-lua').register_ui_select()
+          -- keymaps
+          map('grn', vim.lsp.buf.rename, '[R]e[n]ame')
+          map('gra', require('fzf-lua').lsp_code_actions, '[G]oto Code [A]ction', { 'n', 'x' })
+          map('grr', require('fzf-lua').lsp_references, '[G]oto [R]eferences')
+          map('gri', require('fzf-lua').lsp_implementations, '[G]oto [I]mplementation')
+          map('gd', require('fzf-lua').lsp_definitions, '[G]oto [D]efinition')
+          map('gD', require('fzf-lua').lsp_declarations, '[G]oto [D]eclaration')
+          map('<leader>q', require('fzf-lua').diagnostics_document, "questions")
+
+          map('<leader>d', vim.lsp.buf.hover, '[D]ocumentation')
+
+          -- lsp diagnostic UI
+          vim.diagnostic.config {
+              severity_sort = true,
+              float = { border = 'rounded', source = 'if_many' },
+              underline = { severity = vim.diagnostic.severity.ERROR },
+              signs = vim.g.have_nerd_font and {
+                  text = {
+                      [vim.diagnostic.severity.ERROR] = '󰅚 ',
+                      [vim.diagnostic.severity.WARN] = '󰀪 ',
+                      [vim.diagnostic.severity.INFO] = '󰋽 ',
+                      [vim.diagnostic.severity.HINT] = '󰌶 ',
+                  },
+              } or {},
+              virtual_text = {
+                  source = 'if_many',
+                  spacing = 2,
+                  format = function(diagnostic)
+                      local diagnostic_message = {
+                          [vim.diagnostic.severity.ERROR] = diagnostic.message,
+                          [vim.diagnostic.severity.WARN] = diagnostic.message,
+                          [vim.diagnostic.severity.INFO] = diagnostic.message,
+                          [vim.diagnostic.severity.HINT] = diagnostic.message,
+                      }
+                      return diagnostic_message[diagnostic.severity]
+                  end,
+              },
+          }
+          local bufopts = { noremap = true, silent = true, buffer = bufnr }
+
+          map('<leader>D', vim.diagnostic.open_float, '[D]iagnos')
+
+          -- highlight under cursor
+          if client and client_supports_method(client, vim.lsp.protocol.Methods.textDocument_documentHighlight, event.buf) then
+              local highlight_augroup = vim.api.nvim_create_augroup('kickstart-lsp-highlight', { clear = false })
+              vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
+                  buffer = event.buf,
+                  group = highlight_augroup,
+                  callback = vim.lsp.buf.document_highlight,
+              })
+
+              vim.api.nvim_create_autocmd({ 'CursorMoved', 'CursorMovedI' }, {
+                  buffer = event.buf,
+                  group = highlight_augroup,
+                  callback = vim.lsp.buf.clear_references,
+              })
+
+              vim.api.nvim_create_autocmd('LspDetach', {
+                  group = vim.api.nvim_create_augroup('kickstart-lsp-detach', { clear = true }),
+                  callback = function(event2)
+                      vim.lsp.buf.clear_references()
+                      vim.api.nvim_clear_autocmds { group = 'kickstart-lsp-highlight', buffer = event2.buf }
+                  end,
+              })
+          end
+
+          -- inlay hint
+          if client and client_supports_method(client, vim.lsp.protocol.Methods.textDocument_inlayHint, event.buf) then
+              map('<leader>th', function()
+                  vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf })
+              end, '[T]oggle Inlay [H]ints')
+          end
+        '';
+        servers = {
+          lua_ls = {
+            enable = true;
+            config = {
+              root_markers = [
+                ".luarc.json"
+                ".luarc.jsonc"
+                ".luacheckrc"
+                ".stylua.toml"
+                "stylua.toml"
+                "selene.toml"
+                "selene.yml"
+                ".git"
+              ];
+            };
+          };
+          clangd = {
+            enable = true;
+            config = {
+              cmd = [ "clangd" ];
+              filetypes = [
+                "c"
+                "cpp"
+                "objc"
+                "objcpp"
+                "cuda"
+                "proto"
+              ];
+              root_markers = [
+                ".clangd"
+                ".clang-tidy"
+                ".clang-format"
+                "compile_commands.json"
+                "compile_flags.txt"
+                "configure.ac"
+                ".git"
+              ];
+            };
+          };
+          nixd = {
+            enable = true;
+            config = {
+              cmd = [ "nixd" ];
+              filetypes = [ "nix" ];
+            };
+          };
+        };
+      };
       extraPlugins = [
         (pkgs.vimUtils.buildVimPlugin {
             name = "log-highlight";
@@ -1055,47 +1191,6 @@
         #     };
         # })
       ];
-      lsp = {
-        lua_ls = {
-          enable = true;
-          config = {
-            root_markers = [
-              ".luarc.json"
-              ".luarc.jsonc"
-              ".luacheckrc"
-              ".stylua.toml"
-              "stylua.toml"
-              "selene.toml"
-              "selene.yml"
-              ".git"
-            ];
-          };
-        };
-        clangd = {
-          enable = true;
-          config = {
-            cmd = [ "clangd" ];
-            filetypes = [
-              "c"
-              "cpp"
-              "objc"
-              "objcpp"
-              "cuda"
-              "proto"
-            ];
-            root_markers = [
-              ".clangd"
-              ".clang-tidy"
-              ".clang-format"
-              "compile_commands.json"
-              "compile_flags.txt"
-              "configure.ac"
-              ".git"
-            ];
-          };
-        };
-
-      };
     };
   };
   services = {
@@ -1108,6 +1203,123 @@
     };
     gnome-keyring = {
       enable = true;
+    };
+  };
+  i18n.inputMethod = {
+    enable = true;
+    type = "fcitx5";
+    fcitx5 = {
+      waylandFrontend = true;
+      ignoreUserConfig = false;
+      addons = with pkgs; [
+        (fcitx5-rime.override {
+          rimeDataPkgs = [
+            rime-ice
+          ];
+        })
+      ];
+      # settings = {
+      #   inputMethod = {
+      #     GroupOrder."0" = "Default";
+      #     "Groups/0" = {
+      #       Name = "Default";
+      #       "Default Layout" = "us";
+      #       DefaultIM = "rime";
+      #     };
+      #     "Groups/0/Items/0".Name = "keyboard-us";
+      #     "Groups/0/Items/1".Name = "rime";
+      #   };
+      #   globalOptions = {
+      #     Behavior = {
+      #       ActiveByDefault = false;
+      #       resetStateWhenFocusIn = "No";
+      #       ShareInputState = "No";
+      #       PreeditEnabledByDefault = true;
+      #       ShowInputMethodInformation= true;
+      #       showInputMethodInformationWhenFocusIn = false;
+      #       CompactInputMethodInformation = true;
+      #       ShowFirstInputMethodInformation= true;
+      #       DefaultPageSize = 9;
+      #       OverrideXkbOption = false;
+      #       PreloadInputMethod = true;
+      #       AllowInputMethodForPassword = false;
+      #       ShowPreeditForPassword = false;
+      #       AutoSavePeriod = 30;
+      #     };
+      #     Hotkey = {
+      #       EnumerateWithTriggerKeys = true;
+      #       EnumerateSkipFirst = false;
+      #       ModifierOnlyKeyTimeout = 250;
+      #     };
+      #     "Hotkey/TriggerKeys" = {
+      #       "0" = "Control+space";
+      #       "1" = "Zenkaku_Hankaku";
+      #       "2" = "Hangul";
+      #     };
+      #     "Hotkey/AltTriggerKeys" = {
+      #       "0" = "Shift_L";
+      #     };
+      #     "Hotkey/PrevPage" = {
+      #       "0" = "Up";
+      #     };
+      #     "Hotkey/NextPage" = {
+      #       "0" = "Down";
+      #     };
+      #     "Hotkey/PrevCandidate" = {
+      #       "0" = "Shift+Tab";
+      #     };
+      #     "Hotkey/NextCandidate" = {
+      #       "0" = "Tab";
+      #     };
+      #     "Hotkey/TogglePreedit" = {
+      #       "0" = "Control+Alt+P";
+      #     };
+      #   };
+      #   addons = {
+      #     classicui.globalSection = {
+      #       "Vertical Candidate List" = false;
+      #       WheelForPaging = true;
+      #       Font = "Noto Sans 18";
+      #       MenuFont = "Noto Sans 10";
+      #       TrayFont = "Noto Sans 10";
+      #       TrayOutlineColor = "#000000";
+      #       TrayTextColor = "#ffffff";
+      #       PreferTextIcon = true;
+      #       ShowLayoutNameInIcon = true;
+      #       UseInputMethodLanguageToDisplayText = true;
+      #       Theme= "default-dark";
+      #       DarkTheme = "default-dark";
+      #       UseDarkTheme = false;
+      #       UseAccentColor = false;
+      #       PerScreenDPI = false;
+      #       ForceWaylandDPI = 0;
+      #       EnableFractionalScale = true;
+      #     };
+      #     keyboard = {
+      #       globalSection = {
+      #         PageSize = 9;
+      #         EnableEmoji = true;
+      #         EnableQuickPhraseEmoji = true;
+      #         "Choose Modifier" = "Alt";
+      #         EnableHintByDefault = false;
+      #         UseNewComposeBehavior = true;
+      #         EnableLongPress = false;
+      #         # PrevCandidate = {
+      #         #   "0" = "Shift+Tab";
+      #         # };
+      #         # NextCandidate = {
+      #         #   "0" = "Tab";
+      #         # };
+      #         # "Hint Trigger" = {
+      #         #   "0" = "Control+Alt+H";
+      #         # };
+      #         # "One Time Hint Trigger" = {
+      #         #   "0" = "Control + Alt + J";
+      #         # };
+      #       };
+      #     };
+      #   };
+      # };
     };
   };
 }
