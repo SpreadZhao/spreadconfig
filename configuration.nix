@@ -68,8 +68,6 @@
 
   # console.font = "${pkgs.terminus_font}/share/consolefonts/ter-u28n.psf.gz";
 
-
-
   services = {
     pipewire = {
         enable = true;
@@ -99,6 +97,7 @@
         };
       };
     };
+    xserver.desktopManager.runXdgAutostartIfNone = true;
   };
 
   users.users.spreadzhao = {
@@ -109,32 +108,6 @@
     ];
     # shell = pkgs.zsh;
     initialPassword = "1";
-  };
-
-  i18n.inputMethod = {
-    type = "fcitx5";
-    enable = true;
-    fcitx5 = {
-      waylandFrontend = true;
-      ignoreUserConfig = false;
-      addons = with pkgs; [
-        fcitx5-rime
-        rime-ice
-        rime-data
-      ];
-      # settings = {
-      #   inputMethod = {
-      #     "Groups/0" = {
-      #       Name = "Default";
-      #       "Default Layout" = "us";
-      #       DefaultIM = "keyboard-us";
-      #     };
-      #     "Groups/0/Items/0".Name = "keyboard-us";
-      #     "Groups/0/Items/1".Name = "chinese-addons";
-      #     "Groups/0/Items/2".Name = "mozc";
-      #   };
-      # };
-    };
   };
 
   environment.systemPackages = with pkgs; [
@@ -184,6 +157,7 @@
     jdk11
     jdk8
     python3
+    nixd
     gdu
     bluetui
   ];
