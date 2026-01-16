@@ -1,4 +1,10 @@
-{ lib, config, pkgs, inputs, ... }:
+{
+  lib,
+  config,
+  pkgs,
+  inputs,
+  ...
+}:
 
 {
   imports = [
@@ -20,11 +26,15 @@
       "${config.xdg.configHome}/swaylock".source = ./spreadconfig/config/swaylock;
       "${config.xdg.dataHome}/fcitx5/rime/rime-data".source = "${pkgs.rime-ice}/share/rime-data";
       "${config.xdg.dataHome}/fcitx5/rime/default.custom.yaml".source = ./spreadconfig/input/default;
-      "${config.xdg.configHome}/obs-studio/basic/profiles/Video".source = ./spreadconfig/config/obs/profiles/Video;
-      "${config.xdg.configHome}/obs-studio/basic/profiles/Audio".source = ./spreadconfig/config/obs/profiles/Audio;
-      "${config.xdg.configHome}/qutebrowser/quickmarks".source = ./spreadconfig/config/qutebrowser/quickmarks;
+      "${config.xdg.configHome}/obs-studio/basic/profiles/Video".source =
+        ./spreadconfig/config/obs/profiles/Video;
+      "${config.xdg.configHome}/obs-studio/basic/profiles/Audio".source =
+        ./spreadconfig/config/obs/profiles/Audio;
+      "${config.xdg.configHome}/qutebrowser/quickmarks".source =
+        ./spreadconfig/config/qutebrowser/quickmarks;
       # ".config/qutebrowser/autoconfig.yml".source = ./spreadconfig/config/qutebrowser/autoconfig.yml;
-      "${config.xdg.configHome}/qutebrowser/config.py".source = ./spreadconfig/config/qutebrowser/config.py;
+      "${config.xdg.configHome}/qutebrowser/config.py".source =
+        ./spreadconfig/config/qutebrowser/config.py;
       "${config.home.homeDirectory}/.ideavimrc".source = ./spreadconfig/Jetbrains/.ideavimrc;
     };
     pointerCursor = {
@@ -336,8 +346,8 @@
           default-fill-shapes = false;
           primary-highlighter = "block";
           disable-notifications = false;
-          actions-on-right-click = [];
-          actions-on-enter = [];
+          actions-on-right-click = [ ];
+          actions-on-enter = [ ];
           actions-on-escape = [ "exit" ];
           right-click-copy = false;
           no-window-decoration = true;
@@ -397,7 +407,9 @@
         foldlevelstart = 99;
       };
       autoGroups = {
-          "highlight-yank" = { clear = true; };
+        "highlight-yank" = {
+          clear = true;
+        };
       };
       autoCmd = [
         {
@@ -640,7 +652,7 @@
         oil = {
           enable = true;
           settings = {
-            colums = ["icon"];
+            colums = [ "icon" ];
             delete_to_trash = true;
             cleanup_delay_ms = 10000;
           };
@@ -654,89 +666,98 @@
         gitsigns = {
           enable = true;
           settings = {
-              signs = {
-                      add = { text = "+"; };
-                      change = { text = "~"; };
-                      delete = { text = "_"; };
-                      topdelete = { text = "‾"; };
-                      changedelete = { text = "~"; };
+            signs = {
+              add = {
+                text = "+";
               };
-              on_attach = ''
-                  function(bufnr)
-                      local gitsigns = require 'gitsigns'
+              change = {
+                text = "~";
+              };
+              delete = {
+                text = "_";
+              };
+              topdelete = {
+                text = "‾";
+              };
+              changedelete = {
+                text = "~";
+              };
+            };
+            on_attach = ''
+              function(bufnr)
+                  local gitsigns = require 'gitsigns'
 
 
-                      local function map(mode, l, r, opts)
-                          opts = opts or {}
-                          opts.buffer = bufnr
-                          vim.keymap.set(mode, l, r, opts)
-                      end
-
-                      -- Navigation
-                      map('n', ']c', function()
-                          if vim.wo.diff then
-                              vim.cmd.normal { ']c', bang = true }
-                          else
-                              gitsigns.nav_hunk 'next'
-                          end
-                      end, { desc = 'Jump to next git [c]hange' })
-
-                      map('n', '[c', function()
-                          if vim.wo.diff then
-                              vim.cmd.normal { '[c', bang = true }
-                          else
-                              gitsigns.nav_hunk 'prev'
-                          end
-                      end, { desc = 'Jump to previous git [c]hange' })
-
-                      -- Actions
-                      -- visual mode
-                      -- map('v', '<leader>hs', function()
-                      --   gitsigns.stage_hunk { vim.fn.line '.', vim.fn.line 'v' }
-                      -- end, { desc = 'git [s]tage hunk' })
-                      map('v', '<leader>hr', function()
-                          gitsigns.reset_hunk { vim.fn.line '.', vim.fn.line 'v' }
-                      end, { desc = 'git [r]eset hunk' })
-                      -- normal mode
-                      -- map('n', '<leader>hs', gitsigns.stage_hunk, { desc = 'git [s]tage hunk' })
-                      map('n', '<leader>hr', gitsigns.reset_hunk, { desc = 'git [r]eset hunk' })
-                      -- map('n', '<leader>hS', gitsigns.stage_buffer, { desc = 'git [S]tage buffer' })
-                      -- map('n', '<leader>hu', gitsigns.stage_hunk, { desc = 'git [u]ndo stage hunk' })
-                      -- map('n', '<leader>hR', gitsigns.reset_buffer, { desc = 'git [R]eset buffer' })
-                      map('n', '<leader>hp', gitsigns.preview_hunk, { desc = 'git [p]review hunk' })
-                      map('n', '<leader>hb', gitsigns.blame_line, { desc = 'git [b]lame line' })
-                      map('n', '<leader>hd', gitsigns.diffthis, { desc = 'git [d]iff against index' })
-                      map('n', '<leader>hD', function()
-                          gitsigns.diffthis '@'
-                      end, { desc = 'git [D]iff against last commit' })
-                      -- Toggles
-                      -- map('n', '<leader>tb', gitsigns.toggle_current_line_blame, { desc = '[T]oggle git show [b]lame line' })
-                      map('n', '<leader>tD', gitsigns.preview_hunk_inline, { desc = '[T]oggle git show [D]eleted' })
-                      map('n', '<leader>ha', gitsigns.blame, { desc = 'git blame line' })
+                  local function map(mode, l, r, opts)
+                      opts = opts or {}
+                      opts.buffer = bufnr
+                      vim.keymap.set(mode, l, r, opts)
                   end
-              '';
+
+                  -- Navigation
+                  map('n', ']c', function()
+                      if vim.wo.diff then
+                          vim.cmd.normal { ']c', bang = true }
+                      else
+                          gitsigns.nav_hunk 'next'
+                      end
+                  end, { desc = 'Jump to next git [c]hange' })
+
+                  map('n', '[c', function()
+                      if vim.wo.diff then
+                          vim.cmd.normal { '[c', bang = true }
+                      else
+                          gitsigns.nav_hunk 'prev'
+                      end
+                  end, { desc = 'Jump to previous git [c]hange' })
+
+                  -- Actions
+                  -- visual mode
+                  -- map('v', '<leader>hs', function()
+                  --   gitsigns.stage_hunk { vim.fn.line '.', vim.fn.line 'v' }
+                  -- end, { desc = 'git [s]tage hunk' })
+                  map('v', '<leader>hr', function()
+                      gitsigns.reset_hunk { vim.fn.line '.', vim.fn.line 'v' }
+                  end, { desc = 'git [r]eset hunk' })
+                  -- normal mode
+                  -- map('n', '<leader>hs', gitsigns.stage_hunk, { desc = 'git [s]tage hunk' })
+                  map('n', '<leader>hr', gitsigns.reset_hunk, { desc = 'git [r]eset hunk' })
+                  -- map('n', '<leader>hS', gitsigns.stage_buffer, { desc = 'git [S]tage buffer' })
+                  -- map('n', '<leader>hu', gitsigns.stage_hunk, { desc = 'git [u]ndo stage hunk' })
+                  -- map('n', '<leader>hR', gitsigns.reset_buffer, { desc = 'git [R]eset buffer' })
+                  map('n', '<leader>hp', gitsigns.preview_hunk, { desc = 'git [p]review hunk' })
+                  map('n', '<leader>hb', gitsigns.blame_line, { desc = 'git [b]lame line' })
+                  map('n', '<leader>hd', gitsigns.diffthis, { desc = 'git [d]iff against index' })
+                  map('n', '<leader>hD', function()
+                      gitsigns.diffthis '@'
+                  end, { desc = 'git [D]iff against last commit' })
+                  -- Toggles
+                  -- map('n', '<leader>tb', gitsigns.toggle_current_line_blame, { desc = '[T]oggle git show [b]lame line' })
+                  map('n', '<leader>tD', gitsigns.preview_hunk_inline, { desc = '[T]oggle git show [D]eleted' })
+                  map('n', '<leader>ha', gitsigns.blame, { desc = 'git blame line' })
+              end
+            '';
           };
         };
         lazygit = {
           enable = true;
-          settings = 
-              {
-                floating_window_border_chars = [
-                  "╭"
-                  "─"
-                  "╮"
-                  "│"
-                  "╯"
-                  "─"
-                  "╰"
-                  "│"
-                ];
-                floating_window_scaling_factor = 0.9;
-                floating_window_use_plenary = 0;
-                floating_window_winblend = 0;
-                use_custom_config_file_path = 0;
-                use_neovim_remote = 1;
-              };
+          settings = {
+            floating_window_border_chars = [
+              "╭"
+              "─"
+              "╮"
+              "│"
+              "╯"
+              "─"
+              "╰"
+              "│"
+            ];
+            floating_window_scaling_factor = 0.9;
+            floating_window_use_plenary = 0;
+            floating_window_winblend = 0;
+            use_custom_config_file_path = 0;
+            use_neovim_remote = 1;
+          };
         };
         nvim-autopairs = {
           enable = true;
@@ -1197,13 +1218,13 @@
       };
       extraPlugins = [
         (pkgs.vimUtils.buildVimPlugin {
-            name = "log-highlight";
-            src = pkgs.fetchFromGitHub {
-              owner = "fei6409";
-              repo = "log-highlight.nvim";
-              rev = "v1.2.1";
-              hash = "sha256-jNmoWrF5xvRbD2ujezyeBmvU1Z7hLg981hVL5HA4pZk=";
-            };
+          name = "log-highlight";
+          src = pkgs.fetchFromGitHub {
+            owner = "fei6409";
+            repo = "log-highlight.nvim";
+            rev = "v1.2.1";
+            hash = "sha256-jNmoWrF5xvRbD2ujezyeBmvU1Z7hLg981hVL5HA4pZk=";
+          };
         })
         pkgs.vimPlugins.outline-nvim
         # (pkgs.vimUtils.buildVimPlugin {

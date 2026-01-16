@@ -2,14 +2,20 @@
 # your system. Help is available in the configuration.nix(5) man page, on
 # https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
 
-{ config, lib, pkgs, inputs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  inputs,
+  ...
+}:
 
 {
-  imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-      # ./fcitx5-rime.nix
-    ];
+  imports = [
+    # Include the results of the hardware scan.
+    ./hardware-configuration.nix
+    # ./fcitx5-rime.nix
+  ];
 
   hardware = {
     bluetooth.enable = true;
@@ -40,23 +46,28 @@
       })
     ];
   };
-  nix = let
-    flakeInputs = lib.filterAttrs (_: lib.isType "flake") inputs;
-  in {
-    settings = {
-      experimental-features = [ "nix-command" "flakes" ];
-      flake-registry = "";
-      nix-path = config.nix.nixPath;
-      substituters = [
-        "https://mirrors.ustc.edu.cn/nix-channels/store"
-        "https://mirrors.tuna.tsinghua.edu.cn/nix-channels/store"
-        "https://cache.nixos.org"
-      ];
+  nix =
+    let
+      flakeInputs = lib.filterAttrs (_: lib.isType "flake") inputs;
+    in
+    {
+      settings = {
+        experimental-features = [
+          "nix-command"
+          "flakes"
+        ];
+        flake-registry = "";
+        nix-path = config.nix.nixPath;
+        substituters = [
+          "https://mirrors.ustc.edu.cn/nix-channels/store"
+          "https://mirrors.tuna.tsinghua.edu.cn/nix-channels/store"
+          "https://cache.nixos.org"
+        ];
+      };
+      channel.enable = false;
+      registry = lib.mapAttrs (_: flake: { inherit flake; }) flakeInputs;
+      nixPath = lib.mapAttrsToList (n: _: "{n}=flake:${n}") flakeInputs;
     };
-    channel.enable = false;
-    registry = lib.mapAttrs (_: flake: {inherit flake;}) flakeInputs;
-    nixPath = lib.mapAttrsToList (n: _: "{n}=flake:${n}") flakeInputs;
-  };
 
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -70,8 +81,8 @@
 
   services = {
     pipewire = {
-        enable = true;
-        pulse.enable = true;
+      enable = true;
+      pulse.enable = true;
     };
     libinput.enable = true;
     openssh = {
@@ -162,7 +173,7 @@
     gdu
     bluetui
   ];
-  environment.shellAliases = lib.mkForce {};
+  environment.shellAliases = lib.mkForce { };
   users.defaultUserShell = pkgs.zsh;
   programs = {
     obs-studio = {
@@ -325,16 +336,16 @@
 
   fonts = {
     packages = with pkgs; [
-        noto-fonts
-        noto-fonts-cjk-sans
-        noto-fonts-cjk-serif
-        noto-fonts-color-emoji
-        nerd-fonts.symbols-only
+      noto-fonts
+      noto-fonts-cjk-sans
+      noto-fonts-cjk-serif
+      noto-fonts-color-emoji
+      nerd-fonts.symbols-only
     ];
     fontconfig = {
       defaultFonts = {
         emoji = [ "Noto Color Emoji" ];
-        monospace = [ 
+        monospace = [
           "Noto Sans Mono"
           "Noto Sans Mono CJK SC"
           "Noto Sans Mono CJK HK"
@@ -366,13 +377,10 @@
     };
   };
 
-
   security.polkit = {
     enable = true;
   };
 
-
   system.stateVersion = "25.11"; # Did you read the comment?
 
 }
-

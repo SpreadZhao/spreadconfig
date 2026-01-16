@@ -13,32 +13,36 @@
     };
   };
 
-  outputs = { 
-    nixpkgs, 
-    home-manager, 
-    ... 
-  } @inputs: let 
-  in {
-    nixosConfigurations = {
-      thinkbook = nixpkgs.lib.nixosSystem {
-        # system = "x86_64-linux";
-        specialArgs = { inherit inputs; };
-        modules = [
-          ./configuration.nix
-          home-manager.nixosModules.home-manager {
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-            home-manager.extraSpecialArgs = { inherit inputs; };
-            home-manager.users.spreadzhao = {
-              imports = [
-                ./home.nix
-              ];
-            };
-            # Optionally, use home-manager.extraSpecialArgs to pass
-            # arguments to home.nix
-          }
-        ];
+  outputs =
+    {
+      nixpkgs,
+      home-manager,
+      ...
+    }@inputs:
+    let
+    in
+    {
+      nixosConfigurations = {
+        thinkbook = nixpkgs.lib.nixosSystem {
+          # system = "x86_64-linux";
+          specialArgs = { inherit inputs; };
+          modules = [
+            ./configuration.nix
+            home-manager.nixosModules.home-manager
+            {
+              home-manager.useGlobalPkgs = true;
+              home-manager.useUserPackages = true;
+              home-manager.extraSpecialArgs = { inherit inputs; };
+              home-manager.users.spreadzhao = {
+                imports = [
+                  ./home.nix
+                ];
+              };
+              # Optionally, use home-manager.extraSpecialArgs to pass
+              # arguments to home.nix
+            }
+          ];
+        };
       };
     };
-  };
 }
