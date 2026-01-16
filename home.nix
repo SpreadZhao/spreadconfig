@@ -264,6 +264,9 @@
           name = "SpreadZhao";
           email = "spreadzhao@outlook.com";
         };
+        core = {
+          editor = "nvim";
+        };
       };
     };
     gh = {
