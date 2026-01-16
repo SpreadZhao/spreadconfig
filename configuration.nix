@@ -158,6 +158,7 @@
     jdk8
     python3
     nixd
+    nixfmt
     gdu
     bluetui
   ];

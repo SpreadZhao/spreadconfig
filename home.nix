@@ -743,6 +743,29 @@
         };
         blink-cmp = {
           enable = true;
+          setupLspCapabilities = true;
+          settings = {
+            appearance = {
+              nerd_font_variant = "mono";
+            };
+            completion = {
+              documentation = {
+                auto_show = false;
+                auto_show_delay_ms = 500;
+              };
+            };
+            sources = {
+              cmdline = [ ];
+              providers = {
+                buffer = {
+                  score_offset = -7;
+                };
+                lsp = {
+                  fallbacks = [ ];
+                };
+              };
+            };
+          };
         };
         conform-nvim = {
           enable = true;
@@ -762,6 +785,7 @@
               rust = [ "rustfmt" ];
               lua = [ "stylua" ];
               json = [ "jq" ];
+              nix = [ "nixfmt" ];
             };
           };
         };
@@ -1181,6 +1205,7 @@
               hash = "sha256-jNmoWrF5xvRbD2ujezyeBmvU1Z7hLg981hVL5HA4pZk=";
             };
         })
+        pkgs.vimPlugins.outline-nvim
         # (pkgs.vimUtils.buildVimPlugin {
         #     name = "outline";
         #     src = pkgs.fetchFromGitHub {
@@ -1189,8 +1214,12 @@
         #       rev = "v1.1.0";
         #       hash = "sha256-fbNVSAOzdmmfTV4CkssTpw54IZbCCLUOguO/huEB6eU=";
         #     };
+        #     doCheck = false;
         # })
       ];
+      extraConfigLua = ''
+        require("outline").setup({})
+      '';
     };
   };
   services = {
