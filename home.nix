@@ -80,6 +80,7 @@
       wl-clipboard
       qrencode
       pastel
+      telegram-desktop
     ];
   };
   systemd.user.services.polkit-gnome-authentication-agent-1 = {

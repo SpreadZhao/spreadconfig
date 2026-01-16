@@ -176,6 +176,7 @@
   environment.shellAliases = lib.mkForce { };
   users.defaultUserShell = pkgs.zsh;
   programs = {
+    nano.enable = false;
     obs-studio = {
       enable = true;
       enableVirtualCamera = true;
