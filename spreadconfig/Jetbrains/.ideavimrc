@@ -19,11 +19,27 @@ Plug 'easymotion/vim-easymotion'
 Plug 'preservim/nerdtree'
 Plug 'vim-scripts/argtextobj.vim'
 Plug 'tpope/vim-surround'
+Plug 'terryma/vim-multiple-cursors'
 set which-key
 set notimeout
 set easymotion
+set anyobject
+set quickscope
+set peekaboo
+packadd matchit
+
 let mapleader = " "
 set keep-english-in-normal-and-restore-in-insert
+
+let g:qs_primary_color   = '#ff0000'
+let g:qs_secondary_color = '#00ff00'
+highlight QuickScopePrimary guifg=#ff0000 gui=bold,underline ctermfg=red cterm=bold,underline
+highlight QuickScopeSecondary guifg=#00ff00 gui=underline ctermfg=green cterm=underline
+augroup QuickScopeHighlight
+  autocmd!
+  autocmd ColorScheme * highlight QuickScopePrimary guifg=#ff0000 gui=bold,underline cterm=bold,underline
+  autocmd ColorScheme * highlight QuickScopeSecondary guifg=#00ff00 gui=underline cterm=underline
+augroup END
 
 nmap <leader>si <Action>(SelectInProjectView)
 nmap <leader>ge <Action>(RecentFiles)
@@ -41,3 +57,20 @@ nmap ' $
 nmap <leader>; <leader><leader>s
 nmap <leader>lb <Action>(ToggleLineBreakpoint)
 nmap <leader>d <Action>(QuickJavaDoc)
+nmap <leader>e <Action>(ShowErrorDescription)
+
+" Remap multiple-cursors shortcuts to match terryma/vim-multiple-cursors
+nmap <C-n> <Plug>NextWholeOccurrence
+xmap <C-n> <Plug>NextWholeOccurrence
+nmap g<C-n> <Plug>NextOccurrence
+xmap g<C-n> <Plug>NextOccurrence
+xmap <C-x> <Plug>SkipOccurrence
+xmap <C-p> <Plug>RemoveOccurrence
+
+" Note that the default <A-n> and g<A-n> shortcuts don't work on Mac due to dead keys.
+" <A-n> is used to enter accented text e.g. ñ
+" Feel free to pick your own mappings that are not affected. I like to use <leader>
+nmap <leader><C-n> <Plug>AllWholeOccurrences
+xmap <leader><C-n> <Plug>AllWholeOccurrences
+nmap <leader>g<C-n> <Plug>AllOccurrences
+xmap <leader>g<C-n> <Plug>AllOccurrences
