@@ -46,17 +46,18 @@
       })
     ];
   };
+
   nix =
     let
       flakeInputs = lib.filterAttrs (_: lib.isType "flake") inputs;
     in
     {
       settings = {
-        experimental-features = [
-          "nix-command"
-          "flakes"
-        ];
+        # Enable flakes and new 'nix' command
+        experimental-features = "nix-command flakes";
+        # Opinionated: disable global registry
         flake-registry = "";
+        # Workaround for https://github.com/NixOS/nix/issues/9574
         nix-path = config.nix.nixPath;
         substituters = [
           "https://mirrors.ustc.edu.cn/nix-channels/store"
@@ -64,9 +65,12 @@
           "https://cache.nixos.org"
         ];
       };
+      # Opinionated: disable channels
       channel.enable = false;
+
+      # Opinionated: make flake registry and nix path match flake inputs
       registry = lib.mapAttrs (_: flake: { inherit flake; }) flakeInputs;
-      nixPath = lib.mapAttrsToList (n: _: "{n}=flake:${n}") flakeInputs;
+      nixPath = lib.mapAttrsToList (n: _: "${n}=flake:${n}") flakeInputs;
     };
 
   boot.loader.systemd-boot.enable = true;
@@ -161,8 +165,9 @@
     ninja
     clang
     clang-tools
-    rustup
+    # rustup
     rustc
+    cargo
     jdk21
     jdk17
     jdk11
@@ -170,6 +175,7 @@
     python3
     nixd
     nixfmt
+    lua-language-server
     gdu
     bluetui
   ];

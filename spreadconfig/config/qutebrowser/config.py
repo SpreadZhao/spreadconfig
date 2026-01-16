@@ -1,6 +1,10 @@
 config.load_autoconfig()
 config.bind('tt', 'config-cycle tabs.show always never')
 # config.unbind('d', mode = 'normal')
+config.unbind('M', mode = 'normal')
+config.unbind('m', mode = 'normal')
+config.bind('m', 'cmd-set-text :quickmark-add {{url}} {{title}}', mode = 'normal')
+config.bind('M', 'quickmark-save', mode = 'normal')
 c.aliases.update({
     'q': 'close',
     'qa': 'quit',
@@ -18,6 +22,8 @@ config.bind('<Ctrl-[>', '<Escape>')
 config.bind('<Enter>', '<Return>')
 config.bind('<Shift-Enter>', '<Return>')
 config.bind('<Shift-Return>', '<Return>')
+config.bind('<Ctrl-Shift-J>', 'tab-move +')
+config.bind('<Ctrl-Shift-K>', 'tab-move -')
 
 c.colors.tabs.bar.bg = 'black'
 c.colors.tabs.even.bg = 'black'

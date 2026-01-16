@@ -6,6 +6,12 @@
   ...
 }:
 
+let
+  qutebrowser-quickmarks = builtins.path {
+    path = ./spreadconfig/config/qutebrowser/quickmarks;
+    name = "qutebrowser-quickmarks";
+  };
+in
 {
   imports = [
     inputs.nixvim.homeModules.nixvim
@@ -15,28 +21,75 @@
     homeDirectory = "/home/spreadzhao";
     stateVersion = "25.11";
     file = {
-      "${config.home.homeDirectory}/scripts".source = ./spreadconfig/scripts;
-      "${config.xdg.configHome}/niri".source = ./spreadconfig/config/niri;
-      "${config.xdg.configHome}/mako".source = ./spreadconfig/config/mako;
-      "${config.xdg.configHome}/foot".source = ./spreadconfig/config/foot;
-      "${config.xdg.configHome}/waybar".source = ./spreadconfig/config/waybar;
-      "${config.xdg.configHome}/wofi".source = ./spreadconfig/config/wofi;
       # ".config/vivaldi_custom".source = ./spreadconfig/config/vivaldi_custom;
-      "${config.xdg.configHome}/starship.toml".source = ./spreadconfig/config/starship.toml;
-      "${config.xdg.configHome}/swaylock".source = ./spreadconfig/config/swaylock;
-      "${config.xdg.dataHome}/fcitx5/rime/rime-data".source = "${pkgs.rime-ice}/share/rime-data";
-      "${config.xdg.dataHome}/fcitx5/rime/default.custom.yaml".source = ./spreadconfig/input/default;
-      "${config.xdg.configHome}/obs-studio/basic/profiles/Video".source =
-        ./spreadconfig/config/obs/profiles/Video;
-      "${config.xdg.configHome}/obs-studio/basic/profiles/Audio".source =
-        ./spreadconfig/config/obs/profiles/Audio;
-      "${config.xdg.configHome}/qutebrowser/quickmarks".source =
-        ./spreadconfig/config/qutebrowser/quickmarks;
       # ".config/qutebrowser/autoconfig.yml".source = ./spreadconfig/config/qutebrowser/autoconfig.yml;
-      "${config.xdg.configHome}/qutebrowser/config.py".source =
-        ./spreadconfig/config/qutebrowser/config.py;
-      "${config.home.homeDirectory}/.ideavimrc".source = ./spreadconfig/Jetbrains/.ideavimrc;
+      "${config.home.homeDirectory}/scripts" = {
+        source = config.lib.file.mkOutOfStoreSymlink ./spreadconfig/scripts;
+      };
+      "${config.xdg.configHome}/niri" = {
+        source = config.lib.file.mkOutOfStoreSymlink ./spreadconfig/config/niri;
+      };
+      "${config.xdg.configHome}/mako" = {
+        source = config.lib.file.mkOutOfStoreSymlink ./spreadconfig/config/mako;
+      };
+      "${config.xdg.configHome}/foot" = {
+        source = config.lib.file.mkOutOfStoreSymlink ./spreadconfig/config/foot;
+      };
+      "${config.xdg.configHome}/waybar" = {
+        source = config.lib.file.mkOutOfStoreSymlink ./spreadconfig/config/waybar;
+      };
+      "${config.xdg.configHome}/wofi" = {
+        source = config.lib.file.mkOutOfStoreSymlink ./spreadconfig/config/wofi;
+      };
+      "${config.xdg.configHome}/starship.toml" = {
+        source = config.lib.file.mkOutOfStoreSymlink ./spreadconfig/config/starship.toml;
+      };
+      "${config.xdg.configHome}/swaylock" = {
+        source = config.lib.file.mkOutOfStoreSymlink ./spreadconfig/config/swaylock;
+      };
+      "${config.xdg.dataHome}/fcitx5/rime/rime-data" = {
+        source = "${pkgs.rime-ice}/share/rime-data";
+      };
+      "${config.xdg.dataHome}/fcitx5/rime/default.custom.yaml" = {
+        source = config.lib.file.mkOutOfStoreSymlink ./spreadconfig/input/default;
+      };
+      "${config.xdg.configHome}/obs-studio/basic/profiles/Video" = {
+        source = config.lib.file.mkOutOfStoreSymlink ./spreadconfig/config/obs/profiles/Video;
+      };
+      "${config.xdg.configHome}/obs-studio/basic/profiles/Audio" = {
+        source = config.lib.file.mkOutOfStoreSymlink ./spreadconfig/config/obs/profiles/Audio;
+      };
+      # "${config.xdg.configHome}/qutebrowser/quickmarks" = {
+      #   source = config.lib.file.mkOutOfStoreSymlink ./spreadconfig/config/qutebrowser/quickmarks;
+      # };
+      # "${config.xdg.configHome}/qutebrowser/bookmarks/urls" = {
+      #   source = config.lib.file.mkOutOfStoreSymlink ./spreadconfig/config/qutebrowser/bookmarks;
+      # };
+      "${config.xdg.configHome}/qutebrowser/config.py" = {
+        source = config.lib.file.mkOutOfStoreSymlink ./spreadconfig/config/qutebrowser/config.py;
+      };
+      "${config.home.homeDirectory}/.ideavimrc" = {
+        source = config.lib.file.mkOutOfStoreSymlink ./spreadconfig/Jetbrains/.ideavimrc;
+      };
     };
+    activation.mergeQutebrowserQuickmarks = lib.hm.dag.entryAfter ["writeBoundary"] ''
+      set -euo pipefail
+      DST="${config.xdg.configHome}/qutebrowser/quickmarks"
+      SRC=${qutebrowser-quickmarks}
+      mkdir -p "$(dirname "$DST")"
+      if [ ! -f "$DST" ]; then
+        cp "$SRC" "$DST"
+      else
+        backup="${config.home.homeDirectory}/temp/backup/qutebrowser-quickmarks-backup-$(date +%s)"
+        mkdir -p "$(dirname "$backup")"
+        cp "$DST" "$backup"
+        tmp="$(mktemp)"
+        trap 'rm -f "$tmp"' EXIT
+        cat "$DST" "$SRC" | sort -u > "$tmp"
+        mv "$tmp" "$DST"
+      fi
+      chmod +w "$DST"
+    '';
     pointerCursor = {
       enable = true;
       package = pkgs.adwaita-icon-theme;
@@ -48,8 +101,25 @@
     packages = with pkgs; [
       wechat
       qq
-      # vivaldi
       qutebrowser
+      # vivaldi
+      # (pkgs.qutebrowser.overrideAttrs (old: {
+      #   postInstall = (old.postInstall or "") + ''
+      #     set -euo pipefail
+      #     DST="${config.xdg.configHome}/qutebrowser/quickmarks"
+      #     SRC=${qutebrowser-quickmarks}
+      #     mkdir -p "$(dirname "$DST")"
+      #     if [ ! -f "$DST" ]; then
+      #       cp "$SRC" "$DST"
+      #     else
+      #       tmp="$(mktemp)"
+      #       trap 'rm -f "$tmp"' EXIT
+      #       cat "$DST" "$SRC" \
+      #         | sort -u > "$tmp"
+      #       mv "$tmp" "$DST"
+      #     fi
+      #   '';
+      # }))
       nautilus
       seahorse
       obsidian
@@ -81,6 +151,9 @@
       qrencode
       pastel
       telegram-desktop
+      jadx
+      ghidra-bin
+      pass
     ];
   };
   systemd.user.services.polkit-gnome-authentication-agent-1 = {
@@ -429,6 +502,11 @@
         }
       ];
       keymaps = [
+        {
+          key = "<Esc>";
+          action = "<CMD>nohlsearch<CR>";
+          mode = "n";
+        }
         {
           key = "gk";
           action = "<C-o>";
@@ -1216,6 +1294,111 @@
             config = {
               cmd = [ "nixd" ];
               filetypes = [ "nix" ];
+            };
+          };
+          rust_analyzer = {
+            enable = true;
+            config = {
+              cmd = [ "rust-analyzer" ];
+              filetypes = [ "rust" ];
+              root_dir = {
+                __raw = ''
+                  function(bufnr, on_dir)
+                    local function is_library(fname)
+                        local user_home = vim.fs.normalize(vim.env.HOME)
+                        local cargo_home = os.getenv 'CARGO_HOME' or user_home .. '/.cargo'
+                        local registry = cargo_home .. '/registry/src'
+                        local git_registry = cargo_home .. '/git/checkouts'
+
+                        local rustup_home = os.getenv 'RUSTUP_HOME' or user_home .. '/.rustup'
+                        local toolchains = rustup_home .. '/toolchains'
+
+                        for _, item in ipairs { toolchains, registry, git_registry } do
+                            if vim.fs.relpath(item, fname) then
+                                local clients = vim.lsp.get_clients { name = 'rust_analyzer' }
+                                return #clients > 0 and clients[#clients].config.root_dir or nil
+                            end
+                        end
+                    end
+                    local fname = vim.api.nvim_buf_get_name(bufnr)
+                    local reused_dir = is_library(fname)
+                    if reused_dir then
+                        on_dir(reused_dir)
+                        return
+                    end
+
+                    local cargo_crate_dir = vim.fs.root(fname, { 'Cargo.toml' })
+                    local cargo_workspace_root
+
+                    if cargo_crate_dir == nil then
+                        on_dir(vim.fs.root(fname, { 'rust-project.json' }) or
+                        vim.fs.dirname(vim.fs.find('.git', { path = fname, upward = true })[1]))
+                        return
+                    end
+
+                    local cmd = {
+                        'cargo',
+                        'metadata',
+                        '--no-deps',
+                        '--format-version',
+                        '1',
+                        '--manifest-path',
+                        cargo_crate_dir .. '/Cargo.toml',
+                    }
+
+                    vim.system(cmd, { text = true }, function(output)
+                        if output.code == 0 then
+                            if output.stdout then
+                                local result = vim.json.decode(output.stdout)
+                                if result['workspace_root'] then
+                                    cargo_workspace_root = vim.fs.normalize(result['workspace_root'])
+                                end
+                            end
+
+                            on_dir(cargo_workspace_root or cargo_crate_dir)
+                        else
+                            vim.schedule(function()
+                                vim.notify(('[rust_analyzer] cmd failed with code %d: %s\n%s'):format(output.code, cmd, output
+                                .stderr))
+                            end)
+                        end
+                    end)
+                  end
+                '';
+              };
+              capabilities = {
+                experimental = {
+                  serverStatusNotification = true;
+                };
+              };
+              before_init = {
+                __raw = ''
+                  function(init_params, config)
+                      -- See https://github.com/rust-lang/rust-analyzer/blob/eb5da56d839ae0a9e9f50774fa3eb78eb0964550/docs/dev/lsp-extensions.md?plain=1#L26
+                      if config.settings and config.settings['rust-analyzer'] then
+                          init_params.initializationOptions = config.settings['rust-analyzer']
+                      end
+                  end
+                '';
+              };
+              on_attach = {
+                __raw = ''
+                  function()
+                      vim.api.nvim_buf_create_user_command(0, 'LspCargoReload', function()
+                          local clients = vim.lsp.get_clients { bufnr = 0, name = 'rust_analyzer' }
+                          for _, client in ipairs(clients) do
+                              vim.notify 'Reloading Cargo Workspace'
+                              client.request('rust-analyzer/reloadWorkspace', nil, function(err)
+                                  if err then
+                                      error(tostring(err))
+                                  end
+                                  vim.notify 'Cargo workspace reloaded'
+                              end, 0)
+                          end
+                      end, { desc = 'Reload current cargo workspace' })
+                  end
+                '';
+              };
             };
           };
         };
