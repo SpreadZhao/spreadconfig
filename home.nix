@@ -225,17 +225,20 @@ in
         comment = "Toggle Monitor on and off";
         exec = "${config.home.homeDirectory}/scripts/niri/niri_toggle_output.sh";
         type = "Application";
+        icon = "";
       };
       foot_new_tab = {
         name = "Foot New Tab";
         type = "Application";
         exec = "${config.home.homeDirectory}/scripts/niri/foot_new_tab.sh";
+        icon = "";
         terminal = false;
       };
       change_audio = {
         name = "Change Audio Device";
         type = "Application";
         exec = "/usr/bin/env python3 ${config.home.homeDirectory}/scripts/util/change_audio.py";
+        icon = "";
         categories = [
           "AudioVideo"
           "Utility"
@@ -245,18 +248,21 @@ in
         name = "Shutdown";
         type = "Application";
         exec = "shutdown -h now";
+        icon = "";
         terminal = false;
       };
       reboot = {
         name = "Reboot";
         type = "Application";
         exec = "reboot";
+        icon = "";
         terminal = false;
       };
       wechat = {
         name = "wechat";
         exec = ''env QT_IM_MODULE="fcitx" XMODIFIERS="@im=fcitx" QT_SCREEN_SCALE_FACTORS="eDP-1=2.0;HDMI-A-1=1.0;DP-2=1.0" wechat %U'';
         terminal = false;
+        icon = "wechat";
         type = "Application";
         categories = [
           "Utility"
