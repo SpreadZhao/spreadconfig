@@ -5,6 +5,8 @@ config.unbind('M', mode = 'normal')
 config.unbind('m', mode = 'normal')
 config.bind('m', 'cmd-set-text :quickmark-add {{url}} {{title}}', mode = 'normal')
 config.bind('M', 'quickmark-save', mode = 'normal')
+config.bind('cb', 'tab-only -p', mode = 'normal')
+config.bind('ct', 'tab-only -n', mode = 'normal')
 c.aliases.update({
     'q': 'close',
     'qa': 'quit',
