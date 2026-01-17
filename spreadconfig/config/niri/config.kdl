@@ -128,7 +128,7 @@ spawn-sh-at-startup "wl-paste --type image --watch cliphist store"
 // spawn-sh-at-startup "~/scripts/niri/detect_audio_change.sh"
 spawn-sh-at-startup "~/scripts/niri/detect_niri_window_change.sh"
 spawn-sh-at-startup "~/scripts/niri/start_foot_server.sh"
-spawn-sh-at-startup "~/scripts/niri/auto_lock.sh"
+// spawn-sh-at-startup "~/scripts/niri/auto_lock.sh"
 
 hotkey-overlay {
     skip-at-startup

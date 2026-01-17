@@ -28,7 +28,7 @@ alias ca="mpv /dev/video0"
 alias feh="feh --theme fit"
 alias cdgvfs="cd /run/user/$(id -u)/gvfs"
 alias se="sudo -E nvim"
-alias sf="cd ~/workspaces/spreadconfig"
+alias sf="cd ~/workspaces/spreadconfig && n"
 
 # safe
 alias mv="mv -iv"

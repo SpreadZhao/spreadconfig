@@ -1,4 +1,4 @@
 #/usr/bin/env bash
 
 eval "nix flake update"
-eval "sudo nixos-rebuild switch --flake"
+eval "sns"

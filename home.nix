@@ -158,21 +158,63 @@ in
       pass
     ];
   };
-  systemd.user.services.polkit-gnome-authentication-agent-1 = {
-    Unit = {
-      Description = "polkit-gnome-authentication-agent-1";
-      Wants = [ "graphical-session.target" ];
-      After = [ "graphical-session.target" ];
+  systemd.user.services = {
+    polkit-gnome-authentication-agent-1 = {
+      Unit = {
+        Description = "polkit-gnome-authentication-agent-1";
+        Wants = [ "graphical-session.target" ];
+        After = [ "graphical-session.target" ];
+      };
+      Install = {
+        WantedBy = [ "graphical-session.target" ];
+      };
+      Service = {
+        Type = "simple";
+        ExecStart = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
+        Restart = "on-failure";
+        RestartSec = 1;
+        TimeoutStopSec = 10;
+      };
     };
-    Install = {
-      WantedBy = [ "graphical-session.target" ];
+    swayidle = {
+      Unit = {
+        PartOf = [ "graphical-session.target" ];
+        After = [ "graphical-session.target" ];
+        Requisite = [ "graphical-session.target" ];
+      };
+      Service = {
+        ExecStart = ''
+          ${pkgs.swayidle}/bin/swayidle \
+            -w \
+            timeout 600 '${pkgs.niri}/bin/niri msg action power-off-monitors' \
+            timeout 605 '${pkgs.swaylock}/bin/swaylock' \
+            before-sleep '${pkgs.swaylock}/bin/swaylock'
+        '';
+        Restart = "on-failue";
+      };
     };
-    Service = {
-      Type = "simple";
-      ExecStart = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
-      Restart = "on-failure";
-      RestartSec = 1;
-      TimeoutStopSec = 10;
+    niri = {
+      Unit = {
+        Description = "A scrollable-tilling Wayland compositor";
+        BindsTo = [ "graphical-session.target" ];
+        Before = [
+          "graphical-session.target"
+          "xdg-desktop-autostart.target"
+        ];
+        After = [ "graphical-session-pre.target" ];
+        Wants = [
+          "graphical-session-pre.target"
+          "xdg-desktop-autostart.target"
+          "mako.service"
+          "waybar.service"
+          "swayidle.service"
+        ];
+      };
+      Service = {
+        Slice = "session.slice";
+        Type = "notify";
+        ExecStart = "${pkgs.niri}/bin/niri --session";
+      };
     };
   };
   xdg = {
