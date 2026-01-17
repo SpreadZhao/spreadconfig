@@ -1,9 +1,0 @@
-[Desktop Entry]
-Name=QQ
-Exec=/home/spreadzhao/Applications/QQ/linuxqq_3.2.21-42086_x86_64.AppImage --ozone-platform-hint=auto --enable-wayland-ime --wayland-text-input-version=3 %U
-Terminal=false
-Type=Application
-Icon=qq
-StartupWMClass=QQ
-Categories=Network;
-Comment=QQ

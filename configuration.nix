@@ -122,7 +122,7 @@
       tree
     ];
     # shell = pkgs.zsh;
-    initialPassword = "1";
+    initialPassword = "${lib.strings.trim (builtins.readFile ./secrets/passwd)}";
   };
 
   environment.systemPackages = with pkgs; [
