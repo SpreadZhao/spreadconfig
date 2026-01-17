@@ -1,31 +1,33 @@
 config.load_autoconfig()
 config.bind('tt', 'config-cycle tabs.show always never')
-# config.unbind('d', mode = 'normal')
 config.unbind('M', mode = 'normal')
 config.unbind('m', mode = 'normal')
+config.unbind('d')
 config.bind('m', 'cmd-set-text :quickmark-add {{url}} {{title}}', mode = 'normal')
 config.bind('M', 'quickmark-save', mode = 'normal')
-config.bind('cb', 'tab-only -p', mode = 'normal')
-config.bind('ct', 'tab-only -n', mode = 'normal')
-c.aliases.update({
-    'q': 'close',
-    'qa': 'quit',
-    'w': 'session-save',
-    'wq': 'quit --save',
-    'wqa': 'quit --save',
-})
-c.auto_save.session = False
-config.bind('<Ctrl-6>', '<Ctrl-^>')
-config.bind('<Ctrl-Enter>', '<Ctrl-Return>')
-config.bind('<Ctrl-I>', '<Tab>')
-config.bind('<Ctrl-J>', '<Return>')
-config.bind('<Ctrl-M>', '<Return>')
-config.bind('<Ctrl-[>', '<Escape>')
-config.bind('<Enter>', '<Return>')
-config.bind('<Shift-Enter>', '<Return>')
-config.bind('<Shift-Return>', '<Return>')
-config.bind('<Ctrl-Shift-J>', 'tab-move +')
-config.bind('<Ctrl-Shift-K>', 'tab-move -')
+config.bind('dd', 'tab-close', mode = 'normal')
+config.bind('d$', 'tab-only -p', mode = 'normal')
+config.bind('D', 'tab-only -p', mode = 'normal')
+config.bind('d0', 'tab-only -n', mode = 'normal')
+# c.aliases.update({
+#     'q': 'close',
+#     'qa': 'quit',
+#     'w': 'session-save',
+#     'wq': 'quit --save',
+#     'wqa': 'quit --save',
+# })
+# c.auto_save.session = False
+# config.bind('<Ctrl-6>', '<Ctrl-^>')
+# config.bind('<Ctrl-Enter>', '<Ctrl-Return>')
+# config.bind('<Ctrl-I>', '<Tab>')
+# config.bind('<Ctrl-J>', '<Return>')
+# config.bind('<Ctrl-M>', '<Return>')
+# config.bind('<Ctrl-[>', '<Escape>')
+# config.bind('<Enter>', '<Return>')
+# config.bind('<Shift-Enter>', '<Return>')
+# config.bind('<Shift-Return>', '<Return>')
+config.bind('<Ctrl-Shift-J>', 'tab-move +', mode = 'normal')
+config.bind('<Ctrl-Shift-K>', 'tab-move -', mode = 'normal')
 
 c.colors.tabs.bar.bg = 'black'
 c.colors.tabs.even.bg = 'black'
@@ -35,10 +37,10 @@ c.colors.tabs.selected.even.bg = '#b5b5b5'
 c.colors.tabs.selected.even.fg = 'black'
 c.colors.tabs.selected.odd.bg = '#b5b5b5'
 c.colors.tabs.selected.odd.fg = 'black'
-c.colors.tabs.pinned.selected.odd.bg = '#b5b5b5'
-c.colors.tabs.pinned.selected.even.bg = '#b5b5b5'
-c.colors.tabs.pinned.selected.odd.fg = 'black'
-c.colors.tabs.pinned.selected.even.fg = 'black'
+c.colors.tabs.pinned.selected.odd.bg = '#820030'
+c.colors.tabs.pinned.selected.even.bg = '#820030'
+c.colors.tabs.pinned.selected.odd.fg = 'white'
+c.colors.tabs.pinned.selected.even.fg = 'white'
 
 c.colors.webpage.bg = 'black'
 c.colors.webpage.preferred_color_scheme = 'dark'
@@ -53,14 +55,14 @@ c.colors.webpage.darkmode.policy.images = 'never'
 c.fonts.default_family = ['Noto Sans']
 c.fonts.default_size = '16pt'
 
-c.hints.next_regexes = [
-    r'\bnext\b',
-    r'\bmore\b',
-    r'\bnewer\b',
-    r'\b[>→≫]\b',
-    r'\b(>>|»)\b',
-    r'\bcontinue\b',
-]
+# c.hints.next_regexes = [
+#     r'\bnext\b',
+#     r'\bmore\b',
+#     r'\bnewer\b',
+#     r'\b[>→≫]\b',
+#     r'\b(>>|»)\b',
+#     r'\bcontinue\b',
+# ]
 
 c.statusbar.position = 'top'
 c.statusbar.widgets = [
@@ -94,6 +96,8 @@ c.tabs.show = 'always'
 c.tabs.title.format = '{audio}{relative_index}:{current_title}'
 c.tabs.title.format_pinned = '{audio}{relative_index}:{current_title}'
 c.tabs.width = '10%'
+c.tabs.mousewheel_switching = False;
+c.tabs.new_position.unrelated = 'next';
 
 c.url.default_page = 'about:blank'
 c.url.start_pages = ['about:blank']
@@ -101,6 +105,8 @@ c.url.start_pages = ['about:blank']
 c.url.searchengines = {
     'DEFAULT': 'https://www.google.com/search?q={}'
 }
+
+c.search.incremental = False;
 
 
 c.zoom.default = '150%'
@@ -124,3 +130,5 @@ c.zoom.levels = [
     '500%',
 ]
 c.zoom.mouse_divider = 0
+
+c.window.hide_decoration = True;

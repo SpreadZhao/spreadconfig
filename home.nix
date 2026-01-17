@@ -7,10 +7,10 @@
 }:
 
 let
-  qutebrowser-quickmarks = builtins.path {
-    path = ./spreadconfig/config/qutebrowser/quickmarks;
-    name = "qutebrowser-quickmarks";
-  };
+  # qutebrowser-quickmarks = builtins.path {
+  #   path = ./spreadconfig/config/qutebrowser/quickmarks;
+  #   name = "qutebrowser-quickmarks";
+  # };
   # nixosConfig/realConfig
   spreadconfigDir = "${config.home.homeDirectory}/workspaces/spreadconfig/spreadconfig";
 in
@@ -61,12 +61,9 @@ in
       "${config.xdg.configHome}/obs-studio/basic/profiles/Audio" = {
         source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/obs/profiles/Audio";
       };
-      # "${config.xdg.configHome}/qutebrowser/quickmarks" = {
-      #   source = config.lib.file.mkOutOfStoreSymlink ./spreadconfig/config/qutebrowser/quickmarks;
-      # };
-      # "${config.xdg.configHome}/qutebrowser/bookmarks/urls" = {
-      #   source = config.lib.file.mkOutOfStoreSymlink ./spreadconfig/config/qutebrowser/bookmarks;
-      # };
+      "${config.xdg.configHome}/qutebrowser/quickmarks" = {
+        source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/qutebrowser/quickmarks";
+      };
       "${config.xdg.configHome}/qutebrowser/config.py" = {
         source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/qutebrowser/config.py";
       };
@@ -74,24 +71,24 @@ in
         source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/Jetbrains/.ideavimrc";
       };
     };
-    activation.mergeQutebrowserQuickmarks = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-      set -euo pipefail
-      DST="${config.xdg.configHome}/qutebrowser/quickmarks"
-      SRC=${qutebrowser-quickmarks}
-      mkdir -p "$(dirname "$DST")"
-      if [ ! -f "$DST" ]; then
-        cp "$SRC" "$DST"
-      else
-        backup="${config.home.homeDirectory}/temp/backup/qutebrowser-quickmarks-backup-$(date +%s)"
-        mkdir -p "$(dirname "$backup")"
-        cp "$DST" "$backup"
-        tmp="$(mktemp)"
-        trap 'rm -f "$tmp"' EXIT
-        cat "$DST" "$SRC" | sort -u > "$tmp"
-        mv "$tmp" "$DST"
-      fi
-      chmod +w "$DST"
-    '';
+    # activation.mergeQutebrowserQuickmarks = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    #   set -euo pipefail
+    #   DST="${config.xdg.configHome}/qutebrowser/quickmarks"
+    #   SRC=${qutebrowser-quickmarks}
+    #   mkdir -p "$(dirname "$DST")"
+    #   if [ ! -f "$DST" ]; then
+    #     cp "$SRC" "$DST"
+    #   else
+    #     backup="${config.home.homeDirectory}/temp/backup/qutebrowser-quickmarks-backup-$(date +%s)"
+    #     mkdir -p "$(dirname "$backup")"
+    #     cp "$DST" "$backup"
+    #     tmp="$(mktemp)"
+    #     trap 'rm -f "$tmp"' EXIT
+    #     cat "$DST" "$SRC" | sort -u > "$tmp"
+    #     mv "$tmp" "$DST"
+    #   fi
+    #   chmod +w "$DST"
+    # '';
     pointerCursor = {
       enable = true;
       package = pkgs.adwaita-icon-theme;
