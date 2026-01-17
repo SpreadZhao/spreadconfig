@@ -1,33 +1,3 @@
-# ==============================================================================
-# Core shell configuration (history, vim mode)
-# ==============================================================================
-#
-{
-  echo "===== sourced config_zsh at $(date) ====="
-  echo "PID=$$"
-  echo "BASH_SOURCE:"
-  printf '  %s\n' "${BASH_SOURCE[@]}"
-  echo "FUNCNAME:"
-  printf '  %s\n' "${FUNCNAME[@]}"
-  echo "=============================="
-} >> ~/temp/source-trace.log
-config_basic() {
-    # Set the path for zsh history file (stores command history persistently)
-    HISTFILE=~/.zsh_history
-    # Maximum number of history entries kept in memory (session)
-    HISTSIZE=5000
-    # Maximum number of history entries saved to HISTFILE (persistent)
-    SAVEHIST=5000
-    # export KEYTIMEOUT=1  # Uncomment to set key delay (10ms) for vim mode
-
-    # Enable vi/vim key binding mode in zsh (replace default emacs mode)
-    bindkey -v
-    echo "bindkey"
-}
-
-# ==============================================================================
-# Cursor shape configuration for vim mode (block/beam)
-# ==============================================================================
 config_cursor_mode() {
     # Cursor shape escape sequences (from ttssh2 documentation)
     # Block cursor (vicmd/normal mode)
@@ -61,11 +31,8 @@ config_cursor_mode() {
     zle -N zle-line-init
 }
 
-# ==============================================================================
-# Prompt and vim-style editing enhancements
-# ==============================================================================
+
 config_prompt() {
-    # Load and bind "edit-command-line" widget (edit current command in $VISUAL editor)
     autoload -Uz edit-command-line
     zle -N edit-command-line
     # Bind Ctrl+E (in vicmd mode) to open current command in editor (e.g. vim)
@@ -103,114 +70,7 @@ config_prompt() {
     done
 }
 
-# ==============================================================================
-# Deprecated zsh completion configuration (replaced by config_fzf_tab)
-# ==============================================================================
-config_zsh_completion() {
-    # Extend fpath to include system-wide completion files
-    fpath=(/usr/share/zsh/site-functions $fpath)
-
-    # Load zsh completion module (must be called before compinit)
-    zmodload zsh/complist
-
-    # Bind vim-style hjlk keys for menu selection (completion menu navigation)
-    # Note: May conflict with interactive mode
-    bindkey -M menuselect 'h' vi-backward-char    # Left
-    bindkey -M menuselect 'k' vi-up-line-or-history  # Up
-    bindkey -M menuselect 'j' vi-down-line-or-history  # Down
-    bindkey -M menuselect 'l' vi-forward-char     # Right
-
-    # Additional menuselect key bindings (Ctrl+X + [g/i/h/n/u])
-    bindkey -M menuselect '^xg' clear-screen                # Ctrl+X+G: Clear screen
-    bindkey -M menuselect '^xi' vi-insert                   # Ctrl+X+I: Switch to insert mode
-    bindkey -M menuselect '^xh' accept-and-hold             # Ctrl+X+H: Accept and hold current selection
-    bindkey -M menuselect '^xn' accept-and-infer-next-history  # Ctrl+X+N: Accept and infer next
-    bindkey -M menuselect '^xu' undo                        # Ctrl+X+U: Undo selection
-
-    # Initialize zsh completion system
-    autoload -U compinit; compinit
-    # Include hidden files (dotfiles) in completion
-    _comp_options+=(globdots)
-
-    # Map completion for custom vman function to man command (requires vman in scripts.zsh)
-    compdef vman="man"
-
-    # +---------+
-    # | Options |
-    # +---------+
-    # setopt GLOB_COMPLETE      # Show completion menu for glob patterns
-    setopt MENU_COMPLETE        # Auto-highlight first completion entry
-    setopt AUTO_LIST            # Auto-list choices for ambiguous completions
-    setopt COMPLETE_IN_WORD     # Complete from both ends of a word
-
-    # +---------+
-    # | zstyles | Completion style configuration (pattern: :completion:<func>:<completer>:<cmd>:<arg>:<tag>)
-    # +---------+
-
-    # Define completion handlers (extensions → complete → approximate matching)
-    zstyle ':completion:*' completer _extensions _complete _approximate
-
-    # Enable completion cache (speed up repeated completions)
-    zstyle ':completion:*' use-cache on
-    zstyle ':completion:*' cache-path "$XDG_CACHE_HOME/zsh/.zcompcache"
-    # Complete aliases when _expand_alias is used
-    zstyle ':completion:*' complete true
-
-    # Bind Ctrl+X+A to expand aliases (custom completion widget)
-    zle -C alias-expension complete-word _generic
-    bindkey '^Xa' alias-expension
-    zstyle ':completion:alias-expension:*' completer _expand_alias
-
-    # Use fzf-style menu for completion selection
-    zstyle ':completion:*' menu select
-
-    # Complete cd options instead of directory stack
-    zstyle ':completion:*' complete-options true
-
-    # Sort files by modification time (newest first)
-    zstyle ':completion:*' file-sort modification
-
-    # Completion message formatting (colors for errors/descriptions/messages/warnings)
-    zstyle ':completion:*:*:*:*:corrections' format '%F{yellow}!- %d (errors: %e) -!%f'
-    zstyle ':completion:*:*:*:*:descriptions' format '%F{blue}-- %D %d --%f'
-    zstyle ':completion:*:*:*:*:messages' format ' %F{purple} -- %d --%f'
-    zstyle ':completion:*:*:*:*:warnings' format ' %F{red}-- no matches found --%f'
-
-    # Use LS_COLORS for file/directory colors in completion list
-    zstyle ':completion:*:*:*:*:default' list-colors ${(s.:.)LS_COLORS}
-
-    # Prioritize local directories for cd completion
-    zstyle ':completion:*:*:cd:*' tag-order local-directories directory-stack path-directories
-
-    # Group completions by category (named after tags)
-    zstyle ':completion:*' group-name ''
-
-    # Order of completion groups for commands (aliases → builtins → functions → commands)
-    zstyle ':completion:*:*:-command-:*:*' group-order aliases builtins functions commands
-
-    # Completion matching rules (case-insensitive, partial matching with separators)
-    zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
-
-    # Keep prefix when completing (preserve typed text)
-    zstyle ':completion:*' keep-prefix true
-
-    # SSH host completion (read from /etc/ssh/ and ~/.ssh/known_hosts)
-    zstyle -e ':completion:*:(ssh|scp|sftp|rsh|rsync):hosts' hosts 'reply=(${=${${(f)"$(cat {/etc/ssh_,~/.ssh/known_}hosts(|2)(N) /dev/null)"}%%[# ]*}//,/ })'
-}
-
-# ==============================================================================
-# FZF (fuzzy finder) configuration
-# ==============================================================================
 config_fzf() {
-    # Load official FZF zsh integration
-    # source <(fzf --zsh)
-
-    # FZF Ctrl+T options (file selection): preview with bat (syntax highlighting)
-    # export FZF_CTRL_T_OPTS='--preview "bat --color=always --style=numbers --line-range=:500 {}"'
-    # FZF Alt+C options (directory selection): preview with eza (tree view)
-    # export FZF_ALT_C_OPTS='--preview "eza --tree --color=always {} | head -200"'
-    # export FZF_TMUX=1  # Uncomment to use FZF in tmux pane
-
     # Global FZF completion options (border, inline info)
     export FZF_COMPLETION_OPTS='--border --info=inline'
 
@@ -381,42 +241,16 @@ config_foot() {
     # add-zsh-hook preexec _preexec_osc133
 }
 
-# ==============================================================================
-# Other tool integrations (zoxide, starship, fnm)
-# ==============================================================================
-config_other() {
-    # Initialize zoxide (smart cd alternative) for zsh
-    # eval "$(zoxide init zsh)"
-    # Initialize starship (custom prompt) for zsh
-    # export STARSHIP_CONFIG=$HOME/.config/starship.toml
-    # eval "$(starship init zsh)"
-    # Initialize fnm (Node.js version manager) with auto-switch on cd
-    # eval "$(fnm env --use-on-cd --shell zsh)"
-    # Initialize jj (Git alternative) completion (uncomment to enable)
-    # source <(jj util completion zsh)
-}
-
-# ==============================================================================
-# Execute all configuration functions
-# ==============================================================================
-# config_basic
 config_cursor_mode
 config_prompt
 config_fzf
 config_fzf_tab          # Must be loaded after FZF config
 config_plugins
 config_foot
-# config_other
 
-# ==============================================================================
-# Cleanup: Unset configuration functions to reduce shell memory footprint
-# ==============================================================================
-unset -f config_basic
 unset -f config_cursor_mode
 unset -f config_prompt
-unset -f config_zsh_completion
 unset -f config_fzf
 unset -f config_fzf_tab
 unset -f config_plugins
 unset -f config_foot
-unset -f config_other

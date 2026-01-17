@@ -7,11 +7,13 @@
 }:
 
 let
-  # qutebrowser-quickmarks = builtins.path {
-  #   path = ./spreadconfig/config/qutebrowser/quickmarks;
-  #   name = "qutebrowser-quickmarks";
-  # };
-  # nixosConfig/realConfig
+  installedJDKs = with pkgs; [
+    jdk21
+    jdk17
+    jdk11
+    jdk8
+  ];
+  defaultJDK = builtins.elemAt installedJDKs 0;
   spreadconfigDir = "${config.home.homeDirectory}/workspaces/spreadconfig/spreadconfig";
 in
 {
@@ -22,6 +24,21 @@ in
     username = "spreadzhao";
     homeDirectory = "/home/spreadzhao";
     stateVersion = "25.11";
+    sessionVariables = {
+      SCRIPT_HOME = "${config.home.homeDirectory}/scripts";
+      # LESS = "-R --use-color -Dd+r$Du+b$";
+      # MANPAGER = "sh -c 'awk '\''{ gsub(/\x1B\[[0-9;]*m/, \"\", \$0); gsub(/.\x08/, \"\", \$0); print }'\'' | bat -p -lman'";
+    };
+    shell.enableShellIntegration = true;
+    sessionPath = [
+      "$SCRIPT_HOME/util/bin"
+      "$SCRIPT_HOME/nix"
+      "$HOME/.local/bin"
+      "$HOME/.cargo/bin"
+      "$HOME/go/bin"
+      "$HOME/Android/Sdk/platform-tools"
+      "$HOME/Lib/jdks/bin"
+    ];
     file = {
       # ".config/vivaldi_custom".source = ./spreadconfig/config/vivaldi_custom;
       # ".config/qutebrowser/autoconfig.yml".source = ./spreadconfig/config/qutebrowser/autoconfig.yml;
@@ -43,7 +60,7 @@ in
       "${config.xdg.configHome}/wofi" = {
         source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/wofi";
       };
-      "${config.xdg.configHome}/starship.toml" = {
+      "${config.xdg.configHome}/starship/starship.toml" = {
         source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/starship.toml";
       };
       "${config.xdg.configHome}/swaylock" = {
@@ -70,7 +87,16 @@ in
       "${config.home.homeDirectory}/.ideavimrc" = {
         source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/Jetbrains/.ideavimrc";
       };
-    };
+    }
+    # jdk
+    // (builtins.listToAttrs (
+      map (jdk: {
+        name = "${config.home.homeDirectory}/Lib/jdks/${jdk.version}";
+        value = {
+          source = jdk;
+        };
+      }) installedJDKs
+    ));
     # activation.mergeQutebrowserQuickmarks = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
     #   set -euo pipefail
     #   DST="${config.xdg.configHome}/qutebrowser/quickmarks"
@@ -98,6 +124,42 @@ in
       x11.enable = true;
     };
     packages = with pkgs; [
+      zsh-syntax-highlighting
+      zsh-autosuggestions
+      zsh-completions
+      zsh-fzf-tab
+      gcc
+      gdb
+      gnumake
+      cmake
+      ninja
+      # clang and gcc both offer `ld`, we use clang here
+      (lib.hiPrio clang)
+      clang-tools
+      lldb
+      rustc
+      cargo
+      python3
+      nixd
+      nixfmt
+      lua-language-server
+      bash-language-server
+      fastfetch
+      onefetch
+      btop
+      tealdeer
+      nix-tree
+      # rustup
+      gdu
+      bluetui
+      eza
+      bat
+      duf
+      dust
+      diff-so-fancy
+      rar
+      unzip
+      zip
       wechat
       qq
       qutebrowser
@@ -135,11 +197,15 @@ in
         '';
       }))
       jetbrains-toolbox
+      niri
+      xdg-desktop-portal
+      xdg-desktop-portal-gnome
+      xwayland-satellite
+      foot
       mako
       waybar
       swaylock
       swayidle
-      xwayland-satellite
       xeyes
       wayfreeze
       grim
@@ -153,6 +219,11 @@ in
       jadx
       ghidra-bin
       pass
+      noto-fonts
+      noto-fonts-cjk-sans
+      noto-fonts-cjk-serif
+      noto-fonts-color-emoji
+      nerd-fonts.symbols-only
     ];
   };
   systemd.user.services = {
@@ -325,6 +396,7 @@ in
       enable = true;
       createDirectories = true;
       extraConfig = {
+        XDG_LIB_DIR = "${config.home.homeDirectory}/Lib";
         XDG_WORKSPACE_DIR = "${config.home.homeDirectory}/workspaces";
         XDG_TEMP_DIR = "${config.home.homeDirectory}/temp";
         XDG_SATTY_DIR = "${config.xdg.userDirs.pictures}/satty";
@@ -405,6 +477,10 @@ in
     };
   };
   programs = {
+    java = {
+      enable = true;
+      package = defaultJDK;
+    };
     git = {
       enable = true;
       settings = {
@@ -414,6 +490,23 @@ in
         };
         core = {
           editor = "nvim";
+        };
+      };
+    };
+    lazygit = {
+      enable = true;
+      enableZshIntegration = true;
+      settings = {
+        gui = {
+          nerdFontsVersion = "3";
+        };
+        git = {
+          pagers = [
+            {
+              pager = "diff-so-fancy";
+            }
+          ];
+          autoFetch = false;
         };
       };
     };
@@ -508,19 +601,99 @@ in
     mpv = {
       enable = true;
     };
+    obs-studio = {
+      enable = true;
+      plugins = with pkgs.obs-studio-plugins; [
+        obs-backgroundremoval
+        obs-pipewire-audio-capture
+        obs-vaapi
+      ];
+    };
     zsh = {
       enable = true;
       enableCompletion = false;
+      defaultKeymap = "viins";
       dotDir = "${config.xdg.configHome}/zsh";
+      history = {
+        append = true;
+        extended = true;
+        findNoDups = true;
+        share = true;
+        save = 10000;
+        size = 10000;
+      };
+      shellAliases = {
+        cat = "bat";
+        df = "duf";
+        du = "dust";
+        cd = "z";
+        rm = "rm -Iv";
+        ls = "eza --icons";
+        ll = "eza -l --git --icons";
+        la = "eza -la --git --icons";
+        l = "eza -lah --git --icons";
+        n = "nvim .";
+        # lg = "lazygit";
+        c = "clear";
+        wk = "cd ~/workspaces";
+        sb = "cd ~/workspaces/SecondBrain/";
+        st = "cd ~/workspaces/SpreadStudy/";
+        lc = "cd ~/workspaces/SpreadStudy/Leetcode/LeetcodeCpp/ && n";
+        shuffle = "mpv --shuffle --force-window --autofit-smaller=800x500 .";
+        q = "exit";
+        ca = "mpv /dev/video0";
+        feh = "feh --theme fit";
+        cdgvfs = "cd /run/user/$(id -u)/gvfs";
+        se = "sudo -E nvim";
+        sf = "cd ~/workspaces/spreadconfig && n";
+        mv = "mv -iv";
+        cp = "cp -iv";
+        mkdir = "mkdir -v";
+        # grep = "grep --color=auto";
+        # fzf = ''fzf --preview "bat --color=always --style=numbers --line-range=:500 {}"'';
+      };
+      shellGlobalAliases = {
+        # "--help" = "--help 2>&1 | bat --language=help --style=plain";
+      };
       initContent = lib.mkOrder 2000 ''
-        source ~/scripts/config/config.zsh
+        source ${config.home.homeDirectory}/scripts/config/config_zsh_nix.sh
+        source ${config.home.homeDirectory}/scripts/config/color_output.sh
       '';
     };
     starship = {
       enable = true;
+      configPath = "${config.xdg.configHome}/starship/starship.toml";
+    };
+    zoxide.enable = true;
+    fd = {
+      enable = true;
+      extraOptions = [
+        "--no-ignore"
+        "--absolute-path"
+      ];
+      ignores = [
+        ".git/"
+      ];
+    };
+    fzf = {
+      enable = true;
+      changeDirWidgetCommand = "fd --type d";
+      changeDirWidgetOptions = [
+        "--preview 'eza --tree --color=always {} | head -200'"
+      ];
+      defaultCommand = "fd --type f";
+      fileWidgetCommand = "fd --type f";
+      fileWidgetOptions = [
+        "--preview 'bat --color=always --style=numbers --line-range=:500 {}'"
+      ];
+      historyWidgetOptions = [
+        "--sort"
+        "--exact"
+      ];
     };
     nixvim = {
       enable = true;
+      defaultEditor = true;
       globals = {
         mapleader = " ";
         maplocalleader = " ";
@@ -1540,6 +1713,23 @@ in
               };
             };
           };
+          bashls = {
+            enable = true;
+            config = {
+              cmd = [
+                "bash-language-server"
+                "start"
+              ];
+              filetypes = [
+                "bash"
+                "sh"
+                "zsh"
+              ];
+              root_markers = [
+                ".git"
+              ];
+            };
+          };
         };
       };
     };
@@ -1554,6 +1744,41 @@ in
     };
     gnome-keyring = {
       enable = true;
+    };
+  };
+  fonts = {
+    fontconfig = {
+      defaultFonts = {
+        emoji = [ "Noto Color Emoji" ];
+        monospace = [
+          "Noto Sans Mono"
+          "Noto Sans Mono CJK SC"
+          "Noto Sans Mono CJK HK"
+          "Noto Sans Mono CJK TC"
+          "Noto Sans Mono CJK JP"
+          "Noto Sans Mono CJK KR"
+          "Symbols Nerd Font Mono"
+          "Noto Color Emoji"
+        ];
+        sansSerif = [
+          "Noto Sans"
+          "Noto Sans CJK SC"
+          "Noto Sans CJK HK"
+          "Noto Sans CJK TC"
+          "Noto Sans CJK JP"
+          "Noto Sans CJK KR"
+          "Noto Color Emoji"
+        ];
+        serif = [
+          "Noto Serif"
+          "Noto Serif CJK SC"
+          "Noto Serif CJK HK"
+          "Noto Serif CJK TC"
+          "Noto Serif CJK JP"
+          "Noto Serif CJK KR"
+          "Noto Color Emoji"
+        ];
+      };
     };
   };
   i18n.inputMethod = {

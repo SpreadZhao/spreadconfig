@@ -10,6 +10,16 @@
 # custom
 export SCRIPT_HOME=$HOME/scripts
 
+{
+  echo "===== sourced at $(date) ====="
+  echo "PID=$$"
+  echo "BASH_SOURCE:"
+  printf '  %s\n' "${BASH_SOURCE[@]}"
+  echo "FUNCNAME:"
+  printf '  %s\n' "${FUNCNAME[@]}"
+  echo "=============================="
+} >> ~/temp/source-trace.log
+
 # PATH
 append_path() {
     for p in "$@"; do

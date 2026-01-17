@@ -14,7 +14,6 @@
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
-    # ./fcitx5-rime.nix
   ];
 
   hardware = {
@@ -73,8 +72,22 @@
       nixPath = lib.mapAttrsToList (n: _: "${n}=flake:${n}") flakeInputs;
     };
 
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
+  boot = {
+    loader = {
+      systemd-boot.enable = true;
+      efi.canTouchEfiVariables = true;
+    };
+    extraModulePackages = with config.boot.kernelPackages; [ 
+      v4l2loopback
+    ];
+    kernelModules = [ "v4l2loopback" ];
+    # see:
+    # https://wiki.archlinux.org/title/V4l2loopback#Loading_the_kernel_module
+    # https://wiki.nixos.org/wiki/OBS_Studio#Using_the_Virtual_Camera
+    extraModprobeConfig = ''
+      options v4l2loopback devices=1 video_nr=1 card_label="OBS Camera" exclusive_caps=1
+    '';
+  };
 
   networking.hostName = "thinkbook"; # Define your hostname.
   networking.networkmanager.enable = true;
@@ -107,7 +120,7 @@
           user = "greeter";
         };
         initial_session = {
-          command = "/home/spreadzhao/scripts/niri/start_niri_greetd.sh";
+          command = "niri-session";
           user = "spreadzhao";
         };
       };
@@ -135,90 +148,18 @@
     net-tools
     ripgrep
     ntfs3g
-    zsh-syntax-highlighting
-    zsh-autosuggestions
-    zsh-completions
-    zsh-fzf-tab
-    fzf
-    eza
-    bat
-    fnm
-    zoxide
-    starship
-    duf
-    dust
-    diff-so-fancy
-    unrar
-    rar
-    unzip
-    zip
-    fastfetch
-    onefetch
-    btop
-    # rocmPackages.rocm-smi
-    tealdeer
-    nix-tree
-    gcc
-    gdb
-    gnumake
-    cmake
-    ninja
-    clang
-    clang-tools
-    # rustup
-    rustc
-    cargo
-    jdk21
-    jdk17
-    jdk11
-    jdk8
-    python3
-    nixd
-    nixfmt
-    lua-language-server
-    gdu
-    bluetui
   ];
   environment.shellAliases = lib.mkForce { };
   users.defaultUserShell = pkgs.zsh;
   programs = {
+    dconf.enable = true;
     nano.enable = false;
-    obs-studio = {
+    vim = {
       enable = true;
-      enableVirtualCamera = true;
-      plugins = with pkgs.obs-studio-plugins; [
-        obs-backgroundremoval
-        obs-pipewire-audio-capture
-      ];
-    };
-    niri = {
-      enable = true;
-      useNautilus = true;
-    };
-    foot = {
-      enable = true;
-      enableZshIntegration = false;
-      enableFishIntegration = false;
-      enableBashIntegration = false;
+      defaultEditor = true;
     };
     zsh = {
       enable = true;
-    };
-    lazygit = {
-      enable = true;
-      settings = {
-        gui = {
-          nerdFontsVersion = "3";
-        };
-        git = {
-          pagers = [
-            {
-              pager = "diff-so-fancy";
-            }
-          ];
-          autoFetch = false;
-        };
-      };
     };
     # https://github.com/NixOS/nixpkgs/issues/240444
     nix-ld = {
@@ -338,49 +279,6 @@
         xz
         zlib
       ];
-    };
-  };
-
-  fonts = {
-    packages = with pkgs; [
-      noto-fonts
-      noto-fonts-cjk-sans
-      noto-fonts-cjk-serif
-      noto-fonts-color-emoji
-      nerd-fonts.symbols-only
-    ];
-    fontconfig = {
-      defaultFonts = {
-        emoji = [ "Noto Color Emoji" ];
-        monospace = [
-          "Noto Sans Mono"
-          "Noto Sans Mono CJK SC"
-          "Noto Sans Mono CJK HK"
-          "Noto Sans Mono CJK TC"
-          "Noto Sans Mono CJK JP"
-          "Noto Sans Mono CJK KR"
-          "Symbols Nerd Font Mono"
-          "Noto Color Emoji"
-        ];
-        sansSerif = [
-          "Noto Sans"
-          "Noto Sans CJK SC"
-          "Noto Sans CJK HK"
-          "Noto Sans CJK TC"
-          "Noto Sans CJK JP"
-          "Noto Sans CJK KR"
-          "Noto Color Emoji"
-        ];
-        serif = [
-          "Noto Serif"
-          "Noto Serif CJK SC"
-          "Noto Serif CJK HK"
-          "Noto Serif CJK TC"
-          "Noto Serif CJK JP"
-          "Noto Serif CJK KR"
-          "Noto Color Emoji"
-        ];
-      };
     };
   };
 
