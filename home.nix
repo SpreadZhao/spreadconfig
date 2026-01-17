@@ -11,6 +11,8 @@ let
     path = ./spreadconfig/config/qutebrowser/quickmarks;
     name = "qutebrowser-quickmarks";
   };
+  # nixosConfig/realConfig
+  spreadconfigDir = "${config.home.homeDirectory}/workspaces/spreadconfig/spreadconfig";
 in
 {
   imports = [
@@ -24,40 +26,40 @@ in
       # ".config/vivaldi_custom".source = ./spreadconfig/config/vivaldi_custom;
       # ".config/qutebrowser/autoconfig.yml".source = ./spreadconfig/config/qutebrowser/autoconfig.yml;
       "${config.home.homeDirectory}/scripts" = {
-        source = config.lib.file.mkOutOfStoreSymlink ./spreadconfig/scripts;
+        source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/scripts";
       };
       "${config.xdg.configHome}/niri" = {
-        source = config.lib.file.mkOutOfStoreSymlink ./spreadconfig/config/niri;
+        source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/niri";
       };
       "${config.xdg.configHome}/mako" = {
-        source = config.lib.file.mkOutOfStoreSymlink ./spreadconfig/config/mako;
+        source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/mako";
       };
       "${config.xdg.configHome}/foot" = {
-        source = config.lib.file.mkOutOfStoreSymlink ./spreadconfig/config/foot;
+        source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/foot";
       };
       "${config.xdg.configHome}/waybar" = {
-        source = config.lib.file.mkOutOfStoreSymlink ./spreadconfig/config/waybar;
+        source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/waybar";
       };
       "${config.xdg.configHome}/wofi" = {
-        source = config.lib.file.mkOutOfStoreSymlink ./spreadconfig/config/wofi;
+        source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/wofi";
       };
       "${config.xdg.configHome}/starship.toml" = {
-        source = config.lib.file.mkOutOfStoreSymlink ./spreadconfig/config/starship.toml;
+        source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/starship.toml";
       };
       "${config.xdg.configHome}/swaylock" = {
-        source = config.lib.file.mkOutOfStoreSymlink ./spreadconfig/config/swaylock;
+        source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/swaylock";
       };
       "${config.xdg.dataHome}/fcitx5/rime/rime-data" = {
         source = "${pkgs.rime-ice}/share/rime-data";
       };
       "${config.xdg.dataHome}/fcitx5/rime/default.custom.yaml" = {
-        source = config.lib.file.mkOutOfStoreSymlink ./spreadconfig/input/default;
+        source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/input/default";
       };
       "${config.xdg.configHome}/obs-studio/basic/profiles/Video" = {
-        source = config.lib.file.mkOutOfStoreSymlink ./spreadconfig/config/obs/profiles/Video;
+        source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/obs/profiles/Video";
       };
       "${config.xdg.configHome}/obs-studio/basic/profiles/Audio" = {
-        source = config.lib.file.mkOutOfStoreSymlink ./spreadconfig/config/obs/profiles/Audio;
+        source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/obs/profiles/Audio";
       };
       # "${config.xdg.configHome}/qutebrowser/quickmarks" = {
       #   source = config.lib.file.mkOutOfStoreSymlink ./spreadconfig/config/qutebrowser/quickmarks;
@@ -66,10 +68,10 @@ in
       #   source = config.lib.file.mkOutOfStoreSymlink ./spreadconfig/config/qutebrowser/bookmarks;
       # };
       "${config.xdg.configHome}/qutebrowser/config.py" = {
-        source = config.lib.file.mkOutOfStoreSymlink ./spreadconfig/config/qutebrowser/config.py;
+        source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/qutebrowser/config.py";
       };
       "${config.home.homeDirectory}/.ideavimrc" = {
-        source = config.lib.file.mkOutOfStoreSymlink ./spreadconfig/Jetbrains/.ideavimrc;
+        source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/Jetbrains/.ideavimrc";
       };
     };
     activation.mergeQutebrowserQuickmarks = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
