@@ -1,15 +1,13 @@
 #!/usr/bin/env bash
+set -euo pipefail
 
 LOG_FILE="$HOME/.local/share/niri-restart.log"
 
-while true; do
-    {
-        date '+[%F %T] Starting event-stream...'
-        niri msg event-stream | while read -r line; do
-            pkill -RTMIN+8 waybar
-        done
-        date '+[%F %T] event-stream exited, restarting in 1s...'
-    } >>"$LOG_FILE" 2>&1
+echo "[$(date '+%F %T')] starting niri event-stream" >>"$LOG_FILE"
 
-    sleep 1
-done
+# 使用进程替换，避免 pipe 产生第二个 bash
+while read -r _; do
+    pkill -RTMIN+8 waybar
+done < <(niri msg event-stream)
+
+echo "[$(date '+%F %T')] niri event-stream exited" >>"$LOG_FILE"
