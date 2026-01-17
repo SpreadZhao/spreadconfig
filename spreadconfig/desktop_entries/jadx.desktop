@@ -1,7 +1,0 @@
-[Desktop Entry]
-Name=Jadx GUI
-Exec=env _JAVA_AWT_WM_NONREPARENTING=1 /usr/bin/jadx-gui %U
-StartupNotify=true
-Terminal=false
-Type=Application
-Categories=Development;

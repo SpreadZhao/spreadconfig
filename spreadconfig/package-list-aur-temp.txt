@@ -1,2 +1,0 @@
-feishu-bin
-jetbrains-toolbox
