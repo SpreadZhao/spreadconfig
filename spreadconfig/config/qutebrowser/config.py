@@ -103,7 +103,7 @@ c.url.searchengines = {
 }
 
 
-c.zoom.default = '130%'
+c.zoom.default = '150%'
 c.zoom.levels = [
     '25%',
     '33%',
