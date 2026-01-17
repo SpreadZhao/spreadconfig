@@ -205,12 +205,39 @@ in
           "mako.service"
           "waybar.service"
           "swayidle.service"
+          "foot-server.service"
         ];
       };
       Service = {
         Slice = "session.slice";
         Type = "notify";
         ExecStart = "${pkgs.niri}/bin/niri --session";
+      };
+    };
+    niri-window-detect = {
+      Unit = {
+        Description = "Niri window change watcher";
+        After = [
+          "niri.service"
+        ];
+        BindsTo = [
+          "niri.service"
+        ];
+        PartOf = [
+          "niri.service"
+        ];
+      };
+      Service = {
+        ExecStart = "${config.home.homeDirectory}/scripts/niri/detect_niri_window_change.sh";
+        Restart = "always";
+        RestartSec = 2;
+        StandardOutput = "journal";
+        StandardError = "journal";
+      };
+      Install = {
+        WantedBy = [
+          "graphical-session.target"
+        ];
       };
     };
   };
