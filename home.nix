@@ -72,7 +72,7 @@ in
         source = config.lib.file.mkOutOfStoreSymlink ./spreadconfig/Jetbrains/.ideavimrc;
       };
     };
-    activation.mergeQutebrowserQuickmarks = lib.hm.dag.entryAfter ["writeBoundary"] ''
+    activation.mergeQutebrowserQuickmarks = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
       set -euo pipefail
       DST="${config.xdg.configHome}/qutebrowser/quickmarks"
       SRC=${qutebrowser-quickmarks}
@@ -1164,7 +1164,72 @@ in
           #   };
           # };
         };
+        rainbow-delimiters = {
+          enable = true;
+        };
+        # rainbow = {
+        #   enable = true;
+        #   settings = {
+        #     active = 1;
+        #     # conf = {
+        #     #   guifgs = [
+        #     #     "#7d8618"
+        #     #     "darkorange3"
+        #     #     "seagreen3"
+        #     #     "firebrick"
+        #     #   ];
+        #     #   operators = "_,_";
+        #     #   parentheses = [
+        #     #     "start=/(/ end=/)/ fold"
+        #     #     "start=/\\[/ end=/\\]/ fold"
+        #     #   ];
+        #     #   separately = {
+        #     #     "*" = { };
+        #     #     css = 0;
+        #     #     haskell = {
+        #     #       parentheses = [
+        #     #         "start=/\\[/ end=/\\]/ fold"
+        #     #         "start=/v{ze[^-]/ end=/}/ fold"
+        #     #       ];
+        #     #     };
+        #     #     markdown = {
+        #     #       parentheses_options = "containedin=markdownCode contained";
+        #     #     };
+        #     #   };
+        #     # };
+        #   };
+        # };
       };
+      extraPlugins = [
+        (pkgs.vimUtils.buildVimPlugin {
+          name = "log-highlight";
+          src = pkgs.fetchFromGitHub {
+            owner = "fei6409";
+            repo = "log-highlight.nvim";
+            rev = "v1.2.1";
+            hash = "sha256-jNmoWrF5xvRbD2ujezyeBmvU1Z7hLg981hVL5HA4pZk=";
+          };
+        })
+        pkgs.vimPlugins.outline-nvim
+        pkgs.vimPlugins.quick-scope
+        # (pkgs.vimUtils.buildVimPlugin {
+        #     name = "outline";
+        #     src = pkgs.fetchFromGitHub {
+        #       owner = "hedyhli";
+        #       repo = "outline.nvim";
+        #       rev = "v1.1.0";
+        #       hash = "sha256-fbNVSAOzdmmfTV4CkssTpw54IZbCCLUOguO/huEB6eU=";
+        #     };
+        #     doCheck = false;
+        # })
+      ];
+      extraConfigLua = ''
+        require("outline").setup({})
+      '';
+      extraConfigVim = ''
+        highlight QuickScopePrimary guifg='#ff0000' gui=bold,underline ctermfg=red cterm=bold,underline
+        highlight QuickScopeSecondary guifg='#00ff00' gui=underline ctermfg=yellow cterm=underline
+      '';
       lsp = {
         onAttach = ''
           local client = vim.lsp.get_client_by_id(event.data.client_id)
@@ -1403,31 +1468,6 @@ in
           };
         };
       };
-      extraPlugins = [
-        (pkgs.vimUtils.buildVimPlugin {
-          name = "log-highlight";
-          src = pkgs.fetchFromGitHub {
-            owner = "fei6409";
-            repo = "log-highlight.nvim";
-            rev = "v1.2.1";
-            hash = "sha256-jNmoWrF5xvRbD2ujezyeBmvU1Z7hLg981hVL5HA4pZk=";
-          };
-        })
-        pkgs.vimPlugins.outline-nvim
-        # (pkgs.vimUtils.buildVimPlugin {
-        #     name = "outline";
-        #     src = pkgs.fetchFromGitHub {
-        #       owner = "hedyhli";
-        #       repo = "outline.nvim";
-        #       rev = "v1.1.0";
-        #       hash = "sha256-fbNVSAOzdmmfTV4CkssTpw54IZbCCLUOguO/huEB6eU=";
-        #     };
-        #     doCheck = false;
-        # })
-      ];
-      extraConfigLua = ''
-        require("outline").setup({})
-      '';
     };
   };
   services = {
