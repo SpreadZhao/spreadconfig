@@ -160,8 +160,20 @@ in
       rar
       unzip
       zip
-      wechat
-      qq
+      (wechat.overrideAttrs (old: {
+        postFixup = (old.postFixup or "") + ''
+          substituteInPlace $out/share/applications/wechat.desktop \
+            --replace-fail \
+            "Exec=wechat" \
+            "Exec=env QT_IM_MODULE=fcitx XMODIFIERS=@im=fcitx QT_SCREEN_SCALE_FACTORS='eDP-1=2.0;HDMI-A-1=1.0;DP-2=1.0' wechat"
+        '';
+      }))
+      (qq.overrideAttrs (old: {
+        postInstall = (old.postInstall or "") + ''
+          substituteInPlace $out/share/applications/qq.desktop \
+            --replace-fail "$out/bin/qq" "$out/bin/qq --ozone-platform-hint=auto --enable-wayland-ime --wayland-text-input-version=3"
+        '';
+      }))
       qutebrowser
       # vivaldi
       # (pkgs.qutebrowser.overrideAttrs (old: {
@@ -442,6 +454,19 @@ in
     };
     gtk3 = {
       enable = true;
+      bookmarks = [
+        "file://${config.xdg.userDirs.documents}"
+        "file://${config.xdg.userDirs.download}"
+        "file://${config.xdg.userDirs.music}"
+        "file://${config.xdg.userDirs.pictures}"
+        "file://${config.xdg.userDirs.videos}"
+        "file://${config.xdg.userDirs.extraConfig.XDG_WORKSPACE_DIR} WORK"
+        "file://${config.xdg.userDirs.extraConfig.XDG_LIB_DIR}"
+        "file://${config.xdg.userDirs.extraConfig.XDG_TEMP_DIR}"
+        "file://${config.xdg.userDirs.extraConfig.XDG_SCREENSHOT_DIR}"
+        "file://${config.xdg.userDirs.extraConfig.XDG_SCREENRECORD_DIR}"
+        "davs://spreadzhao.cloud:10116/ NAS"
+      ];
       colorScheme = "dark";
       cursorTheme = {
         name = "Adwaita";
@@ -656,6 +681,7 @@ in
         mv = "mv -iv";
         cp = "cp -iv";
         mkdir = "mkdir -v";
+        onefetch = "onefetch -T programming markup prose data";
         # grep = "grep --color=auto";
         # fzf = ''fzf --preview "bat --color=always --style=numbers --line-range=:500 {}"'';
       };

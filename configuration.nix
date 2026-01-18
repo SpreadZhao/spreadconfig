@@ -24,26 +24,6 @@
     config = {
       allowUnfree = true;
     };
-    overlays = [
-      (final: prev: {
-        qq = prev.qq.overrideAttrs (old: {
-          postInstall = (old.postInstall or "") + ''
-            substituteInPlace $out/share/applications/qq.desktop \
-              --replace-fail "$out/bin/qq" "$out/bin/qq --ozone-platform-hint=auto --enable-wayland-ime --wayland-text-input-version=3"
-          '';
-        });
-      })
-      (final: prev: {
-        wechat = prev.wechat.overrideAttrs (old: {
-          postFixup = (old.postFixup or "") + ''
-            substituteInPlace $out/share/applications/wechat.desktop \
-              --replace-fail \
-              "Exec=wechat" \
-              "Exec=env QT_IM_MODULE=fcitx XMODIFIERS=@im=fcitx QT_SCREEN_SCALE_FACTORS='eDP-1=2.0;HDMI-A-1=1.0;DP-2=1.0' wechat"
-          '';
-        });
-      })
-    ];
   };
 
   nix =
