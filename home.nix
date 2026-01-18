@@ -27,6 +27,8 @@ in
     sessionVariables = {
       SCRIPT_HOME = "${config.home.homeDirectory}/scripts";
       QT_QPA_PLATFORM = "wayland";
+      QT_ENABLE_HIGHDPI_SCALING = "1";
+      # QT_SCREEN_SCALE_FACTORS= "eDP-1=2.0;HDMI-A-1=1.0;DP-2=1.0";
       # LESS = "-R --use-color -Dd+r$Du+b$";
       # MANPAGER = "sh -c 'awk '\''{ gsub(/\x1B\[[0-9;]*m/, \"\", \$0); gsub(/.\x08/, \"\", \$0); print }'\'' | bat -p -lman'";
     };
@@ -1776,6 +1778,15 @@ in
         };
       };
     };
+    zathura = {
+      enable = true;
+      options = {
+        adjust-open = "best-fit";
+        pages-per-row = 1;
+        scroll-page-aware = "true";
+        font = "Noto Sans 20";
+      };
+    };
   };
   services = {
     cliphist = {
@@ -1791,6 +1802,8 @@ in
   };
   fonts = {
     fontconfig = {
+      enable = true;
+      antialiasing = true;
       defaultFonts = {
         emoji = [ "Noto Color Emoji" ];
         monospace = [

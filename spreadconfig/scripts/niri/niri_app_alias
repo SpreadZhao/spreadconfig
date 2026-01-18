@@ -4,6 +4,7 @@ org.gnome.SoundRecorder=recorder
 org.gnome.FileRoller=FileRoller
 org.telegram.desktop=telegram
 org.qutebrowser.qutebrowser=qb
+org.pwmt.zathura=zathura
 footclient=footc
 vivaldi-stable=vivaldi
 jetbrains-studio=android-studio

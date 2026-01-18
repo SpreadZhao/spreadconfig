@@ -88,6 +88,14 @@ output "eDP-1" {
 output "HDMI-A-1" {
     scale 1
     position x=0 y=0
+    layout {
+        default-column-width { proportion 0.5; }
+        preset-column-widths {
+            proportion 0.34
+            proportion 0.5
+            proportion 1.0
+        }
+    }
 }
 
 output "DP-2" {
