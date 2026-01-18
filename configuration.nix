@@ -77,7 +77,7 @@
       systemd-boot.enable = true;
       efi.canTouchEfiVariables = true;
     };
-    extraModulePackages = with config.boot.kernelPackages; [ 
+    extraModulePackages = with config.boot.kernelPackages; [
       v4l2loopback
     ];
     kernelModules = [ "v4l2loopback" ];
@@ -89,8 +89,10 @@
     '';
   };
 
-  networking.hostName = "thinkbook"; # Define your hostname.
-  networking.networkmanager.enable = true;
+  networking = {
+    hostName = "thinkbook";
+    networkmanager.enable = true;
+  };
 
   time.timeZone = "Asia/Shanghai";
 
@@ -127,30 +129,37 @@
     };
     xserver.desktopManager.runXdgAutostartIfNone = true;
   };
-
-  users.users.spreadzhao = {
-    isNormalUser = true;
-    extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
-    packages = with pkgs; [
-      tree
-    ];
-    # shell = pkgs.zsh;
-    initialPassword = "${lib.strings.trim (builtins.readFile ./secrets/passwd)}";
+  users = {
+    users.spreadzhao = {
+      isNormalUser = true;
+      extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
+      # packages = with pkgs; [
+      #   tree
+      # ];
+      # shell = pkgs.zsh;
+      initialPassword = "${lib.strings.trim (builtins.readFile ./secrets/passwd)}";
+    };
+    defaultUserShell = pkgs.zsh;
   };
-
-  environment.systemPackages = with pkgs; [
-    wget
-    brightnessctl
-    efibootmgr
-    exfatprogs
-    jq
-    lsof
-    net-tools
-    ripgrep
-    ntfs3g
-  ];
-  environment.shellAliases = lib.mkForce { };
-  users.defaultUserShell = pkgs.zsh;
+  environment = {
+    pathsToLink = [
+      # https://nix-community.github.io/home-manager/options.xhtml#opt-xdg.portal.enable
+      "/share/xdg-desktop-portal"
+      "/share/applications"
+    ];
+    systemPackages = with pkgs; [
+      wget
+      brightnessctl
+      efibootmgr
+      exfatprogs
+      jq
+      lsof
+      net-tools
+      ripgrep
+      ntfs3g
+    ];
+    shellAliases = lib.mkForce { };
+  };
   programs = {
     dconf.enable = true;
     nano.enable = false;

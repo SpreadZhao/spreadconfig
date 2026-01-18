@@ -198,8 +198,6 @@ in
       }))
       jetbrains-toolbox
       niri
-      xdg-desktop-portal
-      xdg-desktop-portal-gnome
       xwayland-satellite
       foot
       mako
@@ -391,6 +389,15 @@ in
           "text/x-c++"
         ];
       };
+    };
+    portal = {
+      enable = true;
+      configPackages = with pkgs; [
+        xdg-desktop-portal-gnome
+      ];
+      extraPortals = with pkgs; [
+        xdg-desktop-portal-gnome
+      ];
     };
     userDirs = {
       enable = true;
@@ -645,7 +652,7 @@ in
         feh = "feh --theme fit";
         cdgvfs = "cd /run/user/$(id -u)/gvfs";
         se = "sudo -E nvim";
-        sf = "cd ~/workspaces/spreadconfig && n";
+        sf = "cd ~/workspaces/spreadconfig";
         mv = "mv -iv";
         cp = "cp -iv";
         mkdir = "mkdir -v";
