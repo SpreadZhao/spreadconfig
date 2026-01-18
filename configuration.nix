@@ -271,8 +271,12 @@
     };
   };
 
-  security.polkit = {
-    enable = true;
+  security = {
+    polkit = {
+      enable = true;
+    };
+    # https://wiki.nixos.org/wiki/Secret_Service#Auto-decrypt_on_login
+    pam.services.login.enableGnomeKeyring = true;
   };
 
   system.stateVersion = "25.11"; # Did you read the comment?

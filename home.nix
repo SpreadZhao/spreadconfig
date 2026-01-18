@@ -26,6 +26,7 @@ in
     stateVersion = "25.11";
     sessionVariables = {
       SCRIPT_HOME = "${config.home.homeDirectory}/scripts";
+      QT_QPA_PLATFORM = "wayland";
       # LESS = "-R --use-color -Dd+r$Du+b$";
       # MANPAGER = "sh -c 'awk '\''{ gsub(/\x1B\[[0-9;]*m/, \"\", \$0); gsub(/.\x08/, \"\", \$0); print }'\'' | bat -p -lman'";
     };
@@ -234,6 +235,7 @@ in
       noto-fonts-cjk-serif
       noto-fonts-color-emoji
       nerd-fonts.symbols-only
+      gcr # https://wiki.nixos.org/wiki/Secret_Service#GNOME_Keyring
     ];
   };
   systemd.user.services = {
@@ -506,6 +508,14 @@ in
         name = "Adwaita";
         package = pkgs.gnome-themes-extra;
       };
+    };
+  };
+  qt = {
+    enable = true;
+    platformTheme.name = "xdgdesktopportal";
+    style = {
+      package = pkgs.adwaita-qt;
+      name = "adwaita-dark";
     };
   };
   programs = {

@@ -9,23 +9,7 @@ config.bind('dd', 'tab-close', mode = 'normal')
 config.bind('d$', 'tab-only -p', mode = 'normal')
 config.bind('D', 'tab-only -p', mode = 'normal')
 config.bind('d0', 'tab-only -n', mode = 'normal')
-# c.aliases.update({
-#     'q': 'close',
-#     'qa': 'quit',
-#     'w': 'session-save',
-#     'wq': 'quit --save',
-#     'wqa': 'quit --save',
-# })
-# c.auto_save.session = False
-# config.bind('<Ctrl-6>', '<Ctrl-^>')
-# config.bind('<Ctrl-Enter>', '<Ctrl-Return>')
-# config.bind('<Ctrl-I>', '<Tab>')
-# config.bind('<Ctrl-J>', '<Return>')
-# config.bind('<Ctrl-M>', '<Return>')
-# config.bind('<Ctrl-[>', '<Escape>')
-# config.bind('<Enter>', '<Return>')
-# config.bind('<Shift-Enter>', '<Return>')
-# config.bind('<Shift-Return>', '<Return>')
+config.bind('td', 'config-cycle colors.webpage.darkmode.enabled True False')
 config.bind('<Ctrl-Shift-J>', 'tab-move +', mode = 'normal')
 config.bind('<Ctrl-Shift-K>', 'tab-move -', mode = 'normal')
 
@@ -54,15 +38,6 @@ c.colors.webpage.darkmode.policy.images = 'never'
 
 c.fonts.default_family = ['Noto Sans']
 c.fonts.default_size = '16pt'
-
-# c.hints.next_regexes = [
-#     r'\bnext\b',
-#     r'\bmore\b',
-#     r'\bnewer\b',
-#     r'\b[>→≫]\b',
-#     r'\b(>>|»)\b',
-#     r'\bcontinue\b',
-# ]
 
 c.statusbar.position = 'top'
 c.statusbar.widgets = [
