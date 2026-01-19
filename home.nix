@@ -217,8 +217,6 @@ in
       foot
       mako
       waybar
-      swaylock
-      swayidle
       xeyes
       wayfreeze
       grim
@@ -258,23 +256,6 @@ in
         TimeoutStopSec = 10;
       };
     };
-    swayidle = {
-      Unit = {
-        PartOf = [ "graphical-session.target" ];
-        After = [ "graphical-session.target" ];
-        Requisite = [ "graphical-session.target" ];
-      };
-      Service = {
-        ExecStart = ''
-          ${pkgs.swayidle}/bin/swayidle \
-            -w \
-            timeout 600 '${pkgs.niri}/bin/niri msg action power-off-monitors' \
-            timeout 605 '${pkgs.swaylock}/bin/swaylock' \
-            before-sleep '${pkgs.swaylock}/bin/swaylock'
-        '';
-        Restart = "on-failue";
-      };
-    };
     niri = {
       Unit = {
         Description = "A scrollable-tilling Wayland compositor";
@@ -289,7 +270,6 @@ in
           "xdg-desktop-autostart.target"
           "mako.service"
           "waybar.service"
-          "swayidle.service"
           "foot-server.service"
         ];
       };
@@ -521,6 +501,7 @@ in
     };
   };
   programs = {
+    swaylock.enable = true;
     java = {
       enable = true;
       package = defaultJDK;
@@ -1796,9 +1777,27 @@ in
         "1000"
       ];
     };
-    gnome-keyring = {
-      enable = true;
-    };
+    gnome-keyring.enable = true;
+    swayidle =
+      let
+        lock = "${pkgs.swaylock}/bin/swaylock";
+      in
+      {
+        enable = true;
+        timeouts = [
+          {
+            timeout = 600;
+            command = "${pkgs.niri}/bin/niri msg action power-off-monitors";
+          }
+          {
+            timeout = 605;
+            command = lock;
+          }
+        ];
+        events = {
+          "before-sleep" = lock;
+        };
+      };
   };
   fonts = {
     fontconfig = {

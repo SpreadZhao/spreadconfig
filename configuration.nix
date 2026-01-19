@@ -1,7 +1,3 @@
-# Edit this configuration file to define what should be installed on
-# your system. Help is available in the configuration.nix(5) man page, on
-# https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
-
 {
   config,
   lib,
@@ -275,8 +271,13 @@
     polkit = {
       enable = true;
     };
-    # https://wiki.nixos.org/wiki/Secret_Service#Auto-decrypt_on_login
-    pam.services.login.enableGnomeKeyring = true;
+    pam.services = {
+      # https://wiki.nixos.org/wiki/Secret_Service#Auto-decrypt_on_login
+      login.enableGnomeKeyring = true;
+      # https://github.com/swaywm/sway/issues/2773#issuecomment-427570877
+      # https://wiki.nixos.org/wiki/Swaylock#Home_Manager_-_Through_Sway
+      swaylock = { };
+    };
   };
 
   system.stateVersion = "25.11"; # Did you read the comment?
