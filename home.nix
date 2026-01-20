@@ -801,6 +801,14 @@ in
                     };
                 }
                 {
+                    key = "/";
+                    mode = "v";
+                    action = ''""y/\V<C-R>=escape(@", '/\')<CR><CR>'';
+                    options = {
+                        desc = "Search Visual Selection";
+                    };
+                }
+                {
                     key = "<leader>fs";
                     action = "<CMD>Oil<CR>";
                     mode = "n";
