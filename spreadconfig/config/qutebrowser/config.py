@@ -114,7 +114,7 @@ def theme_setup(c):
         "background": "#000000",  # gray
         "foreground": "#d4d4d4",  # white
         "black": "#000000",
-        "dark-gray": "#21242b",
+        "dark-gray": "#1a1a1a",
         "gray": "#282c34",
         "cool-gray": "#3b404d",
         "medium-gray": "#3f444a",
