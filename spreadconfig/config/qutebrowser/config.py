@@ -12,6 +12,10 @@ config.bind('d0', 'tab-only -n', mode = 'normal')
 config.bind('td', 'config-cycle colors.webpage.darkmode.enabled True False')
 config.bind('<Ctrl-Shift-J>', 'tab-move +', mode = 'normal')
 config.bind('<Ctrl-Shift-K>', 'tab-move -', mode = 'normal')
+config.unbind('yy', mode = 'normal')
+config.bind('yyy', 'yank', mode = 'normal')
+config.bind('yym', 'yank inline [{title}]({url:pretty})', mode = 'normal')
+config.bind('gk', 'tab-focus last', mode = 'normal')
 
 c.colors.tabs.bar.bg = 'black'
 c.colors.tabs.even.bg = 'black'
