@@ -58,6 +58,8 @@ nmap <leader>; <leader><leader>s
 nmap <leader>lb <Action>(ToggleLineBreakpoint)
 nmap <leader>d <Action>(QuickJavaDoc)
 nmap <leader>e <Action>(ShowErrorDescription)
+nmap / <Action>(Find)
+xmap / <Action>(Find)
 
 " Remap multiple-cursors shortcuts to match terryma/vim-multiple-cursors
 nmap <C-n> <Plug>NextWholeOccurrence
