@@ -158,6 +158,7 @@ clipboard {
 window-rule {
     match app-id="feh"
     match app-id="vivaldi-stable"
+    match app-id="org.qutebrowser.qutebrowser"
     open-fullscreen false
 }
 

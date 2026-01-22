@@ -14,6 +14,8 @@ let
         jdk8
     ];
     defaultJDK = builtins.elemAt installedJDKs 0;
+    projDir = "${config.xdg.userDirs.extraConfig.XDG_WORKSPACE_DIR}/spreadconfig";
+    secretsDir = "${projDir}/secrets";
     spreadconfigDir = "${config.home.homeDirectory}/workspaces/spreadconfig/spreadconfig";
 in
 {
@@ -82,7 +84,7 @@ in
                 source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/obs/profiles/Audio";
             };
             "${config.xdg.configHome}/qutebrowser/quickmarks" = {
-                source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/qutebrowser/quickmarks";
+                source = config.lib.file.mkOutOfStoreSymlink "${secretsDir}/qutebrowser_quickmarks";
             };
             "${config.xdg.configHome}/qutebrowser/config.py" = {
                 source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/qutebrowser/config.py";
