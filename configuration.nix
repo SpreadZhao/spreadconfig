@@ -108,7 +108,10 @@
     users = {
         users.spreadzhao = {
             isNormalUser = true;
-            extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
+            extraGroups = [ 
+                "wheel" # Enable ‘sudo’ for the user.
+                # "ydotool"
+            ]; 
             # packages = with pkgs; [
             #   tree
             # ];
@@ -139,13 +142,12 @@
     programs = {
         dconf.enable = true;
         nano.enable = false;
+        zsh.enable = true;
         vim = {
             enable = true;
             defaultEditor = true;
         };
-        zsh = {
-            enable = true;
-        };
+        # ydotool.enable = true;
         # https://github.com/NixOS/nixpkgs/issues/240444
         nix-ld = {
             enable = true;

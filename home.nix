@@ -16,6 +16,7 @@ let
     defaultJDK = builtins.elemAt installedJDKs 0;
     projDir = "${config.xdg.userDirs.extraConfig.XDG_WORKSPACE_DIR}/spreadconfig";
     secretsDir = "${projDir}/secrets";
+    scriptsDir = "${config.home.homeDirectory}/scripts";
     spreadconfigDir = "${config.home.homeDirectory}/workspaces/spreadconfig/spreadconfig";
 in
 {
@@ -27,7 +28,7 @@ in
         homeDirectory = "/home/spreadzhao";
         stateVersion = "25.11";
         sessionVariables = {
-            SCRIPT_HOME = "${config.home.homeDirectory}/scripts";
+            SCRIPT_HOME = scriptsDir;
             QT_QPA_PLATFORM = "wayland";
             QT_ENABLE_HIGHDPI_SCALING = "1";
             # QT_SCREEN_SCALE_FACTORS= "eDP-1=2.0;HDMI-A-1=1.0;DP-2=1.0";
@@ -47,7 +48,7 @@ in
         file = {
             # ".config/vivaldi_custom".source = ./spreadconfig/config/vivaldi_custom;
             # ".config/qutebrowser/autoconfig.yml".source = ./spreadconfig/config/qutebrowser/autoconfig.yml;
-            "${config.home.homeDirectory}/scripts" = {
+            "${scriptsDir}" = {
                 source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/scripts";
             };
             "${config.xdg.configHome}/niri" = {
@@ -298,7 +299,7 @@ in
                 ];
             };
             Service = {
-                ExecStart = "${config.home.homeDirectory}/scripts/niri/detect_niri_window_change.sh";
+                ExecStart = "${scriptsDir}/niri/detect_niri_window_change.sh";
                 Restart = "always";
                 RestartSec = 2;
                 StandardOutput = "journal";
@@ -317,21 +318,21 @@ in
             toggle_monitor = {
                 name = "Toggle Monitor";
                 comment = "Toggle Monitor on and off";
-                exec = "${config.home.homeDirectory}/scripts/niri/niri_toggle_output.sh";
+                exec = "${scriptsDir}/niri/niri_toggle_output.sh";
                 type = "Application";
                 icon = "";
             };
             foot_new_tab = {
                 name = "Foot New Tab";
                 type = "Application";
-                exec = "${config.home.homeDirectory}/scripts/niri/foot_new_tab.sh";
+                exec = "${scriptsDir}/niri/foot_new_tab.sh";
                 icon = "";
                 terminal = false;
             };
             change_audio = {
                 name = "Change Audio Device";
                 type = "Application";
-                exec = "/usr/bin/env python3 ${config.home.homeDirectory}/scripts/util/change_audio.py";
+                exec = "/usr/bin/env python3 ${scriptsDir}/util/change_audio.py";
                 icon = "";
                 categories = [
                     "AudioVideo"
@@ -389,6 +390,13 @@ in
                     "text/x-c"
                     "text/x-c++"
                 ];
+            };
+            pmenu = {
+                name = "pmenu";
+                exec = "${scriptsDir}/util/bin/pmenu";
+                type = "Application";
+                icon = "";
+                terminal = false;
             };
         };
         portal = {
@@ -687,8 +695,8 @@ in
                 # "--help" = "--help 2>&1 | bat --language=help --style=plain";
             };
             initContent = lib.mkOrder 2000 ''
-                source ${config.home.homeDirectory}/scripts/config/config_zsh_nix.sh
-                source ${config.home.homeDirectory}/scripts/config/color_output.sh
+                source ${scriptsDir}/config/config_zsh_nix.sh
+                source ${scriptsDir}/config/color_output.sh
             '';
         };
         starship = {
@@ -1801,6 +1809,12 @@ in
                 font = "Noto Sans 20";
             };
         };
+        gpg = {
+            enable = true;
+            homedir = "${config.xdg.dataHome}/gnupg";
+            mutableKeys = true;
+            mutableTrust = true;
+        };
     };
     services = {
         cliphist = {
@@ -1837,6 +1851,14 @@ in
                     }
                 ];
             };
+        gpg-agent = {
+            enable = true;
+            enableZshIntegration = true;
+            pinentry = {
+                package = pkgs.pinentry-gnome3;
+                program = "pinentry-gnome3";
+            };
+        };
     };
     fonts = {
         fontconfig = {

@@ -1,5 +1,5 @@
 config.load_autoconfig()
-config.bind('tt', 'config-cycle tabs.width 0% 28 10%')
+config.bind('tt', 'config-cycle tabs.width 0% 27 10%')
 config.unbind('M', mode = 'normal')
 config.unbind('m', mode = 'normal')
 config.unbind('d')
@@ -74,7 +74,7 @@ c.tabs.select_on_remove = 'last-used'
 c.tabs.show = 'always'
 c.tabs.title.format = '{audio}{relative_index}:{current_title}'
 c.tabs.title.format_pinned = '{audio}{relative_index}:{current_title}'
-c.tabs.width = 28
+c.tabs.width = 27
 c.tabs.favicons.show = 'always'
 c.tabs.mousewheel_switching = False;
 c.tabs.new_position.unrelated = 'next';

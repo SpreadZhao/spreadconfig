@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+shopt -s nullglob globstar
+
+menu=(wofi --dmenu --prompt pass --insensitive)
+
+prefix=${PASSWORD_STORE_DIR:-~/.password-store}
+
+entries=( "$prefix"/**/*.gpg )
+entries=( "${entries[@]#"$prefix"/}" )
+entries=( "${entries[@]%.gpg}" )
+
+entry=$(printf '%s\n' "${entries[@]}" | "${menu[@]}")
+[[ -n $entry ]] || exit 0
+
+content=$(pass show "$entry")
+
+password=$(sed -n '1p' <<<"$content")
+
+mapfile -t meta_lines < <(sed '1d' <<<"$content")
+
+choices=("password")
+choices+=("${meta_lines[@]}")
+
+choice=$(printf '%s\n' "${choices[@]}" \
+    | wofi --dmenu --prompt "$entry")
+
+[[ -n $choice ]] || exit 0
+
+if [[ $choice == "password" ]]; then
+    printf '%s' "$password" | wl-copy
+else
+    value=${choice#*:}
+    printf '%s' "${value#"${value%%[![:space:]]*}"}" | wl-copy
+fi
