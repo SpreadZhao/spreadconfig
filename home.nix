@@ -184,7 +184,12 @@ in
                       --replace-fail "$out/bin/qq" "$out/bin/qq --ozone-platform-hint=auto --enable-wayland-ime --wayland-text-input-version=3"
                 '';
             }))
-            qutebrowser
+            (qutebrowser.overrideAttrs (old: {
+                postInstall = (old.postInstall or "") + ''
+                    substituteInPlace $out/share/applications/org.qutebrowser.qutebrowser.desktop \
+                      --replace-fail "Exec=qutebrowser" "Exec=env QT_SCALE_FACTOR=1.5 qutebrowser"
+                '';
+            }))
             # vivaldi
             # (pkgs.qutebrowser.overrideAttrs (old: {
             #   postInstall = (old.postInstall or "") + ''

@@ -1,5 +1,3 @@
-need to care about: 
-
 files in ./secrets/
 
 - gh_token: github cli token

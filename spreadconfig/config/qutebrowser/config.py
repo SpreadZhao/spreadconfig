@@ -1,5 +1,5 @@
 config.load_autoconfig()
-config.bind('tt', 'config-cycle tabs.width 0% 27 10%')
+config.bind('tt', 'config-cycle tabs.width 0% 21 10% 15%')
 config.unbind('M', mode = 'normal')
 config.unbind('m', mode = 'normal')
 config.unbind('d')
@@ -41,7 +41,7 @@ c.colors.webpage.darkmode.policy.images = 'never'
 # }
 
 c.fonts.default_family = ['Noto Sans']
-c.fonts.default_size = '16pt'
+c.fonts.default_size = '12pt'
 
 c.statusbar.position = 'top'
 c.statusbar.widgets = [
@@ -74,7 +74,7 @@ c.tabs.select_on_remove = 'last-used'
 c.tabs.show = 'always'
 c.tabs.title.format = '{audio}{relative_index}:{current_title}'
 c.tabs.title.format_pinned = '{audio}{relative_index}:{current_title}'
-c.tabs.width = 27
+c.tabs.width = 21
 c.tabs.favicons.show = 'always'
 c.tabs.mousewheel_switching = False;
 c.tabs.new_position.unrelated = 'next';
@@ -89,7 +89,7 @@ c.url.searchengines = {
 c.search.incremental = False;
 
 
-c.zoom.default = '150%'
+c.zoom.default = '100%'
 c.zoom.levels = [
     '25%',
     '33%',
