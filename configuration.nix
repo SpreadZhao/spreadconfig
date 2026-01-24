@@ -108,10 +108,10 @@
     users = {
         users.spreadzhao = {
             isNormalUser = true;
-            extraGroups = [ 
+            extraGroups = [
                 "wheel" # Enable ‘sudo’ for the user.
                 # "ydotool"
-            ]; 
+            ];
             # packages = with pkgs; [
             #   tree
             # ];
@@ -273,6 +273,13 @@
     security = {
         polkit = {
             enable = true;
+            # https://wiki.nixos.org/wiki/Polkit#No_password_for_wheel
+            extraConfig = ''
+                polkit.addRule(function(action, subject) {
+                    if (subject.isInGroup("wheel"))
+                        return polkit.Result.YES;
+                });
+            '';
         };
         pam.services = {
             # https://wiki.nixos.org/wiki/Secret_Service#Auto-decrypt_on_login

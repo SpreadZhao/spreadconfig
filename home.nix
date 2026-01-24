@@ -251,6 +251,7 @@ in
         ];
     };
     systemd.user.services = {
+        # https://wiki.nixos.org/wiki/Polkit#Using_Home_Manager
         polkit-gnome-authentication-agent-1 = {
             Unit = {
                 Description = "polkit-gnome-authentication-agent-1";
