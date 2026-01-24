@@ -1,0 +1,73 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+shopt -s nullglob globstar
+
+menu=(wofi --dmenu --prompt pass --insensitive)
+
+prefix=${PASSWORD_STORE_DIR:-~/.password-store}
+cache_file=/tmp/passmenu.cache
+
+entries=( "$prefix"/**/*.gpg )
+entries=( "${entries[@]#"$prefix"/}" )
+entries=( "${entries[@]%.gpg}" )
+
+# -------- 构造第一级菜单（允许单个 entry 失败） --------
+choices=()
+
+for entry in "${entries[@]}"; do
+    # 单个 entry 解密失败 → 跳过
+    if ! content=$(pass show "$entry" 2>/dev/null); then
+        continue
+    fi
+
+    info=$(grep -i '^info:' <<<"$content" | head -n1 | cut -d: -f2- || true)
+    info=${info:-}
+
+    if [[ -n $info ]]; then
+        info=${info#"${info%%[![:space:]]*}"}
+        display="$entry ($info)"
+    else
+        display="$entry"
+    fi
+
+    # display<TAB>real_entry
+    choices+=( "$(printf '%s\t%s' "$display" "$entry")" )
+done
+
+# -------- 第一级 wofi（允许用户取消） --------
+selection=$(printf '%s\n' "${choices[@]}" | "${menu[@]}" || true)
+[[ -n $selection ]] || exit 0
+
+entry=$(cut -f2 <<<"$selection")
+
+# -------- 最终解密（必须成功） --------
+content=$(pass show "$entry")
+
+# -------- 写缓存（必须成功） --------
+{
+    printf '__ENTRY__=%s\n' "$entry"
+    printf '%s\n' "$content"
+} > "$cache_file"
+chmod 600 "$cache_file"
+
+# -------- 二级菜单 --------
+password=$(sed -n '1p' <<<"$content")
+mapfile -t meta_lines < <(sed '1d' <<<"$content")
+
+choices=("password")
+choices+=("${meta_lines[@]}")
+
+choice=$(printf '%s\n' "${choices[@]}" \
+    | wofi --dmenu --prompt "$entry" || true)
+
+[[ -n $choice ]] || exit 0
+
+# -------- 行为执行 --------
+if [[ $choice == "password" ]]; then
+    printf '%s' "$password" | wl-copy
+else
+    value=${choice#*:}
+    value=${value#"${value%%[![:space:]]*}"}
+    printf '%s' "$value" | wl-copy
+fi

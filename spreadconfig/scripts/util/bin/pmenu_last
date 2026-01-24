@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+cache_file=/tmp/passmenu.cache
+
+[[ -f $cache_file ]] || exit 1
+
+mapfile -t lines < "$cache_file"
+
+entry=${lines[0]#__ENTRY__=}
+password=${lines[1]}
+meta_lines=("${lines[@]:2}")
+
+# -------- password 永远放第一位 --------
+choices=("password")
+choices+=("${meta_lines[@]}")
+
+choice=$(printf '%s\n' "${choices[@]}" \
+    | wofi --dmenu --prompt "$entry")
+
+[[ -n $choice ]] || exit 0
+
+if [[ $choice == "password" ]]; then
+    printf '%s' "$password" | wl-copy
+else
+    value=${choice#*:}
+    printf '%s' "${value#"${value%%[![:space:]]*}"}" | wl-copy
+fi

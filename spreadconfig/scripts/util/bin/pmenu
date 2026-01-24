@@ -6,6 +6,7 @@ shopt -s nullglob globstar
 menu=(wofi --dmenu --prompt pass --insensitive)
 
 prefix=${PASSWORD_STORE_DIR:-~/.password-store}
+cache_file=/tmp/passmenu.cache
 
 entries=( "$prefix"/**/*.gpg )
 entries=( "${entries[@]#"$prefix"/}" )
@@ -15,6 +16,12 @@ entry=$(printf '%s\n' "${entries[@]}" | "${menu[@]}")
 [[ -n $entry ]] || exit 0
 
 content=$(pass show "$entry")
+
+{
+    printf '__ENTRY__=%s\n' "$entry"
+    printf '%s\n' "$content"
+} > "$cache_file"
+chmod 600 "$cache_file"
 
 password=$(sed -n '1p' <<<"$content")
 

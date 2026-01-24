@@ -398,6 +398,13 @@ in
                 icon = "";
                 terminal = false;
             };
+            pmenu_last = {
+                name = "pmenu_last";
+                exec = "${scriptsDir}/util/bin/pmenu_last";
+                type = "Application";
+                icon = "";
+                terminal = false;
+            };
         };
         portal = {
             enable = true;
