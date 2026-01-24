@@ -209,7 +209,7 @@ in
             #   '';
             # }))
             nautilus
-            seahorse
+            # seahorse
             obsidian
             file-roller
             # (pkgs.writeShellScriptBin "scrcpy" ''
@@ -420,6 +420,16 @@ in
             extraPortals = with pkgs; [
                 xdg-desktop-portal-gnome
             ];
+            config = {
+                common = {
+                    default = [
+                        "gnome"
+                    ];
+                    "org.freedesktop.impl.portal.Secret" = [
+                        "pass-secret-service"
+                    ];
+                };
+            };
         };
         userDirs = {
             enable = true;
@@ -1837,7 +1847,11 @@ in
                 "1000"
             ];
         };
-        gnome-keyring.enable = true;
+        pass-secret-service = {
+            enable = true;
+            storePath = "${config.home.homeDirectory}/.password-store";
+        };
+        # gnome-keyring.enable = true;
         swayidle =
             let
                 lock = "${pkgs.swaylock}/bin/swaylock";
