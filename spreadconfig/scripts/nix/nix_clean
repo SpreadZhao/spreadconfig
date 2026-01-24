@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 
-eval "sns"
-eval "nix-env -u --always"
-eval "sudo rm /nix/var/nix/gcroots/auto/*"
-eval "nix-collect-garbage -d"
-eval "sudo nix-env -p /nix/var/nix/profiles/system --delete-generations old"
-eval "sns"
+sns
+nh clean all
+sns
+nh clean all

@@ -1,3 +1,4 @@
 #!/usr/bin/env bash
 
-sudo nixos-rebuild switch --flake "path://$HOME/workspaces/spreadconfig"
+# sudo nixos-rebuild switch --flake "path://$HOME/workspaces/spreadconfig"
+nh os switch "path://$HOME/workspaces/spreadconfig"

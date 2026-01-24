@@ -1,4 +1,4 @@
 #/usr/bin/env bash
 
-eval "nix flake update --flake path://$HOME/workspaces/spreadconfig"
-eval "sns"
+nix flake update --flake "path://$HOME/workspaces/spreadconfig"
+sns

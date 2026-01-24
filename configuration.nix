@@ -147,6 +147,11 @@
             enable = true;
             defaultEditor = true;
         };
+        nh = {
+            enable = true;
+            clean.enable = true;
+            flake = "/home/spreadzhao/workspaces/spreadconfig";
+        };
         # ydotool.enable = true;
         # https://github.com/NixOS/nixpkgs/issues/240444
         nix-ld = {
