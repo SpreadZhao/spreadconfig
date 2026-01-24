@@ -31,6 +31,7 @@ in
             SCRIPT_HOME = scriptsDir;
             QT_QPA_PLATFORM = "wayland";
             QT_ENABLE_HIGHDPI_SCALING = "1";
+            PASSWORD_STORE_DIR = "${config.home.homeDirectory}/.password-store";
             # QT_SCREEN_SCALE_FACTORS= "eDP-1=2.0;HDMI-A-1=1.0;DP-2=1.0";
             # LESS = "-R --use-color -Dd+r$Du+b$";
             # MANPAGER = "sh -c 'awk '\''{ gsub(/\x1B\[[0-9;]*m/, \"\", \$0); gsub(/.\x08/, \"\", \$0); print }'\'' | bat -p -lman'";
