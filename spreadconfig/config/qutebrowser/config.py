@@ -16,6 +16,13 @@ config.unbind('yy', mode = 'normal')
 config.bind('yyy', 'yank', mode = 'normal')
 config.bind('yym', 'yank inline [{title}]({url:pretty})', mode = 'normal')
 config.bind('gk', 'tab-focus last', mode = 'normal')
+config.unbind('f', mode = 'normal')
+config.unbind('F', mode = 'normal')
+config.bind('ff', 'hint all normal', mode = 'normal')
+config.bind('ft', 'hint all tab', mode = 'normal')
+config.bind('fh', 'hint all hover', mode = 'normal')
+config.bind('fr', 'hint all right-click', mode = 'normal')
+config.bind('fy', 'hint all yank', mode = 'normal')
 
 c.colors.tabs.bar.bg = 'black'
 c.colors.tabs.even.bg = 'black'
