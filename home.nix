@@ -540,6 +540,10 @@ in
         };
     };
     programs = {
+        # direnv = {
+        #     enable = true;
+        #     enableZshIntegration = true;
+        # };
         swaylock.enable = true;
         java = {
             enable = true;
