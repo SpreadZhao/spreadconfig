@@ -229,6 +229,7 @@ in
             niri
             xwayland-satellite
             foot
+            libsixel
             mako
             waybar
             xeyes
@@ -250,6 +251,7 @@ in
             noto-fonts-color-emoji
             nerd-fonts.symbols-only
             gcr # https://wiki.nixos.org/wiki/Secret_Service#GNOME_Keyring
+            imagemagick
         ];
     };
     systemd.user.services = {

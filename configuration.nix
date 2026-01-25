@@ -64,6 +64,9 @@
         extraModprobeConfig = ''
             options v4l2loopback devices=1 video_nr=1 card_label="OBS Camera" exclusive_caps=1
         '';
+        tmp = {
+            cleanOnBoot = false;
+        };
     };
 
     networking = {
