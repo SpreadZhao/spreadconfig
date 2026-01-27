@@ -131,10 +131,13 @@ in
             x11.enable = true;
         };
         packages = with pkgs; [
+            # zsh plugin
             zsh-syntax-highlighting
             zsh-autosuggestions
             zsh-completions
             zsh-fzf-tab
+
+            # dev
             gcc
             gdb
             gnumake
@@ -146,22 +149,40 @@ in
             lldb
             cargo
             rustc
-            rustfmt
-            rust-analyzer
+            # rustup no need
             python3
             go
-            gopls
-            nixd
-            nixfmt
-            lua-language-server
-            stylua
+
+            # language-server
             bash-language-server
+            gopls
+            lua-language-server
+            nixd
+            rust-analyzer
+
+            # formatters
+            cmake-format
+            nixfmt
+            rustfmt
+            shfmt
+            stylua
+            xmlstarlet
+
+            # media: pic, music, video
+            imagemagick
+            libsixel
+            wf-recorder
+            # screenshot
+            grim
+            slurp
+            wayfreeze
+
+            # other
             fastfetch
             onefetch
             btop
             tealdeer
             nix-tree
-            # rustup
             gdu
             bluetui
             eza
@@ -229,14 +250,9 @@ in
             niri
             xwayland-satellite
             foot
-            libsixel
             mako
             waybar
             xeyes
-            wayfreeze
-            grim
-            slurp
-            wf-recorder
             libnotify
             wl-clipboard
             qrencode
@@ -251,7 +267,6 @@ in
             noto-fonts-color-emoji
             nerd-fonts.symbols-only
             gcr # https://wiki.nixos.org/wiki/Secret_Service#GNOME_Keyring
-            imagemagick
         ];
     };
     systemd.user.services = {
