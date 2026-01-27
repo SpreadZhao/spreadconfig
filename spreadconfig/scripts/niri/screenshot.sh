@@ -7,6 +7,7 @@ OPTION_CLIPBOARD="Copy to Clipboard"
 OPTION_PIN="Pin"
 OPTION_SAVE="Save"
 OPTION_EDIT="Edit"
+OPTION_OCR="OCR"
 PROMPT="Select Screenshot Action"
 
 # === User-configurable options ===
@@ -79,11 +80,12 @@ fi
 
 # === Show menu ===
 choice=$(
-    printf "%s\n%s\n%s\n%s" \
+    printf "%s\n%s\n%s\n%s\n%s" \
         "$OPTION_CLIPBOARD" \
         "$OPTION_EDIT" \
         "$OPTION_PIN" \
-        "$OPTION_SAVE" |
+        "$OPTION_SAVE" \
+        "$OPTION_OCR" |
         wofi --dmenu --prompt "$PROMPT" --cache-file /dev/null
 )
 
@@ -112,6 +114,41 @@ case "$choice" in
         notify "Saved to $pic 📁"
     else
         notify "Failed to save screenshot ❌"
+    fi
+    ;;
+"$OPTION_OCR")
+    ocr_lang="chi_sim+eng"
+    ocr_text=""
+
+    if ! command -v tesseract >/dev/null 2>&1; then
+        notify "tesseract not found ❌"
+        exit 1
+    fi
+
+    if ! command -v wl-copy >/dev/null 2>&1; then
+        notify "wl-copy not found ❌"
+        exit 1
+    fi
+
+    # OCR → stdout
+    # https://github.com/tesseract-ocr/tesseract/issues/991#issuecomment-311651758
+    if ! ocr_text=$(tesseract "$TMPFILE" stdout -l "$ocr_lang" -c preserve_interword_spaces=1 2>/dev/null); then
+        notify "OCR failed ❌"
+        exit 1
+    fi
+
+    OCR_TEXT_TRIMMED=$(printf "%s" "$ocr_text" | sed '/^[[:space:]]*$/d')
+
+    if [ -z "$OCR_TEXT_TRIMMED" ]; then
+        notify "OCR finished but no text found ⚠️"
+        exit 0
+    fi
+
+    if printf "%s" "$OCR_TEXT_TRIMMED" | wl-copy; then
+        PREVIEW=$(printf "%s" "$OCR_TEXT_TRIMMED" | head -c 30 | tr '\n' ' ')
+        notify "📋 OCR copied to clipboard : ${PREVIEW}…"
+    else
+        notify "Failed to copy OCR result ❌"
     fi
     ;;
 *)

@@ -267,6 +267,7 @@ in
             noto-fonts-color-emoji
             nerd-fonts.symbols-only
             gcr # https://wiki.nixos.org/wiki/Secret_Service#GNOME_Keyring
+            tesseract
         ];
     };
     systemd.user.services = {
@@ -2016,7 +2017,8 @@ in
     fonts = {
         fontconfig = {
             enable = true;
-            antialiasing = true;
+            antialiasing = true;       # setting this to true cause mako cannot display emoji
+            subpixelRendering = "rgb";
             defaultFonts = {
                 emoji = [ "Noto Color Emoji" ];
                 monospace = [
