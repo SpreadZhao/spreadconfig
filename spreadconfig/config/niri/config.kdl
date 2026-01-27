@@ -200,6 +200,27 @@ window-rule {
 //     default-window-height { proportion 0.75; }
 // }
 
+// Indicate screencasted windows with red colors.
+window-rule {
+    match is-window-cast-target=true
+
+    focus-ring {
+        active-color "#162ccc"
+        inactive-color "#32396b"
+        width 2
+    }
+
+    border {
+        inactive-color "#32396b"
+        width 2
+    }
+
+    tab-indicator {
+        active-color "#f38ba8"
+        inactive-color "#7d0d2d"
+    }
+}
+
 binds {
     Mod+Shift+Slash { show-hotkey-overlay; }
 

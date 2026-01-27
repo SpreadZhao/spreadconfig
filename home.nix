@@ -416,6 +416,13 @@ in
                 icon = "";
                 terminal = false;
             };
+            niri_set_dynamic_target = {
+                name = "niri_set_dynamic_target";
+                exec = "${scriptsDir}/niri/niri_set_dynamic_target.sh";
+                type = "Application";
+                icon = "";
+                terminal = false;
+            };
         };
         portal = {
             enable = true;
