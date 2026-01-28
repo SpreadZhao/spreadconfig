@@ -297,6 +297,7 @@
             # https://wiki.nixos.org/wiki/Swaylock#Home_Manager_-_Through_Sway
             swaylock = { };
         };
+        sudo.wheelNeedsPassword = false;
     };
 
     fonts.fontconfig = {
