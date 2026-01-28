@@ -24,7 +24,7 @@ input {
 
 layout {
     gaps 0
-    background-color "#000000"
+    background-color "#0e1117"
     center-focused-column "never"
     preset-column-widths {
         proportion 0.5
@@ -33,15 +33,15 @@ layout {
     default-column-width { proportion 0.5; }
     focus-ring {
         width 2
-        active-color "#ffffff"
-        inactive-color "#3d3d3d"
+        active-color "#f5e0dc"
+        inactive-color "#313244"
     }
     border {
         off
         width 2
-        active-color "#ffc87f"
-        inactive-color "#505050"
-        urgent-color "#9b0000"
+        active-color "#f5e0dc"
+        inactive-color "#313244"
+        urgent-color "#f38ba8"
     }
     shadow {
         off
@@ -58,9 +58,9 @@ layout {
         length total-proportion=1.0
         position "left"
         gaps-between-tabs 5
-        active-color "yellow"
-        inactive-color "gray"
-        urgent-color "red"
+        active-color "#f9e2af"
+        inactive-color "#313244"
+        urgent-color "#f38ba8"
     }
     struts {
         left 2
@@ -122,7 +122,7 @@ recent-windows {
 }
 
 overview {
-    backdrop-color "black"
+    backdrop-color "#0e1117"
 }
 
 // spawn-at-startup "waybar"
@@ -205,19 +205,19 @@ window-rule {
     match is-window-cast-target=true
 
     focus-ring {
-        active-color "#162ccc"
-        inactive-color "#32396b"
+        active-color "#cba6f7"
+        inactive-color "#313244"
         width 2
     }
 
     border {
-        inactive-color "#32396b"
+        inactive-color "#313244"
         width 2
     }
 
     tab-indicator {
-        active-color "#f38ba8"
-        inactive-color "#7d0d2d"
+        active-color "#74c7ec"
+        inactive-color "#313244"
     }
 }
 
@@ -225,7 +225,7 @@ binds {
     Mod+Shift+Slash { show-hotkey-overlay; }
 
     Mod+Return hotkey-overlay-title="Open a Terminal" { spawn-sh "footclient"; }
-    Mod+space hotkey-overlay-title="Run an Application" { spawn "wofi"; }
+    Mod+space hotkey-overlay-title="Run an Application" { spawn "fuzzel"; }
     // Super+Alt+L hotkey-overlay-title="Lock the Screen: swaylock" { spawn "swaylock"; }
 
     XF86AudioRaiseVolume allow-when-locked=true { spawn-sh "wpctl set-volume -l 1.5 @DEFAULT_SINK@ 5%+ && pkill -RTMIN+7 waybar"; }
@@ -354,7 +354,7 @@ binds {
     Ctrl+Shift+A { spawn-sh "~/scripts/niri/screenshot.sh";  }
     Ctrl+Shift+S { spawn-sh "~/scripts/niri/screenrecord.sh";  }
 
-    Mod+Shift+V { spawn-sh "cliphist list | wofi -S dmenu | cliphist decode | wl-copy"; }
+    Mod+Shift+V { spawn-sh "cliphist list | fuzzel --dmenu | cliphist decode | wl-copy"; }
 
     Mod+Shift+Q { quit; }
 }

@@ -17,7 +17,7 @@ choices=("password")
 choices+=("${meta_lines[@]}")
 
 choice=$(printf '%s\n' "${choices[@]}" \
-    | wofi --dmenu --prompt "$entry")
+    | fuzzel --dmenu)
 
 [[ -n $choice ]] || exit 0
 

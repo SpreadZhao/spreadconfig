@@ -1,6 +1,9 @@
+@import "mocha.css";
+
 * {
     border: none;
     border-radius: 0;
+    font-family: Symbols Nerd Font Mono, IBM Plex Sans, IBM Plex Sans SC, IBM Plex Sans TC, IBM Plex Sans JP, IBM Plex Sans KR, OpenMoji Color;
     font-size: 20px;
     font-weight: normal;
     min-height: 0px;
@@ -8,18 +11,18 @@
 
 window#waybar {
     background: transparent;
-    color: white;
+    color: @text;
 }
 
 #workspaces button {
     padding: 0 0;
     background: transparent;
-    color: white;
+    color: @text;
 }
 
 #workspaces button.focused {
     border-top: 2px solid;
-    color: #c9545d;
+    color: @red;
 }
 
 #custom-info {
@@ -27,37 +30,37 @@ window#waybar {
 }
 
 #network {
-    color: #eb7878;
+    color: @maroon;
 }
 
 #custom-audio {
-    color: #1b5982;
+    color: @mauve;
 }
 
 #custom-battery {
-    color: #b02727;
+    color: @Red;
 }
 
 #custom-time {
-    color: #207343;
+    color: @green;
 }
 
 #cpu {
-    color: #13ed22;
+    color: @yellow;
 }
 
 #temperature {
-    color: #456d2f
+    color: @rosewater
 }
 
 #temperature.warning {
-    color: #13ed22;
+    color: @peach;
 }
 
 #temperature.critical {
-    color: #b02727;
+    color: @red;
 }
 
 #memory {
-    color: #38948c;
+    color: @pink;
 }

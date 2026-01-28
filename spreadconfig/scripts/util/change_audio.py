@@ -36,32 +36,34 @@ def parse_wpctl_section(section_name):
         for item in section
     ]
 
-def select_with_wofi(prompt, entries):
-    """Show wofi selection"""
-    output = ''
+def select_with_fuzzel(prompt, entries):
+    output = ""
     for e in entries:
         if e["name"].endswith(" - Default"):
-            output += f"<b>-> {e['id']}: {e['name']}</b>\n"
+            output += f">> {e['id']}: {e['name']}\n"
         else:
-            output += f" {e['id']}: {e['name']}\n"
+            output += f"   {e['id']}: {e['name']}\n"
 
     cmd = (
-        f"echo '{output}' | "
-        f"wofi --show=dmenu --hide-scroll --allow-markup "
-        f"--define=prompt=\"{prompt}\""
+        f"printf '%s' \"{output}\" | "
+        f"fuzzel --dmenu --prompt=\"{prompt}\""
     )
-    res = subprocess.run(cmd, shell=True, encoding="utf-8", stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+    res = subprocess.run(cmd, shell=True, text=True, stdout=subprocess.PIPE)
     if res.returncode != 0 or not res.stdout.strip():
         sys.exit(0)
+
     selected_line = res.stdout.strip()
-    selected_id = int(selected_line.strip('<b>').strip('</b>').split(":")[0].replace("->", "").strip())
+    selected_id = int(
+        selected_line.split(":")[0].replace(">>", "").strip()
+    )
     return selected_id
 
 def main():
     # Step 1: Ask whether to change Sink or Source
     choice_cmd = (
         "echo 'Sink (Output)\nSource (Input)' | "
-        "wofi --show=dmenu --define=prompt='Choose Type'"
+        "fuzzel --dmenu --prompt 'Choose Type'"
     )
     res = subprocess.run(choice_cmd, shell=True, encoding="utf-8", stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     if res.returncode != 0 or not res.stdout.strip():
@@ -78,7 +80,7 @@ def main():
         sys.exit(0)
 
     items = parse_wpctl_section(section)
-    selected_id = select_with_wofi(f"Select {section[:-1]}", items)
+    selected_id = select_with_fuzzel(f"Select {section[:-1]}", items)
     subprocess.run(f"{cmd_prefix} {selected_id}", shell=True)
 
 if __name__ == "__main__":

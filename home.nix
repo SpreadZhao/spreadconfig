@@ -18,11 +18,25 @@ let
     secretsDir = "${projDir}/secrets";
     scriptsDir = "${config.home.homeDirectory}/scripts";
     spreadconfigDir = "${config.home.homeDirectory}/workspaces/spreadconfig/spreadconfig";
+    mochaBg = "0e1117";
 in
 {
     imports = [
         inputs.nixvim.homeModules.nixvim
+        inputs.catppuccin.homeModules.catppuccin
     ];
+    catppuccin = {
+        gtk.icon = {
+            enable = true;
+            flavor = "mocha";
+            accent = "rosewater";
+        };
+        # qt5ct = {
+        #     enable = true;
+        #     flavor = "mocha";
+        #     accent = "rosewater";
+        # };
+    };
     home = {
         username = "spreadzhao";
         homeDirectory = "/home/spreadzhao";
@@ -32,6 +46,9 @@ in
             QT_QPA_PLATFORM = "wayland";
             QT_ENABLE_HIGHDPI_SCALING = "1";
             PASSWORD_STORE_DIR = "${config.home.homeDirectory}/.password-store";
+            STARSHIP_CONFIG = "${config.xdg.configHome}/starship/starship.toml";
+            TERMINAL = "foot";
+            TERM = "foot";
             # QT_SCREEN_SCALE_FACTORS= "eDP-1=2.0;HDMI-A-1=1.0;DP-2=1.0";
             # LESS = "-R --use-color -Dd+r$Du+b$";
             # MANPAGER = "sh -c 'awk '\''{ gsub(/\x1B\[[0-9;]*m/, \"\", \$0); gsub(/.\x08/, \"\", \$0); print }'\'' | bat -p -lman'";
@@ -64,9 +81,9 @@ in
             "${config.xdg.configHome}/waybar" = {
                 source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/waybar";
             };
-            "${config.xdg.configHome}/wofi" = {
-                source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/wofi";
-            };
+            # "${config.xdg.configHome}/wofi" = {
+            #     source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/wofi";
+            # };
             "${config.xdg.configHome}/starship/starship.toml" = {
                 source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/starship.toml";
             };
@@ -78,6 +95,9 @@ in
             };
             "${config.xdg.dataHome}/fcitx5/rime/default.custom.yaml" = {
                 source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/input/default";
+            };
+            "${config.xdg.dataHome}/fcitx5/themes/catppuccin-mocha-rosewater" = {
+                source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/input/fcitx5-catppuccin/src/catppuccin-mocha-rosewater";
             };
             "${config.xdg.configHome}/obs-studio/basic/profiles/Video" = {
                 source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/obs/profiles/Video";
@@ -91,8 +111,14 @@ in
             "${config.xdg.configHome}/qutebrowser/config.py" = {
                 source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/qutebrowser/config.py";
             };
+            "${config.xdg.configHome}/qutebrowser/catppuccin" = {
+                source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/qutebrowser/catppuccin";
+            };
             "${config.home.homeDirectory}/.ideavimrc" = {
                 source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/Jetbrains/.ideavimrc";
+            };
+            "${config.xdg.configHome}/gdu" = {
+                source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/gdu";
             };
         }
         # jdk
@@ -124,9 +150,9 @@ in
         # '';
         pointerCursor = {
             enable = true;
-            package = pkgs.adwaita-icon-theme;
+            package = pkgs.catppuccin-cursors.mochaDark;
             gtk.enable = true;
-            name = "Adwaita";
+            name = "catppuccin-mocha-dark-cursors";
             size = 72;
             x11.enable = true;
         };
@@ -178,9 +204,9 @@ in
             wayfreeze
 
             # other
+            starship
             fastfetch
             onefetch
-            btop
             tealdeer
             nix-tree
             gdu
@@ -261,11 +287,16 @@ in
             jadx
             ghidra-bin
             pass
+
+            # fonts
             noto-fonts
             noto-fonts-cjk-sans
             noto-fonts-cjk-serif
             noto-fonts-color-emoji
             nerd-fonts.symbols-only
+            ibm-plex
+            openmoji-color
+
             gcr # https://wiki.nixos.org/wiki/Secret_Service#GNOME_Keyring
             tesseract
         ];
@@ -484,8 +515,8 @@ in
         enable = true;
         colorScheme = "dark";
         cursorTheme = {
-            name = "Adwaita";
-            package = pkgs.adwaita-icon-theme;
+            name = "catppuccin-mocha-dark-cursors";
+            package = pkgs.catppuccin-cursors.mochaDark;
             size = 72;
         };
         theme = {
@@ -493,13 +524,14 @@ in
             package = pkgs.gnome-themes-extra;
         };
         font = {
-            name = "Noto Sans";
+            # name = "Noto Sans";
+            name = "IBM Plex Sans";
             size = 16;
         };
-        iconTheme = {
-            name = "Adwaita";
-            package = pkgs.adwaita-icon-theme;
-        };
+        # iconTheme = {
+        #     name = "Adwaita";
+        #     package = pkgs.adwaita-icon-theme;
+        # };
         gtk3 = {
             enable = true;
             bookmarks = [
@@ -515,46 +547,8 @@ in
                 "file://${config.xdg.userDirs.extraConfig.XDG_SCREENRECORD_DIR}"
                 "davs://spreadzhao.cloud:10116/ NAS"
             ];
-            colorScheme = "dark";
-            cursorTheme = {
-                name = "Adwaita";
-                package = pkgs.adwaita-icon-theme;
-                size = 72;
-            };
-            font = {
-                name = "Noto Sans";
-                size = 16;
-            };
-            iconTheme = {
-                name = "Adwaita";
-                package = pkgs.adwaita-icon-theme;
-            };
-            theme = {
-                name = "Adwaita";
-                package = pkgs.gnome-themes-extra;
-            };
         };
-        gtk4 = {
-            enable = true;
-            colorScheme = "dark";
-            cursorTheme = {
-                name = "Adwaita";
-                package = pkgs.adwaita-icon-theme;
-                size = 72;
-            };
-            font = {
-                name = "Noto Sans";
-                size = 16;
-            };
-            iconTheme = {
-                name = "Adwaita";
-                package = pkgs.adwaita-icon-theme;
-            };
-            theme = {
-                name = "Adwaita";
-                package = pkgs.gnome-themes-extra;
-            };
-        };
+        gtk4.enable = true;
     };
     qt = {
         enable = true;
@@ -569,6 +563,133 @@ in
         #     enable = true;
         #     enableZshIntegration = true;
         # };
+        btop = {
+            enable = true;
+            settings = {
+                color_theme = "catppuccin-mocha";
+                theme_background = false;
+                truecolor = true;
+                vim_keys = true;
+            };
+            themes = {
+                "catppuccin-mocha" = ''
+                    # Main background, empty for terminal default, need to be empty if you want transparent background
+                    theme[main_bg]="#${mochaBg}"
+
+                    # Main text color
+                    theme[main_fg]="#cdd6f4"
+
+                    # Title color for boxes
+                    theme[title]="#cdd6f4"
+
+                    # Highlight color for keyboard shortcuts
+                    theme[hi_fg]="#89b4fa"
+
+                    # Background color of selected item in processes box
+                    theme[selected_bg]="#45475a"
+
+                    # Foreground color of selected item in processes box
+                    theme[selected_fg]="#89b4fa"
+
+                    # Color of inactive/disabled text
+                    theme[inactive_fg]="#7f849c"
+
+                    # Color of text appearing on top of graphs, i.e uptime and current network graph scaling
+                    theme[graph_text]="#f5e0dc"
+
+                    # Background color of the percentage meters
+                    theme[meter_bg]="#45475a"
+
+                    # Misc colors for processes box including mini cpu graphs, details memory graph and details status text
+                    theme[proc_misc]="#f5e0dc"
+
+                    # CPU, Memory, Network, Proc box outline colors
+                    theme[cpu_box]="#cba6f7" #Mauve
+                    theme[mem_box]="#a6e3a1" #Green
+                    theme[net_box]="#eba0ac" #Maroon
+                    theme[proc_box]="#89b4fa" #Blue
+
+                    # Box divider line and small boxes line color
+                    theme[div_line]="#6c7086"
+
+                    # Temperature graph color (Green -> Yellow -> Red)
+                    theme[temp_start]="#a6e3a1"
+                    theme[temp_mid]="#f9e2af"
+                    theme[temp_end]="#f38ba8"
+
+                    # CPU graph colors (Teal -> Lavender)
+                    theme[cpu_start]="#94e2d5"
+                    theme[cpu_mid]="#74c7ec"
+                    theme[cpu_end]="#b4befe"
+
+                    # Mem/Disk free meter (Mauve -> Lavender -> Blue)
+                    theme[free_start]="#cba6f7"
+                    theme[free_mid]="#b4befe"
+                    theme[free_end]="#89b4fa"
+
+                    # Mem/Disk cached meter (Sapphire -> Lavender)
+                    theme[cached_start]="#74c7ec"
+                    theme[cached_mid]="#89b4fa"
+                    theme[cached_end]="#b4befe"
+
+                    # Mem/Disk available meter (Peach -> Red)
+                    theme[available_start]="#fab387"
+                    theme[available_mid]="#eba0ac"
+                    theme[available_end]="#f38ba8"
+
+                    # Mem/Disk used meter (Green -> Sky)
+                    theme[used_start]="#a6e3a1"
+                    theme[used_mid]="#94e2d5"
+                    theme[used_end]="#89dceb"
+
+                    # Download graph colors (Peach -> Red)
+                    theme[download_start]="#fab387"
+                    theme[download_mid]="#eba0ac"
+                    theme[download_end]="#f38ba8"
+
+                    # Upload graph colors (Green -> Sky)
+                    theme[upload_start]="#a6e3a1"
+                    theme[upload_mid]="#94e2d5"
+                    theme[upload_end]="#89dceb"
+
+                    # Process box color gradient for threads, mem and cpu usage (Sapphire -> Mauve)
+                    theme[process_start]="#74c7ec"
+                    theme[process_mid]="#b4befe"
+                    theme[process_end]="#cba6f7"
+                '';
+            };
+        };
+        fuzzel = {
+            enable = true;
+            settings = {
+                main = {
+                    font = "IBM Plex Mono:size=18, Symbols Nerd Font Mono:size=18";
+                    use-bold = "yes";
+                    terminal = "foot -a '{cmd}' -T '{cmd}' {cmd}";
+                    show-actions = "no";
+                    width = 80;
+                    tabs = 4;
+                    image-size-ratio = 1;
+                };
+                colors = {
+                    # https://github.com/catppuccin/fuzzel/blob/main/themes/catppuccin-mocha/rosewater.ini
+                    background = "${mochaBg}dd";
+                    text = "cdd6f4ff";
+                    prompt = "dc8a78ff";
+                    placeholder = "7f849cff";
+                    input = "dc8a78ff";
+                    match = "f5e0dcff";
+                    selection = "585b70ff";
+                    selection-text = "cdd6f4ff";
+                    selection-match = "f5e0dcff";
+                    counter = "7f849cff";
+                    border = "f5e0dcff";
+                };
+                border = {
+                    radius = 0;
+                };
+            };
+        };
         swaylock.enable = true;
         java = {
             enable = true;
@@ -592,6 +713,40 @@ in
             settings = {
                 gui = {
                     nerdFontsVersion = "3";
+                    theme = {
+                        # https://github.com/catppuccin/lazygit/blob/main/themes/mocha/rosewater.yml
+                        activeBorderColor = [
+                            "#f5e0dc"
+                            "bold"
+                        ];
+                        inactiveBorderColor = [
+                            "#a6adc8"
+                        ];
+                        optionsTextColor = [
+                            "#89b4fa"
+                        ];
+                        selectedLineBgColor = [
+                            "#313244"
+                        ];
+                        cherryPickedCommitBgColor = [
+                            "#45475a"
+                        ];
+                        cherryPickedCommitFgColor = [
+                            "#f5e0dc"
+                        ];
+                        unstagedChangesColor = [
+                            "#f38ba8"
+                        ];
+                        defaultFgColor = [
+                            "#cdd6f4"
+                        ];
+                        searchingActiveBorderColor = [
+                            "#f9e2af"
+                        ];
+                    };
+                    authorColors = {
+                        "*" = "#b4befe";
+                    };
                 };
                 git = {
                     pagers = [
@@ -621,7 +776,7 @@ in
             };
         };
         wofi = {
-            enable = true;
+            enable = false;
         };
         feh = {
             enable = true;
@@ -693,6 +848,29 @@ in
         };
         mpv = {
             enable = true;
+            config = {
+                # Main mpv options
+                background-color = "#${mochaBg}";
+                osd-back-color = "#11111b";
+                osd-border-color = "#11111b";
+                osd-color = "#cdd6f4";
+                osd-shadow-color = "#1e1e2e";
+
+                # Stats script options
+                # Options are on separate lines for clarity
+                # Colors are in #BBGGRR format
+                # script-opts-append="stats-border_color=251818"
+                # script-opts-append=stats-font_color=f4d6cd
+                # script-opts-append=stats-plot_bg_border_color=dce0f5
+                # script-opts-append=stats-plot_bg_color=251818
+                # script-opts-append=stats-plot_color=dce0f5
+
+                # External script options
+                # It is fine to leave these here even if one does not use these scripts because they are just ignored unless a script uses them
+
+                # UOSC options
+                # script-opts-append=uosc-color=foreground=f5e0dc,foreground_text=313244,background=1e1e2e,background_text=cdd6f4,curtain=181825,success=a6e3a1,error=f38ba8
+            };
         };
         obs-studio = {
             enable = true;
@@ -752,12 +930,14 @@ in
             initContent = lib.mkOrder 2000 ''
                 source ${scriptsDir}/config/config_zsh_nix.sh
                 source ${scriptsDir}/config/color_output.sh
+                eval "$(starship init zsh)"
             '';
         };
-        starship = {
-            enable = true;
-            configPath = "${config.xdg.configHome}/starship/starship.toml";
-        };
+        # if eval "$(starship init zsh)" was called before config_zsh_nix.sh, vimcmd_symbol would not work properly.
+        # starship = {
+        #     enable = true;
+        #     configPath = "${config.xdg.configHome}/starship/starship.toml";
+        # };
         zoxide.enable = true;
         fd = {
             enable = true;
@@ -1066,16 +1246,188 @@ in
                     };
                 }
             ];
-            colorschemes.vscode = {
-                enable = true;
-                settings = {
-                    transparent = true;
-                    italic_comments = true;
-                    underline_links = true;
-                    disable_nvimtree_bg = true;
-                    terminal_colors = false;
-                    color_overrides = {
-                        vscLineNumber = "#FFFFFF";
+            colorschemes = {
+                vscode = {
+                    enable = false;
+                    settings = {
+                        transparent = true;
+                        italic_comments = true;
+                        underline_links = true;
+                        disable_nvimtree_bg = true;
+                        terminal_colors = false;
+                        color_overrides = {
+                            vscLineNumber = "#FFFFFF";
+                        };
+                    };
+                };
+                catppuccin = {
+                    enable = true;
+                    settings = {
+                        flavour = "mocha";
+                        dim_inactive = {
+                            enabled = false;
+                            shade = "dark";
+                            percentage = 0.15;
+                        };
+                        show_end_of_buffer = false;
+                        term_colors = true;
+                        styles = {
+                            comments = [ "italic" ];
+                            functions = [ "bold" ];
+                            keywords = [ "italic" ];
+                            operators = [ "bold" ];
+                            conditionals = [ "bold" ];
+                            loops = [ "bold" ];
+                            booleans = [
+                                "bold"
+                                "italic"
+                            ];
+                        };
+                        integrations = {
+                            cmp = true;
+                            dap = true;
+                            dap_ui = true;
+                            diffview = true;
+                            dropbar = {
+                                enabled = true;
+                                color_mode = true;
+                            };
+                            fidget = true;
+                            flash = true;
+                            fzf = true;
+                            gitsigns = true;
+                            grug_far = true;
+                            hop = true;
+                            indent_blankline = {
+                                enabled = true;
+                                colored_indent_levels = true;
+                            };
+                            lsp_saga = true;
+                            lsp_trouble = true;
+                            markdown = true;
+                            mason = true;
+                            mini = {
+                                enabled = true;
+                            };
+                            native_lsp = {
+                                enabled = true;
+                                virtual_text = {
+                                    errors = [ "italic" ];
+                                    hints = [ "italic" ];
+                                    warnings = [ "italic" ];
+                                    information = [ "italic" ];
+                                };
+                                underlines = {
+                                    errors = [ "underline" ];
+                                    hints = [ "underline" ];
+                                    warnings = [ "underline" ];
+                                    information = [ "underline" ];
+                                };
+                            };
+                            notify = true;
+                            nvimtree = true;
+                            rainbow_delimiters = true;
+                            render_markdown = true;
+                            semantic_tokens = true;
+                            telescope = {
+                                enabled = true;
+                                style = "nvchad";
+                            };
+                            treesitter = true;
+                            treesitter_context = true;
+                            which_key = true;
+                        };
+                        color_overrides = {
+                            mocha = {
+                                base = "#${mochaBg}";
+                            };
+                        };
+                        highlight_overrides = {
+                            all = {
+                                __raw = ''
+                                    function(cp)
+                                        return {
+                                            -- For base configs
+                                            NormalFloat = { fg = cp.text, bg = transparent_background and cp.none or cp.mantle },
+                                            FloatBorder = {
+                                                fg = transparent_background and cp.blue or cp.mantle,
+                                                bg = transparent_background and cp.none or cp.mantle,
+                                            },
+                                            CursorLineNr = { fg = cp.green },
+
+                                            -- For native lsp configs
+                                            DiagnosticVirtualTextError = { bg = cp.none },
+                                            DiagnosticVirtualTextWarn = { bg = cp.none },
+                                            DiagnosticVirtualTextInfo = { bg = cp.none },
+                                            DiagnosticVirtualTextHint = { bg = cp.none },
+                                            LspInfoBorder = { link = "FloatBorder" },
+
+                                            -- For mason.nvim
+                                            MasonNormal = { link = "NormalFloat" },
+
+                                            -- For indent-blankline
+                                            IblIndent = { fg = cp.surface0 },
+                                            IblScope = { fg = cp.surface2, style = { "bold" } },
+
+                                            -- For nvim-cmp and wilder.nvim
+                                            Pmenu = { fg = cp.overlay2, bg = transparent_background and cp.none or cp.base },
+                                            PmenuBorder = { fg = cp.surface1, bg = transparent_background and cp.none or cp.base },
+                                            PmenuSel = { bg = cp.green, fg = cp.base },
+                                            CmpItemAbbr = { fg = cp.overlay2 },
+                                            CmpItemAbbrMatch = { fg = cp.blue, style = { "bold" } },
+                                            CmpDoc = { link = "NormalFloat" },
+                                            CmpDocBorder = {
+                                                fg = transparent_background and cp.surface1 or cp.mantle,
+                                                bg = transparent_background and cp.none or cp.mantle,
+                                            },
+
+                                            -- For fidget
+                                            FidgetTask = { bg = cp.none, fg = cp.surface2 },
+                                            FidgetTitle = { fg = cp.blue, style = { "bold" } },
+
+                                            -- For nvim-notify
+                                            NotifyBackground = { bg = cp.base },
+
+                                            -- For nvim-tree
+                                            NvimTreeRootFolder = { fg = cp.pink },
+                                            NvimTreeIndentMarker = { fg = cp.surface2 },
+
+                                            -- For trouble.nvim
+                                            TroubleNormal = { bg = transparent_background and cp.none or cp.base },
+                                            TroubleNormalNC = { bg = transparent_background and cp.none or cp.base },
+
+                                            -- For telescope.nvim
+                                            TelescopeMatching = { fg = cp.lavender },
+                                            TelescopeResultsDiffAdd = { fg = cp.green },
+                                            TelescopeResultsDiffChange = { fg = cp.yellow },
+                                            TelescopeResultsDiffDelete = { fg = cp.red },
+
+                                            -- For glance.nvim
+                                            GlanceWinBarFilename = { fg = cp.subtext1, style = { "bold" } },
+                                            GlanceWinBarFilepath = { fg = cp.subtext0, style = { "italic" } },
+                                            GlanceWinBarTitle = { fg = cp.teal, style = { "bold" } },
+                                            GlanceListCount = { fg = cp.lavender },
+                                            GlanceListFilepath = { link = "Comment" },
+                                            GlanceListFilename = { fg = cp.blue },
+                                            GlanceListMatch = { fg = cp.lavender, style = { "bold" } },
+                                            GlanceFoldIcon = { fg = cp.green },
+
+                                            -- For nvim-treehopper
+                                            TSNodeKey = {
+                                                fg = cp.peach,
+                                                bg = transparent_background and cp.none or cp.base,
+                                                style = { "bold", "underline" },
+                                            },
+
+                                            -- For treesitter
+                                            ["@keyword.return"] = { fg = cp.pink, style = clear },
+                                            ["@error.c"] = { fg = cp.none, style = clear },
+                                            ["@error.cpp"] = { fg = cp.none, style = clear },
+                                        }
+                                    end
+                                '';
+                            };
+                        };
                     };
                 };
             };
@@ -1144,7 +1496,7 @@ in
 
                                 -- Actions
                                 -- visual mode
-                                -- map('v', '<leader>hs', function()
+                                -- map('v', 'wleaderwhs', function()
                                 --   gitsigns.stage_hunk { vim.fn.line '.', vim.fn.line 'v' }
                                 -- end, { desc = 'git [s]tage hunk' })
                                 map('v', '<leader>hr', function()
@@ -1300,12 +1652,12 @@ in
                     enable = true;
                     luaConfig.post = ''
                         local colors = {
-                            red = '#ca1243',
-                            black = '#000000',
-                            white = '#f3f3f3',
-                            light_green = '#83a598',
-                            orange = '#fe8019',
-                            green = '#8ec07c',
+                            red = '#f38ba8',
+                            black = '#${mochaBg}',
+                            white = '#cdd6f4',
+                            light_green = '#a6e3a1',
+                            orange = '#fab387',
+                            green = '#f5e0dc',
                         }
 
                         local theme = {
@@ -1956,8 +2308,48 @@ in
                 adjust-open = "best-fit";
                 pages-per-row = 1;
                 scroll-page-aware = "true";
-                font = "Noto Sans 20";
+                # font = "Noto Sans 20";
+                font = "IBM Plex Sans 20";
             };
+            extraConfig = ''
+                set default-fg                rgba(205,214,244,1)
+                set default-bg                rgba(14,17,23,1)
+
+                set completion-bg             rgba(49,50,68,1)
+                set completion-fg             rgba(205,214,244,1)
+                set completion-highlight-bg   rgba(203,166,247,1)
+                set completion-highlight-fg   rgba(30,30,46,1)
+                set completion-group-bg       rgba(24,24,37,1)
+                set completion-group-fg       rgba(205,214,244,1)
+
+                set statusbar-fg              rgba(205,214,244,1)
+                set statusbar-bg              rgba(17,17,27,1)
+                set inputbar-fg               rgba(205,214,244,1)
+                set inputbar-bg               rgba(30,30,46,1)
+
+                set notification-bg           rgba(30,30,46,1)
+                set notification-fg           rgba(205,214,244,1)
+                set notification-error-bg     rgba(30,30,46,1)
+                set notification-error-fg     rgba(243,139,168,1)
+                set notification-warning-bg   rgba(30,30,46,1)
+                set notification-warning-fg   rgba(249,226,175,1)
+
+                set recolor                   "true"
+                set recolor-lightcolor        rgba(30,30,46,1)
+                set recolor-darkcolor         rgba(205,214,244,1)
+
+                set index-fg                  rgba(205,214,244,1)
+                set index-bg                  rgba(30,30,46,1)
+                set index-active-fg           rgba(205,214,244,1)
+                set index-active-bg           rgba(49,50,68,1)
+
+                set render-loading-bg         rgba(30,30,46,1)
+                set render-loading-fg         rgba(205,214,244,1)
+
+                set highlight-color           rgba(147,153,178,0.3)
+                set highlight-fg              rgba(205,214,244,1)
+                set highlight-active-color    rgba(203,166,247,0.3)
+            '';
         };
         gpg = {
             enable = true;
@@ -2017,11 +2409,13 @@ in
     fonts = {
         fontconfig = {
             enable = true;
-            antialiasing = true;       # setting this to true cause mako cannot display emoji
+            antialiasing = true; # setting this to true cause mako cannot display emoji
             subpixelRendering = "rgb";
             defaultFonts = {
-                emoji = [ "Noto Color Emoji" ];
+                # emoji = [ "Noto Color Emoji" ];
+                emoji = [ "OpenMoji Color" ];
                 monospace = [
+                    "IBM Plex Mono"
                     "Noto Sans Mono"
                     "Noto Sans Mono CJK SC"
                     "Noto Sans Mono CJK HK"
@@ -2029,25 +2423,36 @@ in
                     "Noto Sans Mono CJK JP"
                     "Noto Sans Mono CJK KR"
                     "Symbols Nerd Font Mono"
-                    "Noto Color Emoji"
+                    # "Noto Color Emoji"
                 ];
                 sansSerif = [
+                    "IBM Plex Sans"
+                    "IBM Plex Sans SC"
+                    "IBM Plex Sans TC"
+                    "IBM Plex Sans JP"
+                    "IBM Plex Sans KR"
+                    "IBM Plex Sans Thai"
+                    "IBM Plex Sans Thai Looped"
+                    "IBM Plex Sans Hebrew"
+                    "IBM Plex Sans Arabic"
+                    "IBM Plex Sans Devanagari"
                     "Noto Sans"
                     "Noto Sans CJK SC"
                     "Noto Sans CJK HK"
                     "Noto Sans CJK TC"
                     "Noto Sans CJK JP"
                     "Noto Sans CJK KR"
-                    "Noto Color Emoji"
+                    # "Noto Color Emoji"
                 ];
                 serif = [
+                    "IBM Plex Serif"
                     "Noto Serif"
                     "Noto Serif CJK SC"
                     "Noto Serif CJK HK"
                     "Noto Serif CJK TC"
                     "Noto Serif CJK JP"
                     "Noto Serif CJK KR"
-                    "Noto Color Emoji"
+                    # "Noto Color Emoji"
                 ];
             };
         };

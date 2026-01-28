@@ -5,7 +5,7 @@ set -euo pipefail
 # Show main action menu
 action="$(
     printf "Window\nMonitor\nClear\n" |
-        wofi --dmenu --prompt "Dynamic Cast"
+        fuzzel --dmenu --prompt "Dynamic Cast"
 )"
 
 case "$action" in
@@ -17,14 +17,13 @@ case "$action" in
     ;;
 
 "Monitor")
-    # Select a monitor (output) via wofi
     output_name="$(
         niri msg -j outputs |
             jq -r '
           to_entries[]
           | "\(.value.make) \(.value.model) (\(.key))"
         ' |
-            wofi --dmenu --prompt "Select monitor" |
+            fuzzel --dmenu --prompt "Select monitor" |
             sed -n 's/.*(\(.*\))$/\1/p'
     )"
 
@@ -40,7 +39,6 @@ case "$action" in
     ;;
 
 *)
-    # User cancelled or closed wofi
     exit 0
     ;;
 esac

@@ -21,7 +21,7 @@ menu=$(
   '
 )
 
-selected=$(echo "$menu" | wofi --dmenu --prompt "Toggle output")
+selected=$(echo "$menu" | fuzzel --dmenu --prompt "Toggle output")
 [ -z "$selected" ] && exit 0
 
 output=$(echo "$selected" | cut -d'|' -f1 | xargs)

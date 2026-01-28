@@ -3,7 +3,7 @@
 set -euo pipefail
 shopt -s nullglob globstar
 
-menu=(wofi --dmenu --prompt pass --insensitive)
+menu=(fuzzel --dmenu --prompt ": ")
 
 prefix=${PASSWORD_STORE_DIR:-~/.password-store}
 cache_file=/tmp/passmenu.cache
@@ -31,7 +31,7 @@ choices=("password")
 choices+=("${meta_lines[@]}")
 
 choice=$(printf '%s\n' "${choices[@]}" \
-    | wofi --dmenu --prompt "$entry")
+    | fuzzel --dmenu)
 
 [[ -n $choice ]] || exit 0
 

@@ -86,7 +86,7 @@ choice=$(
         "$OPTION_PIN" \
         "$OPTION_SAVE" \
         "$OPTION_OCR" |
-        wofi --dmenu --prompt "$PROMPT" --cache-file /dev/null
+        fuzzel --dmenu --prompt "$PROMPT" --cache /dev/null
 )
 
 [ -z "$choice" ] && exit 0
