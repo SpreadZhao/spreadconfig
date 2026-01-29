@@ -140,6 +140,7 @@
             net-tools
             ripgrep
             ntfs3g
+            glib
         ];
         shellAliases = lib.mkForce { };
     };
