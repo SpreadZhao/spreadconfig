@@ -1024,6 +1024,11 @@ in
             ];
             keymaps = [
                 {
+                    key = "'";
+                    action = "$";
+                    mode = "n";
+                }
+                {
                     key = "<Esc>";
                     action = "<CMD>nohlsearch<CR>";
                     mode = "n";
@@ -2351,9 +2356,39 @@ in
                 set highlight-active-color    rgba(203,166,247,0.3)
             '';
         };
+        wayprompt = {
+            enable = true;
+            settings = {
+                general = {
+                    font-regular = "sans:size=26";
+                    pin-square-amount = 32;
+                    border = 1;
+                    pin-square-border = 2;
+                    corner-radius = 0;
+                };
+                colours = {
+                    background = "${mochaBg}cc";
+                    border = "f5e0dcff";
+                    text = "cdd6f4ff";
+                    error-text = "f38ba8ff";
+                    pin-background = "181825cc";
+                    pin-border = "7f849cff";
+                    pin-square = "181825cc";
+                    ok-button = "${mochaBg}cc";
+                    ok-button-border = "f5e0dcff";
+                    ok-button-text = "cdd6f4ff";
+                    not-ok-button = "${mochaBg}cc";
+                    not-ok-button-border = "f5e0dcff";
+                    not-ok-button-text = "cdd6f4ff";
+                    cancel-button = "${mochaBg}cc";
+                    cancel-button-border = "f5e0dcff";
+                    cancel-button-text = "cdd6f4ff";
+                };
+            };
+        };
         gpg = {
             enable = true;
-            homedir = "${config.xdg.dataHome}/gnupg";
+            homedir = "${config.home.homeDirectory}/.gnupg";
             mutableKeys = true;
             mutableTrust = true;
         };
@@ -2401,8 +2436,8 @@ in
             enable = true;
             enableZshIntegration = true;
             pinentry = {
-                package = pkgs.pinentry-gnome3;
-                program = "pinentry-gnome3";
+                package = pkgs.wayprompt;
+                program = "pinentry-wayprompt";
             };
         };
     };

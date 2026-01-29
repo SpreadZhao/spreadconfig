@@ -1,7 +1,7 @@
 import catppuccin
 
 config.load_autoconfig()
-config.bind('tt', 'config-cycle tabs.width 0% 21 10% 15%')
+config.bind('tt', 'config-cycle tabs.width 0% 18 10% 15%')
 config.unbind('M', mode = 'normal')
 config.unbind('m', mode = 'normal')
 config.unbind('d')
@@ -100,7 +100,7 @@ c.tabs.select_on_remove = 'last-used'
 c.tabs.show = 'always'
 c.tabs.title.format = '{audio}{relative_index}:{current_title}'
 c.tabs.title.format_pinned = '{audio}{relative_index}:{current_title}'
-c.tabs.width = 21
+c.tabs.width = 18
 c.tabs.favicons.show = 'always'
 c.tabs.mousewheel_switching = False;
 c.tabs.new_position.unrelated = 'next';
