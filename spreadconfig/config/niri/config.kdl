@@ -58,8 +58,8 @@ layout {
         length total-proportion=1.0
         position "left"
         gaps-between-tabs 5
-        active-color "#f9e2af"
-        inactive-color "#313244"
+        active-color "#b4befe"
+        inactive-color "#45475a"
         urgent-color "#f38ba8"
     }
     struts {
@@ -206,20 +206,11 @@ window-rule {
     match is-window-cast-target=true
 
     focus-ring {
-        active-color "#cba6f7"
-        inactive-color "#313244"
+        active-color "#fab387"
+        inactive-color "#b4befe"
         width 2
     }
 
-    border {
-        inactive-color "#313244"
-        width 2
-    }
-
-    tab-indicator {
-        active-color "#74c7ec"
-        inactive-color "#313244"
-    }
 }
 
 binds {

@@ -129,6 +129,9 @@ in
             "${config.xdg.configHome}/fuzzel" = {
                 source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/fuzzel";
             };
+            "${config.xdg.configHome}/lazygit" = {
+                source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/lazygit";
+            };
         }
         # jdk
         // (builtins.listToAttrs (
@@ -334,6 +337,8 @@ in
             # file
             poppler-utils
             lf
+            lazygit
+            swaylock
         ];
     };
     systemd.user.services = {
@@ -725,7 +730,6 @@ in
                 };
             };
         };
-        swaylock.enable = true;
         java = {
             enable = true;
             package = defaultJDK;
@@ -743,7 +747,7 @@ in
             };
         };
         lazygit = {
-            enable = true;
+            enable = false;
             enableZshIntegration = true;
             settings = {
                 gui = {
@@ -939,7 +943,7 @@ in
                 la = "eza -la --git --icons";
                 l = "eza -lah --git --icons";
                 n = "nvim .";
-                # lg = "lazygit";
+                lg = "lazygit";
                 c = "clear";
                 wk = "cd ~/workspaces";
                 sb = "cd ~/workspaces/SecondBrain/";
