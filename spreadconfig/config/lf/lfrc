@@ -1,0 +1,153 @@
+set drawbox
+set icons
+set ignorecase
+set relativenumber
+set smartcase
+
+set previewer ~/.config/lf/pv.sh
+
+cmd on-init :{{
+    cmd on-redraw %{{
+        if [ "$lf_width" -le 80 ]; then
+            lf -remote "send $id set ratios 1:2"
+        elif [ "$lf_width" -le 160 ]; then
+            lf -remote "send $id set ratios 1:2:3"
+        else
+            lf -remote "send $id set ratios 1:2:3:5"
+        fi
+    }}
+
+    on-redraw
+}}
+
+cmd on-load &{{
+    cd "$(dirname "$1")" || exit 1
+    [ "$(git rev-parse --is-inside-git-dir 2>/dev/null)" = false ] || exit 0
+
+    cmds=""
+
+    for file in "$@"; do
+        case "$file" in
+            */.git|*/.git/*) continue;;
+        esac
+
+        status=$(git status --porcelain --ignored -- "$file" | cut -c1-2 | head -n1)
+
+        if [ -n "$status" ]; then
+            cmds="${cmds}addcustominfo ${file} \"$status\"; "
+        else
+            cmds="${cmds}addcustominfo ${file} ''; "
+        fi
+    done
+
+    lf -remote "send $id :$cmds"
+
+    fmt="$(STARSHIP_SHELL= starship prompt | sed 's/\\/\\\\/g;s/"/\\"/g')"
+    lf -remote "send $id set promptfmt \"$fmt\""
+}}
+
+cmd on-select &{{
+    lf -remote "send $id set statfmt \"$(eza -ld --color=always "$f" | sed 's/\\/\\\\/g;s/"/\\"/g')\""
+    set user_preview_offset 1
+}}
+
+cmd on-cd &{{
+    fmt="$(STARSHIP_SHELL= starship prompt | sed 's/\\/\\\\/g;s/"/\\"/g')"
+    lf -remote "send $id set promptfmt \"$fmt\""
+    zoxide add "$PWD"
+}}
+
+cmd toggle-preview %{{
+    if [ "$lf_preview" = true ]; then
+        lf -remote "send $id :set preview false; set ratios 1:5"
+    else
+        lf -remote "send $id :set preview true; set ratios 1:2:3"
+    fi
+}}
+
+cmd trash ${{
+    set -f
+    if command -v gio >/dev/null 2>&1 && gio help trash >/dev/null 2>&1; then
+        gio trash $fx
+    else
+        mkdir -p ~/.trash
+        mv -- $fx ~/.trash
+    fi
+}}
+
+cmd trash-restore %{{
+    set -f
+    ft="$(basename -a -- $fx | sed 's|^|trash:///|')"
+    gio trash --restore $ft
+    printf 'restored'
+    printf ' %s' $(basename -a -- $fx)
+}}
+
+set info custom
+
+
+cmd fzf_search ${{
+    cmd="rg --column --line-number --no-heading --color=always --smart-case"
+    fzf --ansi --disabled --layout=reverse --header="Search in files" --delimiter=: \
+        --bind="start:reload([ -n {q} ] && $cmd -- {q} || true)" \
+        --bind="change:reload([ -n {q} ] && $cmd -- {q} || true)" \
+        --bind='enter:become(lf -remote "send $id select \"$(printf "%s" {1} | sed '\''s/\\/\\\\/g;s/"/\\"/g'\'')\"")' \
+        --preview='bat --color=always --highlight-line={2} -- {1}'
+}}
+
+map gs :fzf_search
+
+
+cmd z %{{
+    result="$(zoxide query --exclude "$PWD" "$@" | sed 's/\\/\\\\/g;s/"/\\"/g')"
+    lf -remote "send $id cd \"$result\""
+}}
+
+cmd zi ${{
+    result="$(zoxide query -i | sed 's/\\/\\\\/g;s/"/\\"/g')"
+    lf -remote "send $id cd \"$result\""
+}}
+
+cmd follow-link %{{
+    lf -remote "send $id select \"$(readlink -- "$f" | sed 's/\\/\\\\/g;s/"/\\"/g')\""
+}}
+
+cmd select-type &{{
+    set -f
+    [ "$#" -eq 0 ] && exit
+    files="$(
+        find "$PWD" -mindepth 1 -maxdepth 1 -type "$1" $([ "$lf_hidden" = false ] && printf '%s\n' -not -name '.*') -print0 |
+        sed -z 's/\\/\\\\/g;s/"/\\"/g;s/\n/\\n/g;s/^/"/;s/$/"/' |
+        tr '\0' ' ')"
+
+    lf -remote "send $id :unselect; toggle $files"
+}}
+
+cmd select-dirs select-type d
+cmd select-files select-type f
+
+cmd bulk-rename ${{
+    old="$(mktemp)"
+    new="$(mktemp)"
+    if [ -n "$fs" ]; then
+        fs="$(basename -a -- $fs)"
+    else
+        fs="$(ls)"
+    fi
+    printf '%s\n' "$fs" > "$old"
+    printf '%s\n' "$fs" > "$new"
+    $EDITOR "$new"
+    [ "$(wc -l < "$new")" -ne "$(wc -l < "$old")" ] && exit
+    paste "$old" "$new" | while IFS= read -r names; do
+        src="$(printf '%s' "$names" | cut -f1)"
+        dst="$(printf '%s' "$names" | cut -f2)"
+        if [ "$src" = "$dst" ] || [ -e "$dst" ]; then
+            continue
+        fi
+        mv -- "$src" "$dst"
+    done
+    rm -- "$old" "$new"
+    lf -remote "send $id unselect"
+}}
+
+&[ "$LF_LEVEL" -eq 1 ] || lf -remote "send $id echoerr \"Warning: You're in a nested lf instance!\""

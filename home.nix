@@ -120,8 +120,8 @@ in
             "${config.xdg.configHome}/gdu" = {
                 source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/gdu";
             };
-            "${config.xdg.configHome}/lf/icons" = {
-                source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/lf/icons";
+            "${config.xdg.configHome}/lf" = {
+                source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/lf";
             };
             "${config.xdg.configHome}/bat" = {
                 source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/bat";
@@ -331,8 +331,9 @@ in
 
             gcr # https://wiki.nixos.org/wiki/Secret_Service#GNOME_Keyring
             tesseract
-            file
+            # file
             poppler-utils
+            lf
         ];
     };
     systemd.user.services = {
@@ -597,226 +598,6 @@ in
         #     enable = true;
         #     enableZshIntegration = true;
         # };
-        lf = {
-            enable = true;
-            settings = {
-                relativenumber = true;
-                smartcase = true;
-                ignorecase = true;
-                icons = true;
-                drawbox = true;
-            };
-            previewer.source = pkgs.writeShellScript "pv.sh" ''
-                preview_text() {
-                    bat --force-colorization --paging=never --style=changes,numbers \
-                        --terminal-width $(($2 - 3)) "$1" && false
-                }
-
-                MIME=$(xdg-mime query filetype "$1")
-
-                case "$MIME" in
-                *application/pdf*)
-                    pdftotext "$1" -
-                    ;;
-
-                *application/x-7z-compressed*)
-                    7z l "$1"
-                    ;;
-
-                *application/x-tar*)
-                    tar -tvf "$1"
-                    ;;
-
-                *application/x-compressed-tar* | *application/x-*-compressed-tar*)
-                    tar -tvf "$1"
-                    ;;
-
-                *application/vnd.rar*)
-                    unrar l "$1"
-                    ;;
-
-                *application/zip*)
-                    unzip -l "$1"
-                    ;;
-
-                *image/*)
-                    chafa -f sixel -s "$2x$3" --animate off --polite on -t 1 --bg black "$1"
-                    ;;
-
-                # ===== 明确的“文本类 application/*” =====
-                *application/json* | \
-                    *application/xml* | \
-                    *application/xhtml+xml* | \
-                    *application/javascript* | \
-                    *application/x-yaml* | \
-                    *application/yaml* | \
-                    *application/toml* | \
-                    *application/x-shellscript* | \
-                    *application/x-python* | \
-                    *application/x-ruby* | \
-                    *application/x-lua* | \
-                    *application/x-php*)
-                    preview_text "$1" "$2"
-                    ;;
-
-                # ===== 标准 text/* =====
-                text/*)
-                    preview_text "$1" "$2"
-                    ;;
-
-                # ===== 兜底：尝试当文本预览 =====
-                *)
-                    preview_text "$1" "$2" || true
-                    ;;
-                esac
-            '';
-            extraConfig = ''
-                cmd on-init :{{
-                    cmd on-redraw %{{
-                        if [ "$lf_width" -le 80 ]; then
-                            lf -remote "send $id set ratios 1:2"
-                        elif [ "$lf_width" -le 160 ]; then
-                            lf -remote "send $id set ratios 1:2:3"
-                        else
-                            lf -remote "send $id set ratios 1:2:3:5"
-                        fi
-                    }}
-
-                    on-redraw
-                }}
-
-                cmd toggle-preview %{{
-                    if [ "$lf_preview" = true ]; then
-                        lf -remote "send $id :set preview false; set ratios 1:5"
-                    else
-                        lf -remote "send $id :set preview true; set ratios 1:2:3"
-                    fi
-                }}
-
-                cmd on-select &{{
-                    lf -remote "send $id set statfmt \"$(eza -ld --color=always "$f" | sed 's/\\/\\\\/g;s/"/\\"/g')\""
-                }}
-
-                cmd trash ${"$"}{{
-                    set -f
-                    if gio trash 2>/dev/null; then
-                        gio trash $fx
-                    else
-                        mkdir -p ~/.trash
-                        mv -- $fx ~/.trash
-                    fi
-                }}
-
-                cmd trash-restore %{{
-                    set -f
-                    ft="$(basename -a -- $fx | sed 's|^|trash:///|')"
-                    gio trash --restore $ft
-                    printf 'restored'
-                    printf ' %s' $(basename -a -- $fx)
-                }}
-
-                set info custom
-
-                cmd on-load &{{
-                    cd "$(dirname "$1")" || exit 1
-                    [ "$(git rev-parse --is-inside-git-dir 2>/dev/null)" = false ] || exit 0
-
-                    cmds=""
-
-                    for file in "$@"; do
-                        case "$file" in
-                            */.git|*/.git/*) continue;;
-                        esac
-
-                        status=$(git status --porcelain --ignored -- "$file" | cut -c1-2 | head -n1)
-
-                        if [ -n "$status" ]; then
-                            cmds="${"$"}{cmds}addcustominfo ${"$"}{file} \"$status\"; "
-                        else
-                            cmds="${"$"}{cmds}addcustominfo ${"$"}{file} ${"''"}; "
-                        fi
-                    done
-
-                    lf -remote "send $id :$cmds"
-                }}
-
-                cmd fzf_search ${"$"}{{
-                    cmd="rg --column --line-number --no-heading --color=always --smart-case"
-                    fzf --ansi --disabled --layout=reverse --header="Search in files" --delimiter=: \
-                        --bind="start:reload([ -n {q} ] && $cmd -- {q} || true)" \
-                        --bind="change:reload([ -n {q} ] && $cmd -- {q} || true)" \
-                        --bind='enter:become(lf -remote "send $id select \"$(printf "%s" {1} | sed '\${"''"}s/\\/\\\\/g;s/"/\\"/g'\${"''"})\"")' \
-                        --preview='cat -- {1}' # Use your favorite previewer here (bat, source-highlight, etc.), for example:
-                        #--preview-window='+{2}-/2' \
-                        #--preview='bat --color=always --highlight-line={2} -- {1}'
-                        # Alternatively you can even use the same previewer you've configured for lf
-                        #--preview='~/.config/lf/cleaner; ~/.config/lf/previewer {1} "$FZF_PREVIEW_COLUMNS" "$FZF_PREVIEW_LINES" "$FZF_PREVIEW_LEFT" "$FZF_PREVIEW_TOP"'
-                }}
-                map gs :fzf_search
-
-                cmd on-cd &{{
-                    fmt="$(STARSHIP_SHELL= starship prompt | sed 's/\\/\\\\/g;s/"/\\"/g')"
-                    lf -remote "send $id set promptfmt \"$fmt\""
-                }}
-
-                cmd z %{{
-                    result="$(zoxide query --exclude "$PWD" "$@" | sed 's/\\/\\\\/g;s/"/\\"/g')"
-                    lf -remote "send $id cd \"$result\""
-                }}
-
-                cmd zi ${"$"}{{
-                    result="$(zoxide query -i | sed 's/\\/\\\\/g;s/"/\\"/g')"
-                    lf -remote "send $id cd \"$result\""
-                }}
-
-                cmd on-cd &{{
-                    zoxide add "$PWD"
-                }}
-
-                cmd follow-link %{{
-                    lf -remote "send $id select \"$(readlink -- "$f" | sed 's/\\/\\\\/g;s/"/\\"/g')\""
-                }}
-
-                cmd select-type &{{
-                    set -f
-                    [ "$#" -eq 0 ] && exit
-                    files="$(
-                        find "$PWD" -mindepth 1 -maxdepth 1 -type "$1" $([ "$lf_hidden" = false ] && printf '%s\n' -not -name '.*') -print0 |
-                        sed -z 's/\\/\\\\/g;s/"/\\"/g;s/\n/\\n/g;s/^/"/;s/$/"/' |
-                        tr '\0' ' ')"
-
-                    lf -remote "send $id :unselect; toggle $files"
-                }}
-
-                cmd select-dirs select-type d
-                cmd select-files select-type f
-
-                cmd bulk-rename ${"$"}{{
-                    old="$(mktemp)"
-                    new="$(mktemp)"
-                    if [ -n "$fs" ]; then
-                        fs="$(basename -a -- $fs)"
-                    else
-                        fs="$(ls)"
-                    fi
-                    printf '%s\n' "$fs" > "$old"
-                    printf '%s\n' "$fs" > "$new"
-                    $EDITOR "$new"
-                    [ "$(wc -l < "$new")" -ne "$(wc -l < "$old")" ] && exit
-                    paste "$old" "$new" | while IFS= read -r names; do
-                        src="$(printf '%s' "$names" | cut -f1)"
-                        dst="$(printf '%s' "$names" | cut -f2)"
-                        if [ "$src" = "$dst" ] || [ -e "$dst" ]; then
-                            continue
-                        fi
-                        mv -- "$src" "$dst"
-                    done
-                    rm -- "$old" "$new"
-                    lf -remote "send $id unselect"
-                }}
-
-            '';
-        };
         btop = {
             enable = true;
             settings = {
