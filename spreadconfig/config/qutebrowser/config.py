@@ -14,9 +14,10 @@ config.bind('d0', 'tab-only -n', mode = 'normal')
 config.bind('td', 'config-cycle colors.webpage.darkmode.enabled True False')
 config.bind('<Ctrl-Shift-J>', 'tab-move +', mode = 'normal')
 config.bind('<Ctrl-Shift-K>', 'tab-move -', mode = 'normal')
-config.unbind('yy', mode = 'normal')
-config.bind('yyy', 'yank', mode = 'normal')
-config.bind('yym', 'yank inline [{title}]({url:pretty})', mode = 'normal')
+# I found that qutebrowser already has these built-in...
+# config.unbind('yy', mode = 'normal')
+# config.bind('yyy', 'yank', mode = 'normal')
+# config.bind('yym', 'yank inline [{title}]({url:pretty})', mode = 'normal')
 config.bind('gk', 'tab-focus last', mode = 'normal')
 config.unbind('f', mode = 'normal')
 config.unbind('F', mode = 'normal')
@@ -39,10 +40,10 @@ config.bind('fy', 'hint all yank', mode = 'normal')
 # c.colors.tabs.pinned.selected.odd.fg = 'white'
 # c.colors.tabs.pinned.selected.even.fg = 'white'
 
-# c.colors.webpage.bg = 'black'
-# c.colors.webpage.preferred_color_scheme = 'dark'
-# c.colors.webpage.darkmode.enabled = True
-# c.colors.webpage.darkmode.policy.images = 'never'
+c.colors.webpage.bg = 'black'
+c.colors.webpage.preferred_color_scheme = 'dark'
+c.colors.webpage.darkmode.enabled = True
+c.colors.webpage.darkmode.policy.images = 'never'
 
 # c.content.headers.user_agent = {
 #     'https://accounts.google.com/*':

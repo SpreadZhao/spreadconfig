@@ -27,7 +27,7 @@ in
     ];
     catppuccin = {
         gtk.icon = {
-            enable = true;
+            enable = false;
             flavor = "mocha";
             accent = "rosewater";
         };
@@ -126,6 +126,9 @@ in
             "${config.xdg.configHome}/bat" = {
                 source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/bat";
             };
+            "${config.xdg.configHome}/fuzzel" = {
+                source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/fuzzel";
+            };
         }
         # jdk
         // (builtins.listToAttrs (
@@ -156,11 +159,15 @@ in
         # '';
         pointerCursor = {
             enable = true;
-            package = pkgs.catppuccin-cursors.mochaDark;
+            dotIcons.enable = true;
             gtk.enable = true;
+            hyprcursor = {
+                enable = true;
+                size = 72;
+            };
             name = "catppuccin-mocha-dark-cursors";
+            package = pkgs.catppuccin-cursors.mochaDark;
             size = 72;
-            x11.enable = true;
         };
         packages = with pkgs; [
             # zsh plugin
@@ -230,14 +237,15 @@ in
             zip
             p7zip
 
-            (wechat.overrideAttrs (old: {
-                postFixup = (old.postFixup or "") + ''
-                    substituteInPlace $out/share/applications/wechat.desktop \
-                      --replace-fail \
-                      "Exec=wechat" \
-                      "Exec=env QT_IM_MODULE=fcitx XMODIFIERS=@im=fcitx QT_SCREEN_SCALE_FACTORS='eDP-1=2.0;HDMI-A-1=1.0;DP-2=1.0' wechat"
-                '';
-            }))
+            # (wechat.overrideAttrs (old: {
+            #     postFixup = (old.postFixup or "") + ''
+            #         substituteInPlace $out/share/applications/wechat.desktop \
+            #           --replace-fail \
+            #           "Exec=wechat" \
+            #           "Exec=env QT_IM_MODULE=fcitx XMODIFIERS=@im=fcitx QT_SCREEN_SCALE_FACTORS='eDP-1=2.0;HDMI-A-1=1.0;DP-2=1.0' wechat"
+            #     '';
+            # }))
+            wechat
             (qq.overrideAttrs (old: {
                 postInstall = (old.postInstall or "") + ''
                     substituteInPlace $out/share/applications/qq.desktop \
@@ -307,11 +315,13 @@ in
             nerd-fonts.symbols-only
             ibm-plex
             openmoji-color
+            fuzzel
 
             gcr # https://wiki.nixos.org/wiki/Secret_Service#GNOME_Keyring
             tesseract
             file
             poppler-utils
+            catppuccin-cursors.mochaDark
         ];
     };
     systemd.user.services = {
@@ -426,7 +436,7 @@ in
             };
             wechat = {
                 name = "wechat";
-                exec = ''env QT_IM_MODULE="fcitx" XMODIFIERS="@im=fcitx" QT_SCREEN_SCALE_FACTORS="eDP-1=2.0;HDMI-A-1=1.0;DP-2=1.0" wechat %U'';
+                exec = "${scriptsDir}/util/start_wechat.sh";
                 terminal = false;
                 icon = "wechat";
                 type = "Application";
@@ -527,11 +537,11 @@ in
     gtk = {
         enable = true;
         colorScheme = "dark";
-        cursorTheme = {
-            name = "catppuccin-mocha-dark-cursors";
-            package = pkgs.catppuccin-cursors.mochaDark;
-            size = 72;
-        };
+        # cursorTheme = {
+        #     name = "catppuccin-mocha-dark-cursors";
+        #     package = pkgs.catppuccin-cursors.mochaDark;
+        #     size = 72;
+        # };
         theme = {
             name = "Adwaita";
             package = pkgs.gnome-themes-extra;
@@ -893,7 +903,7 @@ in
             };
         };
         fuzzel = {
-            enable = true;
+            enable = false;
             settings = {
                 main = {
                     font = "IBM Plex Mono:size=18, Symbols Nerd Font Mono:size=18";
