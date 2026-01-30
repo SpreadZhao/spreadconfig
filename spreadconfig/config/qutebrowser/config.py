@@ -26,6 +26,10 @@ config.bind('ft', 'hint all tab', mode = 'normal')
 config.bind('fh', 'hint all hover', mode = 'normal')
 config.bind('fr', 'hint all right-click', mode = 'normal')
 config.bind('fy', 'hint all yank', mode = 'normal')
+config.unbind('<Ctrl-N>', mode = 'command')
+config.unbind('<Ctrl-P>', mode = 'command')
+config.bind('<Ctrl-N>', 'completion-item-focus next', mode = 'command')
+config.bind('<Ctrl-P>', 'completion-item-focus prev', mode = 'command')
 
 # c.colors.tabs.bar.bg = 'black'
 # c.colors.tabs.even.bg = 'black'
