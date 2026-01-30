@@ -163,12 +163,24 @@ in
             gtk.enable = true;
             hyprcursor = {
                 enable = true;
-                size = 72;
+                size = 24;
             };
             name = "catppuccin-mocha-dark-cursors";
             package = pkgs.catppuccin-cursors.mochaDark;
-            size = 72;
+            size = 24;
         };
+        # pointerCursor = {
+        #     enable = true;
+        #     dotIcons.enable = true;
+        #     gtk.enable = true;
+        #     hyprcursor = {
+        #         enable = true;
+        #         size = 72;
+        #     };
+        #     name = "Adwaita";
+        #     package = pkgs.adwaita-icon-theme;
+        #     size = 72;
+        # };
         packages = with pkgs; [
             # zsh plugin
             zsh-syntax-highlighting
@@ -321,7 +333,6 @@ in
             tesseract
             file
             poppler-utils
-            catppuccin-cursors.mochaDark
         ];
     };
     systemd.user.services = {
