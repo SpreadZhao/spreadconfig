@@ -95,9 +95,6 @@ cmd fzf_search ${{
         --preview='bat --color=always --highlight-line={2} -- {1}'
 }}
 
-map gs :fzf_search
-
-
 cmd z %{{
     result="$(zoxide query --exclude "$PWD" "$@" | sed 's/\\/\\\\/g;s/"/\\"/g')"
     lf -remote "send $id cd \"$result\""
@@ -150,4 +147,27 @@ cmd bulk-rename ${{
     lf -remote "send $id unselect"
 }}
 
+cmd touch-save-file ${{
+    if [ "$LF_LEVEL" -ne 1 ]; then
+        exit 0
+    fi
+
+    if [ -z "$FILE_CHOOSER_SAVE_FILE_NAME" ]; then
+        lf -remote "send $id echoerr \"No save file name provided\""
+        exit 0
+    fi
+
+    if [ -e "$FILE_CHOOSER_SAVE_FILE_NAME" ]; then
+        lf -remote "send $id echoerr \"File already exists: $FILE_CHOOSER_SAVE_FILE_NAME\""
+        exit 0
+    fi
+
+    if touch -- "$FILE_CHOOSER_SAVE_FILE_NAME"; then
+        lf -remote "send $id echo \"Created: $FILE_CHOOSER_SAVE_FILE_NAME\""
+    fi
+}}
+
 &[ "$LF_LEVEL" -eq 1 ] || lf -remote "send $id echoerr \"Warning: You're in a nested lf instance!\""
+
+map gs :fzf_search
+map <gt> :shell-pipe

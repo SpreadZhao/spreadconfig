@@ -304,9 +304,9 @@ def setup(c, flavour, samecolorrows = False):
     ## Background color of the tab bar.
     c.colors.tabs.bar.bg = palette["crust"]
     ## Background color of unselected even tabs.
-    c.colors.tabs.even.bg = palette["surface2"]
+    c.colors.tabs.even.bg = palette["base"]
     ## Background color of unselected odd tabs.
-    c.colors.tabs.odd.bg = palette["surface1"]
+    c.colors.tabs.odd.bg = palette["base"]
 
     ## Foreground color of unselected even tabs.
     c.colors.tabs.even.fg = palette["overlay2"]
@@ -324,9 +324,9 @@ def setup(c, flavour, samecolorrows = False):
     c.colors.tabs.indicator.system = "none"
 
     # ## Background color of selected even tabs.
-    c.colors.tabs.selected.even.bg = palette["base"]
+    c.colors.tabs.selected.even.bg = palette["overlay1"]
     # ## Background color of selected odd tabs.
-    c.colors.tabs.selected.odd.bg = palette["base"]
+    c.colors.tabs.selected.odd.bg = palette["overlay1"]
 
     # ## Foreground color of selected even tabs.
     c.colors.tabs.selected.even.fg = palette["text"]

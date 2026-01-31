@@ -132,6 +132,9 @@ in
             "${config.xdg.configHome}/lazygit" = {
                 source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/lazygit";
             };
+            "${config.xdg.configHome}/xdg-desktop-portal-termfilechooser" = {
+                source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/xdg-desktop-portal-termfilechooser";
+            };
         }
         # jdk
         // (builtins.listToAttrs (
@@ -329,7 +332,7 @@ in
             noto-fonts-color-emoji
             nerd-fonts.symbols-only
             ibm-plex
-            openmoji-color
+            # openmoji-color
             fuzzel
 
             gcr # https://wiki.nixos.org/wiki/Secret_Service#GNOME_Keyring
@@ -517,7 +520,7 @@ in
                 xdg-desktop-portal-gnome
             ];
             extraPortals = with pkgs; [
-                xdg-desktop-portal-gnome
+                xdg-desktop-portal-termfilechooser
             ];
             config = {
                 common = {
@@ -526,6 +529,9 @@ in
                     ];
                     "org.freedesktop.impl.portal.Secret" = [
                         "pass-secret-service"
+                    ];
+                    "org.freedesktop.impl.portal.FileChooser" = [
+                        "termfilechooser"
                     ];
                 };
             };
@@ -945,10 +951,10 @@ in
                 n = "nvim .";
                 lg = "lazygit";
                 c = "clear";
-                wk = "cd ~/workspaces";
-                sb = "cd ~/workspaces/SecondBrain/";
-                st = "cd ~/workspaces/SpreadStudy/";
-                lc = "cd ~/workspaces/SpreadStudy/Leetcode/LeetcodeCpp/ && n";
+                wk = "cd ${config.xdg.userDirs.extraConfig.XDG_WORKSPACE_DIR}";
+                sb = "cd ${config.xdg.userDirs.extraConfig.XDG_WORKSPACE_DIR}/SecondBrain";
+                st = "cd ${config.xdg.userDirs.extraConfig.XDG_WORKSPACE_DIR}/SpreadStudy";
+                lc = "cd ${config.xdg.userDirs.extraConfig.XDG_WORKSPACE_DIR}/SpreadStudy/Leetcode/LeetcodeCpp/ && n";
                 shuffle = "mpv --shuffle --force-window --autofit-smaller=800x500 .";
                 q = "exit";
                 ca = "mpv /dev/video0";
@@ -961,6 +967,8 @@ in
                 mkdir = "mkdir -v";
                 onefetch = "onefetch -T programming markup prose data";
                 lf = "lfcd";
+                ff = "${scriptsDir}/niri/start_floating_foot.sh";
+                ts = "gio trash";
                 # grep = "grep --color=auto";
                 # fzf = ''fzf --preview "bat --color=always --style=numbers --line-range=:500 {}"'';
             };
@@ -2491,8 +2499,8 @@ in
             antialiasing = true; # setting this to true cause mako cannot display emoji
             subpixelRendering = "rgb";
             defaultFonts = {
-                # emoji = [ "Noto Color Emoji" ];
-                emoji = [ "OpenMoji Color" ];
+                emoji = [ "Noto Color Emoji" ];
+                # emoji = [ "OpenMoji Color" ];
                 monospace = [
                     "IBM Plex Mono"
                     "Noto Sans Mono"

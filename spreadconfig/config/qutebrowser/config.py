@@ -30,6 +30,25 @@ config.unbind('<Ctrl-N>', mode = 'command')
 config.unbind('<Ctrl-P>', mode = 'command')
 config.bind('<Ctrl-N>', 'completion-item-focus next', mode = 'command')
 config.bind('<Ctrl-P>', 'completion-item-focus prev', mode = 'command')
+config.bind('eu', 'edit-url', mode = 'normal')
+
+startFloatingFoot = '/home/spreadzhao/scripts/niri/start_floating_foot.sh'
+
+c.content.pdfjs = True
+c.downloads.location.suggestion = 'both'
+c.editor.command = [
+    startFloatingFoot,
+    'nvim +"set wrap" {file}',
+]
+
+fileChooser = [
+    startFloatingFoot,
+    'lf -selection-path={}'
+]
+c.fileselect.folder.command = fileChooser
+c.fileselect.handler = 'external'
+c.fileselect.multiple_files.command = fileChooser
+c.fileselect.single_file.command = fileChooser
 
 # c.colors.tabs.bar.bg = 'black'
 # c.colors.tabs.even.bg = 'black'
@@ -54,7 +73,35 @@ c.colors.webpage.darkmode.policy.images = 'never'
 #         'Mozilla/5.0 ({os_info}; rv:135.0) Gecko/20100101 Firefox/135'
 # }
 
+c.fonts.completion.category = 'bold default_size default_family'
+c.fonts.completion.entry = 'default_size default_family'
+c.fonts.contextmenu = None
+c.fonts.debug_console = 'default_size default_family'
+c.fonts.downloads = 'default_size default_family'
+c.fonts.hints = 'bold default_size default_family'
+c.fonts.keyhint = 'default_size default_family'
+c.fonts.messages.error = 'default_size default_family'
+c.fonts.messages.info = 'default_size default_family'
+c.fonts.messages.warning = 'default_size default_family'
+c.fonts.prompts = 'default_size sans-serif'
+c.fonts.statusbar = 'default_size default_family'
+c.fonts.tabs.selected = 'default_size default_family'
+c.fonts.tabs.unselected = 'default_size default_family'
+c.fonts.tooltip = None
+c.fonts.web.family.cursive = ''
+c.fonts.web.family.fantasy = ''
+c.fonts.web.family.fixed = ''
+c.fonts.web.family.sans_serif = ''
+c.fonts.web.family.serif = ''
+c.fonts.web.family.standard = ''
+c.fonts.web.size.default = 16
+c.fonts.web.size.default_fixed = 13
+c.fonts.web.size.minimum = 0
+c.fonts.web.size.minimum_logical = 6
+
 c.fonts.default_family = [
+    'Noto Color Emoji'
+    'Symbols Nerd Font Mono'
     'IBM Plex Sans'
     'IBM Plex Sans SC'
     'IBM Plex Sans TC'
@@ -65,12 +112,6 @@ c.fonts.default_family = [
     'IBM Plex Sans Hebrew'
     'IBM Plex Sans Arabic'
     'IBM Plex Sans Devanagari'
-    'Noto Sans'
-    'Noto Sans CJK SC'
-    'Noto Sans CJK HK'
-    'Noto Sans CJK TC'
-    'Noto Sans CJK JP'
-    'Noto Sans CJK KR'
 ]
 c.fonts.default_size = '12pt'
 
@@ -84,6 +125,12 @@ c.statusbar.widgets = [
     'tabs',
     'progress',
 ]
+c.statusbar.padding = {
+    'top': -0,
+    'bottom': -0,
+    'left': 0,
+    'right': 0,
+}
 
 c.tabs.indicator.padding = {
     'top': 2,

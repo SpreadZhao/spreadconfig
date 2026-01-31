@@ -165,7 +165,7 @@ window-rule {
 
 window-rule {
     match app-id="feh" title=".*\/tmp.*"
-    match app-id="wechat" title=".*Photos.*"
+    // match app-id="wechat" title=".*Photos.*"
     // match app-id="org.telegram.desktop" title="Media viewer"
     // match app-id="QQ" title=".*聊天记录.*"
     // match app-id="QQ" title=".*图片查看器.*"
@@ -211,6 +211,23 @@ window-rule {
         width 2
     }
 
+}
+
+window-rule {
+    match app-id="feh"
+    match app-id="wechat" title=".*Photos.*"
+    // match app-id="QQ" title=".*聊天记录.*"
+    // match app-id="QQ" title=".*图片查看器.*"
+    // match app-id="QQ" title=".*视频播放器.*"
+    default-column-width {}
+}
+
+// floating terminal
+window-rule {
+    match app-id="lick-foot"
+    open-floating true
+    default-column-width { proportion 0.75; }
+    default-window-height { proportion 0.6; }
 }
 
 binds {
