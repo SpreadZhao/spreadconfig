@@ -3,8 +3,8 @@ set icons
 set ignorecase
 set relativenumber
 set smartcase
-
 set previewer ~/.config/lf/pv.sh
+set errorfmt "\033[1;38;2;243;139;168m%s\033[0m"
 
 cmd on-init :{{
     cmd on-redraw %{{

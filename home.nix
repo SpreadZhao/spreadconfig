@@ -135,6 +135,21 @@ in
             "${config.xdg.configHome}/xdg-desktop-portal-termfilechooser" = {
                 source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/xdg-desktop-portal-termfilechooser";
             };
+            # "${config.xdg.configHome}/btop" = {
+            #     source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/btop";
+            # };
+            "${config.xdg.configHome}/feh" = {
+                source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/feh";
+            };
+            "${config.xdg.configHome}/satty" = {
+                source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/satty";
+            };
+            "${config.xdg.configHome}/mpv" = {
+                source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/mpv";
+            };
+            "${config.xdg.configHome}/zathura" = {
+                source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/zathura";
+            };
         }
         # jdk
         // (builtins.listToAttrs (
@@ -230,6 +245,8 @@ in
             # libsixel
             wf-recorder
             chafa
+            ffmpeg
+            ffmpegthumbnailer
             # screenshot
             grim
             slurp
@@ -342,6 +359,10 @@ in
             lf
             lazygit
             swaylock
+            feh
+            satty
+            mpv
+            zathura
         ];
     };
     systemd.user.services = {
@@ -831,7 +852,7 @@ in
             enable = false;
         };
         feh = {
-            enable = true;
+            enable = false;
             themes = {
                 booth = [
                     "--full-screen"
@@ -874,7 +895,7 @@ in
             };
         };
         satty = {
-            enable = true;
+            enable = false;
             settings = {
                 general = {
                     fullscreen = false;
@@ -899,7 +920,7 @@ in
             };
         };
         mpv = {
-            enable = true;
+            enable = false;
             config = {
                 # Main mpv options
                 background-color = "#${mochaBg}";
@@ -2367,7 +2388,7 @@ in
             };
         };
         zathura = {
-            enable = true;
+            enable = false;
             options = {
                 adjust-open = "best-fit";
                 pages-per-row = 1;
