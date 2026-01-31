@@ -123,6 +123,12 @@ def setup(c, flavour, samecolorrows = False):
         }
     # }}}
 
+    # background
+    c.colors.webpage.bg = palette["base"];
+    c.colors.webpage.preferred_color_scheme = 'dark'
+    c.colors.webpage.darkmode.enabled = True
+    c.colors.webpage.darkmode.policy.images = 'never'
+
     # completion {{{
     ## Background color of the completion widget category headers.
     c.colors.completion.category.bg = palette["base"]
@@ -324,14 +330,24 @@ def setup(c, flavour, samecolorrows = False):
     c.colors.tabs.indicator.system = "none"
 
     # ## Background color of selected even tabs.
-    c.colors.tabs.selected.even.bg = palette["overlay1"]
+    c.colors.tabs.selected.even.bg = palette["surface2"]
     # ## Background color of selected odd tabs.
-    c.colors.tabs.selected.odd.bg = palette["overlay1"]
+    c.colors.tabs.selected.odd.bg = palette["surface2"]
 
     # ## Foreground color of selected even tabs.
     c.colors.tabs.selected.even.fg = palette["text"]
     # ## Foreground color of selected odd tabs.
     c.colors.tabs.selected.odd.fg = palette["text"]
+
+    c.colors.tabs.pinned.even.bg = palette["green"]
+    c.colors.tabs.pinned.odd.bg = palette["green"]
+    c.colors.tabs.pinned.even.fg = palette["mantle"]
+    c.colors.tabs.pinned.odd.fg = palette["mantle"]
+
+    c.colors.tabs.pinned.selected.even.bg = palette["surface2"]
+    c.colors.tabs.pinned.selected.odd.bg = palette["surface2"]
+    c.colors.tabs.pinned.selected.even.fg = palette["text"]
+    c.colors.tabs.pinned.selected.odd.fg = palette["text"]
     # }}}
 
     # context menus {{{

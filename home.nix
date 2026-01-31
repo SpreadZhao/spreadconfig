@@ -135,6 +135,21 @@ in
             "${config.xdg.configHome}/xdg-desktop-portal-termfilechooser" = {
                 source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/xdg-desktop-portal-termfilechooser";
             };
+            # "${config.xdg.configHome}/btop" = {
+            #     source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/btop";
+            # };
+            "${config.xdg.configHome}/feh" = {
+                source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/feh";
+            };
+            "${config.xdg.configHome}/satty" = {
+                source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/satty";
+            };
+            "${config.xdg.configHome}/mpv" = {
+                source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/mpv";
+            };
+            "${config.xdg.configHome}/zathura" = {
+                source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/zathura";
+            };
         }
         # jdk
         // (builtins.listToAttrs (
@@ -209,6 +224,9 @@ in
             # rustup no need
             python3
             go
+            jetbrains-toolbox
+            jadx
+            ghidra-bin
 
             # language-server
             bash-language-server
@@ -227,15 +245,32 @@ in
 
             # media: pic, music, video
             imagemagick
+            mpv
+            feh
+            satty
             # libsixel
             wf-recorder
             chafa
+            ffmpeg
+            ffmpegthumbnailer
             # screenshot
             grim
             slurp
             wayfreeze
+            (pkgs.scrcpy.overrideAttrs (old: {
+                postInstall = (old.postInstall or "") + ''
+                    substituteInPlace $out/share/applications/scrcpy.desktop \
+                      --replace-fail "-c scrcpy\"" \
+                                     "-c 'scrcpy --render-driver=opengl'\""
+                    rm $out/share/applications/scrcpy-console.desktop
+                '';
+            }))
 
-            # other
+            # document
+            zathura
+            obsidian
+
+            # util
             starship
             fastfetch
             onefetch
@@ -248,6 +283,8 @@ in
             duf
             dust
             diff-so-fancy
+            xeyes
+            qrencode
 
             # compress
             rar
@@ -294,36 +331,25 @@ in
             #     fi
             #   '';
             # }))
-            nautilus
+            # nautilus
             # seahorse
-            obsidian
-            file-roller
+            # file-roller
             # (pkgs.writeShellScriptBin "scrcpy" ''
             #   exec ${pkgs.scrcpy}/bin/scrcpy --render-driver=opengl "$@"
             # '')
-            (pkgs.scrcpy.overrideAttrs (old: {
-                postInstall = (old.postInstall or "") + ''
-                    substituteInPlace $out/share/applications/scrcpy.desktop \
-                      --replace-fail "-c scrcpy\"" \
-                                     "-c 'scrcpy --render-driver=opengl'\""
-                    rm $out/share/applications/scrcpy-console.desktop
-                '';
-            }))
-            jetbrains-toolbox
+
+            # niri and it's dependencies
             niri
             xwayland-satellite
             foot
             mako
             waybar
-            xeyes
             libnotify
             wl-clipboard
-            qrencode
             pastel
             telegram-desktop
-            jadx
-            ghidra-bin
             pass
+            swaylock
 
             # fonts
             noto-fonts
@@ -341,7 +367,6 @@ in
             poppler-utils
             lf
             lazygit
-            swaylock
         ];
     };
     systemd.user.services = {
@@ -524,9 +549,11 @@ in
         portal = {
             enable = true;
             configPackages = with pkgs; [
+                # xdg-desktop-portal-gtk
                 xdg-desktop-portal-gnome
             ];
             extraPortals = with pkgs; [
+                # xdg-desktop-portal-wlr
                 xdg-desktop-portal-termfilechooser
             ];
             config = {
@@ -534,6 +561,12 @@ in
                     default = [
                         "gnome"
                     ];
+                    # "org.freedesktop.impl.portal.Screenshot" = [
+                    #     "wlr"
+                    # ];
+                    # "org.freedesktop.impl.portal.ScreenCast" = [
+                    #     "wlr"
+                    # ];
                     "org.freedesktop.impl.portal.Secret" = [
                         "pass-secret-service"
                     ];
@@ -831,7 +864,7 @@ in
             enable = false;
         };
         feh = {
-            enable = true;
+            enable = false;
             themes = {
                 booth = [
                     "--full-screen"
@@ -874,7 +907,7 @@ in
             };
         };
         satty = {
-            enable = true;
+            enable = false;
             settings = {
                 general = {
                     fullscreen = false;
@@ -899,7 +932,7 @@ in
             };
         };
         mpv = {
-            enable = true;
+            enable = false;
             config = {
                 # Main mpv options
                 background-color = "#${mochaBg}";
@@ -2367,7 +2400,7 @@ in
             };
         };
         zathura = {
-            enable = true;
+            enable = false;
             options = {
                 adjust-open = "best-fit";
                 pages-per-row = 1;

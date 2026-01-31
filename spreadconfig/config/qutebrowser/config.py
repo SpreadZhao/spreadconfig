@@ -50,23 +50,6 @@ c.fileselect.handler = 'external'
 c.fileselect.multiple_files.command = fileChooser
 c.fileselect.single_file.command = fileChooser
 
-# c.colors.tabs.bar.bg = 'black'
-# c.colors.tabs.even.bg = 'black'
-# c.colors.tabs.odd.bg = 'black'
-#
-# c.colors.tabs.selected.even.bg = '#b5b5b5'
-# c.colors.tabs.selected.even.fg = 'black'
-# c.colors.tabs.selected.odd.bg = '#b5b5b5'
-# c.colors.tabs.selected.odd.fg = 'black'
-# c.colors.tabs.pinned.selected.odd.bg = '#820030'
-# c.colors.tabs.pinned.selected.even.bg = '#820030'
-# c.colors.tabs.pinned.selected.odd.fg = 'white'
-# c.colors.tabs.pinned.selected.even.fg = 'white'
-
-c.colors.webpage.bg = 'black'
-c.colors.webpage.preferred_color_scheme = 'dark'
-c.colors.webpage.darkmode.enabled = True
-c.colors.webpage.darkmode.policy.images = 'never'
 
 # c.content.headers.user_agent = {
 #     'https://accounts.google.com/*':

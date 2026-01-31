@@ -36,6 +36,25 @@ case "$MIME" in
     chafa -f sixel -s "$2x$3" --animate off --polite on -t 1 --bg black "$1"
     ;;
 
+*video/*)
+    tmp_img="$(mktemp --suffix=.png)"
+
+    # 取视频中间一帧（-t 50%），失败就安静退出
+    if ffmpegthumbnailer \
+        -i "$1" \
+        -o "$tmp_img" \
+        -s 0 2>/dev/null; then
+        chafa -f sixel -s "$2x$3" \
+            --animate off \
+            --polite on \
+            -t 1 \
+            --bg black \
+            "$tmp_img"
+    fi
+
+    rm -f "$tmp_img"
+    ;;
+
 # ===== 明确的“文本类 application/*” =====
 *application/json* | \
     *application/xml* | \
