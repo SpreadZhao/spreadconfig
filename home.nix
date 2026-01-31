@@ -513,6 +513,13 @@ in
                 icon = "";
                 terminal = false;
             };
+            niri_focus_window = {
+                name = "niri_focus_window";
+                exec = "${scriptsDir}/niri/niri_focus_window.sh";
+                type = "Application";
+                icon = "";
+                terminal = false;
+            };
         };
         portal = {
             enable = true;

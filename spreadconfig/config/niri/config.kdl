@@ -118,7 +118,34 @@ environment {
 }
 
 recent-windows {
-    off
+    // off
+    debounce-ms 750
+
+    open-delay-ms 150
+
+    highlight {
+        active-color "#585b70ff"
+        urgent-color "#f38ba8ff"
+        padding 30
+        corner-radius 0
+    }
+
+    previews {
+        max-height 480
+        max-scale 0.5
+    }
+
+    binds {
+        // Alt+Tab         { next-window; }
+        // Alt+Shift+Tab   { previous-window; }
+        // Alt+grave       { next-window     filter="app-id"; }
+        // Alt+Shift+grave { previous-window filter="app-id"; }
+        //
+        Mod+Tab         { next-window; }
+        Mod+Shift+Tab   { previous-window; }
+        Mod+grave       { next-window     filter="app-id"; }
+        Mod+Shift+grave { previous-window filter="app-id"; }
+    }
 }
 
 overview {
@@ -327,8 +354,8 @@ binds {
     Mod+Shift+8 { move-column-to-workspace 8; }
     Mod+Shift+9 { move-column-to-workspace 9; }
 
-    Mod+Tab { focus-window-previous; }
-    Mod+Shift+Tab { focus-workspace-previous; }
+    // Mod+Tab { focus-window-previous; }
+    // Mod+Shift+Tab { focus-workspace-previous; }
 
     Mod+Shift+Comma  { consume-or-expel-window-left; }
     Mod+Shift+Period { consume-or-expel-window-right; }
