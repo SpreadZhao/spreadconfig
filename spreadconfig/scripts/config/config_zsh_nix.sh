@@ -80,6 +80,14 @@ config_fzf() {
     # FZF directory completion options (e.g. cd **<TAB>): include dirs/symlinks
     export FZF_COMPLETION_DIR_OPTS='--walker dir,follow'
 
+    # https://github.com/catppuccin/fzf/blob/main/themes/catppuccin-fzf-mocha.sh
+    export FZF_DEFAULT_OPTS=" \
+    --color=bg+:#313244,bg:#0E1117,spinner:#F5E0DC,hl:#F38BA8 \
+    --color=fg:#CDD6F4,header:#F38BA8,info:#CBA6F7,pointer:#F5E0DC \
+    --color=marker:#B4BEFE,fg+:#CDD6F4,prompt:#CBA6F7,hl+:#F38BA8 \
+    --color=selected-bg:#45475A \
+    --color=border:#6C7086,label:#CDD6F4"
+
     # Custom FZF runner for different commands (override default behavior)
     # See /usr/share/fzf/completion.zsh for default implementation
     _fzf_comprun() {
@@ -182,19 +190,6 @@ config_fzf_tab() {
     zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza -1 --color=always $realpath'  # Preview cd targets with eza
     zstyle ':fzf-tab:*' use-fzf-default-opts yes                                    # Use FZF_DEFAULT_OPTS
     zstyle ':fzf-tab:*' switch-group '<' '>'                                        # Switch completion groups with < >
-
-    # Load FZF-Tab plugin
-    source $(nix path-info nixpkgs#zsh-fzf-tab)/share/fzf-tab/fzf-tab.zsh
-}
-
-# ==============================================================================
-# Zsh plugin configuration (syntax highlighting, autosuggestions)
-# ==============================================================================
-config_plugins() {
-    # Load zsh-syntax-highlighting (colorize commands in real-time)
-    source "$(nix path-info nixpkgs#zsh-syntax-highlighting)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
-    # Load zsh-autosuggestions (suggest commands from history)
-    source "$(nix path-info nixpkgs#zsh-autosuggestions)/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
 }
 
 # ==============================================================================
@@ -245,12 +240,10 @@ config_cursor_mode
 config_prompt
 config_fzf
 config_fzf_tab          # Must be loaded after FZF config
-config_plugins
 config_foot
 
 unset -f config_cursor_mode
 unset -f config_prompt
 unset -f config_fzf
 unset -f config_fzf_tab
-unset -f config_plugins
 unset -f config_foot

@@ -79,6 +79,7 @@
     # console.font = "${pkgs.terminus_font}/share/consolefonts/ter-u28n.psf.gz";
 
     services = {
+        udisks2.enable = lib.mkForce true;
         pipewire = {
             enable = true;
             pulse.enable = true;

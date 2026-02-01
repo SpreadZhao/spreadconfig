@@ -5,7 +5,6 @@
     inputs,
     ...
 }:
-
 let
     installedJDKs = with pkgs; [
         jdk21
@@ -64,92 +63,8 @@ in
             "$HOME/Lib/jdks/bin"
         ];
         file = {
-            # ".config/vivaldi_custom".source = ./spreadconfig/config/vivaldi_custom;
-            # ".config/qutebrowser/autoconfig.yml".source = ./spreadconfig/config/qutebrowser/autoconfig.yml;
-            "${scriptsDir}" = {
-                source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/scripts";
-            };
-            "${config.xdg.configHome}/niri" = {
-                source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/niri";
-            };
-            "${config.xdg.configHome}/mako" = {
-                source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/mako";
-            };
-            "${config.xdg.configHome}/foot" = {
-                source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/foot";
-            };
-            "${config.xdg.configHome}/waybar" = {
-                source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/waybar";
-            };
-            # "${config.xdg.configHome}/wofi" = {
-            #     source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/wofi";
-            # };
-            "${config.xdg.configHome}/starship/starship.toml" = {
-                source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/starship.toml";
-            };
-            "${config.xdg.configHome}/swaylock" = {
-                source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/swaylock";
-            };
-            "${config.xdg.dataHome}/fcitx5/rime/rime-data" = {
-                source = "${pkgs.rime-ice}/share/rime-data";
-            };
-            "${config.xdg.dataHome}/fcitx5/rime/default.custom.yaml" = {
-                source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/input/default";
-            };
-            "${config.xdg.dataHome}/fcitx5/themes/catppuccin-mocha-rosewater" = {
-                source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/input/fcitx5-catppuccin/src/catppuccin-mocha-rosewater";
-            };
-            "${config.xdg.configHome}/obs-studio/basic/profiles/Video" = {
-                source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/obs/profiles/Video";
-            };
-            "${config.xdg.configHome}/obs-studio/basic/profiles/Audio" = {
-                source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/obs/profiles/Audio";
-            };
-            "${config.xdg.configHome}/qutebrowser/quickmarks" = {
-                source = config.lib.file.mkOutOfStoreSymlink "${secretsDir}/qutebrowser_quickmarks";
-            };
-            "${config.xdg.configHome}/qutebrowser/config.py" = {
-                source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/qutebrowser/config.py";
-            };
-            "${config.xdg.configHome}/qutebrowser/catppuccin" = {
-                source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/qutebrowser/catppuccin";
-            };
-            "${config.home.homeDirectory}/.ideavimrc" = {
-                source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/Jetbrains/.ideavimrc";
-            };
-            "${config.xdg.configHome}/gdu" = {
-                source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/gdu";
-            };
-            "${config.xdg.configHome}/lf" = {
-                source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/lf";
-            };
-            "${config.xdg.configHome}/bat" = {
-                source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/bat";
-            };
-            "${config.xdg.configHome}/fuzzel" = {
-                source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/fuzzel";
-            };
-            "${config.xdg.configHome}/lazygit" = {
-                source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/lazygit";
-            };
-            "${config.xdg.configHome}/xdg-desktop-portal-termfilechooser" = {
-                source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/xdg-desktop-portal-termfilechooser";
-            };
-            # "${config.xdg.configHome}/btop" = {
-            #     source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/btop";
-            # };
-            "${config.xdg.configHome}/feh" = {
-                source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/feh";
-            };
-            "${config.xdg.configHome}/satty" = {
-                source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/satty";
-            };
-            "${config.xdg.configHome}/mpv" = {
-                source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/mpv";
-            };
-            "${config.xdg.configHome}/zathura" = {
-                source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/zathura";
-            };
+            "${scriptsDir}".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/scripts";
+            ".ideavimrc".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/Jetbrains/.ideavimrc";
         }
         # jdk
         // (builtins.listToAttrs (
@@ -366,6 +281,9 @@ in
             # file
             poppler-utils
             lf
+            rsync
+            # rclone
+            usbutils
             lazygit
         ];
     };
@@ -440,6 +358,40 @@ in
     };
     xdg = {
         enable = true;
+        configFile = {
+            # "rclone/rclone.conf".text = ''
+            #
+            # '';
+            # "fsh".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/fsh";
+            "niri".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/niri";
+            "mako".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/mako";
+            "foot".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/foot";
+            "waybar".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/waybar";
+            "starship".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/starship";
+            "swaylock".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/swaylock";
+            "obs-studio/basic/profiles/Video".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/obs/profiles/Video";
+            "obs-studio/basic/profiles/Audio".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/obs/profiles/Audio";
+            "qutebrowser/quickmarks".source = config.lib.file.mkOutOfStoreSymlink "${secretsDir}/qutebrowser_quickmarks";
+            "qutebrowser/config.py".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/qutebrowser/config.py";
+            "qutebrowser/catppuccin".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/qutebrowser/catppuccin";
+            "gdu".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/gdu";
+            "lf".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/lf";
+            "bat".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/bat";
+            "fuzzel".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/fuzzel";
+            "lazygit".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/lazygit";
+            "xdg-desktop-portal-termfilechooser".source =
+                config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/xdg-desktop-portal-termfilechooser";
+            "feh".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/feh";
+            "satty".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/satty";
+            "mpv".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/mpv";
+            "zathura".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/zathura";
+        };
+        dataFile = {
+            "fcitx5/rime/rime-data".source = "${pkgs.rime-ice}/share/rime-data";
+            "fcitx5/rime/default.custom.yaml".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/input/default";
+            "fcitx5/themes/catppuccin-mocha-rosewater".source =
+                config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/input/fcitx5-catppuccin/src/catppuccin-mocha-rosewater";
+        };
         desktopEntries = {
             toggle_monitor = {
                 name = "Toggle Monitor";
@@ -1009,6 +961,7 @@ in
                 lf = "lfcd";
                 ff = "${scriptsDir}/niri/start_floating_foot.sh";
                 ts = "gio trash";
+                rsync = "rsync --progress";
                 # grep = "grep --color=auto";
                 # fzf = ''fzf --preview "bat --color=always --style=numbers --line-range=:500 {}"'';
             };
@@ -1017,12 +970,37 @@ in
             };
             initContent = lib.mkOrder 2000 ''
                 source ${scriptsDir}/config/config_zsh_nix.sh
+
+                # plugins
+                source ${pkgs.zsh-fzf-tab}/share/fzf-tab/fzf-tab.plugin.zsh
+                source ${pkgs.zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+                source ${pkgs.zsh-autosuggestions}/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.plugin.zsh
+                # ZSH_HIGHLIGHT_DIRS_BLACKLIST+=(/run/user/1000/gvfs/dav:host=spreadzhao.cloud,port=10116,ssl=true)
+                # ZSH_HIGHLIGHT_DIRS_BLACKLIST+=(/run/user/1000/gvfs)
+
                 source ${scriptsDir}/config/color_output.sh
+
                 eval "$(starship init zsh)"
+                # slim-starship() {
+                #     if [[ "$PWD" == *gvfs* ]]; then
+                #         export STARSHIP_CONFIG="${config.xdg.configHome}/starship/starship_simple.toml"
+                #     else
+                #         export STARSHIP_CONFIG="${config.xdg.configHome}/starship/starship.toml";
+                #     fi
+                # }
+                # add-zsh-hook precmd slim-starship
+
                 lfcd () {
                     # `command` is needed in case `lfcd` is aliased to `lf`
                     cd "$(command lf -print-last-dir "$@")"
                 }
+                # ls () {
+                #     if [[ "$PWD" == *gvfs* ]]; then
+                #         command ls
+                #     else
+                #         eza --icons
+                #     fi
+                # }
             '';
         };
         # if eval "$(starship init zsh)" was called before config_zsh_nix.sh, vimcmd_symbol would not work properly.
@@ -1693,6 +1671,7 @@ in
                                 command = lib.getExe pkgs.nixfmt;
                                 args = [
                                     "--indent=4"
+                                    "--width=140" # because my Xiaomi Monitor can show 140 characters
                                 ];
                             };
                         };
@@ -2486,6 +2465,16 @@ in
         };
     };
     services = {
+        udiskie = {
+            enable = false;
+            settings = {
+                program_options = {
+                    # https://wiki.nixos.org/wiki/USB_storage_devices
+                    # https://github.com/nix-community/home-manager/issues/632#issuecomment-2210425312
+                    file_manager = "${pkgs.foot}/bin/footclient -- ${pkgs.lf}/bin/lf";
+                };
+            };
+        };
         cliphist = {
             enable = true;
             extraOptions = [
