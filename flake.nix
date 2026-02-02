@@ -11,10 +11,6 @@
             url = "github:nix-community/nixvim/nixos-25.11";
             inputs.nixpkgs.follows = "nixpkgs";
         };
-        catppuccin = {
-            url = "github:catppuccin/nix/release-25.11";
-            inputs.nixpkgs.follows = "nixpkgs";
-        };
     };
 
     outputs =

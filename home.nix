@@ -22,20 +22,7 @@ in
 {
     imports = [
         inputs.nixvim.homeModules.nixvim
-        inputs.catppuccin.homeModules.catppuccin
     ];
-    catppuccin = {
-        gtk.icon = {
-            enable = false;
-            flavor = "mocha";
-            accent = "rosewater";
-        };
-        # qt5ct = {
-        #     enable = true;
-        #     flavor = "mocha";
-        #     accent = "rosewater";
-        # };
-    };
     home = {
         username = "spreadzhao";
         homeDirectory = "/home/spreadzhao";
@@ -48,9 +35,6 @@ in
             STARSHIP_CONFIG = "${config.xdg.configHome}/starship/starship.toml";
             TERMINAL = "foot";
             TERM = "foot";
-            # QT_SCREEN_SCALE_FACTORS= "eDP-1=2.0;HDMI-A-1=1.0;DP-2=1.0";
-            # LESS = "-R --use-color -Dd+r$Du+b$";
-            # MANPAGER = "sh -c 'awk '\''{ gsub(/\x1B\[[0-9;]*m/, \"\", \$0); gsub(/.\x08/, \"\", \$0); print }'\'' | bat -p -lman'";
         };
         shell.enableShellIntegration = true;
         sessionPath = [
@@ -75,24 +59,6 @@ in
                 };
             }) installedJDKs
         ));
-        # activation.mergeQutebrowserQuickmarks = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-        #   set -euo pipefail
-        #   DST="${config.xdg.configHome}/qutebrowser/quickmarks"
-        #   SRC=${qutebrowser-quickmarks}
-        #   mkdir -p "$(dirname "$DST")"
-        #   if [ ! -f "$DST" ]; then
-        #     cp "$SRC" "$DST"
-        #   else
-        #     backup="${config.home.homeDirectory}/temp/backup/qutebrowser-quickmarks-backup-$(date +%s)"
-        #     mkdir -p "$(dirname "$backup")"
-        #     cp "$DST" "$backup"
-        #     tmp="$(mktemp)"
-        #     trap 'rm -f "$tmp"' EXIT
-        #     cat "$DST" "$SRC" | sort -u > "$tmp"
-        #     mv "$tmp" "$DST"
-        #   fi
-        #   chmod +w "$DST"
-        # '';
         pointerCursor = {
             enable = true;
             dotIcons.enable = true;
@@ -105,18 +71,6 @@ in
             package = pkgs.catppuccin-cursors.mochaDark;
             size = 24;
         };
-        # pointerCursor = {
-        #     enable = true;
-        #     dotIcons.enable = true;
-        #     gtk.enable = true;
-        #     hyprcursor = {
-        #         enable = true;
-        #         size = 72;
-        #     };
-        #     name = "Adwaita";
-        #     package = pkgs.adwaita-icon-theme;
-        #     size = 72;
-        # };
         packages = with pkgs; [
             # zsh plugin
             zsh-syntax-highlighting
@@ -207,14 +161,6 @@ in
             zip
             p7zip
 
-            # (wechat.overrideAttrs (old: {
-            #     postFixup = (old.postFixup or "") + ''
-            #         substituteInPlace $out/share/applications/wechat.desktop \
-            #           --replace-fail \
-            #           "Exec=wechat" \
-            #           "Exec=env QT_IM_MODULE=fcitx XMODIFIERS=@im=fcitx QT_SCREEN_SCALE_FACTORS='eDP-1=2.0;HDMI-A-1=1.0;DP-2=1.0' wechat"
-            #     '';
-            # }))
             wechat
             (qq.overrideAttrs (old: {
                 postInstall = (old.postInstall or "") + ''
@@ -228,35 +174,12 @@ in
                       --replace-fail "Exec=qutebrowser" "Exec=env QT_SCALE_FACTOR=1.5 qutebrowser"
                 '';
             }))
-            # vivaldi
-            # (pkgs.qutebrowser.overrideAttrs (old: {
-            #   postInstall = (old.postInstall or "") + ''
-            #     set -euo pipefail
-            #     DST="${config.xdg.configHome}/qutebrowser/quickmarks"
-            #     SRC=${qutebrowser-quickmarks}
-            #     mkdir -p "$(dirname "$DST")"
-            #     if [ ! -f "$DST" ]; then
-            #       cp "$SRC" "$DST"
-            #     else
-            #       tmp="$(mktemp)"
-            #       trap 'rm -f "$tmp"' EXIT
-            #       cat "$DST" "$SRC" \
-            #         | sort -u > "$tmp"
-            #       mv "$tmp" "$DST"
-            #     fi
-            #   '';
-            # }))
-            # nautilus
-            # seahorse
-            # file-roller
-            # (pkgs.writeShellScriptBin "scrcpy" ''
-            #   exec ${pkgs.scrcpy}/bin/scrcpy --render-driver=opengl "$@"
-            # '')
 
             # niri and it's dependencies
             niri
             xwayland-satellite
             foot
+            fuzzel
             mako
             waybar
             libnotify
@@ -273,10 +196,7 @@ in
             noto-fonts-color-emoji
             nerd-fonts.symbols-only
             ibm-plex
-            # openmoji-color
-            fuzzel
 
-            gcr # https://wiki.nixos.org/wiki/Secret_Service#GNOME_Keyring
             tesseract
             # file
             poppler-utils
@@ -359,10 +279,6 @@ in
     xdg = {
         enable = true;
         configFile = {
-            # "rclone/rclone.conf".text = ''
-            #
-            # '';
-            # "fsh".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/fsh";
             "niri".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/niri";
             "mako".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/mako";
             "foot".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/foot";
@@ -441,34 +357,6 @@ in
                     "Utility"
                 ];
             };
-            # nvim = {
-            #     name = "Neovim";
-            #     exec = "footclient --title=nvim -- nvim %F";
-            #     terminal = false;
-            #     type = "Application";
-            #     icon = "nvim";
-            #     categories = [
-            #         "TextEditor"
-            #         "Utility"
-            #     ];
-            #     mimeType = [
-            #         "text/english"
-            #         "text/plain"
-            #         "text/x-makefile"
-            #         "text/x-c++hdr"
-            #         "text/x-c++src"
-            #         "text/x-chdr"
-            #         "text/x-csrc"
-            #         "text/x-java"
-            #         "text/x-moc"
-            #         "text/x-pascal"
-            #         "text/x-tcl"
-            #         "text/x-tex"
-            #         "application/x-shellscript"
-            #         "text/x-c"
-            #         "text/x-c++"
-            #     ];
-            # };
             pmenu = {
                 name = "pmenu";
                 exec = "${scriptsDir}/util/bin/pmenu";
@@ -513,12 +401,6 @@ in
                     default = [
                         "gnome"
                     ];
-                    # "org.freedesktop.impl.portal.Screenshot" = [
-                    #     "wlr"
-                    # ];
-                    # "org.freedesktop.impl.portal.ScreenCast" = [
-                    #     "wlr"
-                    # ];
                     "org.freedesktop.impl.portal.Secret" = [
                         "pass-secret-service"
                     ];
@@ -552,11 +434,6 @@ in
     gtk = {
         enable = true;
         colorScheme = "dark";
-        # cursorTheme = {
-        #     name = "catppuccin-mocha-dark-cursors";
-        #     package = pkgs.catppuccin-cursors.mochaDark;
-        #     size = 72;
-        # };
         theme = {
             name = "Adwaita";
             package = pkgs.gnome-themes-extra;
@@ -566,10 +443,6 @@ in
             name = "IBM Plex Sans";
             size = 16;
         };
-        # iconTheme = {
-        #     name = "Adwaita";
-        #     package = pkgs.adwaita-icon-theme;
-        # };
         gtk3 = {
             enable = true;
             bookmarks = [
@@ -597,10 +470,6 @@ in
         };
     };
     programs = {
-        # direnv = {
-        #     enable = true;
-        #     enableZshIntegration = true;
-        # };
         btop = {
             enable = true;
             settings = {
@@ -697,37 +566,6 @@ in
                 '';
             };
         };
-        fuzzel = {
-            enable = false;
-            settings = {
-                main = {
-                    font = "IBM Plex Mono:size=18, Symbols Nerd Font Mono:size=18";
-                    use-bold = "yes";
-                    terminal = "foot -a '{cmd}' -T '{cmd}' {cmd}";
-                    show-actions = "no";
-                    width = 80;
-                    tabs = 4;
-                    image-size-ratio = 1;
-                };
-                colors = {
-                    # https://github.com/catppuccin/fuzzel/blob/main/themes/catppuccin-mocha/rosewater.ini
-                    background = "${mochaBg}dd";
-                    text = "cdd6f4ff";
-                    prompt = "dc8a78ff";
-                    placeholder = "7f849cff";
-                    input = "dc8a78ff";
-                    match = "f5e0dcff";
-                    selection = "585b70ff";
-                    selection-text = "cdd6f4ff";
-                    selection-match = "f5e0dcff";
-                    counter = "7f849cff";
-                    border = "f5e0dcff";
-                };
-                border = {
-                    radius = 0;
-                };
-            };
-        };
         java = {
             enable = true;
             package = defaultJDK;
@@ -741,57 +579,6 @@ in
                 };
                 core = {
                     editor = "nvim";
-                };
-            };
-        };
-        lazygit = {
-            enable = false;
-            enableZshIntegration = true;
-            settings = {
-                gui = {
-                    nerdFontsVersion = "3";
-                    theme = {
-                        # https://github.com/catppuccin/lazygit/blob/main/themes/mocha/rosewater.yml
-                        activeBorderColor = [
-                            "#f5e0dc"
-                            "bold"
-                        ];
-                        inactiveBorderColor = [
-                            "#a6adc8"
-                        ];
-                        optionsTextColor = [
-                            "#89b4fa"
-                        ];
-                        selectedLineBgColor = [
-                            "#313244"
-                        ];
-                        cherryPickedCommitBgColor = [
-                            "#45475a"
-                        ];
-                        cherryPickedCommitFgColor = [
-                            "#f5e0dc"
-                        ];
-                        unstagedChangesColor = [
-                            "#f38ba8"
-                        ];
-                        defaultFgColor = [
-                            "#cdd6f4"
-                        ];
-                        searchingActiveBorderColor = [
-                            "#f9e2af"
-                        ];
-                    };
-                    authorColors = {
-                        "*" = "#b4befe";
-                    };
-                };
-                git = {
-                    pagers = [
-                        {
-                            pager = "diff-so-fancy";
-                        }
-                    ];
-                    autoFetch = false;
                 };
             };
         };
@@ -810,103 +597,6 @@ in
                     oauth_token = lib.strings.trim (builtins.readFile ./secrets/gh_token);
                     git_protocol = "https";
                 };
-            };
-        };
-        wofi = {
-            enable = false;
-        };
-        feh = {
-            enable = false;
-            themes = {
-                booth = [
-                    "--full-screen"
-                    "--hide-pointer"
-                    "--slideshow-delay"
-                    "20"
-                ];
-                example = [
-                    "--info"
-                    "foo bar"
-                ];
-                feh = [
-                    "--image-bg"
-                    "black"
-                ];
-                imagemap = [
-                    "-rVq"
-                    "--thumb-width"
-                    "40"
-                    "--thumb-height"
-                    "30"
-                    "--index-info"
-                    "%n\\n%wx%h"
-                ];
-                present = [
-                    "--full-screen"
-                    "--sort"
-                    "name"
-                    "--hide-pointer"
-                ];
-                webcam = [
-                    "--multiwindow"
-                    "--reload"
-                    "20"
-                ];
-                fit = [
-                    "--scale-down"
-                    "--auto-zoom"
-                ];
-            };
-        };
-        satty = {
-            enable = false;
-            settings = {
-                general = {
-                    fullscreen = false;
-                    early-exit = true;
-                    corner-roundness = 0;
-                    initial-tool = "brush";
-                    copy-command = "wl-copy";
-                    annotation-size-factor = 1;
-                    output-filename = "~/Pictures/satty/satty-%Y%m%d-%H%M%S.png";
-                    save-after-copy = false;
-                    default-hide-toolbars = false;
-                    focus-toggles-toolbars = false;
-                    default-fill-shapes = false;
-                    primary-highlighter = "block";
-                    disable-notifications = false;
-                    actions-on-right-click = [ ];
-                    actions-on-enter = [ ];
-                    actions-on-escape = [ "exit" ];
-                    right-click-copy = false;
-                    no-window-decoration = true;
-                };
-            };
-        };
-        mpv = {
-            enable = false;
-            config = {
-                # Main mpv options
-                background-color = "#${mochaBg}";
-                osd-back-color = "#11111b";
-                osd-border-color = "#11111b";
-                osd-color = "#cdd6f4";
-                osd-shadow-color = "#1e1e2e";
-
-                # Stats script options
-                # Options are on separate lines for clarity
-                # Colors are in #BBGGRR format
-                # script-opts-append="stats-border_color=251818"
-                # script-opts-append=stats-font_color=f4d6cd
-                # script-opts-append=stats-plot_bg_border_color=dce0f5
-                # script-opts-append=stats-plot_bg_color=251818
-                # script-opts-append=stats-plot_color=dce0f5
-
-                # External script options
-                # It is fine to leave these here even if one does not use these scripts because they are just ignored unless a script uses them
-
-                # UOSC options
-                # script-opts-append=uosc-color=foreground=f5e0dc,foreground_text=313244,background=1e1e2e,background_text=cdd6f4,curtain=181825,success=a6e3a1,error=f38ba8
             };
         };
         obs-studio = {
@@ -962,11 +652,8 @@ in
                 ff = "${scriptsDir}/niri/start_floating_foot.sh";
                 ts = "gio trash";
                 rsync = "rsync --progress";
-                # grep = "grep --color=auto";
-                # fzf = ''fzf --preview "bat --color=always --style=numbers --line-range=:500 {}"'';
             };
             shellGlobalAliases = {
-                # "--help" = "--help 2>&1 | bat --language=help --style=plain";
             };
             initContent = lib.mkOrder 2000 ''
                 source ${scriptsDir}/config/config_zsh_nix.sh
@@ -1003,11 +690,6 @@ in
                 # }
             '';
         };
-        # if eval "$(starship init zsh)" was called before config_zsh_nix.sh, vimcmd_symbol would not work properly.
-        # starship = {
-        #     enable = true;
-        #     configPath = "${config.xdg.configHome}/starship/starship.toml";
-        # };
         zoxide.enable = true;
         fd = {
             enable = true;
@@ -1926,70 +1608,10 @@ in
                 };
                 fidget = {
                     enable = true;
-                    # settings = {
-                    #   notification = {
-                    #     window = {
-                    #       winblend = 0;
-                    #     };
-                    #   };
-                    #   progress = {
-                    #     display = {
-                    #       done_icon = "";
-                    #       done_ttl = 7;
-                    #       format_message = lib.nixvim.mkRaw ''
-                    #         function(msg)
-                    #           if string.find(msg.title, "Indexing") then
-                    #             return nil -- Ignore "Indexing..." progress messages
-                    #           end
-                    #           if msg.message then
-                    #             return msg.message
-                    #           else
-                    #             return msg.done and "Completed" or "In progress..."
-                    #           end
-                    #         end
-                    #       '';
-                    #     };
-                    #   };
-                    #   text = {
-                    #     spinner = "dots";
-                    #   };
-                    # };
                 };
                 rainbow-delimiters = {
                     enable = true;
                 };
-                # rainbow = {
-                #   enable = true;
-                #   settings = {
-                #     active = 1;
-                #     # conf = {
-                #     #   guifgs = [
-                #     #     "#7d8618"
-                #     #     "darkorange3"
-                #     #     "seagreen3"
-                #     #     "firebrick"
-                #     #   ];
-                #     #   operators = "_,_";
-                #     #   parentheses = [
-                #     #     "start=/(/ end=/)/ fold"
-                #     #     "start=/\\[/ end=/\\]/ fold"
-                #     #   ];
-                #     #   separately = {
-                #     #     "*" = { };
-                #     #     css = 0;
-                #     #     haskell = {
-                #     #       parentheses = [
-                #     #         "start=/\\[/ end=/\\]/ fold"
-                #     #         "start=/v{ze[^-]/ end=/}/ fold"
-                #     #       ];
-                #     #     };
-                #     #     markdown = {
-                #     #       parentheses_options = "containedin=markdownCode contained";
-                #     #     };
-                #     #   };
-                #     # };
-                #   };
-                # };
             };
             extraPlugins = [
                 (pkgs.vimUtils.buildVimPlugin {
@@ -2003,16 +1625,6 @@ in
                 })
                 pkgs.vimPlugins.outline-nvim
                 pkgs.vimPlugins.quick-scope
-                # (pkgs.vimUtils.buildVimPlugin {
-                #     name = "outline";
-                #     src = pkgs.fetchFromGitHub {
-                #       owner = "hedyhli";
-                #       repo = "outline.nvim";
-                #       rev = "v1.1.0";
-                #       hash = "sha256-fbNVSAOzdmmfTV4CkssTpw54IZbCCLUOguO/huEB6eU=";
-                #     };
-                #     doCheck = false;
-                # })
             ];
             extraConfigLua = ''
                 require("outline").setup({})
@@ -2378,55 +1990,6 @@ in
                 };
             };
         };
-        zathura = {
-            enable = false;
-            options = {
-                adjust-open = "best-fit";
-                pages-per-row = 1;
-                scroll-page-aware = "true";
-                # font = "Noto Sans 20";
-                font = "IBM Plex Sans 20";
-            };
-            extraConfig = ''
-                set default-fg                rgba(205,214,244,1)
-                set default-bg                rgba(14,17,23,1)
-
-                set completion-bg             rgba(49,50,68,1)
-                set completion-fg             rgba(205,214,244,1)
-                set completion-highlight-bg   rgba(203,166,247,1)
-                set completion-highlight-fg   rgba(30,30,46,1)
-                set completion-group-bg       rgba(24,24,37,1)
-                set completion-group-fg       rgba(205,214,244,1)
-
-                set statusbar-fg              rgba(205,214,244,1)
-                set statusbar-bg              rgba(17,17,27,1)
-                set inputbar-fg               rgba(205,214,244,1)
-                set inputbar-bg               rgba(30,30,46,1)
-
-                set notification-bg           rgba(30,30,46,1)
-                set notification-fg           rgba(205,214,244,1)
-                set notification-error-bg     rgba(30,30,46,1)
-                set notification-error-fg     rgba(243,139,168,1)
-                set notification-warning-bg   rgba(30,30,46,1)
-                set notification-warning-fg   rgba(249,226,175,1)
-
-                set recolor                   "true"
-                set recolor-lightcolor        rgba(30,30,46,1)
-                set recolor-darkcolor         rgba(205,214,244,1)
-
-                set index-fg                  rgba(205,214,244,1)
-                set index-bg                  rgba(30,30,46,1)
-                set index-active-fg           rgba(205,214,244,1)
-                set index-active-bg           rgba(49,50,68,1)
-
-                set render-loading-bg         rgba(30,30,46,1)
-                set render-loading-fg         rgba(205,214,244,1)
-
-                set highlight-color           rgba(147,153,178,0.3)
-                set highlight-fg              rgba(205,214,244,1)
-                set highlight-active-color    rgba(203,166,247,0.3)
-            '';
-        };
         wayprompt = {
             enable = true;
             settings = {
@@ -2465,16 +2028,6 @@ in
         };
     };
     services = {
-        udiskie = {
-            enable = false;
-            settings = {
-                program_options = {
-                    # https://wiki.nixos.org/wiki/USB_storage_devices
-                    # https://github.com/nix-community/home-manager/issues/632#issuecomment-2210425312
-                    file_manager = "${pkgs.foot}/bin/footclient -- ${pkgs.lf}/bin/lf";
-                };
-            };
-        };
         cliphist = {
             enable = true;
             extraOptions = [
@@ -2486,7 +2039,6 @@ in
             enable = true;
             storePath = "${config.home.homeDirectory}/.password-store";
         };
-        # gnome-keyring.enable = true;
         swayidle =
             let
                 lock = "${pkgs.swaylock}/bin/swaylock";
@@ -2503,9 +2055,6 @@ in
                         command = lock;
                     }
                 ];
-                # events = {
-                #   "before-sleep" = lock;
-                # };
                 events = [
                     {
                         event = "before-sleep";
