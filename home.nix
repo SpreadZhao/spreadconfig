@@ -49,6 +49,12 @@ in
         file = {
             "${scriptsDir}".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/scripts";
             ".ideavimrc".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/Jetbrains/.ideavimrc";
+            # This may work after https://github.com/nix-community/home-manager/issues/3090 closed as complete.
+            # ".davfs2/secrets" = {
+            #     text = ''
+            #         ${lib.strings.trim (builtins.readFile ./secrets/nas_url)} spreadzhao ${lib.strings.trim (builtins.readFile ./secrets/nas_passwd)}
+            #     '';
+            # };
         }
         # jdk
         // (builtins.listToAttrs (
@@ -420,6 +426,7 @@ in
                 XDG_SATTY_DIR = "${config.xdg.userDirs.pictures}/satty";
                 XDG_SCREENSHOT_DIR = "${config.xdg.userDirs.pictures}/screenshot";
                 XDG_SCREENRECORD_DIR = "${config.xdg.userDirs.videos}/screenrecord";
+                XDG_MNT_DAV_DIR = "${config.home.homeDirectory}/mnt/dav";
             };
         };
     };

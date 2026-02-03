@@ -17,3 +17,7 @@ sudo ln -s /path/to/spreadconfig /etc/nixos
 ### fcitx5
 
 Now that I have not already make fcitx5 config to work, so stuff like theme,addons,classic-ui,etc. should be configured manually.
+
+### davfs
+
+Write your secrets to `~/.davfs/secrets`, ref: [davfs2 - ArchWiki](https://wiki.archlinux.org/title/Davfs2#Storing_credentials)

@@ -78,6 +78,18 @@
 
     # console.font = "${pkgs.terminus_font}/share/consolefonts/ter-u28n.psf.gz";
 
+    fileSystems = {
+        "/home/spreadzhao/mnt/dav" = {
+            device = "${lib.strings.trim (builtins.readFile ./secrets/nas_url)}";
+            fsType = "davfs";
+            options = [
+                "_netdev"
+                "user"
+                "noauto"
+            ];
+        };
+    };
+
     services = {
         udisks2.enable = lib.mkForce true;
         pipewire = {
@@ -91,7 +103,12 @@
                 # PermitRootLogin = "no"
             };
         };
-        gvfs.enable = true;
+        gvfs.enable = false;
+        davfs2 = {
+            enable = true;
+            davUser = "spreadzhao";
+            davGroup = "wheel";
+        };
         greetd = {
             enable = true;
             settings = {
@@ -141,7 +158,7 @@
             net-tools
             ripgrep
             ntfs3g
-            glib
+            # glib
         ];
         shellAliases = lib.mkForce { };
     };
