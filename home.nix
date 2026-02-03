@@ -765,24 +765,45 @@ in
                 {
                     event = "TextYankPost";
                     group = "highlight-yank";
-                    callback = {
-                        __raw = ''
-                            function()
-                              vim.hl.on_yank()
-                            end
-                        '';
-                    };
+                    callback.__raw = ''
+                        function()
+                          vim.hl.on_yank()
+                        end
+                    '';
                 }
             ];
             keymaps = [
                 {
                     key = "'";
                     action = "$";
-                    mode = "n";
+                    mode = [
+                        "n"
+                        "v"
+                    ];
                 }
                 {
                     key = "<Esc>";
                     action = "<CMD>nohlsearch<CR>";
+                    mode = "n";
+                }
+                {
+                    key = "<C-h>";
+                    action = "<C-w><C-h>";
+                    mode = "n";
+                }
+                {
+                    key = "<C-l>";
+                    action = "<C-w><C-l>";
+                    mode = "n";
+                }
+                {
+                    key = "<C-j>";
+                    action = "<C-w><C-j>";
+                    mode = "n";
+                }
+                {
+                    key = "<C-k>";
+                    action = "<C-w><C-k>";
                     mode = "n";
                 }
                 {
@@ -833,34 +854,6 @@ in
                     mode = "n";
                     options = {
                         desc = "LazyGit";
-                    };
-                }
-                {
-                    key = "<leader>cb";
-                    action = {
-                        __raw = ''
-                            function()
-                                require('conform').format { async = true, lsp_format = 'fallback' }
-                            end
-                        '';
-                    };
-                    mode = "n";
-                    options = {
-                        desc = "Conform Buffer";
-                    };
-                }
-                {
-                    key = "<leader>;";
-                    action = {
-                        __raw = ''
-                            function()
-                                require('flash').jump()
-                            end
-                        '';
-                    };
-                    mode = "n";
-                    options = {
-                        desc = "Jump Code";
                     };
                 }
                 {
@@ -1003,6 +996,7 @@ in
                     };
                 }
             ];
+            colorscheme = "catppuccin";
             colorschemes = {
                 vscode = {
                     enable = false;
@@ -1019,6 +1013,7 @@ in
                 };
                 catppuccin = {
                     enable = true;
+                    lazyLoad.enable = true;
                     settings = {
                         flavour = "mocha";
                         dim_inactive = {
@@ -1100,95 +1095,97 @@ in
                             };
                         };
                         highlight_overrides = {
-                            all = {
-                                __raw = ''
-                                    function(cp)
-                                        return {
-                                            -- For base configs
-                                            NormalFloat = { fg = cp.text, bg = transparent_background and cp.none or cp.mantle },
-                                            FloatBorder = {
-                                                fg = transparent_background and cp.blue or cp.mantle,
-                                                bg = transparent_background and cp.none or cp.mantle,
-                                            },
-                                            CursorLineNr = { fg = cp.green },
+                            all.__raw = ''
+                                function(cp)
+                                    return {
+                                        -- For base configs
+                                        NormalFloat = { fg = cp.text, bg = transparent_background and cp.none or cp.mantle },
+                                        FloatBorder = {
+                                            fg = transparent_background and cp.blue or cp.mantle,
+                                            bg = transparent_background and cp.none or cp.mantle,
+                                        },
+                                        CursorLineNr = { fg = cp.green },
 
-                                            -- For native lsp configs
-                                            DiagnosticVirtualTextError = { bg = cp.none },
-                                            DiagnosticVirtualTextWarn = { bg = cp.none },
-                                            DiagnosticVirtualTextInfo = { bg = cp.none },
-                                            DiagnosticVirtualTextHint = { bg = cp.none },
-                                            LspInfoBorder = { link = "FloatBorder" },
+                                        -- For native lsp configs
+                                        DiagnosticVirtualTextError = { bg = cp.none },
+                                        DiagnosticVirtualTextWarn = { bg = cp.none },
+                                        DiagnosticVirtualTextInfo = { bg = cp.none },
+                                        DiagnosticVirtualTextHint = { bg = cp.none },
+                                        LspInfoBorder = { link = "FloatBorder" },
 
-                                            -- For mason.nvim
-                                            MasonNormal = { link = "NormalFloat" },
+                                        -- For mason.nvim
+                                        MasonNormal = { link = "NormalFloat" },
 
-                                            -- For indent-blankline
-                                            IblIndent = { fg = cp.surface0 },
-                                            IblScope = { fg = cp.surface2, style = { "bold" } },
+                                        -- For indent-blankline
+                                        IblIndent = { fg = cp.surface0 },
+                                        IblScope = { fg = cp.surface2, style = { "bold" } },
 
-                                            -- For nvim-cmp and wilder.nvim
-                                            Pmenu = { fg = cp.overlay2, bg = transparent_background and cp.none or cp.base },
-                                            PmenuBorder = { fg = cp.surface1, bg = transparent_background and cp.none or cp.base },
-                                            PmenuSel = { bg = cp.green, fg = cp.base },
-                                            CmpItemAbbr = { fg = cp.overlay2 },
-                                            CmpItemAbbrMatch = { fg = cp.blue, style = { "bold" } },
-                                            CmpDoc = { link = "NormalFloat" },
-                                            CmpDocBorder = {
-                                                fg = transparent_background and cp.surface1 or cp.mantle,
-                                                bg = transparent_background and cp.none or cp.mantle,
-                                            },
+                                        -- For nvim-cmp and wilder.nvim
+                                        Pmenu = { fg = cp.overlay2, bg = transparent_background and cp.none or cp.base },
+                                        PmenuBorder = { fg = cp.surface1, bg = transparent_background and cp.none or cp.base },
+                                        PmenuSel = { bg = cp.green, fg = cp.base },
+                                        CmpItemAbbr = { fg = cp.overlay2 },
+                                        CmpItemAbbrMatch = { fg = cp.blue, style = { "bold" } },
+                                        CmpDoc = { link = "NormalFloat" },
+                                        CmpDocBorder = {
+                                            fg = transparent_background and cp.surface1 or cp.mantle,
+                                            bg = transparent_background and cp.none or cp.mantle,
+                                        },
 
-                                            -- For fidget
-                                            FidgetTask = { bg = cp.none, fg = cp.surface2 },
-                                            FidgetTitle = { fg = cp.blue, style = { "bold" } },
+                                        -- For fidget
+                                        FidgetTask = { bg = cp.none, fg = cp.surface2 },
+                                        FidgetTitle = { fg = cp.blue, style = { "bold" } },
 
-                                            -- For nvim-notify
-                                            NotifyBackground = { bg = cp.base },
+                                        -- For nvim-notify
+                                        NotifyBackground = { bg = cp.base },
 
-                                            -- For nvim-tree
-                                            NvimTreeRootFolder = { fg = cp.pink },
-                                            NvimTreeIndentMarker = { fg = cp.surface2 },
+                                        -- For nvim-tree
+                                        NvimTreeRootFolder = { fg = cp.pink },
+                                        NvimTreeIndentMarker = { fg = cp.surface2 },
 
-                                            -- For trouble.nvim
-                                            TroubleNormal = { bg = transparent_background and cp.none or cp.base },
-                                            TroubleNormalNC = { bg = transparent_background and cp.none or cp.base },
+                                        -- For trouble.nvim
+                                        TroubleNormal = { bg = transparent_background and cp.none or cp.base },
+                                        TroubleNormalNC = { bg = transparent_background and cp.none or cp.base },
 
-                                            -- For telescope.nvim
-                                            TelescopeMatching = { fg = cp.lavender },
-                                            TelescopeResultsDiffAdd = { fg = cp.green },
-                                            TelescopeResultsDiffChange = { fg = cp.yellow },
-                                            TelescopeResultsDiffDelete = { fg = cp.red },
+                                        -- For telescope.nvim
+                                        TelescopeMatching = { fg = cp.lavender },
+                                        TelescopeResultsDiffAdd = { fg = cp.green },
+                                        TelescopeResultsDiffChange = { fg = cp.yellow },
+                                        TelescopeResultsDiffDelete = { fg = cp.red },
 
-                                            -- For glance.nvim
-                                            GlanceWinBarFilename = { fg = cp.subtext1, style = { "bold" } },
-                                            GlanceWinBarFilepath = { fg = cp.subtext0, style = { "italic" } },
-                                            GlanceWinBarTitle = { fg = cp.teal, style = { "bold" } },
-                                            GlanceListCount = { fg = cp.lavender },
-                                            GlanceListFilepath = { link = "Comment" },
-                                            GlanceListFilename = { fg = cp.blue },
-                                            GlanceListMatch = { fg = cp.lavender, style = { "bold" } },
-                                            GlanceFoldIcon = { fg = cp.green },
+                                        -- For glance.nvim
+                                        GlanceWinBarFilename = { fg = cp.subtext1, style = { "bold" } },
+                                        GlanceWinBarFilepath = { fg = cp.subtext0, style = { "italic" } },
+                                        GlanceWinBarTitle = { fg = cp.teal, style = { "bold" } },
+                                        GlanceListCount = { fg = cp.lavender },
+                                        GlanceListFilepath = { link = "Comment" },
+                                        GlanceListFilename = { fg = cp.blue },
+                                        GlanceListMatch = { fg = cp.lavender, style = { "bold" } },
+                                        GlanceFoldIcon = { fg = cp.green },
 
-                                            -- For nvim-treehopper
-                                            TSNodeKey = {
-                                                fg = cp.peach,
-                                                bg = transparent_background and cp.none or cp.base,
-                                                style = { "bold", "underline" },
-                                            },
+                                        -- For nvim-treehopper
+                                        TSNodeKey = {
+                                            fg = cp.peach,
+                                            bg = transparent_background and cp.none or cp.base,
+                                            style = { "bold", "underline" },
+                                        },
 
-                                            -- For treesitter
-                                            ["@keyword.return"] = { fg = cp.pink, style = clear },
-                                            ["@error.c"] = { fg = cp.none, style = clear },
-                                            ["@error.cpp"] = { fg = cp.none, style = clear },
-                                        }
-                                    end
-                                '';
-                            };
+                                        -- For treesitter
+                                        ["@keyword.return"] = { fg = cp.pink, style = clear },
+                                        ["@error.c"] = { fg = cp.none, style = clear },
+                                        ["@error.cpp"] = { fg = cp.none, style = clear },
+                                    }
+                                end
+                            '';
                         };
                     };
                 };
             };
             plugins = {
+                lz-n = {
+                    enable = true;
+                    autoLoad = true;
+                };
                 oil = {
                     enable = true;
                     settings = {
@@ -1196,11 +1193,19 @@ in
                         delete_to_trash = true;
                         cleanup_delay_ms = 10000;
                     };
+                    lazyLoad = {
+                        enable = true;
+                        settings.event = "VimEnter";
+                    };
                 };
                 which-key = {
                     enable = true;
                     settings = {
                         delay = 0;
+                    };
+                    lazyLoad = {
+                        enable = true;
+                        settings.keys = [ "<leader>" ];
                     };
                 };
                 gitsigns = {
@@ -1278,6 +1283,10 @@ in
                             end
                         '';
                     };
+                    lazyLoad = {
+                        enable = true;
+                        settings.event = "VimEnter";
+                    };
                 };
                 lazygit = {
                     enable = true;
@@ -1298,9 +1307,15 @@ in
                         use_custom_config_file_path = 0;
                         use_neovim_remote = 1;
                     };
+                    # do not have in 25.11
+                    # lazyLoad.enable = true;
                 };
                 nvim-autopairs = {
                     enable = true;
+                    lazyLoad = {
+                        enable = true;
+                        settings.event = "InsertEnter";
+                    };
                 };
                 blink-cmp = {
                     enable = true;
@@ -1326,6 +1341,13 @@ in
                                 };
                             };
                         };
+                    };
+                    lazyLoad = {
+                        enable = true;
+                        settings.event = [
+                            "InsertEnter"
+                            "CmdlineEnter"
+                        ];
                     };
                 };
                 conform-nvim = {
@@ -1358,11 +1380,45 @@ in
                             };
                         };
                     };
+                    lazyLoad = {
+                        enable = true;
+                        settings = {
+                            cmd = "ConformInfo";
+                            event = "BufWritePre";
+                            keys = [
+                                {
+                                    __unkeyed-1 = "<leader>cb";
+                                    __unkeyed-2.__raw = ''
+                                        function()
+                                            require('conform').format { async = true, lsp_format = 'fallback' }
+                                        end
+                                    '';
+                                    mode = "n";
+                                    desc = "Conform Buffer";
+                                }
+                            ];
+                        };
+                    };
                 };
                 flash = {
                     enable = true;
                     settings = {
                         modes.char.enabled = false;
+                    };
+                    lazyLoad = {
+                        enable = true;
+                        settings.keys = [
+                            {
+                                __unkeyed-1 = "<leader>;";
+                                __unkeyed-2.__raw = ''
+                                    function()
+                                        require('flash').jump()
+                                    end
+                                '';
+                                mode = "n";
+                                desc = "Jump Code";
+                            }
+                        ];
                     };
                 };
                 fzf-lua = {
@@ -1375,6 +1431,10 @@ in
                                 layout = "vertical";
                             };
                         };
+                    };
+                    lazyLoad = {
+                        enable = true;
+                        settings.event = [ "LspAttach" ];
                     };
                 };
                 indent-blankline = {
@@ -1404,6 +1464,10 @@ in
                             show_exact_scope = true;
                             show_start = false;
                         };
+                    };
+                    lazyLoad = {
+                        enable = true;
+                        settings.event = "VimEnter";
                     };
                 };
                 lualine = {
@@ -1584,6 +1648,10 @@ in
                             },
                         }
                     '';
+                    lazyLoad = {
+                        enable = true;
+                        settings.event = "VimEnter";
+                    };
                 };
                 treesitter = {
                     enable = true;
@@ -1596,21 +1664,47 @@ in
                         highlight.enable = true;
                         indent.enable = true;
                     };
+                    lazyLoad = {
+                        enable = true;
+                        settings.event = "VimEnter";
+                    };
                 };
                 todo-comments = {
                     enable = true;
+                    lazyLoad = {
+                        enable = true;
+                        settings.event = "VimEnter";
+                    };
                 };
                 toggleterm = {
                     enable = true;
+                    lazyLoad = {
+                        enable = true;
+                        settings = {
+                            cmd = "ToggleTerm";
+                        };
+                    };
                 };
                 nvim-surround = {
                     enable = true;
+                    lazyLoad = {
+                        enable = true;
+                        settings.event = "VimEnter";
+                    };
                 };
                 fidget = {
                     enable = true;
+                    lazyLoad = {
+                        enable = true;
+                        settings.event = "VimEnter";
+                    };
                 };
                 rainbow-delimiters = {
                     enable = true;
+                    lazyLoad = {
+                        enable = true;
+                        settings.event = "VimEnter";
+                    };
                 };
             };
             extraPlugins = [
@@ -1772,107 +1866,101 @@ in
                         config = {
                             cmd = [ "rust-analyzer" ];
                             filetypes = [ "rust" ];
-                            root_dir = {
-                                __raw = ''
-                                    function(bufnr, on_dir)
-                                        local function is_library(fname)
-                                            local user_home = vim.fs.normalize(vim.env.HOME)
-                                            local cargo_home = os.getenv("CARGO_HOME") or user_home .. "/.cargo"
-                                            local registry = cargo_home .. "/registry/src"
-                                            local git_registry = cargo_home .. "/git/checkouts"
+                            root_dir.__raw = ''
+                                function(bufnr, on_dir)
+                                    local function is_library(fname)
+                                        local user_home = vim.fs.normalize(vim.env.HOME)
+                                        local cargo_home = os.getenv("CARGO_HOME") or user_home .. "/.cargo"
+                                        local registry = cargo_home .. "/registry/src"
+                                        local git_registry = cargo_home .. "/git/checkouts"
 
-                                            local rustup_home = os.getenv("RUSTUP_HOME") or user_home .. "/.rustup"
-                                            local toolchains = rustup_home .. "/toolchains"
+                                        local rustup_home = os.getenv("RUSTUP_HOME") or user_home .. "/.rustup"
+                                        local toolchains = rustup_home .. "/toolchains"
 
-                                            for _, item in ipairs({ toolchains, registry, git_registry }) do
-                                                if vim.fs.relpath(item, fname) then
-                                                    local clients = vim.lsp.get_clients({ name = "rust_analyzer" })
-                                                    return #clients > 0 and clients[#clients].config.root_dir or nil
-                                                end
+                                        for _, item in ipairs({ toolchains, registry, git_registry }) do
+                                            if vim.fs.relpath(item, fname) then
+                                                local clients = vim.lsp.get_clients({ name = "rust_analyzer" })
+                                                return #clients > 0 and clients[#clients].config.root_dir or nil
                                             end
                                         end
-                                        local fname = vim.api.nvim_buf_get_name(bufnr)
-                                        local reused_dir = is_library(fname)
-                                        if reused_dir then
-                                            on_dir(reused_dir)
-                                            return
-                                        end
-
-                                        local cargo_crate_dir = vim.fs.root(fname, { "Cargo.toml" })
-                                        local cargo_workspace_root
-
-                                        if cargo_crate_dir == nil then
-                                            on_dir(
-                                                vim.fs.root(fname, { "rust-project.json" })
-                                                    or vim.fs.dirname(vim.fs.find(".git", { path = fname, upward = true })[1])
-                                            )
-                                            return
-                                        end
-
-                                        local cmd = {
-                                            "cargo",
-                                            "metadata",
-                                            "--no-deps",
-                                            "--format-version",
-                                            "1",
-                                            "--manifest-path",
-                                            cargo_crate_dir .. "/Cargo.toml",
-                                        }
-
-                                        vim.system(cmd, { text = true }, function(output)
-                                            if output.code == 0 then
-                                                if output.stdout then
-                                                    local result = vim.json.decode(output.stdout)
-                                                    if result["workspace_root"] then
-                                                        cargo_workspace_root = vim.fs.normalize(result["workspace_root"])
-                                                    end
-                                                end
-
-                                                on_dir(cargo_workspace_root or cargo_crate_dir)
-                                            else
-                                                vim.schedule(function()
-                                                    vim.notify(
-                                                        ("[rust_analyzer] cmd failed with code %d: %s\n%s"):format(output.code, cmd, output.stderr)
-                                                    )
-                                                end)
-                                            end
-                                        end)
                                     end
-                                '';
-                            };
+                                    local fname = vim.api.nvim_buf_get_name(bufnr)
+                                    local reused_dir = is_library(fname)
+                                    if reused_dir then
+                                        on_dir(reused_dir)
+                                        return
+                                    end
+
+                                    local cargo_crate_dir = vim.fs.root(fname, { "Cargo.toml" })
+                                    local cargo_workspace_root
+
+                                    if cargo_crate_dir == nil then
+                                        on_dir(
+                                            vim.fs.root(fname, { "rust-project.json" })
+                                                or vim.fs.dirname(vim.fs.find(".git", { path = fname, upward = true })[1])
+                                        )
+                                        return
+                                    end
+
+                                    local cmd = {
+                                        "cargo",
+                                        "metadata",
+                                        "--no-deps",
+                                        "--format-version",
+                                        "1",
+                                        "--manifest-path",
+                                        cargo_crate_dir .. "/Cargo.toml",
+                                    }
+
+                                    vim.system(cmd, { text = true }, function(output)
+                                        if output.code == 0 then
+                                            if output.stdout then
+                                                local result = vim.json.decode(output.stdout)
+                                                if result["workspace_root"] then
+                                                    cargo_workspace_root = vim.fs.normalize(result["workspace_root"])
+                                                end
+                                            end
+
+                                            on_dir(cargo_workspace_root or cargo_crate_dir)
+                                        else
+                                            vim.schedule(function()
+                                                vim.notify(
+                                                    ("[rust_analyzer] cmd failed with code %d: %s\n%s"):format(output.code, cmd, output.stderr)
+                                                )
+                                            end)
+                                        end
+                                    end)
+                                end
+                            '';
                             capabilities = {
                                 experimental = {
                                     serverStatusNotification = true;
                                 };
                             };
-                            before_init = {
-                                __raw = ''
-                                    function(init_params, config)
-                                        -- See https://github.com/rust-lang/rust-analyzer/blob/eb5da56d839ae0a9e9f50774fa3eb78eb0964550/docs/dev/lsp-extensions.md?plain=1#L26
-                                        if config.settings and config.settings['rust-analyzer'] then
-                                            init_params.initializationOptions = config.settings['rust-analyzer']
+                            before_init.__raw = ''
+                                function(init_params, config)
+                                    -- See https://github.com/rust-lang/rust-analyzer/blob/eb5da56d839ae0a9e9f50774fa3eb78eb0964550/docs/dev/lsp-extensions.md?plain=1#L26
+                                    if config.settings and config.settings['rust-analyzer'] then
+                                        init_params.initializationOptions = config.settings['rust-analyzer']
+                                    end
+                                end
+                            '';
+                            on_attach.__raw = ''
+                                function()
+                                    vim.api.nvim_buf_create_user_command(0, 'LspCargoReload', function()
+                                        local clients = vim.lsp.get_clients { bufnr = 0, name = 'rust_analyzer' }
+                                        for _, client in ipairs(clients) do
+                                            vim.notify 'Reloading Cargo Workspace'
+                                            client.request('rust-analyzer/reloadWorkspace', nil, function(err)
+                                                if err then
+                                                    error(tostring(err))
+                                                end
+                                                vim.notify 'Cargo workspace reloaded'
+                                            end, 0)
                                         end
-                                    end
-                                '';
-                            };
-                            on_attach = {
-                                __raw = ''
-                                    function()
-                                        vim.api.nvim_buf_create_user_command(0, 'LspCargoReload', function()
-                                            local clients = vim.lsp.get_clients { bufnr = 0, name = 'rust_analyzer' }
-                                            for _, client in ipairs(clients) do
-                                                vim.notify 'Reloading Cargo Workspace'
-                                                client.request('rust-analyzer/reloadWorkspace', nil, function(err)
-                                                    if err then
-                                                        error(tostring(err))
-                                                    end
-                                                    vim.notify 'Cargo workspace reloaded'
-                                                end, 0)
-                                            end
-                                        end, { desc = 'Reload current cargo workspace' })
-                                    end
-                                '';
-                            };
+                                    end, { desc = 'Reload current cargo workspace' })
+                                end
+                            '';
                         };
                     };
                     bashls = {
@@ -1904,87 +1992,85 @@ in
                                 "gowork"
                                 "gotmpl"
                             ];
-                            root_dir = {
-                                __raw = ''
-                                    function(bufnr, on_dir)
-                                        local mod_cache = nil
-                                        local std_lib = nil
-                                        ---@param custom_args go_dir_custom_args
-                                        ---@param on_complete fun(dir: string | nil)
-                                        local function identify_go_dir(custom_args, on_complete)
-                                            local cmd = { 'go', 'env', custom_args.envvar_id }
-                                            vim.system(cmd, { text = true }, function(output)
-                                                local res = vim.trim(output.stdout or ${"''"})
-                                                if output.code == 0 and res ~= ${"''"} then
-                                                    if custom_args.custom_subdir and custom_args.custom_subdir ~= ${"''"} then
-                                                        res = res .. custom_args.custom_subdir
-                                                    end
-                                                    on_complete(res)
-                                                else
-                                                    vim.schedule(function()
-                                                        vim.notify(
-                                                            ('[gopls] identify ' .. custom_args.envvar_id .. ' dir cmd failed with code %d: %s\n%s'):format(
-                                                            output.code, vim.inspect(cmd), output.stderr)
-                                                        )
-                                                    end)
-                                                    on_complete(nil)
+                            root_dir.__raw = ''
+                                function(bufnr, on_dir)
+                                    local mod_cache = nil
+                                    local std_lib = nil
+                                    ---@param custom_args go_dir_custom_args
+                                    ---@param on_complete fun(dir: string | nil)
+                                    local function identify_go_dir(custom_args, on_complete)
+                                        local cmd = { 'go', 'env', custom_args.envvar_id }
+                                        vim.system(cmd, { text = true }, function(output)
+                                            local res = vim.trim(output.stdout or ${"''"})
+                                            if output.code == 0 and res ~= ${"''"} then
+                                                if custom_args.custom_subdir and custom_args.custom_subdir ~= ${"''"} then
+                                                    res = res .. custom_args.custom_subdir
                                                 end
-                                            end)
-                                        end
-
-                                        ---@return string?
-                                        local function get_std_lib_dir()
-                                            if std_lib and std_lib ~= ${"''"} then
-                                                return std_lib
+                                                on_complete(res)
+                                            else
+                                                vim.schedule(function()
+                                                    vim.notify(
+                                                        ('[gopls] identify ' .. custom_args.envvar_id .. ' dir cmd failed with code %d: %s\n%s'):format(
+                                                        output.code, vim.inspect(cmd), output.stderr)
+                                                    )
+                                                end)
+                                                on_complete(nil)
                                             end
+                                        end)
+                                    end
 
-                                            identify_go_dir({ envvar_id = 'GOROOT', custom_subdir = '/src' }, function(dir)
-                                                if dir then
-                                                    std_lib = dir
-                                                end
-                                            end)
+                                    ---@return string?
+                                    local function get_std_lib_dir()
+                                        if std_lib and std_lib ~= ${"''"} then
                                             return std_lib
                                         end
 
-                                        ---@return string?
-                                        local function get_mod_cache_dir()
-                                            if mod_cache and mod_cache ~= ${"''"} then
-                                                return mod_cache
+                                        identify_go_dir({ envvar_id = 'GOROOT', custom_subdir = '/src' }, function(dir)
+                                            if dir then
+                                                std_lib = dir
                                             end
+                                        end)
+                                        return std_lib
+                                    end
 
-                                            identify_go_dir({ envvar_id = 'GOMODCACHE' }, function(dir)
-                                                if dir then
-                                                    mod_cache = dir
-                                                end
-                                            end)
+                                    ---@return string?
+                                    local function get_mod_cache_dir()
+                                        if mod_cache and mod_cache ~= ${"''"} then
                                             return mod_cache
                                         end
 
-                                        ---@param fname string
-                                        ---@return string?
-                                        local function get_root_dir(fname)
-                                            if mod_cache and fname:sub(1, #mod_cache) == mod_cache then
-                                                local clients = vim.lsp.get_clients { name = 'gopls' }
-                                                if #clients > 0 then
-                                                    return clients[#clients].config.root_dir
-                                                end
+                                        identify_go_dir({ envvar_id = 'GOMODCACHE' }, function(dir)
+                                            if dir then
+                                                mod_cache = dir
                                             end
-                                            if std_lib and fname:sub(1, #std_lib) == std_lib then
-                                                local clients = vim.lsp.get_clients { name = 'gopls' }
-                                                if #clients > 0 then
-                                                    return clients[#clients].config.root_dir
-                                                end
-                                            end
-                                            return vim.fs.root(fname, 'go.work') or vim.fs.root(fname, 'go.mod') or vim.fs.root(fname, '.git')
-                                        end
-                                        local fname = vim.api.nvim_buf_get_name(bufnr)
-                                        get_mod_cache_dir()
-                                        get_std_lib_dir()
-                                        -- see: https://github.com/neovim/nvim-lspconfig/issues/804
-                                        on_dir(get_root_dir(fname))
+                                        end)
+                                        return mod_cache
                                     end
-                                '';
-                            };
+
+                                    ---@param fname string
+                                    ---@return string?
+                                    local function get_root_dir(fname)
+                                        if mod_cache and fname:sub(1, #mod_cache) == mod_cache then
+                                            local clients = vim.lsp.get_clients { name = 'gopls' }
+                                            if #clients > 0 then
+                                                return clients[#clients].config.root_dir
+                                            end
+                                        end
+                                        if std_lib and fname:sub(1, #std_lib) == std_lib then
+                                            local clients = vim.lsp.get_clients { name = 'gopls' }
+                                            if #clients > 0 then
+                                                return clients[#clients].config.root_dir
+                                            end
+                                        end
+                                        return vim.fs.root(fname, 'go.work') or vim.fs.root(fname, 'go.mod') or vim.fs.root(fname, '.git')
+                                    end
+                                    local fname = vim.api.nvim_buf_get_name(bufnr)
+                                    get_mod_cache_dir()
+                                    get_std_lib_dir()
+                                    -- see: https://github.com/neovim/nvim-lspconfig/issues/804
+                                    on_dir(get_root_dir(fname))
+                                end
+                            '';
                         };
                     };
                 };
