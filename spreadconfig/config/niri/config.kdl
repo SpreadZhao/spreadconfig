@@ -272,7 +272,8 @@ binds {
     XF86MonBrightnessUp allow-when-locked=true { spawn-sh "brightnessctl --class=backlight set +10%"; }
     XF86MonBrightnessDown allow-when-locked=true { spawn-sh "brightnessctl --class=backlight set 10%-"; }
 
-    Mod+D { spawn-sh "~/scripts/niri/niri_lock.sh"; }
+    Mod+D { spawn-sh "swaylock"; }
+    Mod+Shift+D { spawn-sh "~/scripts/niri/niri_lock.sh"; }
 
     Mod+B { spawn-sh "killall -SIGUSR1 waybar"; }
 

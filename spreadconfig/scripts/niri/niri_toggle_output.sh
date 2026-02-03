@@ -1,33 +1,29 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-outputs=$(niri msg -j outputs)
+outputs_json=$(niri msg -j outputs)
 
-menu=$(
-    echo "$outputs" | jq -r '
-    to_entries[] |
-    .key as $name |
-    .value as $v |
-    (
-      $v.make // "Unknown"
-    ) as $make |
-    (
-      $v.model // "Unknown"
-    ) as $model |
-    (
-      if $v.logical then "on" else "off" end
-    ) as $state |
-    "\($name)|\($state)|\($make) \($model)"
-  '
-)
+on_count=$(jq '
+  [ .[] | select(.logical != null) ] | length
+' <<<"$outputs_json")
 
-selected=$(echo "$menu" | fuzzel --dmenu --prompt "Toggle output")
+menu=$(jq -r '
+  to_entries[] |
+  .key as $name |
+  .value as $v |
+  "\($name)|\(if $v.logical != null then "on" else "off" end)|\($v.make // "Unknown") \($v.model // "Unknown")"
+' <<<"$outputs_json")
+
+selected=$(fuzzel --dmenu --prompt "Toggle output" <<<"$menu")
 [ -z "$selected" ] && exit 0
 
-output=$(echo "$selected" | cut -d'|' -f1 | xargs)
-state=$(echo "$selected" | awk -F'|' '{print $2}' | xargs)
+IFS="|" read -r output state _ <<<"$selected"
 
-if [ "$state" = "on" ]; then
+if [[ "$state" == "on" && "$on_count" -le 1 ]]; then
+    exit 0
+fi
+
+if [[ "$state" == "on" ]]; then
     niri msg output "$output" off
 else
     niri msg output "$output" on
