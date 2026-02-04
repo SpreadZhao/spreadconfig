@@ -175,7 +175,7 @@ screenshot-path null
 
 cursor {
     xcursor-theme "catppuccin-mocha-dark-cursors"
-    xcursor-size 24
+    xcursor-size 72
     hide-after-inactive-ms 5000
 }
 

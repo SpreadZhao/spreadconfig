@@ -67,15 +67,16 @@ in
         ));
         pointerCursor = {
             enable = true;
-            dotIcons.enable = true;
+            name = "catppuccin-mocha-dark-cursors";
+            size = 72;
+            package = pkgs.catppuccin-cursors.mochaDark;
             gtk.enable = true;
+            x11.enable = true;
+            dotIcons.enable = true;
             hyprcursor = {
-                enable = true;
+                enable = false;
                 size = 24;
             };
-            name = "catppuccin-mocha-dark-cursors";
-            package = pkgs.catppuccin-cursors.mochaDark;
-            size = 24;
         };
         packages = with pkgs; [
             # zsh plugin
@@ -209,7 +210,6 @@ in
             lf
             rsync
             # rclone
-            usbutils
             lazygit
         ];
     };
@@ -442,8 +442,24 @@ in
         enable = true;
         colorScheme = "dark";
         theme = {
-            name = "Adwaita";
-            package = pkgs.gnome-themes-extra;
+            name = "catppuccin-mocha-rosewater-compact+default";
+            package =
+                (pkgs.catppuccin-gtk.overrideAttrs {
+                    src = pkgs.fetchFromGitHub {
+                        owner = "catppuccin";
+                        repo = "gtk";
+                        rev = "v1.0.3";
+                        fetchSubmodules = true;
+                        hash = "sha256-q5/VcFsm3vNEw55zq/vcM11eo456SYE5TQA3g2VQjGc=";
+                    };
+
+                    postUnpack = "";
+                }).override
+                    {
+                        accents = [ "rosewater" ];
+                        variant = "mocha";
+                        size = "compact";
+                    };
         };
         font = {
             # name = "Noto Sans";
@@ -474,6 +490,24 @@ in
         style = {
             package = pkgs.adwaita-qt;
             name = "adwaita-dark";
+        };
+        qt5ctSettings = {
+            Appearance = {
+                standar_dialogs = "xdgdesktopportal";
+            };
+            Fonts = {
+                fixed = "\"IBM Plex Mono,16\"";
+                general = "\"IBM Plex Sans,16\"";
+            };
+        };
+        qt6ctSettings = {
+            Appearance = {
+                standar_dialogs = "xdgdesktopportal";
+            };
+            Fonts = {
+                fixed = "\"IBM Plex Mono,16\"";
+                general = "\"IBM Plex Sans,16\"";
+            };
         };
     };
     programs = {
@@ -2297,8 +2331,8 @@ in
             #       PreferTextIcon = true;
             #       ShowLayoutNameInIcon = true;
             #       UseInputMethodLanguageToDisplayText = true;
-            #       Theme= "default-dark";
-            #       DarkTheme = "default-dark";
+            #       Theme= "catppuccin-mocha-rosewater";
+            #       DarkTheme = "catppuccin-mocha-rosewater";
             #       UseDarkTheme = false;
             #       UseAccentColor = false;
             #       PerScreenDPI = false;

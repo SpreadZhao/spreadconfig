@@ -158,6 +158,8 @@
             net-tools
             ripgrep
             ntfs3g
+            usbutils
+            pciutils
             # glib
         ];
         shellAliases = lib.mkForce { };

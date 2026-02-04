@@ -9,7 +9,11 @@ MIME=$(xdg-mime query filetype "$1")
 
 case "$MIME" in
 *application/pdf*)
-    pdftotext "$1" -
+    tmp_img="$(mktemp --suffix=.png)"
+    if pdftoppm -singlefile -png -r 100 "$1" >"$tmp_img" 2>/dev/null; then
+        chafa -f sixel -s "$2x$3" --animate off --polite on -t 1 --bg black "$tmp_img"
+    fi
+    rm -f "$tmp_img"
     ;;
 
 *application/x-7z-compressed*)
