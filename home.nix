@@ -1751,6 +1751,34 @@ in
                         settings.event = "VimEnter";
                     };
                 };
+                neorg = {
+                    enable = false;
+                    # autoLoad = true;
+                    settings = {
+                        load = {
+                            "core.concealer" = {
+                                config = {
+                                    icon_preset = "varied";
+                                };
+                            };
+                            "core.defaults" = {
+                                __empty = null;
+                            };
+                            "core.dirman" = {
+                                config = {
+                                    workspaces = {
+                                        home = "~/workspaces/NeorgTest/home";
+                                        work = "~/workspaces/NeorgTest/work";
+                                    };
+                                };
+                            };
+                        };
+                    };
+                    lazyLoad = {
+                        enable = false;
+                        settings = { };
+                    };
+                };
             };
             extraPlugins = [
                 (pkgs.vimUtils.buildVimPlugin {
