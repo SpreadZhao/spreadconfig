@@ -205,7 +205,6 @@ in
             ibm-plex
 
             tesseract
-            # file
             poppler-utils
             lf
             rsync
@@ -441,25 +440,30 @@ in
     gtk = {
         enable = true;
         colorScheme = "dark";
-        theme = {
-            name = "catppuccin-mocha-rosewater-compact+default";
-            package =
-                (pkgs.catppuccin-gtk.overrideAttrs {
-                    src = pkgs.fetchFromGitHub {
-                        owner = "catppuccin";
-                        repo = "gtk";
-                        rev = "v1.0.3";
-                        fetchSubmodules = true;
-                        hash = "sha256-q5/VcFsm3vNEw55zq/vcM11eo456SYE5TQA3g2VQjGc=";
-                    };
-
-                    postUnpack = "";
-                }).override
-                    {
-                        accents = [ "rosewater" ];
-                        variant = "mocha";
-                        size = "compact";
-                    };
+        # theme = {
+        #     name = "catppuccin-mocha-rosewater-compact+default";
+        #     package =
+        #         (pkgs.catppuccin-gtk.overrideAttrs {
+        #             src = pkgs.fetchFromGitHub {
+        #                 owner = "catppuccin";
+        #                 repo = "gtk";
+        #                 rev = "v1.0.3";
+        #                 fetchSubmodules = true;
+        #                 hash = "sha256-q5/VcFsm3vNEw55zq/vcM11eo456SYE5TQA3g2VQjGc=";
+        #             };
+        #
+        #             postUnpack = "";
+        #         }).override
+        #             {
+        #                 accents = [ "rosewater" ];
+        #                 variant = "mocha";
+        #                 size = "compact";
+        #             };
+        # };
+        cursorTheme = {
+            name = "catppuccin-mocha-dark-cursors";
+            package = pkgs.catppuccin-cursors.mochaDark;
+            size = 72;
         };
         font = {
             # name = "Noto Sans";
@@ -1765,6 +1769,7 @@ in
                 require("outline").setup({})
             '';
             extraConfigVim = ''
+                let g:qs_highlight_on_keys = ['f', 'F']
                 highlight QuickScopePrimary guifg='#ff0000' gui=bold,underline ctermfg=red cterm=bold,underline
                 highlight QuickScopeSecondary guifg='#00ff00' gui=underline ctermfg=yellow cterm=underline
             '';

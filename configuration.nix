@@ -160,6 +160,7 @@
             ntfs3g
             usbutils
             pciutils
+            file
             # glib
         ];
         shellAliases = lib.mkForce { };
