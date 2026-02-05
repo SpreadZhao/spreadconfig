@@ -6,6 +6,8 @@ set smartcase
 set previewer ~/.config/lf/pv.sh
 set errorfmt "\033[1;38;2;243;139;168m%s\033[0m"
 
+# cmd start
+
 cmd on-init :{{
     cmd on-redraw %{{
         if [ "$lf_width" -le 80 ]; then
@@ -54,7 +56,7 @@ cmd on-select &{{
 cmd on-cd &{{
     fmt="$(STARSHIP_SHELL= starship prompt | sed 's/\\/\\\\/g;s/"/\\"/g')"
     lf -remote "send $id set promptfmt \"$fmt\""
-    zoxide add "$PWD"
+    # zoxide add "$PWD"
 }}
 
 cmd toggle-preview %{{
@@ -167,7 +169,19 @@ cmd touch-save-file ${{
     fi
 }}
 
+cmd open-with-cmd %{{
+    read -p "open with: " opener || exit 0
+
+    [ -z "$opener" ] && exit 0
+
+    eval "$opener \"\$f\""
+}}
+
+# cmd end
+
 &[ "$LF_LEVEL" -eq 1 ] || lf -remote "send $id echoerr \"Warning: You're in a nested lf instance!\""
 
 map gs :fzf_search
 map <gt> :shell-pipe
+map o open-with-cmd
+map Q %lf -remote "send $id :cd \"$OLDPWD\"; quit"

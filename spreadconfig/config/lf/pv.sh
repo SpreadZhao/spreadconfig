@@ -1,87 +1,141 @@
 #!/usr/bin/env sh
 
-preview_text() {
-    bat --force-colorization --paging=never --style=changes,numbers \
-        --terminal-width $(($2 - 3)) "$1" && false
+show_by_chafa() {
+    img="$1"
+    width="$2"
+    height="$3"
+
+    chafa -f sixel -s "${width}x${height}" \
+        --animate off \
+        --polite on \
+        -t 1 \
+        --bg black \
+        "$img"
 }
 
-MIME=$(xdg-mime query filetype "$1")
+preview_video() {
+    file="$1"
+    width="$2"
+    height="$3"
 
-case "$MIME" in
+    tmp_img="$(mktemp --suffix=.png)"
+
+    if ffmpegthumbnailer \
+        -i "$file" \
+        -o "$tmp_img" \
+        -s 0 2>/dev/null; then
+        show_by_chafa "$tmp_img" "$width" "$height"
+    fi
+
+    rm -f "$tmp_img"
+}
+
+preview_audio() {
+    file="$1"
+    width="$2"
+    height="$3"
+
+    tmp_img="$(mktemp --suffix=.png)"
+
+    if ffmpegthumbnailer \
+        -i "$file" \
+        -o "$tmp_img" \
+        -s 0 2>/dev/null; then
+        show_by_chafa "$tmp_img" "$width" "$height"
+    fi
+
+    rm -f "$tmp_img"
+}
+
+preview_bat() {
+    file="$1"
+    width="$2"
+
+    bat --force-colorization --paging=never --style=changes,numbers \
+        --terminal-width $(($width - 3)) "$file" && false
+}
+
+preview_default() {
+    file="$1"
+    width="$2"
+    height="$3"
+
+    if file -b --extension "$file" | tr '/' '\n' | grep -qx ts; then
+        preview_video "$file" "$width" "$height"
+        exit 0
+    fi
+
+    preview_bat "$file" "$width"
+}
+
+file="$1"
+width="$2"
+height="$3"
+
+mime_type="$(xdg-mime query filetype "$file")"
+
+case "$mime_type" in
 *application/pdf*)
     tmp_img="$(mktemp --suffix=.png)"
-    if pdftoppm -singlefile -png -r 100 "$1" >"$tmp_img" 2>/dev/null; then
-        chafa -f sixel -s "$2x$3" --animate off --polite on -t 1 --bg black "$tmp_img"
+    if pdftoppm -singlefile -png -r 100 "$file" >"$tmp_img" 2>/dev/null; then
+        show_by_chafa "$tmp_img" "$width" "$height"
     fi
     rm -f "$tmp_img"
     ;;
 
 *application/x-7z-compressed*)
-    7z l "$1"
+    7z l "$file"
     ;;
 
 *application/x-tar*)
-    tar -tvf "$1"
+    tar -tvf "$file"
     ;;
 
 *application/x-compressed-tar* | *application/x-*-compressed-tar*)
-    tar -tvf "$1"
+    tar -tvf "$file"
     ;;
 
 *application/vnd.rar*)
-    unrar l "$1"
+    unrar l "$file"
     ;;
 
 *application/zip*)
-    unzip -l "$1"
+    unzip -l "$file"
     ;;
 
 *image/*)
-    chafa -f sixel -s "$2x$3" --animate off --polite on -t 1 --bg black "$1"
+    show_by_chafa "$file" "$width" "$height"
     ;;
 
 *video/*)
-    tmp_img="$(mktemp --suffix=.png)"
+    preview_video "$file" "$width" "$height"
+    ;;
 
-    # 取视频中间一帧（-t 50%），失败就安静退出
-    if ffmpegthumbnailer \
-        -i "$1" \
-        -o "$tmp_img" \
-        -s 0 2>/dev/null; then
-        chafa -f sixel -s "$2x$3" \
-            --animate off \
-            --polite on \
-            -t 1 \
-            --bg black \
-            "$tmp_img"
-    fi
-
-    rm -f "$tmp_img"
+*audio/*)
+    preview_audio "$file" "$width" "$height"
     ;;
 
 # ===== 明确的“文本类 application/*” =====
 *application/json* | \
-    *application/xml* | \
-    *application/xhtml+xml* | \
-    *application/javascript* | \
-    *application/x-yaml* | \
-    *application/yaml* | \
-    *application/toml* | \
-    *application/x-shellscript* | \
-    *application/x-python* | \
-    *application/x-ruby* | \
-    *application/x-lua* | \
-    *application/x-php*)
-    preview_text "$1" "$2"
+*application/xml* | \
+*application/xhtml+xml* | \
+*application/javascript* | \
+*application/x-yaml* | \
+*application/yaml* | \
+*application/toml* | \
+*application/x-shellscript* | \
+*application/x-python* | \
+*application/x-ruby* | \
+*application/x-lua* | \
+*application/x-php*)
+    preview_default "$file" "$width" "$height"
     ;;
 
-# ===== 标准 text/* =====
 text/*)
-    preview_text "$1" "$2"
+    preview_default "$file" "$width" "$height"
     ;;
 
-# ===== 兜底：尝试当文本预览 =====
 *)
-    preview_text "$1" "$2" || true
+    preview_default "$file" "$width" "$height" || true
     ;;
 esac
