@@ -273,7 +273,7 @@ binds {
     XF86MonBrightnessDown allow-when-locked=true { spawn-sh "brightnessctl --class=backlight set 10%-"; }
 
     Mod+D { spawn-sh "swaylock"; }
-    Mod+Shift+D { spawn-sh "~/scripts/niri/niri_lock.sh"; }
+    Mod+Shift+D { spawn-sh "$SCRIPT_HOME/niri/niri_lock.sh"; }
 
     Mod+B { spawn-sh "killall -SIGUSR1 waybar"; }
 
@@ -388,10 +388,13 @@ binds {
 
     Mod+T { toggle-column-tabbed-display; }
 
-    Ctrl+Shift+A { spawn-sh "~/scripts/niri/screenshot.sh";  }
-    Ctrl+Shift+S { spawn-sh "~/scripts/niri/screenrecord.sh";  }
+    Ctrl+Shift+A { spawn-sh "$SCRIPT_HOME/niri/screenshot.sh";  }
+    Ctrl+Shift+S { spawn-sh "$SCRIPT_HOME/niri/screenrecord.sh";  }
 
     Mod+Shift+V { spawn-sh "cliphist list | fuzzel --dmenu | cliphist decode | wl-copy"; }
+
+    Mod+Z { spawn-sh "~/app/wooz --invert-scroll --output $($SCRIPT_HOME/niri/niri_focused_output_name.sh)"; }
+    Mod+S { spawn-sh "slurp -b '#0e1117aa' -c '#f5e0dc' >/dev/null"; }
 
     Mod+Shift+Q { quit; }
 }

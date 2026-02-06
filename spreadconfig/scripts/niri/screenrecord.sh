@@ -40,7 +40,7 @@ stop_recording() {
 # === Select region to record using slurp ===
 select_region() {
     local region
-    region=$(slurp -d)
+    region=$(slurp -d -b "#0e1117aa" -c "#f5e0dc")
     echo "$region"
 }
 

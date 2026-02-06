@@ -697,6 +697,7 @@ in
                 ff = "${scriptsDir}/niri/start_floating_foot.sh";
                 ts = "gio trash";
                 rsync = "rsync --progress";
+                slurp = "slurp -b #0e1117aa -c #f5e0dc";
             };
             shellGlobalAliases = {
             };
@@ -733,6 +734,13 @@ in
                 #         eza --icons
                 #     fi
                 # }
+                function vi-yank-wlclip {
+                    zle vi-yank
+                    print -rn -- "$CUTBUFFER" | wl-copy
+                }
+
+                zle -N vi-yank-wlclip
+                bindkey -M vicmd 'y' vi-yank-wlclip
             '';
         };
         zoxide.enable = true;
@@ -1478,7 +1486,7 @@ in
                         };
                     };
                     lazyLoad = {
-                        enable = true;
+                        enable = false;
                         settings.event = [ "LspAttach" ];
                     };
                 };

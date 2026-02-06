@@ -69,7 +69,7 @@ else
         sleep 0.1
     fi
 
-    if ! grim -g "$(slurp -d)" "$TMPFILE"; then
+    if ! grim -g "$(slurp -d -b "#0e1117aa" -c "#f5e0dc")" "$TMPFILE"; then
         [ -n "$FREEZE_PID" ] && kill "$FREEZE_PID" 2>/dev/null
         notify "Capture failed ❌"
         exit 1

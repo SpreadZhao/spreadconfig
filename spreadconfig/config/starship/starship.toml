@@ -2,6 +2,7 @@ format = """
 $username\
 $hostname\
 $directory\
+$nix_shell\
 $git_branch\
 $git_commit\
 $git_state\
@@ -57,6 +58,21 @@ format = '[$time]($style)'
 # time_format = '%H:%M:%S%.3f'
 time_format = '%H:%M:%S'
 style = "bold rosewater"
+
+[nix_shell]
+disabled = false
+impure_msg = ''
+style= 'blue'
+symbol = ''
+format = '[$symbol$state]($style) '
+# BUG: heuristic always returns true (depends on whether any value $PATH starts with /nix/store)
+# https://github.com/starship/starship/blob/master/src/modules/nix_shell.rs#L38
+# heuristic = true
+
+[shlvl]
+disabled = true
+style = "blue"
+symbol = "󰓍 "
 
 [palettes.catppuccin_mocha]
 rosewater = "#f5e0dc"
