@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+sns
+sudo nix-env --delete-generations old --profile /nix/var/nix/profiles/system
+sns
+sudo nix-env --delete-generations old --profile /nix/var/nix/profiles/system
