@@ -213,7 +213,7 @@ in
             poppler-utils
             lf
             rsync
-            # rclone
+            rclone
             lazygit
         ];
     };
@@ -395,6 +395,19 @@ in
                 icon = "";
                 terminal = false;
             };
+            lf_open = {
+                enable = false;
+                name = "lf (Open Folder)";
+                exec = "${scriptsDir}/util/lf-open.sh %f";
+                mimeType = [
+                    "inode/directory"
+                ];
+                categories = [
+                    "FileManager"
+                ];
+                terminal = false;
+                noDisplay = true;
+            };
         };
         portal = {
             enable = true;
@@ -430,7 +443,7 @@ in
                 XDG_SATTY_DIR = "${config.xdg.userDirs.pictures}/satty";
                 XDG_SCREENSHOT_DIR = "${config.xdg.userDirs.pictures}/screenshot";
                 XDG_SCREENRECORD_DIR = "${config.xdg.userDirs.videos}/screenrecord";
-                XDG_MNT_DAV_DIR = "${config.home.homeDirectory}/mnt/dav";
+                # XDG_MNT_DAV_DIR = "${config.home.homeDirectory}/mnt/dav";
             };
         };
     };

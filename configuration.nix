@@ -103,6 +103,7 @@
 
     fileSystems = {
         "/home/spreadzhao/mnt/dav" = {
+            enable = false;
             device = "${lib.strings.trim (builtins.readFile ./secrets/nas_url)}";
             fsType = "davfs";
             options = [
@@ -128,7 +129,7 @@
         };
         gvfs.enable = false;
         davfs2 = {
-            enable = true;
+            enable = false;
             davUser = "spreadzhao";
             davGroup = "wheel";
         };
