@@ -51,7 +51,10 @@
 
     boot = {
         loader = {
-            systemd-boot.enable = true;
+            systemd-boot = {
+                enable = true;
+                configurationLimit = 3;
+            };
             efi.canTouchEfiVariables = true;
         };
         extraModulePackages = with config.boot.kernelPackages; [
@@ -76,7 +79,27 @@
 
     time.timeZone = "Asia/Shanghai";
 
-    # console.font = "${pkgs.terminus_font}/share/consolefonts/ter-u28n.psf.gz";
+    console = {
+        font = "${pkgs.terminus_font}/share/consolefonts/ter-u28n.psf.gz";
+        colors = [
+            "0e1117"
+            "f38ba8"
+            "a6e3a1"
+            "f9e2af"
+            "89b4fa"
+            "f5c2e7"
+            "94e2d5"
+            "bac2de"
+            "585b70"
+            "f38ba8"
+            "a6e3a1"
+            "f9e2af"
+            "89b4fa"
+            "f5c2e7"
+            "94e2d5"
+            "a6adc8"
+        ];
+    };
 
     fileSystems = {
         "/home/spreadzhao/mnt/dav" = {
