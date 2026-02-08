@@ -945,6 +945,16 @@ in
                     };
                 }
                 {
+                    key = "<leader>;";
+                    action.__raw = ''
+                        function()
+                            require('flash').jump()
+                        end
+                    '';
+                    mode = "n";
+                    options.desc = "Jump Code";
+                }
+                {
                     key = "<leader>ff";
                     action = {
                         __raw = ''
@@ -1491,22 +1501,19 @@ in
                 flash = {
                     enable = true;
                     settings = {
-                        modes.char.enabled = false;
+                        labels = "asdfghjklqwertyuiopzxcvbnm";
+                        label = {
+                            uppercase = false;
+                            rainbow.enabled = false;
+                        };
+                        modes = {
+                            search.enabled = true;
+                            char.enabled = false;
+                        };
                     };
                     lazyLoad = {
                         enable = true;
-                        settings.keys = [
-                            {
-                                __unkeyed-1 = "<leader>;";
-                                __unkeyed-2.__raw = ''
-                                    function()
-                                        require('flash').jump()
-                                    end
-                                '';
-                                mode = "n";
-                                desc = "Jump Code";
-                            }
-                        ];
+                        settings.event = "VimEnter";
                     };
                 };
                 fzf-lua = {
