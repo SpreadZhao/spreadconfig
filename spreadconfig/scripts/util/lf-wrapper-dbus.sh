@@ -19,7 +19,7 @@ quote_string() {
 }
 
 cmd="lf"
-termcmd="footclient -a lick-foot -T 'Choose File'"
+termcmd="footclient -a lf -T '$1'"
 case "$BDUS_METHOD" in
 # Since lf can only handle 1 file or folder.
 "ShowFolders" | "ShowItems")

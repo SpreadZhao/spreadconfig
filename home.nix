@@ -200,6 +200,7 @@ in
             telegram-desktop
             pass
             swaylock
+            wbg
 
             # fonts
             noto-fonts
@@ -307,6 +308,25 @@ in
             Install = {
                 WantedBy = [
                     "graphical-session.target"
+                    "niri.service"
+                ];
+            };
+        };
+        wbg = {
+            Unit = {
+                Description = "Wallpaper";
+                PartOf = [ "graphical-session.target" ];
+                After = [ "graphical-session-pre.target" ];
+                Requisite = [ "graphical-session-pre.target" ];
+            };
+            Service = {
+                ExecStart = "${scriptsDir}/util/random_wallpaper_apply.sh";
+                Restart = "no";
+            };
+            Install = {
+                WantedBy = [
+                    "graphical-session.target"
+                    "niri.service"
                 ];
             };
         };
@@ -1113,6 +1133,7 @@ in
                     enable = true;
                     lazyLoad.enable = true;
                     settings = {
+                        transparent_background = true;
                         flavour = "mocha";
                         dim_inactive = {
                             enabled = false;
