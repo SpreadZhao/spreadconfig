@@ -192,7 +192,6 @@ in
             xwayland-satellite
             foot
             fuzzel
-            mako
             waybar
             libnotify
             wl-clipboard
@@ -249,7 +248,6 @@ in
                 Wants = [
                     "graphical-session-pre.target"
                     "xdg-desktop-autostart.target"
-                    "mako.service"
                     "waybar.service"
                     "foot-server.service"
                 ];
@@ -315,9 +313,9 @@ in
         wbg = {
             Unit = {
                 Description = "Wallpaper";
-                PartOf = [ "graphical-session.target" ];
-                After = [ "graphical-session-pre.target" ];
-                Requisite = [ "graphical-session-pre.target" ];
+                PartOf = [ "niri.service" ];
+                After = [ "niri.service" ];
+                Requisite = [ "niri.service" ];
             };
             Service = {
                 ExecStart = "${scriptsDir}/util/random_wallpaper_apply.sh";
@@ -335,7 +333,6 @@ in
         enable = true;
         configFile = {
             "niri".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/niri";
-            "mako".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/mako";
             "foot".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/foot";
             "waybar".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/waybar";
             "starship".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/starship";
@@ -1591,7 +1588,7 @@ in
                     luaConfig.post = ''
                         local colors = {
                             red = '#f38ba8',
-                            black = '#${mochaBg}',
+                            black = '#${mochaBg}00',
                             white = '#cdd6f4',
                             light_green = '#a6e3a1',
                             orange = '#fab387',
@@ -2259,6 +2256,43 @@ in
         };
     };
     services = {
+        fnott = {
+            enable = true;
+            settings = {
+                main = {
+                    title-color = "a6adc8ff";
+                    summary-color = "cdd6f4ff";
+                    body-color = "cdd6f4ff";
+                    background = "1e1e2eee";
+                    border-color = "89b4faff";
+                    progress-color = "6c7086ff";
+
+                    max-width = 1000;
+                    max-height = 500;
+                    max-icon-size = 64;
+                    anchor = "top-right";
+                    stacking-order = "bottom-up";
+                    selection-helper-uses-null-separator = "yes";
+                    selection-helper = "\"fuzzel --dmenu0\"";
+
+                    dpi-aware = "yes";
+                    title-font = "IBM Plex Sans:size=20";
+                    summary-font = "IBM Plex Sans:size=19";
+                    body-font = "IBM Plex Sans:size=18";
+
+                    title-format = "<b>%a%A</b>";
+                    summary-format = "<i>%s</i>";
+                    body-format = "%b";
+
+                    max-timeout = 0;
+                    default-timeout = 10;
+                    idle-timeout = 5;
+                };
+                critical = {
+                    border-color = "fab387ff";
+                };
+            };
+        };
         ollama = {
             enable = true;
             package = pkgs.ollama-rocm;
