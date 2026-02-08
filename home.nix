@@ -285,6 +285,31 @@ in
                 ];
             };
         };
+        file-manager-dbus = {
+            Unit = {
+                Description = "Use terminal to open files";
+                After = [
+                    "niri.service"
+                ];
+                BindsTo = [
+                    "niri.service"
+                ];
+                PartOf = [
+                    "niri.service"
+                ];
+            };
+            Service = {
+                ExecStart = "${config.xdg.userDirs.extraConfig.XDG_APP_DIR}/file_manager_dbus";
+                Restart = "on-failure";
+                RestartSec = 5;
+                TimeoutStopSec = 10;
+            };
+            Install = {
+                WantedBy = [
+                    "graphical-session.target"
+                ];
+            };
+        };
     };
     xdg = {
         enable = true;
@@ -311,6 +336,10 @@ in
             "satty".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/satty";
             "mpv".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/mpv";
             "zathura".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/zathura";
+            # https://github.com/boydaihungst/org.freedesktop.FileManager1.common
+            "org.freedesktop.FileManager1.common/config".text = ''
+                cmd="${scriptsDir}/util/lf-wrapper-dbus.sh"
+            '';
         };
         dataFile = {
             "fcitx5/rime/rime-data".source = "${pkgs.rime-ice}/share/rime-data";
@@ -395,19 +424,6 @@ in
                 icon = "";
                 terminal = false;
             };
-            lf_open = {
-                enable = false;
-                name = "lf (Open Folder)";
-                exec = "${scriptsDir}/util/lf-open.sh %f";
-                mimeType = [
-                    "inode/directory"
-                ];
-                categories = [
-                    "FileManager"
-                ];
-                terminal = false;
-                noDisplay = true;
-            };
         };
         portal = {
             enable = true;
@@ -443,6 +459,7 @@ in
                 XDG_SATTY_DIR = "${config.xdg.userDirs.pictures}/satty";
                 XDG_SCREENSHOT_DIR = "${config.xdg.userDirs.pictures}/screenshot";
                 XDG_SCREENRECORD_DIR = "${config.xdg.userDirs.videos}/screenrecord";
+                XDG_APP_DIR = "${config.home.homeDirectory}/app";
                 # XDG_MNT_DAV_DIR = "${config.home.homeDirectory}/mnt/dav";
             };
         };

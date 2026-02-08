@@ -59,6 +59,12 @@ cmd on-cd &{{
     # zoxide add "$PWD"
 }}
 
+cmd on-quit ${{
+    marks=~/.local/share/lf/marks
+    sed -i "/^'/d" "$marks"
+    echo "':$PWD" >> "$marks"
+}}
+
 cmd toggle-preview %{{
     if [ "$lf_preview" = true ]; then
         lf -remote "send $id :set preview false; set ratios 1:5"
