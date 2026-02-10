@@ -82,11 +82,11 @@
     },
     "cpu": {
         "interval": 10,
-        "format": "{}"
+        "format": "{usage}"
     },
     "memory": {
         "interval": 10,
-        "format": "{}"
+        "format": "{percentage}"
     },
     "temperature": {
         "interval": 10,

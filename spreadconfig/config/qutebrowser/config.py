@@ -11,6 +11,8 @@ config.bind('dd', 'tab-close', mode = 'normal')
 config.bind('d$', 'tab-only -p', mode = 'normal')
 config.bind('D', 'tab-only -p', mode = 'normal')
 config.bind('d0', 'tab-only -n', mode = 'normal')
+config.bind('dj', 'cmd-repeat 1 tab-close -n', mode = 'normal')
+config.bind('dk', 'cmd-repeat 1 tab-close -p', mode = 'normal')
 config.bind('td', 'config-cycle colors.webpage.darkmode.enabled True False')
 config.bind('<Ctrl-Shift-J>', 'tab-move +', mode = 'normal')
 config.bind('<Ctrl-Shift-K>', 'tab-move -', mode = 'normal')
@@ -18,7 +20,8 @@ config.bind('<Ctrl-Shift-K>', 'tab-move -', mode = 'normal')
 # config.unbind('yy', mode = 'normal')
 # config.bind('yyy', 'yank', mode = 'normal')
 # config.bind('yym', 'yank inline [{title}]({url:pretty})', mode = 'normal')
-config.bind('gk', 'tab-focus last', mode = 'normal')
+config.bind('gk', 'tab-focus stack-prev', mode = 'normal')
+config.bind('gj', 'tab-focus stack-next', mode = 'normal')
 config.unbind('f', mode = 'normal')
 config.unbind('F', mode = 'normal')
 config.bind('ff', 'hint all normal', mode = 'normal')
@@ -30,7 +33,14 @@ config.unbind('<Ctrl-N>', mode = 'command')
 config.unbind('<Ctrl-P>', mode = 'command')
 config.bind('<Ctrl-N>', 'completion-item-focus next', mode = 'command')
 config.bind('<Ctrl-P>', 'completion-item-focus prev', mode = 'command')
+config.bind('<Ctrl-D>', 'completion-item-focus next-category', mode = 'command')
+config.bind('<Ctrl-U>', 'completion-item-focus prev-category', mode = 'command')
 config.bind('eu', 'edit-url', mode = 'normal')
+config.unbind('<Up>', mode = 'command')
+config.unbind('<Down>', mode = 'command')
+config.bind('<Ctrl-K>', 'completion-item-focus --history prev', mode = 'command')
+config.bind('<Ctrl-J>', 'completion-item-focus --history next', mode = 'command')
+
 
 startFloatingFoot = '/home/spreadzhao/scripts/niri/start_floating_foot.sh'
 
@@ -138,7 +148,9 @@ c.tabs.title.format_pinned = '{audio}{relative_index}:{current_title}'
 c.tabs.width = 18
 c.tabs.favicons.show = 'always'
 c.tabs.mousewheel_switching = False;
-c.tabs.new_position.unrelated = 'next';
+c.tabs.new_position.related = 'last';
+c.tabs.new_position.stacking = True;
+c.tabs.new_position.unrelated = 'last';
 
 c.url.default_page = 'about:blank'
 c.url.start_pages = ['about:blank']

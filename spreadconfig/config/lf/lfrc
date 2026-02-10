@@ -191,3 +191,7 @@ map gs :fzf_search
 map <gt> :shell-pipe
 map o open-with-cmd
 map Q %lf -remote "send $id :cd \"$OLDPWD\"; quit"
+map zi zi
+map t
+map tp toggle-preview
+map tt tag-toggle

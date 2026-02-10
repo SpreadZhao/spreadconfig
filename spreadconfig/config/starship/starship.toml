@@ -26,11 +26,11 @@ vimcmd_symbol = "[](rosewater)"
 
 [git_branch]
 format = "[$branch]($style)"
-style = "overlay0"
+style = "overlay1"
 
 [git_state]
 format = '\([$state($progress_current/$progress_total)]($style)\)'
-style = "overlay0"
+style = "overlay1"
 
 [git_status]
 format = '([$all_status$ahead_behind]($style))'
@@ -50,7 +50,7 @@ style = "yellow"
 
 [fill]
 symbol = '-'
-style = 'surface0'
+style = 'overlay1'
 
 [time]
 disabled = false

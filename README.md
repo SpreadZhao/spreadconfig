@@ -1,3 +1,26 @@
+## Software I use (partial)
+
+- Shell: Zsh with [Starship](https://starship.rs/)
+- WM: [niri-wm/niri: A scrollable-tiling Wayland compositor.](https://github.com/niri-wm/niri)
+- Terminal: [dnkl/foot: A fast, lightweight and minimalistic Wayland terminal emulator - Codeberg.org](https://codeberg.org/dnkl/foot)
+- Launcher: [dnkl/fuzzel: App launcher and fuzzy finder for Wayland, inspired by rofi(1) and dmenu(1). - Codeberg.org](https://codeberg.org/dnkl/fuzzel)
+- Notification: [dnkl/fnott: Keyboard driven and lightweight Wayland notification daemon for wlroots-based compositors. - Codeberg.org](https://codeberg.org/dnkl/fnott)
+- Bar: [Alexays/Waybar: Highly customizable Wayland bar for Sway and Wlroots based compositors. :tada:](https://github.com/Alexays/Waybar)
+- File Manager: [gokcehan/lf: Terminal file manager](https://github.com/gokcehan/lf)
+- Screenshot: 
+    - [grim: Grab images from a Wayland compositor](https://sr.ht/~emersion/grim/)
+    - [emersion/slurp: Select a region in a Wayland compositor](https://github.com/emersion/slurp)
+    - [Jappie3/wayfreeze: Tool to freeze the screen of a Wayland compositor](https://github.com/Jappie3/wayfreeze)
+- Screenrecord: 
+    - [ammen99/wf-recorder](https://github.com/ammen99/wf-recorder)
+    - [Open Broadcaster Software | OBS](https://obsproject.com/)
+    - [emersion/slurp: Select a region in a Wayland compositor](https://github.com/emersion/slurp)
+- Secrets:
+    - [Pass: The Standard Unix Password Manager](https://www.passwordstore.org/)
+    - [grimsteel/pass-secret-service: Implementation of org.freedesktop.secrets using `pass`](https://github.com/grimsteel/pass-secret-service)
+
+> Some of them need more dependencies to be fully configured.
+
 ## Things to do after install
 
 ### files in `./secrets/`

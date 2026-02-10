@@ -877,6 +877,10 @@ in
                     '';
                 }
             ];
+            highlightOverride = {
+                LineNrAbove.fg = "#a6adc8";
+                LineNrBelow.fg = "#a6adc8";
+            };
             keymaps = [
                 {
                     key = "'";
