@@ -402,5 +402,7 @@ binds {
     Mod+Z { spawn-sh "~/app/wooz --invert-scroll --output $($SCRIPT_HOME/niri/niri_focused_output_name.sh)"; }
     Mod+S { spawn-sh "slurp -b '#0e1117aa' -c '#f5e0dc' >/dev/null"; }
 
+    Mod+W { spawn-sh "$SCRIPT_HOME/util/toggle_wallpaper.sh"; }
+
     Mod+Shift+Q { quit; }
 }
