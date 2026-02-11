@@ -23,18 +23,24 @@ input {
 }
 
 layout {
-    gaps 0
+    gaps 10
     background-color "#0e1117"
     center-focused-column "never"
     preset-column-widths {
         proportion 0.5
         proportion 1.0
     }
+    preset-window-heights {
+        proportion 0.33333
+        proportion 0.5
+        proportion 0.66667
+        proportion 1.0
+    }
     default-column-width { proportion 0.5; }
     focus-ring {
         width 2
         active-color "#f5e0dc"
-        inactive-color "#313244"
+        inactive-color "#7f849c"
     }
     border {
         off
@@ -52,7 +58,7 @@ layout {
     }
     tab-indicator {
         // hide-when-single-tab
-        place-within-column
+        // place-within-column
         gap 4
         width 4
         length total-proportion=1.0
@@ -63,10 +69,10 @@ layout {
         urgent-color "#f38ba8"
     }
     struts {
-        left 2
-        right 2
-        top 2
-        bottom 2
+        left 0
+        right 0
+        top -4
+        bottom -4
     }
 }
 

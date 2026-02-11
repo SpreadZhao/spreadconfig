@@ -40,6 +40,8 @@ config.unbind('<Up>', mode = 'command')
 config.unbind('<Down>', mode = 'command')
 config.bind('<Ctrl-K>', 'completion-item-focus --history prev', mode = 'command')
 config.bind('<Ctrl-J>', 'completion-item-focus --history next', mode = 'command')
+config.unbind('co', mode = 'normal')
+config.bind('da', 'tab-only', mode = 'normal')
 
 
 startFloatingFoot = '/home/spreadzhao/scripts/niri/start_floating_foot.sh'

@@ -357,6 +357,8 @@ in
             "org.freedesktop.FileManager1.common/config".text = ''
                 cmd="${scriptsDir}/util/lf-wrapper-dbus.sh"
             '';
+            # service
+            "systemd/user/waybar.service".source = "${pkgs.waybar}/share/systemd/user/waybar.service";
         };
         dataFile = {
             "fcitx5/rime/rime-data".source = "${pkgs.rime-ice}/share/rime-data";
