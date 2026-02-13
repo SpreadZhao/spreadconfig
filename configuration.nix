@@ -17,7 +17,10 @@
             enable = true;
             powerOnBoot = true;
             settings = {
-                General.Experimental = true;
+                General = {
+                    Experimental = true;
+                    KernelExperimental = true;
+                };
             };
         };
     };
@@ -121,6 +124,7 @@
     };
 
     services = {
+        upower.enable = true;
         udisks2.enable = lib.mkForce true;
         pipewire = {
             enable = true;
