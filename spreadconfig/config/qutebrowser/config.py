@@ -188,4 +188,6 @@ c.zoom.mouse_divider = 0
 
 c.window.hide_decoration = True;
 
+c.scrolling.smooth = False;
+
 catppuccin.setup(c, 'mocha', True)

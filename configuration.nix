@@ -13,7 +13,13 @@
     ];
 
     hardware = {
-        bluetooth.enable = true;
+        bluetooth = {
+            enable = true;
+            powerOnBoot = true;
+            settings = {
+                General.Experimental = true;
+            };
+        };
     };
 
     nixpkgs = {

@@ -14,10 +14,11 @@ input {
     }
 
     touchpad {
-        tap
+        // tap
         dwt
         natural-scroll
         accel-speed 0.5
+        scroll-factor 0.5
     }
 
 }
@@ -71,8 +72,8 @@ layout {
     struts {
         left 0
         right 0
-        top -4
-        bottom -4
+        top 0
+        bottom 0
     }
 }
 
@@ -81,7 +82,6 @@ output "eDP-1" {
     scale 2
     position x=5360 y=500
     // position x=3440 y=1439          // ensure monitor has left/right relationship
-    // you can do this since next release
     layout {
         default-column-width { proportion 1.0; }
         preset-column-widths {
@@ -124,7 +124,6 @@ environment {
 }
 
 recent-windows {
-    // off
     debounce-ms 750
 
     open-delay-ms 150
@@ -142,11 +141,6 @@ recent-windows {
     }
 
     binds {
-        // Alt+Tab         { next-window; }
-        // Alt+Shift+Tab   { previous-window; }
-        // Alt+grave       { next-window     filter="app-id"; }
-        // Alt+Shift+grave { previous-window filter="app-id"; }
-        //
         Mod+Tab         { next-window; }
         Mod+Shift+Tab   { previous-window; }
         Mod+grave       { next-window     filter="app-id"; }
@@ -157,19 +151,6 @@ recent-windows {
 overview {
     backdrop-color "#0e1117"
 }
-
-// spawn-at-startup "waybar"
-// spawn-at-startup "fcitx5 -d"
-// spawn-at-startup "clash-verge"
-// spawn-at-startup "mako"
-// spawn-at-startup "/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1"
-
-// spawn-sh-at-startup "wl-paste --type text --watch cliphist store"
-// spawn-sh-at-startup "wl-paste --type image --watch cliphist store"
-// spawn-sh-at-startup "~/scripts/niri/detect_audio_change.sh"
-// spawn-sh-at-startup "~/scripts/niri/detect_niri_window_change.sh"
-// spawn-sh-at-startup "~/scripts/niri/start_foot_server.sh"
-// spawn-sh-at-startup "~/scripts/niri/auto_lock.sh"
 
 hotkey-overlay {
     skip-at-startup
@@ -189,20 +170,15 @@ clipboard {
     disable-primary
 }
 
-window-rule {
-    match app-id="feh"
-    match app-id="vivaldi-stable"
-    match app-id="org.qutebrowser.qutebrowser"
-    open-fullscreen false
-}
+// window-rule {
+//     match app-id="feh"
+//     match app-id="vivaldi-stable"
+//     match app-id="org.qutebrowser.qutebrowser"
+//     open-fullscreen false
+// }
 
 window-rule {
     match app-id="feh" title=".*\/tmp.*"
-    // match app-id="wechat" title=".*Photos.*"
-    // match app-id="org.telegram.desktop" title="Media viewer"
-    // match app-id="QQ" title=".*聊天记录.*"
-    // match app-id="QQ" title=".*图片查看器.*"
-    // match app-id="QQ" title=".*视频播放器.*"
     match app-id=".*jetbrains.*" title=".*Welcome.*"
     match app-id="com.gabm.satty"
     open-floating true
@@ -215,25 +191,6 @@ window-rule {
     open-focused false
 }
 
-// window-rule {
-//     match app-id="org.telegram.desktop"
-//     default-column-width { fixed 456; }
-// }
-
-window-rule {
-    match app-id="org.telegram.desktop" title="Media viewer"
-    open-floating false
-    open-fullscreen false
-    max-width 200
-}
-
-// window-rule {
-//     match app-id="org.gnome.FileRoller"
-//     open-floating true
-//     default-column-width { proportion 0.34; }
-//     default-window-height { proportion 0.75; }
-// }
-
 // Indicate screencasted windows with red colors.
 window-rule {
     match is-window-cast-target=true
@@ -244,15 +201,6 @@ window-rule {
         width 2
     }
 
-}
-
-window-rule {
-    match app-id="feh"
-    match app-id="wechat" title=".*Photos.*"
-    // match app-id="QQ" title=".*聊天记录.*"
-    // match app-id="QQ" title=".*图片查看器.*"
-    // match app-id="QQ" title=".*视频播放器.*"
-    default-column-width {}
 }
 
 // floating terminal
