@@ -6,7 +6,9 @@
 - Launcher: [dnkl/fuzzel: App launcher and fuzzy finder for Wayland, inspired by rofi(1) and dmenu(1). - Codeberg.org](https://codeberg.org/dnkl/fuzzel)
 - Notification: [dnkl/fnott: Keyboard driven and lightweight Wayland notification daemon for wlroots-based compositors. - Codeberg.org](https://codeberg.org/dnkl/fnott)
 - Bar: [Alexays/Waybar: Highly customizable Wayland bar for Sway and Wlroots based compositors. :tada:](https://github.com/Alexays/Waybar)
-- File Manager: [gokcehan/lf: Terminal file manager](https://github.com/gokcehan/lf)
+- File Manager: [gokcehan/lf: Terminal file manager](https://github.com/gokcehan/lf) with these powerful addons:
+    - [boydaihungst/org.freedesktop.FileManager1.common](https://github.com/boydaihungst/org.freedesktop.FileManager1.common)
+    - [hunkyburrito/xdg-desktop-portal-termfilechooser: xdg-desktop-portal backend for choosing files with your favorite file chooser](https://github.com/hunkyburrito/xdg-desktop-portal-termfilechooser)
 - Screenshot: 
     - [grim: Grab images from a Wayland compositor](https://sr.ht/~emersion/grim/)
     - [emersion/slurp: Select a region in a Wayland compositor](https://github.com/emersion/slurp)
