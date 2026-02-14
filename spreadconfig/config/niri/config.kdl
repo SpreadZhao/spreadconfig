@@ -170,12 +170,11 @@ clipboard {
     disable-primary
 }
 
-// window-rule {
-//     match app-id="feh"
-//     match app-id="vivaldi-stable"
-//     match app-id="org.qutebrowser.qutebrowser"
-//     open-fullscreen false
-// }
+window-rule {
+    match app-id="feh"
+    match app-id="org.qutebrowser.qutebrowser"
+    open-fullscreen false
+}
 
 window-rule {
     match app-id="feh" title=".*\/tmp.*"
