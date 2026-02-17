@@ -13,10 +13,10 @@ let
         jdk8
     ];
     defaultJDK = builtins.elemAt installedJDKs 0;
-    projDir = "${config.xdg.userDirs.extraConfig.XDG_WORKSPACE_DIR}/spreadconfig";
-    secretsDir = "${projDir}/secrets";
+    projDir = "${config.xdg.userDirs.extraConfig.WORKSPACE}/spreadconfig";
     scriptsDir = "${config.home.homeDirectory}/scripts";
-    spreadconfigDir = "${config.home.homeDirectory}/workspaces/spreadconfig/spreadconfig";
+    secretsDir = "${projDir}/secrets";
+    spreadconfigDir = "${projDir}/spreadconfig";
     mochaBg = "0e1117";
 in
 {
@@ -216,6 +216,7 @@ in
             rsync
             rclone
             lazygit
+            wooz
         ];
     };
     systemd.user.services = {
@@ -299,7 +300,7 @@ in
                 ];
             };
             Service = {
-                ExecStart = "${config.xdg.userDirs.extraConfig.XDG_APP_DIR}/file_manager_dbus";
+                ExecStart = "${config.xdg.userDirs.extraConfig.APP}/file_manager_dbus";
                 Restart = "on-failure";
                 RestartSec = 5;
                 TimeoutStopSec = 10;
@@ -395,14 +396,28 @@ in
             shutdown = {
                 name = "Shutdown";
                 type = "Application";
-                exec = "shutdown -h now";
+                exec = "systemctl poweroff";
                 icon = "";
                 terminal = false;
             };
             reboot = {
                 name = "Reboot";
                 type = "Application";
-                exec = "reboot";
+                exec = "systemctl reboot";
+                icon = "";
+                terminal = false;
+            };
+            sleep = {
+                name = "Sleep";
+                type = "Application";
+                exec = "systemctl sleep";
+                icon = "";
+                terminal = false;
+            };
+            suspend = {
+                name = "Suspend";
+                type = "Application";
+                exec = "systemctl suspend";
                 icon = "";
                 terminal = false;
             };
@@ -473,14 +488,13 @@ in
             enable = true;
             createDirectories = true;
             extraConfig = {
-                XDG_LIB_DIR = "${config.home.homeDirectory}/Lib";
-                XDG_WORKSPACE_DIR = "${config.home.homeDirectory}/workspaces";
-                XDG_TEMP_DIR = "${config.home.homeDirectory}/temp";
-                XDG_SATTY_DIR = "${config.xdg.userDirs.pictures}/satty";
-                XDG_SCREENSHOT_DIR = "${config.xdg.userDirs.pictures}/screenshot";
-                XDG_SCREENRECORD_DIR = "${config.xdg.userDirs.videos}/screenrecord";
-                XDG_APP_DIR = "${config.home.homeDirectory}/app";
-                # XDG_MNT_DAV_DIR = "${config.home.homeDirectory}/mnt/dav";
+                LIB = "${config.home.homeDirectory}/Lib";
+                WORKSPACE = "${config.home.homeDirectory}/workspaces";
+                TEMP = "${config.home.homeDirectory}/temp";
+                SATTY = "${config.xdg.userDirs.pictures}/satty";
+                SCREENSHOT = "${config.xdg.userDirs.pictures}/screenshot";
+                SCREENRECORD = "${config.xdg.userDirs.videos}/screenrecord";
+                APP = "${config.home.homeDirectory}/app";
             };
         };
     };
@@ -527,19 +541,6 @@ in
         };
         gtk3 = {
             enable = true;
-            bookmarks = [
-                "file://${config.xdg.userDirs.documents}"
-                "file://${config.xdg.userDirs.download}"
-                "file://${config.xdg.userDirs.music}"
-                "file://${config.xdg.userDirs.pictures}"
-                "file://${config.xdg.userDirs.videos}"
-                "file://${config.xdg.userDirs.extraConfig.XDG_WORKSPACE_DIR} WORK"
-                "file://${config.xdg.userDirs.extraConfig.XDG_LIB_DIR}"
-                "file://${config.xdg.userDirs.extraConfig.XDG_TEMP_DIR}"
-                "file://${config.xdg.userDirs.extraConfig.XDG_SCREENSHOT_DIR}"
-                "file://${config.xdg.userDirs.extraConfig.XDG_SCREENRECORD_DIR}"
-                "davs://spreadzhao.cloud:10116/ NAS"
-            ];
         };
         gtk4.enable = true;
     };
@@ -733,10 +734,10 @@ in
                 n = "nvim .";
                 lg = "lazygit";
                 c = "clear";
-                wk = "cd ${config.xdg.userDirs.extraConfig.XDG_WORKSPACE_DIR}";
-                sb = "cd ${config.xdg.userDirs.extraConfig.XDG_WORKSPACE_DIR}/SecondBrain";
-                st = "cd ${config.xdg.userDirs.extraConfig.XDG_WORKSPACE_DIR}/SpreadStudy";
-                lc = "cd ${config.xdg.userDirs.extraConfig.XDG_WORKSPACE_DIR}/SpreadStudy/Leetcode/LeetcodeCpp/ && n";
+                wk = "cd ${config.xdg.userDirs.extraConfig.WORKSPACE}";
+                sb = "cd ${config.xdg.userDirs.extraConfig.WORKSPACE}/SecondBrain";
+                st = "cd ${config.xdg.userDirs.extraConfig.WORKSPACE}/SpreadStudy";
+                lc = "cd ${config.xdg.userDirs.extraConfig.WORKSPACE}/SpreadStudy/Leetcode/LeetcodeCpp/ && n";
                 shuffle = "mpv --shuffle --force-window --autofit-smaller=800x500 .";
                 q = "exit";
                 ca = "mpv /dev/video0";
@@ -1775,19 +1776,9 @@ in
                 };
                 treesitter = {
                     enable = true;
-                    # highlight.enable = true;
-                    # indent.enable = true;
-                    folding = true;
-                    settings = {
-                        auto_install = true;
-                        # ensure_installed = "all";
-                        highlight.enable = true;
-                        indent.enable = true;
-                    };
-                    lazyLoad = {
-                        enable = true;
-                        settings.event = "VimEnter";
-                    };
+                    highlight.enable = true;
+                    indent.enable = true;
+                    folding.enable = true;
                 };
                 todo-comments = {
                     enable = true;
@@ -2334,12 +2325,9 @@ in
                         command = lock;
                     }
                 ];
-                events = [
-                    {
-                        event = "before-sleep";
-                        command = lock;
-                    }
-                ];
+                events = {
+                    "before-sleep" = lock;
+                };
             };
         gpg-agent = {
             enable = true;

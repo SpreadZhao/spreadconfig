@@ -227,7 +227,7 @@ binds {
     Mod+D { spawn-sh "swaylock"; }
     Mod+Shift+D { spawn-sh "$SCRIPT_HOME/niri/niri_lock.sh"; }
 
-    Mod+B { spawn-sh "killall -SIGUSR1 waybar"; }
+    Mod+B { spawn-sh "killall -SIGUSR1 .waybar-wrapped"; }
 
     Mod+O repeat=false { toggle-overview; }
 
@@ -326,8 +326,6 @@ binds {
 
     Mod+C { center-column; }
 
-    Mod+Ctrl+C { center-visible-columns; }
-
     Mod+Minus { set-column-width "-10%"; }
     Mod+Equal { set-column-width "+10%"; }
 
@@ -345,7 +343,7 @@ binds {
 
     Mod+Shift+V { spawn-sh "cliphist list | fuzzel --dmenu | cliphist decode | wl-copy"; }
 
-    Mod+Z { spawn-sh "~/app/wooz --invert-scroll --output $($SCRIPT_HOME/niri/niri_focused_output_name.sh)"; }
+    Mod+Z { spawn-sh "wooz --invert-scroll --output $($SCRIPT_HOME/niri/niri_focused_output_name.sh)"; }
     Mod+S { spawn-sh "slurp -b '#0e1117aa' -c '#f5e0dc' >/dev/null"; }
 
     Mod+W { spawn-sh "$SCRIPT_HOME/util/toggle_wallpaper.sh"; }
