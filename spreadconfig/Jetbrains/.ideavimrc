@@ -17,22 +17,21 @@ Plug 'machakann/vim-highlightedyank'
 Plug 'tpope/vim-commentary'
 Plug 'easymotion/vim-easymotion'
 Plug 'preservim/nerdtree'
-Plug 'vim-scripts/argtextobj.vim'
 Plug 'tpope/vim-surround'
 Plug 'terryma/vim-multiple-cursors'
 set which-key
 set notimeout
 set easymotion
 set anyobject
-set quickscope
+" set quickscope
 set peekaboo
 packadd matchit
 
 let mapleader = " "
 set keep-english-in-normal-and-restore-in-insert
 
-let g:qs_primary_color   = '#ff0000'
-let g:qs_secondary_color = '#00ff00'
+" let g:qs_primary_color   = '#ff0000'
+" let g:qs_secondary_color = '#00ff00'
 
 nmap <leader>si <Action>(SelectInProjectView)
 nmap <leader>ge <Action>(RecentFiles)
@@ -46,7 +45,7 @@ nmap <leader>a <Action>(Annotate)
 nmap <leader>p "+p
 nmap <leader>y "+y
 nmap grn <Action>(RenameElement)
-nmap ' $
+xmap ' $
 nmap <leader>; <leader><leader>s
 nmap <leader>lb <Action>(ToggleLineBreakpoint)
 nmap <leader>d <Action>(QuickJavaDoc)
