@@ -212,6 +212,7 @@ in
             tesseract
             poppler-utils
             lf
+            trash-cli
             rsync
             rclone
             lazygit
