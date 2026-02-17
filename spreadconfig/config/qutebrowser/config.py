@@ -192,4 +192,12 @@ c.scrolling.smooth = False;
 
 c.content.proxy = "http://127.0.0.1:7897"
 
+c.hints.radius = 0
+c.hints.padding = {
+    'top': 0,
+    'bottom': 0,
+    'left': 0,
+    'right': 0,
+}
+
 catppuccin.setup(c, 'mocha', True)
