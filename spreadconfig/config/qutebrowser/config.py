@@ -190,4 +190,6 @@ c.window.hide_decoration = True;
 
 c.scrolling.smooth = False;
 
+c.content.proxy = "http://127.0.0.1:7897"
+
 catppuccin.setup(c, 'mocha', True)

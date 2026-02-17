@@ -13,6 +13,15 @@
     ];
 
     hardware = {
+        graphics.enable = true;
+        nvidia = {
+            modesetting.enable = true;
+            powerManagement.enable = false;
+            powerManagement.finegrained = false;
+            nvidiaSettings = true;
+            open = true;
+            package = config.boot.kernelPackages.nvidiaPackages.stable;
+        };
         bluetooth = {
             enable = true;
             powerOnBoot = true;
@@ -28,7 +37,7 @@
     nixpkgs = {
         config = {
             allowUnfree = true;
-            rocmSupport = true;
+            # rocmSupport = true;
         };
     };
 
@@ -82,8 +91,17 @@
     };
 
     networking = {
-        hostName = "thinkbook";
+        hostName = "desktop1";
         networkmanager.enable = true;
+        proxy = {
+            default = "http://127.0.0.1:7897";
+            httpProxy = "http://127.0.0.1:7897";
+            httpsProxy = "http://127.0.0.1:7897";
+            ftpProxy = "http://127.0.0.1:7897";
+            rsyncProxy = "http://127.0.0.1:7897";
+            allProxy = "http://127.0.0.1:7897";
+            noProxy = "127.0.0.1,localhost,.localdomain";
+        };
     };
 
     time.timeZone = "Asia/Shanghai";
@@ -124,6 +142,7 @@
     };
 
     services = {
+        xserver.videoDrivers = [ "nvidia" ];
         upower.enable = true;
         udisks2.enable = lib.mkForce true;
         pipewire = {
@@ -200,6 +219,13 @@
         shellAliases = lib.mkForce { };
     };
     programs = {
+        clash-verge = {
+            enable = true;
+            tunMode = false;
+            package = pkgs.clash-verge-rev;
+            autoStart = true;
+            serviceMode = false;
+        };
         dconf.enable = true;
         nano.enable = false;
         zsh.enable = true;

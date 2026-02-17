@@ -39,6 +39,12 @@
 sudo ln -s /path/to/spreadconfig /etc/nixos
 ```
 
+⚠️ However, I use path directly now. So make sure this repo is in:
+
+```bash
+~/workspaces/spreadconfig
+```
+
 ### fcitx5
 
 Now that I have not already make fcitx5 config to work, so stuff like theme,addons,classic-ui,etc. should be configured manually.

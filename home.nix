@@ -2301,8 +2301,8 @@ in
         };
         ollama = {
             enable = true;
-            package = pkgs.ollama-rocm;
-            acceleration = "rocm";
+            package = pkgs.ollama-cuda;
+            acceleration = "cuda";
             host = "127.0.0.1";
             port = 11434;
         };

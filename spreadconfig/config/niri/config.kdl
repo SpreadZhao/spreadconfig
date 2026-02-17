@@ -97,7 +97,6 @@ output "HDMI-A-1" {
     layout {
         default-column-width { proportion 0.5; }
         preset-column-widths {
-            proportion 0.34
             proportion 0.5
             proportion 1.0
         }
