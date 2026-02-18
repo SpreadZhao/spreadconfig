@@ -159,7 +159,10 @@ cmd touch-save-file ${{
     fi
 
     if touch -- "$FILE_CHOOSER_SAVE_FILE_NAME"; then
-        lf -remote "send $id echo \"Created: $FILE_CHOOSER_SAVE_FILE_NAME\""
+        local msg
+        msg="Created: $FILE_CHOOSER_SAVE_FILE_NAME"
+        notify-send --app-name "lf" -u normal -t 10000 "$msg"
+        lf -remote "send $id echo $msg"
     fi
 }}
 
