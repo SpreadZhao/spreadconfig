@@ -759,37 +759,14 @@ in
             };
             initContent = lib.mkOrder 2000 ''
                 source ${scriptsDir}/config/config_zsh_nix.sh
-
-                # plugins
-                source ${pkgs.zsh-fzf-tab}/share/fzf-tab/fzf-tab.plugin.zsh
-                source ${pkgs.zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-                source ${pkgs.zsh-autosuggestions}/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.plugin.zsh
-                # ZSH_HIGHLIGHT_DIRS_BLACKLIST+=(/run/user/1000/gvfs/dav:host=spreadzhao.cloud,port=10116,ssl=true)
-                # ZSH_HIGHLIGHT_DIRS_BLACKLIST+=(/run/user/1000/gvfs)
-
                 source ${scriptsDir}/config/color_output.sh
-
                 eval "$(starship init zsh)"
-                # slim-starship() {
-                #     if [[ "$PWD" == *gvfs* ]]; then
-                #         export STARSHIP_CONFIG="${config.xdg.configHome}/starship/starship_simple.toml"
-                #     else
-                #         export STARSHIP_CONFIG="${config.xdg.configHome}/starship/starship.toml";
-                #     fi
-                # }
-                # add-zsh-hook precmd slim-starship
 
                 lfcd () {
                     # `command` is needed in case `lfcd` is aliased to `lf`
                     cd "$(command lf -print-last-dir "$@")"
                 }
-                # ls () {
-                #     if [[ "$PWD" == *gvfs* ]]; then
-                #         command ls
-                #     else
-                #         eza --icons
-                #     fi
-                # }
+
                 function vi-yank-wlclip {
                     zle vi-yank
                     print -rn -- "$CUTBUFFER" | wl-copy
@@ -797,6 +774,12 @@ in
 
                 zle -N vi-yank-wlclip
                 bindkey -M vicmd 'y' vi-yank-wlclip
+
+                # plugins
+                source ${pkgs.zsh-fzf-tab}/share/fzf-tab/fzf-tab.plugin.zsh
+                source ${pkgs.zsh-autosuggestions}/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.plugin.zsh
+                source ${scriptsDir}/config/catppuccin_mocha-zsh-syntax-highlighting.zsh
+                source ${pkgs.zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
             '';
         };
         zoxide.enable = true;
@@ -1533,7 +1516,7 @@ in
                             rainbow.enabled = false;
                         };
                         modes = {
-                            search.enabled = true;
+                            search.enabled = false;
                             char.enabled = false;
                         };
                     };

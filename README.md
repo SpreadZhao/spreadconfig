@@ -103,3 +103,21 @@ ninja -C build
 ```
 
 Then you will get `./build/file_manager_dbus`. Move it to `~/app/` like wooz.
+
+## Color Scheme
+
+- foot
+- gdu
+- fnott
+- niri
+- qutebrowser
+- swaylock
+- waybar
+- starship
+- fcitx5
+- fuzzel
+- btop
+- mpv
+- nixvim
+- bat
+- zsh-syntax-highlighting
