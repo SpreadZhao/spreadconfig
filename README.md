@@ -121,3 +121,7 @@ Then you will get `./build/file_manager_dbus`. Move it to `~/app/` like wooz.
 - nixvim
 - bat
 - zsh-syntax-highlighting
+- lazygit
+- obsidian
+- wayprompt
+- zathura

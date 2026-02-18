@@ -186,9 +186,9 @@ c.zoom.levels = [
 ]
 c.zoom.mouse_divider = 0
 
-c.window.hide_decoration = True;
+c.window.hide_decoration = True
 
-c.scrolling.smooth = False;
+c.scrolling.smooth = False
 
 c.content.proxy = "http://127.0.0.1:7897"
 
@@ -199,5 +199,7 @@ c.hints.padding = {
     'left': 0,
     'right': 0,
 }
+
+c.content.javascript.clipboard = "access-paste"
 
 catppuccin.setup(c, 'mocha', True)
