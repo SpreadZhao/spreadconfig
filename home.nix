@@ -45,6 +45,7 @@ in
             "$HOME/go/bin"
             "$HOME/Android/Sdk/platform-tools"
             "$HOME/Lib/jdks/bin"
+            "$HOME/.npm/bin"
         ];
         file = {
             "${scriptsDir}".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/scripts";
@@ -571,6 +572,13 @@ in
         };
     };
     programs = {
+        npm = {
+            enable = true;
+            settings = {
+                prefix = "${config.home.homeDirectory}/.npm";
+                color = true;
+            };
+        };
         btop = {
             enable = true;
             settings = {
