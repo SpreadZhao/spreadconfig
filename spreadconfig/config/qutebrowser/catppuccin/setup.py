@@ -124,7 +124,7 @@ def setup(c, flavour, samecolorrows = False):
     # }}}
 
     # background
-    c.colors.webpage.bg = palette["base"];
+    c.colors.webpage.bg = '#eff1f5';
     c.colors.webpage.preferred_color_scheme = 'dark'
     c.colors.webpage.darkmode.enabled = True
     c.colors.webpage.darkmode.policy.images = 'never'

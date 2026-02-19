@@ -201,5 +201,6 @@ c.hints.padding = {
 }
 
 c.content.javascript.clipboard = "access-paste"
+# c.qt.force_software_rendering = "chromium"
 
 catppuccin.setup(c, 'mocha', True)
