@@ -46,6 +46,7 @@ nmap <leader>p "+p
 nmap <leader>y "+y
 nmap grn <Action>(RenameElement)
 xmap ' $
+nmap ' $
 nmap <leader>; <leader><leader>s
 nmap <leader>lb <Action>(ToggleLineBreakpoint)
 nmap <leader>d <Action>(QuickJavaDoc)
