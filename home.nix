@@ -50,12 +50,6 @@ in
         file = {
             "${scriptsDir}".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/scripts";
             ".ideavimrc".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/Jetbrains/.ideavimrc";
-            # This may work after https://github.com/nix-community/home-manager/issues/3090 closed as complete.
-            # ".davfs2/secrets" = {
-            #     text = ''
-            #         ${lib.strings.trim (builtins.readFile ./secrets/nas_url)} spreadzhao ${lib.strings.trim (builtins.readFile ./secrets/nas_passwd)}
-            #     '';
-            # };
         }
         # jdk
         // (builtins.listToAttrs (
@@ -2251,6 +2245,7 @@ in
             enable = true;
             settings = {
                 main = {
+                    layer = "overlay";
                     title-color = "a6adc8ff";
                     summary-color = "cdd6f4ff";
                     body-color = "cdd6f4ff";
