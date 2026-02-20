@@ -9,47 +9,85 @@
     min-height: 0px;
 }
 
+/* all */
 window#waybar {
-    background-color: rgba(14, 17, 23, 0.7);
+    background-color: transparent;
     color: @text;
+}
+
+/* spacer */
+#custom-spacer {
+    background: rgba(14, 17, 23, 0.8);
+    margin-top: 10px;
+}
+
+/* niri workspaces */
+#workspaces {
+    background: rgba(14, 17, 23, 0.8);
+    border-radius: 8px 0px 0px 8px;
+    margin-left: 8px;
+    margin-top: 10px;
+    padding-left: 5px;
+    padding-right: 1px;
 }
 
 #workspaces button {
     padding: 0 0;
-    background: transparent;
+    background-color: transparent;
     color: @text;
 }
 
 #workspaces button.focused {
     border-top: 2px solid;
+    background-color: transparent;
     color: @rosewater;
 }
 
-#custom-info {
-    color: #13ed22;
+/* niri window indicator */
+#custom-window-indicator {
+    background: rgba(14, 17, 23, 0.8);
+    border-radius: 0px 8px 8px 0px;
+    margin-top: 10px;
+    padding-left: 1px;
+    padding-right: 5px;
 }
 
-#network {
-    color: @maroon;
+/* niri window title */
+#window {
+    border-radius: 8px;
+    background: rgba(14, 17, 23, 0.8);
+    margin-top: 10px;
+    padding-left: 5px;
+    padding-right: 5px;
 }
 
-#custom-audio {
-    color: @mauve;
+window#waybar.empty #window {
+    background-color: transparent;
 }
 
-#custom-battery {
-    color: @Red;
-}
-
-#custom-time {
-    color: @green;
-}
-
+/* right */
 #cpu {
+    background: rgba(14, 17, 23, 0.8);
+    border-radius: 8px 0px 0px 8px;
+    margin-top: 10px;
+    padding-left: 5px;
+    padding-right: 1px;
     color: @yellow;
 }
 
+#memory {
+    background: rgba(14, 17, 23, 0.8);
+    margin-top: 10px;
+    padding-left: 1px;
+    padding-right: 1px;
+    color: @pink;
+}
+
 #temperature {
+    background: rgba(14, 17, 23, 0.8);
+    margin-top: 10px;
+    padding-left: 1px;
+    padding-right: 1px;
     color: @rosewater
 }
 
@@ -61,6 +99,43 @@ window#waybar {
     color: @red;
 }
 
-#memory {
-    color: @pink;
+#network {
+    background: rgba(14, 17, 23, 0.8);
+    margin-top: 10px;
+    padding-left: 1px;
+    padding-right: 1px;
+    color: @maroon;
+}
+
+#custom-audio {
+    background: rgba(14, 17, 23, 0.8);
+    margin-top: 10px;
+    padding-left: 1px;
+    padding-right: 1px;
+    color: @mauve;
+}
+
+#custom-battery {
+    background: rgba(14, 17, 23, 0.8);
+    margin-top: 10px;
+    padding-left: 1px;
+    padding-right: 1px;
+    color: @Red;
+}
+
+#custom-time {
+    background: rgba(14, 17, 23, 0.8);
+    margin-top: 10px;
+    padding-left: 1px;
+    padding-right: 1px;
+    color: @green;
+}
+
+#tray {
+    background: rgba(14, 17, 23, 0.8);
+    margin-top: 10px;
+    margin-right: 8px;
+    border-radius: 0px 8px 8px 0px;
+    padding-left: 1px;
+    padding-right: 5px;
 }

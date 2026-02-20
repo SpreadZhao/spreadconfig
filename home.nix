@@ -218,6 +218,8 @@ in
             rclone
             lazygit
             wooz
+
+            nvtopPackages.nvidia
         ];
     };
     systemd.user.services = {

@@ -24,7 +24,7 @@ input {
 }
 
 layout {
-    gaps 10
+    gaps 12
     background-color "#0e1117"
     center-focused-column "never"
     preset-column-widths {
@@ -39,6 +39,7 @@ layout {
     }
     default-column-width { proportion 0.5; }
     focus-ring {
+        off
         width 2
         active-color "#f5e0dc"
         inactive-color "#7f849c"
@@ -50,30 +51,24 @@ layout {
         inactive-color "#313244"
         urgent-color "#f38ba8"
     }
-    shadow {
-        off
-        softness 30
-        spread 5
-        offset x=0 y=5
-        color "#0007"
-    }
     tab-indicator {
         // hide-when-single-tab
         // place-within-column
         gap 4
         width 4
+        corner-radius 8
         length total-proportion=1.0
         position "left"
-        gaps-between-tabs 5
-        active-color "#b4befe"
-        inactive-color "#45475a"
+        gaps-between-tabs 12
+        active-color "#fab387"
+        inactive-color "#1e1e2e"
         urgent-color "#f38ba8"
     }
     struts {
-        left 0
-        right 0
-        top 0
-        bottom 0
+        left -2
+        right -2
+        top -2
+        bottom -2
     }
 }
 
@@ -131,7 +126,7 @@ recent-windows {
         active-color "#585b70ff"
         urgent-color "#f38ba8ff"
         padding 30
-        corner-radius 0
+        corner-radius 8
     }
 
     previews {
@@ -169,6 +164,42 @@ clipboard {
     disable-primary
 }
 
+layer-rule {
+    match namespace="^launcher$"
+    shadow {
+        on
+        softness 15
+        spread 1
+        offset x=0 y=0
+        draw-behind-window false
+        color "#f2cdcd"
+    }
+    geometry-corner-radius 8
+}
+
+window-rule {
+    geometry-corner-radius 8
+    clip-to-geometry true
+    draw-border-with-background false
+}
+
+window-rule {
+    match is-floating=false
+    tiled-state true
+}
+
+window-rule {
+    match is-focused=true
+    shadow {
+        on
+        softness 15
+        spread 1
+        offset x=0 y=0
+        draw-behind-window false
+        color "#f2cdcd"
+    }
+}
+
 window-rule {
     match app-id="feh"
     match app-id="org.qutebrowser.qutebrowser"
@@ -198,7 +229,6 @@ window-rule {
         inactive-color "#b4befe"
         width 2
     }
-
 }
 
 // floating terminal
@@ -320,9 +350,8 @@ binds {
     Mod+Shift+R { switch-preset-window-height; }
     Mod+Ctrl+R { reset-window-height; }
     Mod+F { maximize-column; }
-    Mod+F11 { fullscreen-window; }
-    Mod+Shift+F11 { toggle-windowed-fullscreen; }
-    Mod+M { maximize-window-to-edges; }
+    Mod+M { fullscreen-window; }
+    Mod+Shift+M { toggle-windowed-fullscreen; }
 
     Mod+C { center-column; }
 
