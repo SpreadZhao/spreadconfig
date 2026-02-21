@@ -9,6 +9,7 @@
     min-height: 0px;
 }
 
+
 /* all */
 window#waybar {
     background-color: transparent;
@@ -21,34 +22,33 @@ window#waybar {
     margin-top: 10px;
 }
 
-/* niri workspaces */
-#workspaces {
+/* niri workspaces and windows */
+#niri-workspace-window {
     background: rgba(14, 17, 23, 0.8);
-    border-radius: 8px 0px 0px 8px;
-    margin-left: 8px;
+    border-radius: 8px;
     margin-top: 10px;
+    margin-left: 10px;
+}
+
+#workspaces {
     padding-left: 5px;
-    padding-right: 1px;
+    padding-right: 5px;
 }
 
 #workspaces button {
     padding: 0 0;
+    border-top: 2px solid transparent;
     background-color: transparent;
     color: @text;
 }
 
 #workspaces button.focused {
-    border-top: 2px solid;
-    background-color: transparent;
+    border-top: 2px solid @rosewater;
     color: @rosewater;
 }
 
 /* niri window indicator */
 #custom-window-indicator {
-    background: rgba(14, 17, 23, 0.8);
-    border-radius: 0px 8px 8px 0px;
-    margin-top: 10px;
-    padding-left: 1px;
     padding-right: 5px;
 }
 
@@ -71,23 +71,21 @@ window#waybar.empty #window {
     border-radius: 8px 0px 0px 8px;
     margin-top: 10px;
     padding-left: 5px;
-    padding-right: 1px;
+    padding-right: 5px;
     color: @yellow;
 }
 
 #memory {
     background: rgba(14, 17, 23, 0.8);
     margin-top: 10px;
-    padding-left: 1px;
-    padding-right: 1px;
+    padding-right: 5px;
     color: @pink;
 }
 
 #temperature {
     background: rgba(14, 17, 23, 0.8);
     margin-top: 10px;
-    padding-left: 1px;
-    padding-right: 1px;
+    padding-right: 5px;
     color: @rosewater
 }
 
@@ -102,40 +100,35 @@ window#waybar.empty #window {
 #network {
     background: rgba(14, 17, 23, 0.8);
     margin-top: 10px;
-    padding-left: 1px;
-    padding-right: 1px;
+    padding-right: 5px;
     color: @maroon;
 }
 
 #custom-audio {
     background: rgba(14, 17, 23, 0.8);
     margin-top: 10px;
-    padding-left: 1px;
-    padding-right: 1px;
+    padding-right: 5px;
     color: @mauve;
 }
 
 #custom-battery {
     background: rgba(14, 17, 23, 0.8);
     margin-top: 10px;
-    padding-left: 1px;
-    padding-right: 1px;
+    padding-right: 5px;
     color: @Red;
 }
 
 #custom-time {
     background: rgba(14, 17, 23, 0.8);
     margin-top: 10px;
-    padding-left: 1px;
-    padding-right: 1px;
+    padding-right: 5px;
     color: @green;
 }
 
 #tray {
     background: rgba(14, 17, 23, 0.8);
     margin-top: 10px;
-    margin-right: 8px;
+    margin-right: 10px;
     border-radius: 0px 8px 8px 0px;
-    padding-left: 1px;
     padding-right: 5px;
 }

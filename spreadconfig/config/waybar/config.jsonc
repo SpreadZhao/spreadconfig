@@ -3,8 +3,7 @@
     "height": 30,
     "spacing": 0,
     "modules-left": [
-        "niri/workspaces",
-        "custom/window-indicator",
+        "group/niri-workspace-window",
     ],
     "modules-center": [
         "niri/window"
@@ -18,6 +17,13 @@
         "custom/time",
         "tray"
     ],
+    "group/niri-workspace-window": {
+        "orientation": "horizontal",
+        "modules": [
+            "niri/workspaces",
+            "custom/window-indicator"
+        ]
+    },
     "custom/spacer": {
         "format": "|"
     },
