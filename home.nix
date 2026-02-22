@@ -7,6 +7,7 @@
 }:
 let
     installedJDKs = with pkgs; [
+        jdk25
         jdk21
         jdk17
         jdk11
@@ -214,6 +215,7 @@ in
             wooz
 
             nvtopPackages.nvidia
+            chromium
         ];
     };
     systemd.user.services = {
@@ -330,6 +332,10 @@ in
     };
     xdg = {
         enable = true;
+        autostart = {
+            enable = true;
+            readOnly = true;
+        };
         configFile = {
             "niri".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/niri";
             "foot".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/foot";
@@ -455,6 +461,27 @@ in
                 type = "Application";
                 icon = "";
                 terminal = false;
+            };
+        };
+        mime.enable = true;
+        mimeApps = {
+            enable = true;
+            defaultApplications = {
+                "text/html" = "org.qutebrowser.qutebrowser.desktop";
+                "x-scheme-handler/http" = "org.qutebrowser.qutebrowser.desktop";
+                "x-scheme-handler/https" = "org.qutebrowser.qutebrowser.desktop";
+                "x-scheme-handler/about" = "org.qutebrowser.qutebrowser.desktop";
+                "x-scheme-handler/unknown" = "org.qutebrowser.qutebrowser.desktop";
+                "x-scheme-handler/clash" = "clash-verge.desktop";
+                "x-scheme-handler/clash-verge" = "clash-verge.desktop";
+                "x-scheme-handler/tg" = "org.telegram.desktop.desktop";
+                "x-scheme-handler/tonsite" = "org.telegram.desktop.desktop";
+            };
+            associations.added = {
+                "x-scheme-handler/tg" = "org.telegram.desktop.desktop";
+                "x-scheme-handler/tonsite" = "org.telegram.desktop.desktop";
+                "x-scheme-handler/clash" = "clash-verge.desktop";
+                "x-scheme-handler/clash-verge" = "clash-verge.desktop";
             };
         };
         portal = {
@@ -2260,6 +2287,7 @@ in
                     stacking-order = "bottom-up";
                     selection-helper-uses-null-separator = "yes";
                     selection-helper = "\"fuzzel --dmenu0\"";
+                    border-radius = 8;
 
                     dpi-aware = "yes";
                     title-font = "IBM Plex Sans:size=20";
