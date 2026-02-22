@@ -118,7 +118,13 @@ in
             # media: pic, music, video
             imagemagick
             mpv
-            feh
+            (feh.overrideAttrs (old: {
+                postInstall = (old.postInstall or "") + ''
+                    substituteInPlace $out/share/applications/feh.desktop \
+                      --replace-fail "Exec=feh --start-at %u" \
+                                     "Exec=feh --theme fit --start-at %u"
+                '';
+            }))
             satty
             # libsixel
             wf-recorder
@@ -129,7 +135,7 @@ in
             grim
             slurp
             wayfreeze
-            (pkgs.scrcpy.overrideAttrs (old: {
+            (scrcpy.overrideAttrs (old: {
                 postInstall = (old.postInstall or "") + ''
                     substituteInPlace $out/share/applications/scrcpy.desktop \
                       --replace-fail "-c scrcpy\"" \
@@ -468,6 +474,24 @@ in
             enable = true;
             defaultApplications = {
                 "text/html" = "org.qutebrowser.qutebrowser.desktop";
+                "image/bmp" = "feh.desktop";
+                "image/gif" = "feh.desktop";
+                "image/jpeg" = "feh.desktop";
+                "image/jpg" = "feh.desktop";
+                "image/pjpeg" = "feh.desktop";
+                "image/png" = "feh.desktop";
+                "image/tiff" = "feh.desktop";
+                "image/webp" = "feh.desktop";
+                "image/x-bmp" = "feh.desktop";
+                "image/x-pcx" = "feh.desktop";
+                "image/x-png" = "feh.desktop";
+                "image/x-portable-anymap" = "feh.desktop";
+                "image/x-portable-bitmap" = "feh.desktop";
+                "image/x-portable-graymap" = "feh.desktop";
+                "image/x-portable-pixmap" = "feh.desktop";
+                "image/x-tga" = "feh.desktop";
+                "image/x-xbitmap" = "feh.desktop";
+                "image/heic" = "feh.desktop";
                 "x-scheme-handler/http" = "org.qutebrowser.qutebrowser.desktop";
                 "x-scheme-handler/https" = "org.qutebrowser.qutebrowser.desktop";
                 "x-scheme-handler/about" = "org.qutebrowser.qutebrowser.desktop";
