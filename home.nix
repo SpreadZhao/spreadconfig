@@ -222,6 +222,7 @@ in
 
             nvtopPackages.nvidia
             chromium
+            localsend
         ];
     };
     systemd.user.services = {
