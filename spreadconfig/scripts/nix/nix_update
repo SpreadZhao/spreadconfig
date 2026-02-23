@@ -1,4 +1,3 @@
 #/usr/bin/env bash
 
-nix flake update --flake "path://$HOME/workspaces/spreadconfig"
-sns
+nix flake update --flake "path://$HOME/workspaces/spreadconfig" && sns
