@@ -190,8 +190,6 @@ c.window.hide_decoration = True
 
 c.scrolling.smooth = False
 
-c.content.proxy = "http://127.0.0.1:7897"
-
 c.hints.radius = 0
 c.hints.padding = {
     'top': 0,

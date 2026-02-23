@@ -219,10 +219,6 @@ in
             rclone
             lazygit
             wooz
-
-            nvtopPackages.nvidia
-            chromium
-            localsend
         ];
     };
     systemd.user.services = {
@@ -497,16 +493,12 @@ in
                 "x-scheme-handler/https" = "org.qutebrowser.qutebrowser.desktop";
                 "x-scheme-handler/about" = "org.qutebrowser.qutebrowser.desktop";
                 "x-scheme-handler/unknown" = "org.qutebrowser.qutebrowser.desktop";
-                "x-scheme-handler/clash" = "clash-verge.desktop";
-                "x-scheme-handler/clash-verge" = "clash-verge.desktop";
                 "x-scheme-handler/tg" = "org.telegram.desktop.desktop";
                 "x-scheme-handler/tonsite" = "org.telegram.desktop.desktop";
             };
             associations.added = {
                 "x-scheme-handler/tg" = "org.telegram.desktop.desktop";
                 "x-scheme-handler/tonsite" = "org.telegram.desktop.desktop";
-                "x-scheme-handler/clash" = "clash-verge.desktop";
-                "x-scheme-handler/clash-verge" = "clash-verge.desktop";
             };
         };
         portal = {
@@ -2334,8 +2326,8 @@ in
         };
         ollama = {
             enable = true;
-            package = pkgs.ollama-cuda;
-            acceleration = "cuda";
+            package = pkgs.ollama-rocm;
+            acceleration = "rocm";
             host = "127.0.0.1";
             port = 11434;
         };
