@@ -39,6 +39,12 @@
 sudo ln -s /path/to/spreadconfig /etc/nixos
 ```
 
+⚠️ However, I use path directly now. So make sure this repo is in:
+
+```bash
+~/workspaces/spreadconfig
+```
+
 ### fcitx5
 
 Now that I have not already make fcitx5 config to work, so stuff like theme,addons,classic-ui,etc. should be configured manually.
@@ -97,3 +103,25 @@ ninja -C build
 ```
 
 Then you will get `./build/file_manager_dbus`. Move it to `~/app/` like wooz.
+
+## Color Scheme
+
+- foot
+- gdu
+- fnott
+- niri
+- qutebrowser
+- swaylock
+- waybar
+- starship
+- fcitx5
+- fuzzel
+- btop
+- mpv
+- nixvim
+- bat
+- zsh-syntax-highlighting
+- lazygit
+- obsidian
+- wayprompt
+- zathura

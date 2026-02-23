@@ -186,8 +186,19 @@ c.zoom.levels = [
 ]
 c.zoom.mouse_divider = 0
 
-c.window.hide_decoration = True;
+c.window.hide_decoration = True
 
-c.scrolling.smooth = False;
+c.scrolling.smooth = False
+
+c.hints.radius = 0
+c.hints.padding = {
+    'top': 0,
+    'bottom': 0,
+    'left': 0,
+    'right': 0,
+}
+
+c.content.javascript.clipboard = "access-paste"
+# c.qt.force_software_rendering = "qt-quick"
 
 catppuccin.setup(c, 'mocha', True)

@@ -124,7 +124,7 @@ def setup(c, flavour, samecolorrows = False):
     # }}}
 
     # background
-    c.colors.webpage.bg = palette["base"];
+    c.colors.webpage.bg = '#eff1f5';
     c.colors.webpage.preferred_color_scheme = 'dark'
     c.colors.webpage.darkmode.enabled = True
     c.colors.webpage.darkmode.policy.images = 'never'
@@ -183,16 +183,16 @@ def setup(c, flavour, samecolorrows = False):
     # hints {{{
     ## Background color for hints. Note that you can use a `rgba(...)` value
     ## for transparency.
-    c.colors.hints.bg = palette["peach"]
+    c.colors.hints.bg = palette["base"]
 
     ## Font color for hints.
-    c.colors.hints.fg = palette["mantle"]
+    c.colors.hints.fg = palette["text"]
 
     ## Hints
-    c.hints.border = "1px solid " + palette["mantle"]
+    c.hints.border = "1px solid " + palette["rosewater"]
 
     ## Font color for the matched part of hints.
-    c.colors.hints.match.fg = palette["subtext1"]
+    c.colors.hints.match.fg = palette["yellow"]
     # }}}
 
     # keyhints {{{
@@ -359,4 +359,5 @@ def setup(c, flavour, samecolorrows = False):
 
     c.colors.contextmenu.selected.bg = palette["overlay0"]
     c.colors.contextmenu.selected.fg = palette["rosewater"]
+
     # }}}

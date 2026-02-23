@@ -125,11 +125,6 @@ config_fzf() {
 # Note: Must be loaded after FZF config
 # ==============================================================================
 config_fzf_tab() {
-    # Extend fpath for system-wide completion files
-    # fpath=(
-    #     "$(nix path-info nixpkgs#zsh-completions)/share/zsh/site-functions"
-    #     $fpath
-    # )
     # Load zsh completion module
     zmodload zsh/complist
     # Initialize completion system

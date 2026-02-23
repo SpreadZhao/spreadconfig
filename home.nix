@@ -7,16 +7,17 @@
 }:
 let
     installedJDKs = with pkgs; [
+        jdk25
         jdk21
         jdk17
         jdk11
         jdk8
     ];
     defaultJDK = builtins.elemAt installedJDKs 0;
-    projDir = "${config.xdg.userDirs.extraConfig.XDG_WORKSPACE_DIR}/spreadconfig";
-    secretsDir = "${projDir}/secrets";
+    projDir = "${config.xdg.userDirs.extraConfig.WORKSPACE}/spreadconfig";
     scriptsDir = "${config.home.homeDirectory}/scripts";
-    spreadconfigDir = "${config.home.homeDirectory}/workspaces/spreadconfig/spreadconfig";
+    secretsDir = "${projDir}/secrets";
+    spreadconfigDir = "${projDir}/spreadconfig";
     mochaBg = "0e1117";
 in
 {
@@ -45,16 +46,11 @@ in
             "$HOME/go/bin"
             "$HOME/Android/Sdk/platform-tools"
             "$HOME/Lib/jdks/bin"
+            "$HOME/.npm/bin"
         ];
         file = {
             "${scriptsDir}".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/scripts";
             ".ideavimrc".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/Jetbrains/.ideavimrc";
-            # This may work after https://github.com/nix-community/home-manager/issues/3090 closed as complete.
-            # ".davfs2/secrets" = {
-            #     text = ''
-            #         ${lib.strings.trim (builtins.readFile ./secrets/nas_url)} spreadzhao ${lib.strings.trim (builtins.readFile ./secrets/nas_passwd)}
-            #     '';
-            # };
         }
         # jdk
         // (builtins.listToAttrs (
@@ -122,7 +118,13 @@ in
             # media: pic, music, video
             imagemagick
             mpv
-            feh
+            (feh.overrideAttrs (old: {
+                postInstall = (old.postInstall or "") + ''
+                    substituteInPlace $out/share/applications/feh.desktop \
+                      --replace-fail "Exec=feh --start-at %u" \
+                                     "Exec=feh --theme fit --start-at %u"
+                '';
+            }))
             satty
             # libsixel
             wf-recorder
@@ -133,7 +135,7 @@ in
             grim
             slurp
             wayfreeze
-            (pkgs.scrcpy.overrideAttrs (old: {
+            (scrcpy.overrideAttrs (old: {
                 postInstall = (old.postInstall or "") + ''
                     substituteInPlace $out/share/applications/scrcpy.desktop \
                       --replace-fail "-c scrcpy\"" \
@@ -212,9 +214,11 @@ in
             tesseract
             poppler-utils
             lf
+            trash-cli
             rsync
             rclone
             lazygit
+            wooz
         ];
     };
     systemd.user.services = {
@@ -298,7 +302,7 @@ in
                 ];
             };
             Service = {
-                ExecStart = "${config.xdg.userDirs.extraConfig.XDG_APP_DIR}/file_manager_dbus";
+                ExecStart = "${config.xdg.userDirs.extraConfig.APP}/file_manager_dbus";
                 Restart = "on-failure";
                 RestartSec = 5;
                 TimeoutStopSec = 10;
@@ -331,6 +335,10 @@ in
     };
     xdg = {
         enable = true;
+        autostart = {
+            enable = true;
+            readOnly = true;
+        };
         configFile = {
             "niri".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/niri";
             "foot".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/foot";
@@ -394,14 +402,28 @@ in
             shutdown = {
                 name = "Shutdown";
                 type = "Application";
-                exec = "shutdown -h now";
+                exec = "systemctl poweroff";
                 icon = "";
                 terminal = false;
             };
             reboot = {
                 name = "Reboot";
                 type = "Application";
-                exec = "reboot";
+                exec = "systemctl reboot";
+                icon = "";
+                terminal = false;
+            };
+            sleep = {
+                name = "Sleep";
+                type = "Application";
+                exec = "systemctl sleep";
+                icon = "";
+                terminal = false;
+            };
+            suspend = {
+                name = "Suspend";
+                type = "Application";
+                exec = "systemctl suspend";
                 icon = "";
                 terminal = false;
             };
@@ -444,6 +466,41 @@ in
                 terminal = false;
             };
         };
+        mime.enable = true;
+        mimeApps = {
+            enable = true;
+            defaultApplications = {
+                "text/html" = "org.qutebrowser.qutebrowser.desktop";
+                "image/bmp" = "feh.desktop";
+                "image/gif" = "feh.desktop";
+                "image/jpeg" = "feh.desktop";
+                "image/jpg" = "feh.desktop";
+                "image/pjpeg" = "feh.desktop";
+                "image/png" = "feh.desktop";
+                "image/tiff" = "feh.desktop";
+                "image/webp" = "feh.desktop";
+                "image/x-bmp" = "feh.desktop";
+                "image/x-pcx" = "feh.desktop";
+                "image/x-png" = "feh.desktop";
+                "image/x-portable-anymap" = "feh.desktop";
+                "image/x-portable-bitmap" = "feh.desktop";
+                "image/x-portable-graymap" = "feh.desktop";
+                "image/x-portable-pixmap" = "feh.desktop";
+                "image/x-tga" = "feh.desktop";
+                "image/x-xbitmap" = "feh.desktop";
+                "image/heic" = "feh.desktop";
+                "x-scheme-handler/http" = "org.qutebrowser.qutebrowser.desktop";
+                "x-scheme-handler/https" = "org.qutebrowser.qutebrowser.desktop";
+                "x-scheme-handler/about" = "org.qutebrowser.qutebrowser.desktop";
+                "x-scheme-handler/unknown" = "org.qutebrowser.qutebrowser.desktop";
+                "x-scheme-handler/tg" = "org.telegram.desktop.desktop";
+                "x-scheme-handler/tonsite" = "org.telegram.desktop.desktop";
+            };
+            associations.added = {
+                "x-scheme-handler/tg" = "org.telegram.desktop.desktop";
+                "x-scheme-handler/tonsite" = "org.telegram.desktop.desktop";
+            };
+        };
         portal = {
             enable = true;
             configPackages = with pkgs; [
@@ -472,14 +529,13 @@ in
             enable = true;
             createDirectories = true;
             extraConfig = {
-                XDG_LIB_DIR = "${config.home.homeDirectory}/Lib";
-                XDG_WORKSPACE_DIR = "${config.home.homeDirectory}/workspaces";
-                XDG_TEMP_DIR = "${config.home.homeDirectory}/temp";
-                XDG_SATTY_DIR = "${config.xdg.userDirs.pictures}/satty";
-                XDG_SCREENSHOT_DIR = "${config.xdg.userDirs.pictures}/screenshot";
-                XDG_SCREENRECORD_DIR = "${config.xdg.userDirs.videos}/screenrecord";
-                XDG_APP_DIR = "${config.home.homeDirectory}/app";
-                # XDG_MNT_DAV_DIR = "${config.home.homeDirectory}/mnt/dav";
+                LIB = "${config.home.homeDirectory}/Lib";
+                WORKSPACE = "${config.home.homeDirectory}/workspaces";
+                TEMP = "${config.home.homeDirectory}/temp";
+                SATTY = "${config.xdg.userDirs.pictures}/satty";
+                SCREENSHOT = "${config.xdg.userDirs.pictures}/screenshot";
+                SCREENRECORD = "${config.xdg.userDirs.videos}/screenrecord";
+                APP = "${config.home.homeDirectory}/app";
             };
         };
     };
@@ -526,19 +582,6 @@ in
         };
         gtk3 = {
             enable = true;
-            bookmarks = [
-                "file://${config.xdg.userDirs.documents}"
-                "file://${config.xdg.userDirs.download}"
-                "file://${config.xdg.userDirs.music}"
-                "file://${config.xdg.userDirs.pictures}"
-                "file://${config.xdg.userDirs.videos}"
-                "file://${config.xdg.userDirs.extraConfig.XDG_WORKSPACE_DIR} WORK"
-                "file://${config.xdg.userDirs.extraConfig.XDG_LIB_DIR}"
-                "file://${config.xdg.userDirs.extraConfig.XDG_TEMP_DIR}"
-                "file://${config.xdg.userDirs.extraConfig.XDG_SCREENSHOT_DIR}"
-                "file://${config.xdg.userDirs.extraConfig.XDG_SCREENRECORD_DIR}"
-                "davs://spreadzhao.cloud:10116/ NAS"
-            ];
         };
         gtk4.enable = true;
     };
@@ -569,6 +612,13 @@ in
         };
     };
     programs = {
+        npm = {
+            enable = true;
+            settings = {
+                prefix = "${config.home.homeDirectory}/.npm";
+                color = true;
+            };
+        };
         btop = {
             enable = true;
             settings = {
@@ -732,10 +782,10 @@ in
                 n = "nvim .";
                 lg = "lazygit";
                 c = "clear";
-                wk = "cd ${config.xdg.userDirs.extraConfig.XDG_WORKSPACE_DIR}";
-                sb = "cd ${config.xdg.userDirs.extraConfig.XDG_WORKSPACE_DIR}/SecondBrain";
-                st = "cd ${config.xdg.userDirs.extraConfig.XDG_WORKSPACE_DIR}/SpreadStudy";
-                lc = "cd ${config.xdg.userDirs.extraConfig.XDG_WORKSPACE_DIR}/SpreadStudy/Leetcode/LeetcodeCpp/ && n";
+                wk = "cd ${config.xdg.userDirs.extraConfig.WORKSPACE}";
+                sb = "cd ${config.xdg.userDirs.extraConfig.WORKSPACE}/SecondBrain";
+                st = "cd ${config.xdg.userDirs.extraConfig.WORKSPACE}/SpreadStudy";
+                lc = "cd ${config.xdg.userDirs.extraConfig.WORKSPACE}/SpreadStudy/Leetcode/LeetcodeCpp/ && n";
                 shuffle = "mpv --shuffle --force-window --autofit-smaller=800x500 .";
                 q = "exit";
                 ca = "mpv /dev/video0";
@@ -757,37 +807,14 @@ in
             };
             initContent = lib.mkOrder 2000 ''
                 source ${scriptsDir}/config/config_zsh_nix.sh
-
-                # plugins
-                source ${pkgs.zsh-fzf-tab}/share/fzf-tab/fzf-tab.plugin.zsh
-                source ${pkgs.zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-                source ${pkgs.zsh-autosuggestions}/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.plugin.zsh
-                # ZSH_HIGHLIGHT_DIRS_BLACKLIST+=(/run/user/1000/gvfs/dav:host=spreadzhao.cloud,port=10116,ssl=true)
-                # ZSH_HIGHLIGHT_DIRS_BLACKLIST+=(/run/user/1000/gvfs)
-
                 source ${scriptsDir}/config/color_output.sh
-
                 eval "$(starship init zsh)"
-                # slim-starship() {
-                #     if [[ "$PWD" == *gvfs* ]]; then
-                #         export STARSHIP_CONFIG="${config.xdg.configHome}/starship/starship_simple.toml"
-                #     else
-                #         export STARSHIP_CONFIG="${config.xdg.configHome}/starship/starship.toml";
-                #     fi
-                # }
-                # add-zsh-hook precmd slim-starship
 
                 lfcd () {
                     # `command` is needed in case `lfcd` is aliased to `lf`
                     cd "$(command lf -print-last-dir "$@")"
                 }
-                # ls () {
-                #     if [[ "$PWD" == *gvfs* ]]; then
-                #         command ls
-                #     else
-                #         eza --icons
-                #     fi
-                # }
+
                 function vi-yank-wlclip {
                     zle vi-yank
                     print -rn -- "$CUTBUFFER" | wl-copy
@@ -795,6 +822,12 @@ in
 
                 zle -N vi-yank-wlclip
                 bindkey -M vicmd 'y' vi-yank-wlclip
+
+                # plugins
+                source ${pkgs.zsh-fzf-tab}/share/fzf-tab/fzf-tab.plugin.zsh
+                source ${pkgs.zsh-autosuggestions}/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.plugin.zsh
+                source ${scriptsDir}/config/catppuccin_mocha-zsh-syntax-highlighting.zsh
+                source ${pkgs.zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
             '';
         };
         zoxide.enable = true;
@@ -1531,7 +1564,7 @@ in
                             rainbow.enabled = false;
                         };
                         modes = {
-                            search.enabled = true;
+                            search.enabled = false;
                             char.enabled = false;
                         };
                     };
@@ -1774,19 +1807,9 @@ in
                 };
                 treesitter = {
                     enable = true;
-                    # highlight.enable = true;
-                    # indent.enable = true;
-                    folding = true;
-                    settings = {
-                        auto_install = true;
-                        # ensure_installed = "all";
-                        highlight.enable = true;
-                        indent.enable = true;
-                    };
-                    lazyLoad = {
-                        enable = true;
-                        settings.event = "VimEnter";
-                    };
+                    highlight.enable = true;
+                    indent.enable = true;
+                    folding.enable = true;
                 };
                 todo-comments = {
                     enable = true;
@@ -2266,6 +2289,7 @@ in
             enable = true;
             settings = {
                 main = {
+                    layer = "overlay";
                     title-color = "a6adc8ff";
                     summary-color = "cdd6f4ff";
                     body-color = "cdd6f4ff";
@@ -2280,6 +2304,7 @@ in
                     stacking-order = "bottom-up";
                     selection-helper-uses-null-separator = "yes";
                     selection-helper = "\"fuzzel --dmenu0\"";
+                    border-radius = 8;
 
                     dpi-aware = "yes";
                     title-font = "IBM Plex Sans:size=20";
@@ -2333,12 +2358,9 @@ in
                         command = lock;
                     }
                 ];
-                events = [
-                    {
-                        event = "before-sleep";
-                        command = lock;
-                    }
-                ];
+                events = {
+                    "before-sleep" = lock;
+                };
             };
         gpg-agent = {
             enable = true;
