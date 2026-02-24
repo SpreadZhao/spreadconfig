@@ -150,7 +150,7 @@ c.tabs.title.format_pinned = '{audio}{relative_index}:{current_title}'
 c.tabs.width = 18
 c.tabs.favicons.show = 'always'
 c.tabs.mousewheel_switching = False;
-c.tabs.new_position.related = 'last';
+c.tabs.new_position.related = 'next';
 c.tabs.new_position.stacking = True;
 c.tabs.new_position.unrelated = 'last';
 
