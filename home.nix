@@ -64,14 +64,14 @@ in
         pointerCursor = {
             enable = true;
             name = "catppuccin-mocha-dark-cursors";
-            size = 72;
+            size = 36;
             package = pkgs.catppuccin-cursors.mochaDark;
             gtk.enable = true;
             x11.enable = true;
             dotIcons.enable = true;
             hyprcursor = {
                 enable = false;
-                size = 24;
+                size = 36;
             };
         };
         packages = with pkgs; [
@@ -573,7 +573,7 @@ in
         cursorTheme = {
             name = "catppuccin-mocha-dark-cursors";
             package = pkgs.catppuccin-cursors.mochaDark;
-            size = 72;
+            size = 36;
         };
         font = {
             # name = "Noto Sans";
