@@ -106,6 +106,7 @@
     };
 
     services = {
+        lact.enable = true;
         upower.enable = true;
         udisks2.enable = lib.mkForce true;
         pipewire = {
@@ -178,6 +179,8 @@
             pciutils
             file
             killall
+            clinfo
+            nethogs
             # glib
         ];
         shellAliases = lib.mkForce { };
