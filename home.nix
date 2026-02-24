@@ -55,7 +55,7 @@ in
         # jdk
         // (builtins.listToAttrs (
             map (jdk: {
-                name = "${config.home.homeDirectory}/Lib/jdks/${jdk.version}";
+                name = "${config.xdg.userDirs.extraConfig.LIB}/jdks/${jdk.version}";
                 value = {
                     source = jdk;
                 };
