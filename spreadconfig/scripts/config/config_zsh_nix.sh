@@ -231,14 +231,26 @@ config_foot() {
     # add-zsh-hook preexec _preexec_osc133
 }
 
+config_other() {
+    _nuq_completion() {
+        local log_dir="/home/spreadzhao/.local/share/net-log"
+        if [[ $CURRENT -eq 2 ]]; then
+            _files -W "$log_dir"
+        fi
+    }
+    compdef _nuq_completion nuq
+}
+
 config_cursor_mode
 config_prompt
 config_fzf
 config_fzf_tab          # Must be loaded after FZF config
 config_foot
+config_other
 
 unset -f config_cursor_mode
 unset -f config_prompt
 unset -f config_fzf
 unset -f config_fzf_tab
 unset -f config_foot
+unset -f config_other
