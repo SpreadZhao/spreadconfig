@@ -166,7 +166,17 @@ cmd touch-save-file ${{
     fi
 }}
 
-cmd open &xdg-open $fx
+cmd open &{{
+    mime_type="$(xdg-mime query filetype "$fx")"
+    case "$mime_type" in
+        text/*)
+            footclient -a "nvim" -T "nvim" -- nvim "$fx"
+        ;;
+        *)
+            xdg-open $fx
+        ;;
+    esac
+}}
 cmd open-with-gui &"$@" $fx
 cmd open-with-tui $"$@" $fx
 cmd open-with-cli %"$@" $fx

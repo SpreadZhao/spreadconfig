@@ -353,7 +353,6 @@ in
             readOnly = true;
         };
         configFile = {
-            # "niri".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/niri";
             "niri/config.kdl".text = ''
                 animations {
                     off
@@ -730,12 +729,8 @@ in
                     Mod+Shift+Q { quit; }
                 }
             '';
-            "foot".enable = false;
-            "foot".force = true;
-            "foot".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/foot";
             "waybar".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/waybar";
             "starship".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/starship";
-            # "swaylock".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/swaylock";
             "obs-studio/basic/profiles/Video".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/obs/profiles/Video";
             "obs-studio/basic/profiles/Audio".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/obs/profiles/Audio";
             "qutebrowser/quickmarks".source = config.lib.file.mkOutOfStoreSymlink "${secretsDir}/qutebrowser_quickmarks";
@@ -744,20 +739,21 @@ in
             "gdu".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/gdu";
             "lf".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/lf";
             "bat".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/bat";
-            # "fuzzel".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/fuzzel";
             "lazygit".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/lazygit";
             "xdg-desktop-portal-termfilechooser".source =
                 config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/xdg-desktop-portal-termfilechooser";
             "feh".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/feh";
             "satty".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/satty";
-            # "mpv".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/mpv";
             "zathura".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/zathura";
-            # https://github.com/boydaihungst/org.freedesktop.FileManager1.common
             "org.freedesktop.FileManager1.common/config".text = ''
                 cmd="${scriptsDir}/util/lf-wrapper-dbus.sh"
             '';
-            # service
             "systemd/user/waybar.service".source = "${pkgs.waybar}/share/systemd/user/waybar.service";
+            # "niri".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/niri";
+            # "foot".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/foot";
+            # "swaylock".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/swaylock";
+            # "fuzzel".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/fuzzel";
+            # "mpv".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/mpv";
         };
         dataFile = {
             "fcitx5/rime/rime-data".source = "${pkgs.rime-ice}/share/rime-data";

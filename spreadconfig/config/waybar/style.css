@@ -75,7 +75,7 @@ window#waybar.empty #window {
 #temperature {
     background: @theme_background;
     padding-right: 5px;
-    color: @theme_cyan;
+    color: @theme_green;
 }
 
 #temperature.warning {
@@ -89,7 +89,7 @@ window#waybar.empty #window {
 #network {
     background: @theme_background;
     padding-right: 5px;
-    color: @theme_magenta;
+    color: @theme_white;
 }
 
 #custom-audio {
