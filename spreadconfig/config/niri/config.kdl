@@ -60,8 +60,8 @@ layout {
         length total-proportion=1.0
         position "left"
         gaps-between-tabs 12
-        active-color "#fab387"
-        inactive-color "#1e1e2e"
+        active-color "#11111b"
+        inactive-color "#00000000"
         urgent-color "#f38ba8"
     }
     struts {
