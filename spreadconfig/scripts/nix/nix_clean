@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-sns
+sns_until
 nh clean all
-sns
+sns_until
 nh clean all

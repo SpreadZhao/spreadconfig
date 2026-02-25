@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 
-sns
+sns_until
 nix_update
 nix_clean

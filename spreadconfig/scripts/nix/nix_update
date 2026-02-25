@@ -1,3 +1,7 @@
 #/usr/bin/env bash
 
-nix flake update --flake "path://$HOME/workspaces/spreadconfig" && sns
+until nix flake update --flake "path://$HOME/workspaces/spreadconfig"; do
+    sleep 1
+done
+
+sns_until

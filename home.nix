@@ -19,6 +19,23 @@ let
     secretsDir = "${projDir}/secrets";
     spreadconfigDir = "${projDir}/spreadconfig";
     mochaBg = "0e1117";
+    theme_tranparent = "00000000";
+    theme_background = "000000";
+    theme_red = "bc3f3c";
+    theme_green = "6a9955";
+    theme_yellow = "e6e6aa";
+    theme_blue = "47a2ed";
+    theme_purple = "3181a7";
+    theme_magenta = "bc3f3c";
+    theme_cyan = "47ccb1";
+    theme_white = "d4d4d4";
+    theme_bright_background = "3a3a3a";
+    theme_bright_dark = "72737a";
+    theme_bright_red = "ff0000";
+    theme_bright_blue = "8cd7ff";
+    theme_bright_white = "ffffff";
+    theme_bright_yellow = "ffc66d";
+    theme_radius = "0";
 in
 {
     imports = [
@@ -63,9 +80,9 @@ in
         ));
         pointerCursor = {
             enable = true;
-            name = "catppuccin-mocha-dark-cursors";
+            name = "Adwaita";
             size = 36;
-            package = pkgs.catppuccin-cursors.mochaDark;
+            package = pkgs.adwaita-icon-theme;
             gtk.enable = true;
             x11.enable = true;
             dotIcons.enable = true;
@@ -192,15 +209,12 @@ in
             # niri and it's dependencies
             niri
             xwayland-satellite
-            foot
-            fuzzel
             waybar
             libnotify
             wl-clipboard
             pastel
             telegram-desktop
             pass
-            swaylock
             wbg
 
             # fonts
@@ -253,7 +267,6 @@ in
                     "graphical-session-pre.target"
                     "xdg-desktop-autostart.target"
                     "waybar.service"
-                    "foot-server.service"
                 ];
             };
             Service = {
@@ -314,24 +327,24 @@ in
                 ];
             };
         };
-        wbg = {
-            Unit = {
-                Description = "Wallpaper";
-                PartOf = [ "niri.service" ];
-                After = [ "niri.service" ];
-                Requisite = [ "niri.service" ];
-            };
-            Service = {
-                ExecStart = "${scriptsDir}/util/random_wallpaper_apply.sh";
-                Restart = "no";
-            };
-            Install = {
-                WantedBy = [
-                    "graphical-session.target"
-                    "niri.service"
-                ];
-            };
-        };
+        # wbg = {
+        #     Unit = {
+        #         Description = "Wallpaper";
+        #         PartOf = [ "niri.service" ];
+        #         After = [ "niri.service" ];
+        #         Requisite = [ "niri.service" ];
+        #     };
+        #     Service = {
+        #         ExecStart = "${scriptsDir}/util/random_wallpaper_apply.sh";
+        #         Restart = "no";
+        #     };
+        #     Install = {
+        #         WantedBy = [
+        #             "graphical-session.target"
+        #             "niri.service"
+        #         ];
+        #     };
+        # };
     };
     xdg = {
         enable = true;
@@ -340,26 +353,404 @@ in
             readOnly = true;
         };
         configFile = {
-            "niri".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/niri";
+            # "niri".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/niri";
+            "niri/config.kdl".text = ''
+                animations {
+                    off
+                }
+
+                gestures {
+                    hot-corners {
+                        off
+                    }
+                }
+
+                input {
+                    keyboard {
+                        numlock
+                    }
+
+                    touchpad {
+                        // tap
+                        dwt
+                        natural-scroll
+                        accel-speed 0.5
+                        scroll-factor 0.5
+                    }
+
+                }
+
+                layout {
+                    gaps 4
+                    background-color "#${theme_background}"
+                    center-focused-column "never"
+                    preset-column-widths {
+                        proportion 0.5
+                        proportion 1.0
+                    }
+                    preset-window-heights {
+                        proportion 0.33333
+                        proportion 0.5
+                        proportion 0.66667
+                        proportion 1.0
+                    }
+                    default-column-width { proportion 0.5; }
+                    focus-ring {
+                        // off
+                        width 2
+                        active-color "#${theme_bright_white}"
+                        inactive-color "#${theme_bright_dark}"
+                    }
+                    tab-indicator {
+                        // hide-when-single-tab
+                        place-within-column
+                        gap 4
+                        width 4
+                        corner-radius ${theme_radius}
+                        length total-proportion=1.0
+                        position "left"
+                        gaps-between-tabs 4
+                        active-color "#${theme_bright_yellow}"
+                        inactive-color "#${theme_bright_dark}"
+                        urgent-color "#${theme_bright_red}"
+                    }
+                    struts {
+                        left -2
+                        right -2
+                        top -2
+                        bottom -2
+                    }
+                }
+
+                output "eDP-1" {
+                    // off
+                    scale 2
+                    position x=5360 y=500
+                    // position x=3440 y=1439          // ensure monitor has left/right relationship
+                    layout {
+                        default-column-width { proportion 1.0; }
+                        preset-column-widths {
+                            proportion 0.5
+                            proportion 1.0
+                        }
+                    }
+                }
+
+                output "HDMI-A-1" {
+                    scale 1
+                    position x=0 y=0
+                    layout {
+                        default-column-width { proportion 0.5; }
+                        preset-column-widths {
+                            proportion 0.5
+                            proportion 1.0
+                        }
+                    }
+                }
+
+                output "DP-2" {
+                    scale 1
+                    position x=3440 y=180
+                    focus-at-startup
+                    layout {
+                        default-column-width { proportion 1.0; }
+                        preset-column-widths {
+                            proportion 0.5
+                            proportion 1.0
+                        }
+                    }
+                }
+
+                environment {
+                    // GTK_IM_MODULE "fcitx"
+                    // QT_QPA_PLATFORM "wayland"
+                    // ELECTRON_OZONE_PLATFORM_HINT "auto"
+                }
+
+                recent-windows {
+                    debounce-ms 750
+
+                    open-delay-ms 150
+
+                    highlight {
+                        active-color "#${theme_bright_dark}"
+                        urgent-color "#${theme_bright_red}"
+                        padding 30
+                        corner-radius ${theme_radius}
+                    }
+
+                    previews {
+                        max-height 480
+                        max-scale 0.5
+                    }
+
+                    binds {
+                        Mod+Tab         { next-window; }
+                        Mod+Shift+Tab   { previous-window; }
+                        Mod+grave       { next-window     filter="app-id"; }
+                        Mod+Shift+grave { previous-window filter="app-id"; }
+                    }
+                }
+
+                overview {
+                    backdrop-color "#${theme_background}"
+                }
+
+                hotkey-overlay {
+                    skip-at-startup
+                }
+
+                prefer-no-csd
+
+                screenshot-path null
+
+                cursor {
+                    xcursor-theme "Adwaita"
+                    xcursor-size 36
+                    hide-after-inactive-ms 5000
+                }
+
+                clipboard {
+                    disable-primary
+                }
+
+                // layer-rule {
+                //     match namespace="^launcher$"
+                //     shadow {
+                //         on
+                //         softness 15
+                //         spread 1
+                //         offset x=0 y=0
+                //         draw-behind-window false
+                //         color "#f2cdcd"
+                //     }
+                //     geometry-corner-radius 8
+                // }
+
+                // window-rule {
+                //     geometry-corner-radius 8
+                //     clip-to-geometry true
+                //     draw-border-with-background false
+                // }
+
+                window-rule {
+                    match is-floating=false
+                    tiled-state true
+                }
+
+                // window-rule {
+                //     match is-focused=true
+                //     shadow {
+                //         on
+                //         softness 15
+                //         spread 1
+                //         offset x=0 y=0
+                //         draw-behind-window false
+                //         color "#f2cdcd"
+                //     }
+                // }
+
+                window-rule {
+                    match app-id="feh"
+                    match app-id="org.qutebrowser.qutebrowser"
+                    open-fullscreen false
+                }
+
+                window-rule {
+                    match app-id="feh" title=".*\/tmp.*"
+                    match app-id=".*jetbrains.*" title=".*Welcome.*"
+                    match app-id="com.gabm.satty"
+                    open-floating true
+                    open-fullscreen false
+                }
+
+                // wechat bug for some floating windows
+                window-rule {
+                    match app-id="wechat" title="wechat"
+                    open-focused false
+                }
+
+                // Indicate screencasted windows with red colors.
+                window-rule {
+                    match is-window-cast-target=true
+
+                    focus-ring {
+                        active-color "#${theme_blue}"
+                        inactive-color "#${theme_bright_blue}"
+                        width 2
+                    }
+                }
+
+                // floating terminal
+                window-rule {
+                    match app-id="lick-foot"
+                    open-floating true
+                    default-column-width { proportion 0.75; }
+                    default-window-height { proportion 0.6; }
+                }
+
+                binds {
+                    Mod+Shift+Slash { show-hotkey-overlay; }
+
+                    Mod+Return hotkey-overlay-title="Open a Terminal" { spawn-sh "footclient"; }
+                    Mod+space hotkey-overlay-title="Run an Application" { spawn "fuzzel"; }
+                    // Super+Alt+L hotkey-overlay-title="Lock the Screen: swaylock" { spawn "swaylock"; }
+
+                    XF86AudioRaiseVolume allow-when-locked=true { spawn-sh "wpctl set-volume -l 1.5 @DEFAULT_SINK@ 5%+ && pkill -RTMIN+7 waybar"; }
+                    XF86AudioLowerVolume allow-when-locked=true { spawn-sh "wpctl set-volume @DEFAULT_SINK@ 5%- && pkill -RTMIN+7 waybar"; }
+                    XF86AudioMute        allow-when-locked=true { spawn-sh "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle && pkill -RTMIN+7 waybar"; }
+                    XF86AudioMicMute     allow-when-locked=true { spawn-sh "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle && pkill -RTMIN+7 waybar"; }
+
+                    XF86MonBrightnessUp allow-when-locked=true { spawn-sh "brightnessctl --class=backlight set +10%"; }
+                    XF86MonBrightnessDown allow-when-locked=true { spawn-sh "brightnessctl --class=backlight set 10%-"; }
+
+                    Mod+D { spawn-sh "swaylock"; }
+                    Mod+Shift+D { spawn-sh "$SCRIPT_HOME/niri/niri_lock.sh"; }
+
+                    Mod+B { spawn-sh "killall -SIGUSR1 .waybar-wrapped"; }
+
+                    Mod+O repeat=false { toggle-overview; }
+
+                    Mod+Shift+C repeat=false { close-window; }
+
+                    Mod+Left  { focus-column-or-monitor-left; }
+                    Mod+Down  { focus-window-or-monitor-down; }
+                    Mod+Up    { focus-window-or-monitor-up; }
+                    Mod+Right { focus-column-or-monitor-right; }
+                    Mod+H     { focus-column-or-monitor-left; }
+                    Mod+J     { focus-window-or-monitor-down; }
+                    Mod+K     { focus-window-or-monitor-up; }
+                    Mod+L     { focus-column-or-monitor-right; }
+
+                    Mod+Shift+Left  { move-column-left-or-to-monitor-left; }
+                    Mod+Shift+Down  { move-window-down-or-to-workspace-down; }
+                    Mod+Shift+Up    { move-window-up-or-to-workspace-up; }
+                    Mod+Shift+Right { move-column-right-or-to-monitor-right; }
+                    Mod+Shift+H     { move-column-left-or-to-monitor-left; }
+                    Mod+Shift+J     { move-window-down-or-to-workspace-down; }
+                    Mod+Shift+K     { move-window-up-or-to-workspace-up; }
+                    Mod+Shift+L     { move-column-right-or-to-monitor-right; }
+
+                    Mod+Home { focus-column-first; }
+                    Mod+End  { focus-column-last; }
+                    Mod+Shift+Home { move-column-to-first; }
+                    Mod+Shift+End  { move-column-to-last; }
+
+                    Mod+Ctrl+Left  { focus-monitor-left; }
+                    Mod+Ctrl+Down  { focus-monitor-down; }
+                    Mod+Ctrl+Up    { focus-monitor-up; }
+                    Mod+Ctrl+Right { focus-monitor-right; }
+                    Mod+Ctrl+H     { focus-monitor-left; }
+                    Mod+Ctrl+J     { focus-monitor-down; }
+                    Mod+Ctrl+K     { focus-monitor-up; }
+                    Mod+Ctrl+L     { focus-monitor-right; }
+
+                    Mod+Shift+Ctrl+Left  { move-column-to-monitor-left; }
+                    Mod+Shift+Ctrl+Down  { move-column-to-monitor-down; }
+                    Mod+Shift+Ctrl+Up    { move-column-to-monitor-up; }
+                    Mod+Shift+Ctrl+Right { move-column-to-monitor-right; }
+                    Mod+Shift+Ctrl+H     { move-column-to-monitor-left; }
+                    Mod+Shift+Ctrl+J     { move-column-to-monitor-down; }
+                    Mod+Shift+Ctrl+K     { move-column-to-monitor-up; }
+                    Mod+Shift+Ctrl+L     { move-column-to-monitor-right; }
+
+                    Mod+Alt+P   { move-workspace-up; }
+                    Mod+Alt+N   { move-workspace-down; }
+                    Mod+Alt+L   { move-workspace-to-monitor-right; }
+                    Mod+Alt+H   { move-workspace-to-monitor-left; }
+
+                    Mod+N              { focus-workspace-down; }
+                    Mod+P              { focus-workspace-up; }
+                    Mod+Shift+N         { move-column-to-workspace-down; }
+                    Mod+Shift+P         { move-column-to-workspace-up; }
+                    Mod+WheelScrollDown cooldown-ms=150 { focus-workspace-down; }
+                    Mod+WheelScrollUp   cooldown-ms=150 { focus-workspace-up; }
+                    Mod+WheelScrollRight                { focus-column-or-monitor-right; }
+                    Mod+WheelScrollLeft                 { focus-column-or-monitor-left; }
+
+                    Mod+1 { focus-workspace 1; }
+                    Mod+2 { focus-workspace 2; }
+                    Mod+3 { focus-workspace 3; }
+                    Mod+4 { focus-workspace 4; }
+                    Mod+5 { focus-workspace 5; }
+                    Mod+6 { focus-workspace 6; }
+                    Mod+7 { focus-workspace 7; }
+                    Mod+8 { focus-workspace 8; }
+                    Mod+9 { focus-workspace 9; }
+                    Mod+Shift+1 { move-column-to-workspace 1; }
+                    Mod+Shift+2 { move-column-to-workspace 2; }
+                    Mod+Shift+3 { move-column-to-workspace 3; }
+                    Mod+Shift+4 { move-column-to-workspace 4; }
+                    Mod+Shift+5 { move-column-to-workspace 5; }
+                    Mod+Shift+6 { move-column-to-workspace 6; }
+                    Mod+Shift+7 { move-column-to-workspace 7; }
+                    Mod+Shift+8 { move-column-to-workspace 8; }
+                    Mod+Shift+9 { move-column-to-workspace 9; }
+
+                    // Mod+Tab { focus-window-previous; }
+                    // Mod+Shift+Tab { focus-workspace-previous; }
+
+                    Mod+Shift+Comma  { consume-or-expel-window-left; }
+                    Mod+Shift+Period { consume-or-expel-window-right; }
+
+                    Mod+Comma  { consume-window-into-column; }
+                    Mod+Period { expel-window-from-column; }
+
+                    Mod+R { switch-preset-column-width; }
+                    Mod+Shift+R { switch-preset-window-height; }
+                    Mod+Ctrl+R { reset-window-height; }
+                    Mod+F { maximize-column; }
+                    Mod+M { fullscreen-window; }
+                    Mod+Shift+M { toggle-windowed-fullscreen; }
+
+                    Mod+C { center-column; }
+
+                    Mod+Minus { set-column-width "-10%"; }
+                    Mod+Equal { set-column-width "+10%"; }
+
+                    Mod+Shift+Minus { set-window-height "-10%"; }
+                    Mod+Shift+Equal { set-window-height "+10%"; }
+                    Mod+Ctrl+Equal { expand-column-to-available-width; }
+
+                    Mod+Shift+F       { toggle-window-floating; }
+                    Mod+Ctrl+F { switch-focus-between-floating-and-tiling; }
+
+                    Mod+T { toggle-column-tabbed-display; }
+
+                    Ctrl+Shift+A { spawn-sh "$SCRIPT_HOME/niri/screenshot.sh";  }
+                    Ctrl+Shift+S { spawn-sh "$SCRIPT_HOME/niri/screenrecord.sh";  }
+
+                    Mod+Shift+V { spawn-sh "cliphist list | fuzzel --dmenu | cliphist decode | wl-copy"; }
+
+                    Mod+Z { spawn-sh "wooz --invert-scroll --output $($SCRIPT_HOME/niri/niri_focused_output_name.sh)"; }
+                    Mod+S { spawn-sh "slurp -b '#${theme_background}aa' -c '#${theme_bright_white}' >/dev/null"; }
+
+                    Mod+W { spawn-sh "$SCRIPT_HOME/util/toggle_wallpaper.sh"; }
+
+                    Mod+Shift+Q { quit; }
+                }
+            '';
+            "foot".enable = false;
+            "foot".force = true;
             "foot".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/foot";
             "waybar".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/waybar";
             "starship".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/starship";
-            "swaylock".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/swaylock";
+            # "swaylock".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/swaylock";
             "obs-studio/basic/profiles/Video".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/obs/profiles/Video";
             "obs-studio/basic/profiles/Audio".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/obs/profiles/Audio";
             "qutebrowser/quickmarks".source = config.lib.file.mkOutOfStoreSymlink "${secretsDir}/qutebrowser_quickmarks";
             "qutebrowser/config.py".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/qutebrowser/config.py";
-            "qutebrowser/catppuccin".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/qutebrowser/catppuccin";
+            "qutebrowser/themes".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/qutebrowser/themes";
             "gdu".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/gdu";
             "lf".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/lf";
             "bat".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/bat";
-            "fuzzel".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/fuzzel";
+            # "fuzzel".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/fuzzel";
             "lazygit".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/lazygit";
             "xdg-desktop-portal-termfilechooser".source =
                 config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/xdg-desktop-portal-termfilechooser";
             "feh".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/feh";
             "satty".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/satty";
-            "mpv".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/mpv";
+            # "mpv".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/mpv";
             "zathura".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/zathura";
             # https://github.com/boydaihungst/org.freedesktop.FileManager1.common
             "org.freedesktop.FileManager1.common/config".text = ''
@@ -371,8 +762,8 @@ in
         dataFile = {
             "fcitx5/rime/rime-data".source = "${pkgs.rime-ice}/share/rime-data";
             "fcitx5/rime/default.custom.yaml".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/input/default";
-            "fcitx5/themes/catppuccin-mocha-rosewater".source =
-                config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/input/fcitx5-catppuccin/src/catppuccin-mocha-rosewater";
+            # "fcitx5/themes/catppuccin-mocha-rosewater".source =
+            #     config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/input/fcitx5-catppuccin/src/catppuccin-mocha-rosewater";
         };
         desktopEntries = {
             toggle_monitor = {
@@ -571,8 +962,8 @@ in
         #             };
         # };
         cursorTheme = {
-            name = "catppuccin-mocha-dark-cursors";
-            package = pkgs.catppuccin-cursors.mochaDark;
+            name = "Adwaita";
+            package = pkgs.adwaita-icon-theme;
             size = 36;
         };
         font = {
@@ -612,6 +1003,176 @@ in
         };
     };
     programs = {
+        fuzzel = {
+            enable = true;
+            settings = {
+                border = {
+                    radius = "${theme_radius}";
+                };
+                colors = {
+                    background = "${theme_background}dd";
+                    text = "${theme_bright_white}ff";
+                    prompt = "${theme_bright_white}ff";
+                    placeholder = "${theme_bright_dark}ff";
+                    input = "${theme_bright_white}ff";
+                    match = "${theme_yellow}ff";
+                    selection = "${theme_bright_background}ff";
+                    selection-text = "${theme_bright_white}ff";
+                    selection-match = "${theme_yellow}ff";
+                    counter = "${theme_blue}ff";
+                };
+                main = {
+                    font = "IBM Plex Mono:size=18, Symbols Nerd Font Mono:size=18, Noto Color Emoji:size=18";
+                    image-size-ratio = 1;
+                    show-actions = "no";
+                    tabs = 4;
+                    terminal = "footclient -a '{cmd}' -T '{cmd}' {cmd}";
+                    use-bold = "yes";
+                    width = 50;
+                };
+                key-bindings = {
+                    "next" = "none";
+                    "prev" = "none";
+                    next-with-wrap = "Control+n";
+                    prev-with-wrap = "Control+p";
+                };
+            };
+        };
+        swaylock = {
+            enable = true;
+            settings = {
+                ignore-empty-password = true;
+                show-failed-attempts = true;
+                daemonize = true;
+
+                font = "IBM Plex Sans";
+                font-size = 30;
+
+                color = "${theme_background}";
+
+                inside-color = "${theme_tranparent}";
+                inside-clear-color = "${theme_tranparent}";
+                inside-caps-lock-color = "${theme_tranparent}";
+                inside-ver-color = "${theme_tranparent}";
+                inside-wrong-color = "${theme_tranparent}";
+
+                line-color = "${theme_tranparent}";
+                line-clear-color = "${theme_tranparent}";
+                line-caps-lock-color = "${theme_tranparent}";
+                line-ver-color = "${theme_tranparent}";
+                line-wrong-color = "${theme_tranparent}";
+
+                separator-color = "${theme_tranparent}";
+                layout-bg-color = "${theme_tranparent}";
+                layout-border-color = "${theme_tranparent}";
+
+                # ===============================
+                # Ring
+                # ===============================
+
+                ring-color = "${theme_bright_dark}"; # 默认：冷灰
+                ring-clear-color = "${theme_blue}"; # 输入中：蓝
+                ring-caps-lock-color = "${theme_bright_yellow}";
+                ring-ver-color = "${theme_cyan}"; # 验证中：青
+                ring-wrong-color = "${theme_bright_red}"; # 错误：亮红
+
+                # ===============================
+                # Text
+                # ===============================
+
+                text-color = "${theme_white}";
+                text-clear-color = "${theme_blue}";
+                text-caps-lock-color = "${theme_bright_yellow}";
+                text-ver-color = "${theme_cyan}";
+                text-wrong-color = "${theme_bright_red}";
+
+                layout-text-color = "${theme_white}";
+
+                # ===============================
+                # Key feedback（低调处理）
+                # ===============================
+
+                key-hl-color = "${theme_white}";
+                caps-lock-key-hl-color = "${theme_bright_white}";
+                bs-hl-color = "${theme_blue}";
+                caps-lock-bs-hl-color = "${theme_bright_yellow}";
+
+                scaling = "fit";
+
+                indicator-radius = 200;
+                indicator-idle-visible = true;
+
+                disable-caps-lock-text = true;
+                indicator-caps-lock = true;
+            };
+        };
+        foot = {
+            enable = true;
+            server.enable = true;
+            settings = {
+                main = {
+                    font = "IBM Plex Mono:size=16, Symbols Nerd Font Mono:size=16";
+                    bold-text-in-bright = "yes";
+                };
+                colors = {
+                    alpha = 0.8;
+
+                    foreground = "ffffff";
+                    background = "000000";
+                    cursor = "171616 adaeac";
+
+                    # --- ANSI 8 colors ---
+
+                    regular0 = "${theme_background}"; # black (background)
+                    regular1 = "${theme_red}"; # red (error)
+                    regular2 = "${theme_green}"; # green (comment)
+                    regular3 = "${theme_yellow}"; # yellow (function)
+                    regular4 = "${theme_blue}"; # blue (keyword)
+                    regular5 = "${theme_magenta}"; # magenta (secondary keyword)
+                    regular6 = "${theme_cyan}"; # cyan (class)
+                    regular7 = "${theme_white}"; # white (default text)
+
+                    # --- bright variants ---
+
+                    bright0 = "${theme_bright_dark}";
+                    bright1 = "ff6b6b";
+                    bright2 = "b4cda8";
+                    bright3 = "d7ba7d";
+                    bright4 = "${theme_bright_blue}";
+                    bright5 = "e49ad8";
+                    bright6 = "5fe0c6";
+                    bright7 = "ffffff";
+
+                    selection-foreground = "adaeac";
+                    selection-background = "264e77";
+
+                    search-box-no-match = "171616 f44747";
+                    search-box-match = "adaeac 262626";
+
+                    jump-labels = "171616 e6e6aa";
+                    urls = "47a2ed";
+                };
+                cursor = {
+                    style = "beam";
+                };
+                desktop-notifications = {
+                    command = ''notify-send --wait --app-name ''\${app-id} --icon ''\${app-id} --category ''\${category} --urgency ''\${urgency} --expire-time ''\${expire-time} --hint STRING:image-path:''\${icon} --hint BOOLEAN:suppress-sound:''\${muted} --hint STRING:sound-name:''\${sound-name} --replace-id ''\${replace-id} ''\${action-argument} --print-id -- ''\${title} ''\${body}'';
+                };
+                url = {
+                    launch = "xdg-open ''\${url}";
+                };
+                key-bindings = {
+                    scrollback-up-half-page = "Control+u";
+
+                    scrollback-down-half-page = "Control+d";
+                    search-start = "Control+f";
+                };
+                search-bindings = {
+                    find-prev = "Control+p";
+                    find-next = "Control+n";
+                };
+            };
+        };
         npm = {
             enable = true;
             settings = {
@@ -622,97 +1183,9 @@ in
         btop = {
             enable = true;
             settings = {
-                color_theme = "catppuccin-mocha";
                 theme_background = false;
                 truecolor = true;
                 vim_keys = true;
-            };
-            themes = {
-                "catppuccin-mocha" = ''
-                    # Main background, empty for terminal default, need to be empty if you want transparent background
-                    theme[main_bg]="#${mochaBg}"
-
-                    # Main text color
-                    theme[main_fg]="#cdd6f4"
-
-                    # Title color for boxes
-                    theme[title]="#cdd6f4"
-
-                    # Highlight color for keyboard shortcuts
-                    theme[hi_fg]="#89b4fa"
-
-                    # Background color of selected item in processes box
-                    theme[selected_bg]="#45475a"
-
-                    # Foreground color of selected item in processes box
-                    theme[selected_fg]="#89b4fa"
-
-                    # Color of inactive/disabled text
-                    theme[inactive_fg]="#7f849c"
-
-                    # Color of text appearing on top of graphs, i.e uptime and current network graph scaling
-                    theme[graph_text]="#f5e0dc"
-
-                    # Background color of the percentage meters
-                    theme[meter_bg]="#45475a"
-
-                    # Misc colors for processes box including mini cpu graphs, details memory graph and details status text
-                    theme[proc_misc]="#f5e0dc"
-
-                    # CPU, Memory, Network, Proc box outline colors
-                    theme[cpu_box]="#cba6f7" #Mauve
-                    theme[mem_box]="#a6e3a1" #Green
-                    theme[net_box]="#eba0ac" #Maroon
-                    theme[proc_box]="#89b4fa" #Blue
-
-                    # Box divider line and small boxes line color
-                    theme[div_line]="#6c7086"
-
-                    # Temperature graph color (Green -> Yellow -> Red)
-                    theme[temp_start]="#a6e3a1"
-                    theme[temp_mid]="#f9e2af"
-                    theme[temp_end]="#f38ba8"
-
-                    # CPU graph colors (Teal -> Lavender)
-                    theme[cpu_start]="#94e2d5"
-                    theme[cpu_mid]="#74c7ec"
-                    theme[cpu_end]="#b4befe"
-
-                    # Mem/Disk free meter (Mauve -> Lavender -> Blue)
-                    theme[free_start]="#cba6f7"
-                    theme[free_mid]="#b4befe"
-                    theme[free_end]="#89b4fa"
-
-                    # Mem/Disk cached meter (Sapphire -> Lavender)
-                    theme[cached_start]="#74c7ec"
-                    theme[cached_mid]="#89b4fa"
-                    theme[cached_end]="#b4befe"
-
-                    # Mem/Disk available meter (Peach -> Red)
-                    theme[available_start]="#fab387"
-                    theme[available_mid]="#eba0ac"
-                    theme[available_end]="#f38ba8"
-
-                    # Mem/Disk used meter (Green -> Sky)
-                    theme[used_start]="#a6e3a1"
-                    theme[used_mid]="#94e2d5"
-                    theme[used_end]="#89dceb"
-
-                    # Download graph colors (Peach -> Red)
-                    theme[download_start]="#fab387"
-                    theme[download_mid]="#eba0ac"
-                    theme[download_end]="#f38ba8"
-
-                    # Upload graph colors (Green -> Sky)
-                    theme[upload_start]="#a6e3a1"
-                    theme[upload_mid]="#94e2d5"
-                    theme[upload_end]="#89dceb"
-
-                    # Process box color gradient for threads, mem and cpu usage (Sapphire -> Mauve)
-                    theme[process_start]="#74c7ec"
-                    theme[process_mid]="#b4befe"
-                    theme[process_end]="#cba6f7"
-                '';
             };
         };
         java = {
@@ -826,7 +1299,6 @@ in
                 # plugins
                 source ${pkgs.zsh-fzf-tab}/share/fzf-tab/fzf-tab.plugin.zsh
                 source ${pkgs.zsh-autosuggestions}/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.plugin.zsh
-                source ${scriptsDir}/config/catppuccin_mocha-zsh-syntax-highlighting.zsh
                 source ${pkgs.zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
             '';
         };
@@ -1150,23 +1622,82 @@ in
                     };
                 }
             ];
-            colorscheme = "catppuccin";
+            colorscheme = "vscode";
             colorschemes = {
                 vscode = {
-                    enable = false;
+                    enable = true;
                     settings = {
                         transparent = true;
-                        italic_comments = true;
+                        italic_comments = false; # JetBrains 默认不斜体
+                        italic_inlayhints = true;
                         underline_links = true;
                         disable_nvimtree_bg = true;
-                        terminal_colors = false;
+                        terminal_colors = true;
+
                         color_overrides = {
-                            vscLineNumber = "#FFFFFF";
+                            vscBack = "#000000";
+                            vscLineNumber = "#7C7C7C";
+                            vscCursorDarkDark = "#262626";
+                            vscSelection = "#262626";
+                            vscForeground = "#ADAEAC";
+                        };
+
+                        group_overrides = {
+                            # ===== 注释 =====
+                            Comment = {
+                                fg = "#6A9955";
+                                italic = false;
+                            };
+
+                            # ===== 关键字 =====
+                            Keyword = {
+                                fg = "#47A2ED";
+                            };
+
+                            # ===== static =====
+                            StorageClass = {
+                                fg = "#FFC66D";
+                            };
+
+                            # ===== 类 =====
+                            Type = {
+                                fg = "#47CCB1";
+                            };
+
+                            # ===== 类成员 =====
+                            Field = {
+                                fg = "#47CCB1";
+                            };
+
+                            Property = {
+                                fg = "#47CCB1";
+                            };
+
+                            # ===== 函数 =====
+                            Function = {
+                                fg = "#E6E6AA";
+                            };
+
+                            # ===== 错误 =====
+                            DiagnosticError = {
+                                fg = "#F44747";
+                                bold = true;
+                            };
+
+                            # ===== 字符串 =====
+                            String = {
+                                fg = "#CD9069";
+                            };
+
+                            # ===== 常量 =====
+                            Constant = {
+                                fg = "#FFC66D";
+                            };
                         };
                     };
                 };
                 catppuccin = {
-                    enable = true;
+                    enable = false;
                     lazyLoad.enable = true;
                     settings = {
                         transparent_background = true;
@@ -1626,12 +2157,12 @@ in
                     enable = true;
                     luaConfig.post = ''
                         local colors = {
-                            red = '#f38ba8',
-                            black = '#${mochaBg}00',
-                            white = '#cdd6f4',
-                            light_green = '#a6e3a1',
-                            orange = '#fab387',
-                            green = '#f5e0dc',
+                            red = '#ca1243',
+                            black = '#000000',
+                            white = '#f3f3f3',
+                            light_green = '#83a598',
+                            orange = '#fe8019',
+                            green = '#8ec07c',
                         }
 
                         local theme = {
@@ -2258,22 +2789,42 @@ in
                     corner-radius = 0;
                 };
                 colours = {
-                    background = "${mochaBg}cc";
-                    border = "f5e0dcff";
-                    text = "cdd6f4ff";
-                    error-text = "f38ba8ff";
-                    pin-background = "181825cc";
-                    pin-border = "7f849cff";
-                    pin-square = "181825cc";
-                    ok-button = "${mochaBg}cc";
-                    ok-button-border = "f5e0dcff";
-                    ok-button-text = "cdd6f4ff";
-                    not-ok-button = "${mochaBg}cc";
-                    not-ok-button-border = "f5e0dcff";
-                    not-ok-button-text = "cdd6f4ff";
-                    cancel-button = "${mochaBg}cc";
-                    cancel-button-border = "f5e0dcff";
-                    cancel-button-text = "cdd6f4ff";
+                    background = "${theme_background}cc";
+                    border = "${theme_bright_dark}ff";
+                    text = "${theme_white}ff";
+                    error-text = "${theme_bright_red}ff";
+
+                    # =========================
+                    # PIN 区域
+                    # =========================
+
+                    pin-background = "${theme_bright_background}cc";
+                    pin-border = "${theme_bright_dark}ff";
+                    pin-square = "${theme_bright_background}cc";
+
+                    # =========================
+                    # OK 按钮（主按钮）
+                    # =========================
+
+                    ok-button = "${theme_blue}cc";
+                    ok-button-border = "${theme_bright_blue}ff";
+                    ok-button-text = "${theme_bright_white}ff";
+
+                    # =========================
+                    # NOT OK（次级）
+                    # =========================
+
+                    not-ok-button = "${theme_bright_background}cc";
+                    not-ok-button-border = "${theme_bright_dark}ff";
+                    not-ok-button-text = "${theme_white}ff";
+
+                    # =========================
+                    # Cancel（低强调）
+                    # =========================
+
+                    cancel-button = "${theme_bright_background}cc";
+                    cancel-button-border = "${theme_bright_dark}ff";
+                    cancel-button-text = "${theme_bright_dark}ff";
                 };
             };
         };
@@ -2290,12 +2841,12 @@ in
             settings = {
                 main = {
                     layer = "overlay";
-                    title-color = "a6adc8ff";
-                    summary-color = "cdd6f4ff";
-                    body-color = "cdd6f4ff";
-                    background = "1e1e2eee";
-                    border-color = "89b4faff";
-                    progress-color = "6c7086ff";
+                    title-color = "${theme_yellow}ff";
+                    summary-color = "${theme_bright_dark}ff";
+                    body-color = "${theme_white}ff";
+                    background = "${theme_background}aa";
+                    border-color = "${theme_tranparent}";
+                    progress-color = "${theme_blue}ff";
 
                     max-width = 1000;
                     max-height = 500;
@@ -2320,7 +2871,7 @@ in
                     idle-timeout = 5;
                 };
                 critical = {
-                    border-color = "fab387ff";
+                    border-color = "${theme_red}ff";
                 };
             };
         };

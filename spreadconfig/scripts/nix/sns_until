@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+until nh os switch -d always -t "path://$HOME/workspaces/spreadconfig"; do
+    sleep 1
+done

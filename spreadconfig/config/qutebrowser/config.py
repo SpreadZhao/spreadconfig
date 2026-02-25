@@ -1,4 +1,4 @@
-import catppuccin
+import themes
 
 config.load_autoconfig()
 config.bind('tt', 'config-cycle tabs.width 0% 18 10% 15%')
@@ -201,4 +201,4 @@ c.hints.padding = {
 c.content.javascript.clipboard = "access-paste"
 # c.qt.force_software_rendering = "qt-quick"
 
-catppuccin.setup(c, 'mocha', True)
+themes.setup(c)

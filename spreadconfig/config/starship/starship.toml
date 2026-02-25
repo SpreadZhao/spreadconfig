@@ -14,55 +14,55 @@ $time
 $character"""
 
 add_newline = false
-palette = "catppuccin_mocha"
+palette = "spreadzhao"
 
 [directory]
 style = "mauve"
 
 [character]
-success_symbol = "[❯](rosewater)"
-error_symbol = "[X](red)"
-vimcmd_symbol = "[](rosewater)"
+success_symbol = "[❯](theme_yellow)"
+error_symbol = "[X](theme_red)"
+vimcmd_symbol = "[](theme_white)"
 
 [git_branch]
 format = "[$branch]($style)"
-style = "overlay1"
+style = "theme_cyan"
 
 [git_state]
 format = '\([$state($progress_current/$progress_total)]($style)\)'
-style = "overlay1"
+style = "theme_cyan"
 
 [git_status]
 format = '([$all_status$ahead_behind]($style))'
 modified = 'M'
 conflicted = '󱃞'
-style = "peach"
+style = "theme_bright_yellow"
 
 [git_metrics]
 format = '([+$added]($added_style))([-$deleted]($deleted_style))'
 disabled = false
-added_style = "bold mauve"
-deleted_style = "bold red"
+added_style = "bold theme_blue"
+deleted_style = "bold theme_red"
 
 [cmd_duration]
 format = "[$duration]($style) "
-style = "yellow"
+style = "theme_yellow"
 
 [fill]
 symbol = '-'
-style = 'overlay1'
+style = 'theme_bright_dark'
 
 [time]
 disabled = false
 format = '[$time]($style)'
 # time_format = '%H:%M:%S%.3f'
 time_format = '%H:%M:%S'
-style = "bold rosewater"
+style = "bold theme_yellow"
 
 [nix_shell]
 disabled = false
 impure_msg = ''
-style= 'blue'
+style= 'theme_bright_blue'
 symbol = ''
 format = '[$symbol$state]($style) '
 # BUG: heuristic always returns true (depends on whether any value $PATH starts with /nix/store)
@@ -71,7 +71,7 @@ format = '[$symbol$state]($style) '
 
 [shlvl]
 disabled = true
-style = "blue"
+style = "theme_bright_blue"
 symbol = "󰓍 "
 
 [palettes.catppuccin_mocha]
@@ -101,3 +101,18 @@ surface0 = "#313244"
 base = "#0e1117"
 mantle = "#181825"
 crust = "#11111b"
+
+[palettes.spreadzhao]
+theme_red = "#bc3f3c"
+theme_green = "#6a9955"
+theme_yellow = "#e6e6aa"
+theme_blue = "#47a2ed"
+theme_purple = "#3181a7"
+theme_magenta = "#bc3f3c"
+theme_cyan = "#47ccb1"
+theme_white = "#d4d4d4"
+theme_bright_dark = "#72737a"
+theme_bright_red = "#ff0000"
+theme_bright_blue = "#8cd7ff"
+theme_bright_white = "#ffffff"
+theme_bright_yellow = "#ffc66d"

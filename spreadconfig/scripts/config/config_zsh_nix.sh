@@ -82,11 +82,15 @@ config_fzf() {
 
     # https://github.com/catppuccin/fzf/blob/main/themes/catppuccin-fzf-mocha.sh
     export FZF_DEFAULT_OPTS=" \
-    --color=bg+:#313244,bg:#0E1117,spinner:#F5E0DC,hl:#F38BA8 \
-    --color=fg:#CDD6F4,header:#F38BA8,info:#CBA6F7,pointer:#F5E0DC \
-    --color=marker:#B4BEFE,fg+:#CDD6F4,prompt:#CBA6F7,hl+:#F38BA8 \
-    --color=selected-bg:#45475A \
-    --color=border:#6C7086,label:#CDD6F4"
+    --color=bg:#000000,bg+:#3a3a3a \
+    --color=fg:#ADAEAC,fg+:#ADAEAC \
+    --color=hl:#47A2ED,hl+:#47A2ED \
+    --color=prompt:#CC85C6,pointer:#47CCB1 \
+    --color=marker:#E6E6AA \
+    --color=header:#CC85C6,info:#6A9955 \
+    --color=spinner:#47CCB1 \
+    --color=selected-bg:#262626 \
+    --color=border:#7C7C7C,label:#ADAEAC"
 
     # Custom FZF runner for different commands (override default behavior)
     # See /usr/share/fzf/completion.zsh for default implementation
