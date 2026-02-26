@@ -17,7 +17,7 @@ add_newline = false
 palette = "spreadzhao"
 
 [directory]
-style = "mauve"
+style = "theme_purple"
 
 [character]
 success_symbol = "[❯](theme_yellow)"

@@ -716,15 +716,16 @@ in
 
                     Mod+T { toggle-column-tabbed-display; }
 
-                    Ctrl+Shift+A { spawn-sh "$SCRIPT_HOME/niri/screenshot.sh";  }
-                    Ctrl+Shift+S { spawn-sh "$SCRIPT_HOME/niri/screenrecord.sh";  }
+                    Mod+Shift+A { spawn-sh "$SCRIPT_HOME/niri/screenshot.sh";  }
+                    Mod+Ctrl+Shift+A { spawn-sh "$SCRIPT_HOME/niri/screenshot.sh -o";  }
+                    Mod+Shift+S { spawn-sh "$SCRIPT_HOME/niri/screenrecord.sh";  }
 
                     Mod+Shift+V { spawn-sh "cliphist list | fuzzel --dmenu | cliphist decode | wl-copy"; }
 
                     Mod+Z { spawn-sh "wooz --invert-scroll --output $($SCRIPT_HOME/niri/niri_focused_output_name.sh)"; }
                     Mod+S { spawn-sh "slurp -b '#${theme_background}aa' -c '#${theme_bright_white}' >/dev/null"; }
 
-                    Mod+W { spawn-sh "$SCRIPT_HOME/util/toggle_wallpaper.sh"; }
+                    // Mod+W { spawn-sh "$SCRIPT_HOME/util/toggle_wallpaper.sh"; }
 
                     Mod+Shift+Q { quit; }
                 }
@@ -2838,10 +2839,10 @@ in
                 main = {
                     layer = "overlay";
                     title-color = "${theme_yellow}ff";
-                    summary-color = "${theme_bright_dark}ff";
+                    summary-color = "${theme_bright_white}ff";
                     body-color = "${theme_white}ff";
-                    background = "${theme_background}aa";
-                    border-color = "${theme_tranparent}";
+                    background = "${theme_background}ff";
+                    border-color = "${theme_bright_white}ff";
                     progress-color = "${theme_blue}ff";
 
                     max-width = 1000;
@@ -2851,7 +2852,9 @@ in
                     stacking-order = "bottom-up";
                     selection-helper-uses-null-separator = "yes";
                     selection-helper = "\"fuzzel --dmenu0\"";
-                    border-radius = 8;
+                    border-radius = "${theme_radius}";
+                    edge-margin-vertical = 0;
+                    edge-margin-horizontal = 0;
 
                     dpi-aware = "yes";
                     title-font = "IBM Plex Sans:size=20";
@@ -2859,7 +2862,7 @@ in
                     body-font = "IBM Plex Sans:size=18";
 
                     title-format = "<b>%a%A</b>";
-                    summary-format = "<i>%s</i>";
+                    summary-format = "%s";
                     body-format = "%b";
 
                     max-timeout = 0;
