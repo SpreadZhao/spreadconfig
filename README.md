@@ -1,3 +1,7 @@
+# My NixOS Config
+
+<img width="1920" height="1080" alt="Screenshot_DP-2_20260227_000645" src="https://github.com/user-attachments/assets/fddcf456-6f25-4798-89ab-ee930262a981" />
+
 ## Software I use (partial)
 
 - Shell: Zsh with [Starship](https://starship.rs/)
