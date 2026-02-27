@@ -722,7 +722,7 @@ in
 
                     Mod+Shift+V { spawn-sh "cliphist list | fuzzel --dmenu | cliphist decode | wl-copy"; }
 
-                    Mod+Z { spawn-sh "wooz --invert-scroll --output $($SCRIPT_HOME/niri/niri_focused_output_name.sh)"; }
+                    Mod+Z { spawn-sh "wooz --output $($SCRIPT_HOME/niri/niri_focused_output_name.sh)"; }
                     Mod+S { spawn-sh "slurp -b '#${theme_background}aa' -c '#${theme_bright_white}' >/dev/null"; }
 
                     // Mod+W { spawn-sh "$SCRIPT_HOME/util/toggle_wallpaper.sh"; }
@@ -1112,7 +1112,7 @@ in
                     bold-text-in-bright = "yes";
                 };
                 colors = {
-                    alpha = 0.8;
+                    # alpha = 0.8;
 
                     foreground = "ffffff";
                     background = "000000";

@@ -11,7 +11,7 @@ OPTION_SAVE="Save"
 OPTION_EDIT="Edit"
 OPTION_OCR="OCR"
 PROMPT_OUTPUT="Select Output"
-PROMPT_ACTION="Select Screenshot Action"
+PROMPT_ACTION="Select Screenshot Action: "
 
 # ===============================
 #       User config

@@ -1,4 +1,4 @@
-@define-color theme_background rgba(0, 0, 0, 0.8);
+@define-color theme_background rgb(0, 0, 0);
 @define-color theme_red #bc3f3c;
 @define-color theme_green #6a9955;
 @define-color theme_yellow #e6e6aa;

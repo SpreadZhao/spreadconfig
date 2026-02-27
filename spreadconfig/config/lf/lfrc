@@ -159,10 +159,28 @@ cmd touch-save-file ${{
     fi
 
     if touch -- "$FILE_CHOOSER_SAVE_FILE_NAME"; then
-        local msg
-        msg="Created: $FILE_CHOOSER_SAVE_FILE_NAME"
-        notify-send --app-name "lf" -u normal -t 10000 "$msg"
-        lf -remote "send $id echo $msg"
+        lf -remote "send $id select $FILE_CHOOSER_SAVE_FILE_NAME"
+    fi
+}}
+
+cmd save ${{
+    if [ "$LF_LEVEL" -ne 1 ]; then
+        exit 0
+    fi
+
+    if [ -z "$FILE_CHOOSER_SAVE_FILE_NAME" ]; then
+        lf -remote "send $id echoerr \"No save file name provided\""
+        exit 0
+    fi
+
+    if [ -e "$FILE_CHOOSER_SAVE_FILE_NAME" ]; then
+        lf -remote "send $id echoerr \"File already exists: $FILE_CHOOSER_SAVE_FILE_NAME\""
+        exit 0
+    fi
+
+    if touch -- "$FILE_CHOOSER_SAVE_FILE_NAME"; then
+        lf -remote "send $id select $FILE_CHOOSER_SAVE_FILE_NAME"
+        lf -remote "send $id open"
     fi
 }}
 
