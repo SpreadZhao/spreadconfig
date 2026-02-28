@@ -1113,7 +1113,7 @@ in
                     command = ''notify-send --wait --app-name ''\${app-id} --icon ''\${app-id} --category ''\${category} --urgency ''\${urgency} --expire-time ''\${expire-time} --hint STRING:image-path:''\${icon} --hint BOOLEAN:suppress-sound:''\${muted} --hint STRING:sound-name:''\${sound-name} --replace-id ''\${replace-id} ''\${action-argument} --print-id -- ''\${title} ''\${body}'';
                 };
                 url = {
-                    launch = "xdg-open ''\${url}";
+                    launch = "xdg-open \${url}";
                 };
                 key-bindings = {
                     scrollback-up-half-page = "Control+u";
