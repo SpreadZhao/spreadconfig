@@ -11,6 +11,7 @@
             url = "github:nix-community/nixvim";
             inputs.nixpkgs.follows = "nixpkgs";
         };
+        file-manager-dbus.url = "./packages/file-manager-dbus";
     };
 
     outputs =

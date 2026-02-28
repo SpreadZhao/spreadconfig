@@ -30,6 +30,11 @@
             allowUnfree = true;
             rocmSupport = true;
         };
+        overlays = [
+            (final: prev: {
+                file-manager-dbus = inputs.file-manager-dbus.packages.${prev.stdenv.hostPlatform.system}.default;
+            })
+        ];
     };
 
     nix =

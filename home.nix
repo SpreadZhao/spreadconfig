@@ -233,6 +233,7 @@ in
             rclone
             lazygit
             wooz
+            file-manager-dbus
         ];
     };
     systemd.user.services = {
@@ -301,50 +302,6 @@ in
                 ];
             };
         };
-        file-manager-dbus = {
-            Unit = {
-                Description = "Use terminal to open files";
-                After = [
-                    "niri.service"
-                ];
-                BindsTo = [
-                    "niri.service"
-                ];
-                PartOf = [
-                    "niri.service"
-                ];
-            };
-            Service = {
-                ExecStart = "${config.xdg.userDirs.extraConfig.APP}/file_manager_dbus";
-                Restart = "on-failure";
-                RestartSec = 5;
-                TimeoutStopSec = 10;
-            };
-            Install = {
-                WantedBy = [
-                    "graphical-session.target"
-                    "niri.service"
-                ];
-            };
-        };
-        # wbg = {
-        #     Unit = {
-        #         Description = "Wallpaper";
-        #         PartOf = [ "niri.service" ];
-        #         After = [ "niri.service" ];
-        #         Requisite = [ "niri.service" ];
-        #     };
-        #     Service = {
-        #         ExecStart = "${scriptsDir}/util/random_wallpaper_apply.sh";
-        #         Restart = "no";
-        #     };
-        #     Install = {
-        #         WantedBy = [
-        #             "graphical-session.target"
-        #             "niri.service"
-        #         ];
-        #     };
-        # };
     };
     xdg = {
         enable = true;
