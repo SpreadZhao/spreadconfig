@@ -89,7 +89,7 @@ window#waybar.empty #window {
 #network {
     background: @theme_background;
     padding-right: 5px;
-    color: @theme_white;
+    color: @theme_magenta;
 }
 
 #custom-audio {
@@ -102,6 +102,12 @@ window#waybar.empty #window {
     background: @theme_background;
     padding-right: 5px;
     color: @theme_red;
+}
+
+#upower {
+    background: @theme_background;
+    padding-right: 5px;
+    color: @theme_white;
 }
 
 #custom-time {

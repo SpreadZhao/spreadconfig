@@ -14,6 +14,8 @@
         "temperature",
         "network",
         "custom/audio",
+        "custom/battery",
+        // "upower",
         "custom/time",
         "tray"
     ],
@@ -61,6 +63,11 @@
     "custom/battery": {
         "exec": "/home/spreadzhao/scripts/util/get_battery.sh",
         "interval": 10
+    },
+    "upower": {
+        "native-path": "hid-3c:34:64:0a:eb:7c-battery",
+        "show-icon": false,
+        "format": ""
     },
     "custom/time": {
         "exec": "/home/spreadzhao/scripts/util/get_time.sh",
