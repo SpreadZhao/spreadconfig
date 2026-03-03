@@ -549,7 +549,7 @@ in
                     Mod+Shift+Slash { show-hotkey-overlay; }
 
                     Mod+Return hotkey-overlay-title="Open a Terminal" { spawn-sh "footclient"; }
-                    Mod+space hotkey-overlay-title="Run an Application" { spawn "fuzzel"; }
+                    Mod+space hotkey-overlay-title="Run an Application" { spawn "~/scripts/niri/launcher.sh"; }
                     // Super+Alt+L hotkey-overlay-title="Lock the Screen: swaylock" { spawn "swaylock"; }
 
                     XF86AudioRaiseVolume allow-when-locked=true { spawn-sh "wpctl set-volume -l 1.5 @DEFAULT_SINK@ 5%+ && pkill -RTMIN+7 waybar"; }
@@ -677,7 +677,7 @@ in
                     Mod+Ctrl+Shift+A { spawn-sh "$SCRIPT_HOME/niri/screenshot.sh -o";  }
                     Mod+Shift+S { spawn-sh "$SCRIPT_HOME/niri/screenrecord.sh";  }
 
-                    Mod+Shift+V { spawn-sh "cliphist list | fuzzel --dmenu | cliphist decode | wl-copy"; }
+                    Mod+Shift+V { spawn-sh "cliphist list | ~/scripts/niri/fzf_dmenu.sh | cliphist decode | wl-copy"; }
 
                     Mod+Z { spawn-sh "wooz --output $($SCRIPT_HOME/niri/niri_focused_output_name.sh)"; }
                     Mod+S { spawn-sh "slurp -b '#${theme_background}aa' -c '#${theme_bright_white}' >/dev/null"; }
