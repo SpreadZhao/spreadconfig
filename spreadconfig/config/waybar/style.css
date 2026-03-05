@@ -92,7 +92,13 @@ window#waybar.empty #window {
     color: @theme_magenta;
 }
 
-#custom-audio {
+#custom-sink {
+    background: @theme_background;
+    padding-right: 5px;
+    color: @theme_blue;
+}
+
+#custom-source {
     background: @theme_background;
     padding-right: 5px;
     color: @theme_blue;

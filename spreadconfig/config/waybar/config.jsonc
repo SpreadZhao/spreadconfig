@@ -9,16 +9,37 @@
         "niri/window"
     ],
     "modules-right": [
-        "cpu",
-        "memory",
-        "temperature",
+        "group/usage",
         "network",
-        "custom/audio",
+        "group/audio",
         "custom/battery",
         // "upower",
         "custom/time",
         "tray"
     ],
+    "group/audio": {
+        "orientation": "horizontal",
+        "drawer": {
+            "transition-duration": 0,
+            "click-to-reveal": true
+        },
+        "modules": [
+            "custom/sink",
+            "custom/source"
+        ]
+    },
+    "group/usage": {
+        "orientation": "horizontal",
+        "drawer": {
+            "transition-duration": 0,
+            "click-to-reveal": true
+        },
+        "modules": [
+            "cpu",
+            "memory",
+            "temperature"
+        ]
+    },
     "group/niri-workspace-window": {
         "orientation": "horizontal",
         "modules": [
@@ -55,8 +76,13 @@
         "exec": "/home/spreadzhao/scripts/util/get_brightness.sh",
         "interval": "once"
     },
-    "custom/audio": {
-        "exec": "/home/spreadzhao/scripts/niri/audio_niri.sh",
+    "custom/sink": {
+        "exec": "/home/spreadzhao/scripts/niri/sink_niri.sh",
+        "interval": 10,
+        "signal": 7
+    },
+    "custom/source": {
+        "exec": "/home/spreadzhao/scripts/niri/source_niri.sh",
         "interval": 10,
         "signal": 7
     },
