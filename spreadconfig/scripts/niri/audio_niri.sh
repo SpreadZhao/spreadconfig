@@ -90,5 +90,4 @@ get_sink_volume() {
     echo "${volume_percent}$(get_sink_icon "$volume_output")"
 }
 
-# Print sink volume + icon and mic volume + icon, separated by space
-echo "$(get_sink_volume) $(get_mic_volume)"
+get_sink_volume

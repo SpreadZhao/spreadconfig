@@ -30,7 +30,6 @@ footclient \
 
         fzf \
             --preview '\''bash -c "preview \"\$1\"" _ {}'\'' \
-            --preview-window=right:60%:wrap \
             < "'"$TMP_INPUT"'" \
             > "'"$TMP_OUTPUT"'"
     '
