@@ -3,6 +3,7 @@
 
     inputs = {
         nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+        nixpkgs-old-dd9b079.url = "github:nixos/nixpkgs/dd9b079222d43e1943b6ebd802f04fd959dc8e61";
         home-manager = {
             url = "github:nix-community/home-manager";
             inputs.nixpkgs.follows = "nixpkgs";
@@ -18,14 +19,15 @@
         {
             nixpkgs,
             home-manager,
+            nixpkgs-old-dd9b079,
             ...
         }@inputs:
         let
         in
         {
             nixosConfigurations = {
-                thinkbook = nixpkgs.lib.nixosSystem {
-                    # system = "x86_64-linux";
+                thinkbook = nixpkgs.lib.nixosSystem rec {
+                    system = "x86_64-linux";
                     specialArgs = { inherit inputs; };
                     modules = [
                         ./configuration.nix
@@ -33,7 +35,13 @@
                         {
                             home-manager.useGlobalPkgs = true;
                             home-manager.useUserPackages = true;
-                            home-manager.extraSpecialArgs = { inherit inputs; };
+                            home-manager.extraSpecialArgs = {
+                                inherit inputs;
+                                pkgs-old-dd9b079 = import nixpkgs-old-dd9b079 {
+                                    inherit system;
+                                    config.allowUnfree = true;
+                                };
+                            };
                             home-manager.users.spreadzhao = {
                                 imports = [
                                     ./home.nix

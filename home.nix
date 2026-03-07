@@ -3,6 +3,7 @@
     config,
     pkgs,
     inputs,
+    pkgs-old-dd9b079,
     ...
 }:
 let
@@ -1178,7 +1179,7 @@ in
         };
         obs-studio = {
             enable = true;
-            plugins = with pkgs.obs-studio-plugins; [
+            plugins = with pkgs-old-dd9b079.obs-studio-plugins; [
                 obs-backgroundremoval
                 obs-pipewire-audio-capture
                 obs-vaapi
@@ -2861,7 +2862,7 @@ in
         };
         ollama = {
             enable = true;
-            package = pkgs.ollama-rocm;
+            package = pkgs-old-dd9b079.ollama-rocm;
             acceleration = "rocm";
             host = "127.0.0.1";
             port = 11434;
