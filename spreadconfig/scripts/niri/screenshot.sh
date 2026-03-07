@@ -43,8 +43,8 @@ notify() {
     notify-send \
         --app-name "screenshot" \
         -u normal \
-        -t 10000 \
-        "$1"
+        "$1" \
+        "$2"
 }
 
 # ===============================
@@ -68,7 +68,7 @@ TMPFILE=$(mktemp --suffix=.png)
 if [ "$USE_OUTPUT_MODE" = true ]; then
     # ----- Output selection mode -----
     if ! outputs_json=$(niri msg -j outputs); then
-        notify "Failed to query outputs ❌"
+        notify "Failed to query outputs ❌" ""
         exit 1
     fi
 
@@ -81,7 +81,7 @@ if [ "$USE_OUTPUT_MODE" = true ]; then
     ' <<<"$outputs_json")
 
     if [ -z "$menu" ]; then
-        notify "No active outputs found ❌"
+        notify "No active outputs found ❌" ""
         exit 1
     fi
 
@@ -91,7 +91,7 @@ if [ "$USE_OUTPUT_MODE" = true ]; then
     OUTPUT_NAME="${selected%%|*}"
 
     if ! grim -o "$OUTPUT_NAME" "$TMPFILE"; then
-        notify "Capture failed ❌"
+        notify "Capture failed ❌" ""
         exit 1
     fi
 
@@ -105,9 +105,9 @@ else
         sleep 0.1
     fi
 
-    if ! grim -g "$(slurp -d -b "#0e1117aa" -c "#f5e0dc")" "$TMPFILE"; then
+    if ! grim -g "$(slurp -d -b "#000000aa" -c "#ffffff")" "$TMPFILE"; then
         [ -n "$FREEZE_PID" ] && kill "$FREEZE_PID" 2>/dev/null
-        notify "Capture failed ❌"
+        notify "Capture failed ❌" ""
         exit 1
     fi
 
@@ -116,7 +116,7 @@ fi
 
 # 确认文件存在
 if [ ! -s "$TMPFILE" ]; then
-    notify "Screenshot failed ❌"
+    notify "Screenshot failed ❌" ""
     exit 1
 fi
 
@@ -141,9 +141,9 @@ choice=$(
 case "$choice" in
 "$OPTION_CLIPBOARD")
     if wl-copy --type image/png <"$TMPFILE"; then
-        notify "Image copied to clipboard 📋"
+        notify "Image copied to clipboard 📋" ""
     else
-        notify "Failed to copy image ❌"
+        notify "Failed to copy image ❌" ""
     fi
     ;;
 
@@ -167,9 +167,9 @@ case "$choice" in
 
     if mv "$TMPFILE" "$pic"; then
         KEEP_TMPFILE=true
-        notify "Saved to $pic 📁"
+        notify "Saved to 📁" "$pic"
     else
-        notify "Failed to save screenshot ❌"
+        notify "Failed to save screenshot ❌" ""
     fi
     ;;
 
@@ -177,31 +177,31 @@ case "$choice" in
     ocr_lang="chi_sim+eng"
 
     if ! command -v tesseract >/dev/null 2>&1; then
-        notify "tesseract not found ❌"
+        notify "tesseract not found ❌" ""
         exit 1
     fi
 
     if ! ocr_text=$(tesseract "$TMPFILE" stdout -l "$ocr_lang" -c preserve_interword_spaces=1 2>/dev/null); then
-        notify "OCR failed ❌"
+        notify "OCR failed ❌" ""
         exit 1
     fi
 
     OCR_TEXT_TRIMMED=$(printf "%s" "$ocr_text" | sed '/^[[:space:]]*$/d')
 
     if [ -z "$OCR_TEXT_TRIMMED" ]; then
-        notify "OCR finished but no text found ⚠️"
+        notify "OCR finished but no text found ⚠️" ""
         exit 0
     fi
 
     if printf "%s" "$OCR_TEXT_TRIMMED" | wl-copy; then
         PREVIEW=$(printf "%s" "$OCR_TEXT_TRIMMED" | head -c 30 | tr '\n' ' ')
-        notify "📋 OCR copied : ${PREVIEW}…"
+        notify "📋 OCR copied" "${PREVIEW}…"
     else
-        notify "Failed to copy OCR result ❌"
+        notify "Failed to copy OCR result ❌" ""
     fi
     ;;
 
 *)
-    notify "Operation cancelled 🚫"
+    notify "Operation cancelled 🚫" ""
     ;;
 esac

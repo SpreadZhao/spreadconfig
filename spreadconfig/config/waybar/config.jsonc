@@ -4,6 +4,7 @@
     "spacing": 0,
     "modules-left": [
         "group/niri-workspace-window",
+        "custom/screen-record-time"
     ],
     "modules-center": [
         "niri/window"
@@ -73,9 +74,9 @@
         "separate-outputs": true
     },
     "custom/screen-record-time": {
-        "format": " {}",
+        "format": "  {}",
         "exec": "/home/spreadzhao/scripts/util/get_screenrecord_time.sh",
-        "signal": 10,
+        "interval": 1,
         "hide-empty-text": true
     },
     "custom/info": {
