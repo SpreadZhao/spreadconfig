@@ -12,11 +12,21 @@
         "group/usage",
         "network",
         "group/audio",
-        "custom/battery",
-        // "upower",
+        "group/power",
         "custom/time",
         "tray"
     ],
+    "group/power": {
+        "orientation": "horizontal",
+        "drawer": {
+            "transition-duration": 0,
+            "click-to-reveal": true
+        },
+        "modules": [
+            "custom/battery",
+            "upower"
+        ]
+    },
     "group/audio": {
         "orientation": "horizontal",
         "drawer": {
@@ -93,7 +103,7 @@
     "upower": {
         "native-path": "hid-3c:34:64:0a:eb:7c-battery",
         "show-icon": false,
-        "format": ""
+        "format": "{percentage}"
     },
     "custom/time": {
         "exec": "/home/spreadzhao/scripts/util/get_time.sh",
