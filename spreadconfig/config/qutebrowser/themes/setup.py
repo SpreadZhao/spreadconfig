@@ -95,7 +95,7 @@ def setup(c):
 
     # statusbar
     c.colors.statusbar.normal.bg = palette["theme_background"]
-    c.colors.statusbar.insert.bg = palette["theme_green"]
+    c.colors.statusbar.insert.bg = palette["theme_bright_background"]
     c.colors.statusbar.command.bg = palette["theme_background"]
     c.colors.statusbar.caret.bg = palette["theme_background"]
     c.colors.statusbar.caret.selection.bg = palette["theme_background"]
@@ -103,7 +103,7 @@ def setup(c):
     c.colors.statusbar.passthrough.bg = palette["theme_background"]
 
     c.colors.statusbar.normal.fg = palette["theme_white"]
-    c.colors.statusbar.insert.fg = palette["theme_background"]
+    c.colors.statusbar.insert.fg = palette["theme_green"]
     c.colors.statusbar.command.fg = palette["theme_white"]
     c.colors.statusbar.passthrough.fg = palette["theme_yellow"]
     c.colors.statusbar.caret.fg = palette["theme_yellow"]
