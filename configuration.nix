@@ -54,6 +54,8 @@
                     "https://mirrors.tuna.tsinghua.edu.cn/nix-channels/store"
                     "https://cache.nixos.org"
                 ];
+                max-jobs = 2;
+                cores = 4;
             };
             # Opinionated: disable channels
             channel.enable = false;
@@ -61,6 +63,9 @@
             # Opinionated: make flake registry and nix path match flake inputs
             registry = lib.mapAttrs (_: flake: { inherit flake; }) flakeInputs;
             nixPath = lib.mapAttrsToList (n: _: "${n}=flake:${n}") flakeInputs;
+
+            daemonIOSchedClass = lib.mkDefault "idle";
+            daemonCPUSchedPolicy = lib.mkDefault "idle";
         };
 
     boot = {
@@ -151,6 +156,7 @@
     };
 
     systemd.services = {
+        nix-daemon.serviceConfig.Slice = "-.slice";
         net-usage = {
             path = with pkgs; [
                 bash
@@ -183,6 +189,9 @@
         defaultUserShell = pkgs.zsh;
     };
     environment = {
+        variables = {
+            NIX_REMOTE = "daemon";
+        };
         pathsToLink = [
             # https://nix-community.github.io/home-manager/options.xhtml#opt-xdg.portal.enable
             "/share/xdg-desktop-portal"
