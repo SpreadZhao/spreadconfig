@@ -24,6 +24,7 @@
 - Secrets:
     - [Pass: The Standard Unix Password Manager](https://www.passwordstore.org/)
     - [grimsteel/pass-secret-service: Implementation of org.freedesktop.secrets using `pass`](https://github.com/grimsteel/pass-secret-service)
+- Browser: [qutebrowser/qutebrowser: A keyboard-driven, vim-like browser based on Python and Qt.](https://github.com/qutebrowser/qutebrowser)
 
 > Some of them need more dependencies to be fully configured.
 
