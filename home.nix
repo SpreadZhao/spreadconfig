@@ -173,6 +173,7 @@ in
             onefetch
             tealdeer
             nix-tree
+            nvd
             gdu
             bluetui
             eza
