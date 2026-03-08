@@ -98,27 +98,23 @@ config_fzf() {
         local command=$1
         shift
         case "$command" in
-        # cd: preview directory tree with eza
         cd)
             fzf --preview 'eza --tree --color=always {} | head -200' "$@"
             ;;
-        # export/unset: preview environment variable values
         export | unset)
             fzf --preview 'eval "echo \$ {}"' "$@"
             ;;
-        # ssh: preview host info with dig
         ssh)
-            fzf --preview 'dig {}' "$@"
+            fzf --preview 'dig {}'
             ;;
-        # Default: preview dirs with eza, files with bat (fallback to "Cannot preview")
         *)
             fzf --preview '
-                    if [ -d {} ]; then
-                        eza --tree --color=always {} | head -200
-                    else
-                        bat -n --color=always {} 2>/dev/null || echo "Cannot preview"
-                    fi
-                ' "$@"
+                if [ -d {} ]; then
+                    eza --tree --color=always {} | head -200
+                else
+                    "$SCRIPT_HOME/config/fzf_preview.sh" {}
+                fi
+            ' "$@"
             ;;
         esac
     }
