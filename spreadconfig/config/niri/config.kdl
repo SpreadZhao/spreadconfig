@@ -1,5 +1,5 @@
 animations {
-    // off
+    off
 }
 
 gestures {
@@ -24,8 +24,8 @@ input {
 }
 
 layout {
-    gaps 12
-    background-color "#0e1117"
+    gaps 4
+    background-color "#000000"
     center-focused-column "never"
     preset-column-widths {
         proportion 0.5
@@ -39,30 +39,23 @@ layout {
     }
     default-column-width { proportion 0.5; }
     focus-ring {
-        off
+        // off
         width 2
-        active-color "#f5e0dc"
-        inactive-color "#7f849c"
-    }
-    border {
-        off
-        width 2
-        active-color "#f5e0dc"
-        inactive-color "#313244"
-        urgent-color "#f38ba8"
+        active-color "#ffffff"
+        inactive-color "#72737a"
     }
     tab-indicator {
         // hide-when-single-tab
-        // place-within-column
+        place-within-column
         gap 4
         width 4
-        corner-radius 8
+        corner-radius 0
         length total-proportion=1.0
         position "left"
-        gaps-between-tabs 12
-        active-color "#11111b"
-        inactive-color "#00000000"
-        urgent-color "#f38ba8"
+        gaps-between-tabs 4
+        active-color "#ffc66d"
+        inactive-color "#72737a"
+        urgent-color "#ff0000"
     }
     struts {
         left -2
@@ -123,10 +116,10 @@ recent-windows {
     open-delay-ms 150
 
     highlight {
-        active-color "#585b70ff"
-        urgent-color "#f38ba8ff"
+        active-color "#72737a"
+        urgent-color "#ff0000"
         padding 30
-        corner-radius 8
+        corner-radius 0
     }
 
     previews {
@@ -143,7 +136,7 @@ recent-windows {
 }
 
 overview {
-    backdrop-color "#0e1117"
+    backdrop-color "#000000"
 }
 
 hotkey-overlay {
@@ -155,7 +148,7 @@ prefer-no-csd
 screenshot-path null
 
 cursor {
-    xcursor-theme "catppuccin-mocha-dark-cursors"
+    xcursor-theme "Adwaita"
     xcursor-size 36
     hide-after-inactive-ms 5000
 }
@@ -164,41 +157,41 @@ clipboard {
     disable-primary
 }
 
-layer-rule {
-    match namespace="^launcher$"
-    shadow {
-        on
-        softness 15
-        spread 1
-        offset x=0 y=0
-        draw-behind-window false
-        color "#f2cdcd"
-    }
-    geometry-corner-radius 8
-}
+// layer-rule {
+//     match namespace="^launcher$"
+//     shadow {
+//         on
+//         softness 15
+//         spread 1
+//         offset x=0 y=0
+//         draw-behind-window false
+//         color "#f2cdcd"
+//     }
+//     geometry-corner-radius 8
+// }
 
-window-rule {
-    geometry-corner-radius 8
-    clip-to-geometry true
-    draw-border-with-background false
-}
+// window-rule {
+//     geometry-corner-radius 8
+//     clip-to-geometry true
+//     draw-border-with-background false
+// }
 
 window-rule {
     match is-floating=false
     tiled-state true
 }
 
-window-rule {
-    match is-focused=true
-    shadow {
-        on
-        softness 15
-        spread 1
-        offset x=0 y=0
-        draw-behind-window false
-        color "#f2cdcd"
-    }
-}
+// window-rule {
+//     match is-focused=true
+//     shadow {
+//         on
+//         softness 15
+//         spread 1
+//         offset x=0 y=0
+//         draw-behind-window false
+//         color "#f2cdcd"
+//     }
+// }
 
 window-rule {
     match app-id="feh"
@@ -225,8 +218,8 @@ window-rule {
     match is-window-cast-target=true
 
     focus-ring {
-        active-color "#fab387"
-        inactive-color "#b4befe"
+        active-color "#47a2ed"
+        inactive-color "#8cd7ff"
         width 2
     }
 }
@@ -367,15 +360,16 @@ binds {
 
     Mod+T { toggle-column-tabbed-display; }
 
-    Ctrl+Shift+A { spawn-sh "$SCRIPT_HOME/niri/screenshot.sh";  }
-    Ctrl+Shift+S { spawn-sh "$SCRIPT_HOME/niri/screenrecord.sh";  }
+    Mod+Shift+A { spawn-sh "$SCRIPT_HOME/niri/screenshot.sh";  }
+    Mod+Ctrl+Shift+A { spawn-sh "$SCRIPT_HOME/niri/screenshot.sh -o";  }
+    Mod+Shift+S { spawn-sh "$SCRIPT_HOME/niri/screenrecord.sh";  }
 
-    Mod+Shift+V { spawn-sh "cliphist list | fuzzel --dmenu | cliphist decode | wl-copy"; }
+    Mod+Shift+V { spawn-sh "cliphist list | fm --dmenu | cliphist decode | wl-copy"; }
 
-    Mod+Z { spawn-sh "wooz --invert-scroll --output $($SCRIPT_HOME/niri/niri_focused_output_name.sh)"; }
-    Mod+S { spawn-sh "slurp -b '#0e1117aa' -c '#f5e0dc' >/dev/null"; }
+    Mod+Z { spawn-sh "wooz --output $($SCRIPT_HOME/niri/niri_focused_output_name.sh)"; }
+    Mod+S { spawn-sh "slurp -b '#000000aa' -c '#ffffff' >/dev/null"; }
 
-    Mod+W { spawn-sh "$SCRIPT_HOME/util/toggle_wallpaper.sh"; }
+    // Mod+W { spawn-sh "$SCRIPT_HOME/util/toggle_wallpaper.sh"; }
 
     Mod+Shift+Q { quit; }
 }
