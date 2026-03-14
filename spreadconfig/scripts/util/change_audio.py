@@ -63,7 +63,7 @@ def main():
     # Step 1: Ask whether to change Sink or Source
     choice_cmd = (
         "echo 'Sink (Output)\nSource (Input)' | "
-        "fuzzel --dmenu --prompt 'Choose Type'"
+            "fuzzel --dmenu --prompt 'Choose Type: '"
     )
     res = subprocess.run(choice_cmd, shell=True, encoding="utf-8", stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     if res.returncode != 0 or not res.stdout.strip():

@@ -10,7 +10,7 @@ OPTION_PIN="Pin"
 OPTION_SAVE="Save"
 OPTION_EDIT="Edit"
 OPTION_OCR="OCR"
-PROMPT_OUTPUT="Select Output"
+PROMPT_OUTPUT="Select Output: "
 PROMPT_ACTION="Select Screenshot Action: "
 
 # ===============================

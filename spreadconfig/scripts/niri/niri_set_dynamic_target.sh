@@ -5,7 +5,7 @@ set -euo pipefail
 # Show main action menu
 action="$(
     printf "Window\nMonitor\nClear\n" |
-        fuzzel --dmenu --prompt "Dynamic Cast"
+        fuzzel --dmenu --prompt "Dynamic Cast: "
 )"
 
 case "$action" in
@@ -23,7 +23,7 @@ case "$action" in
           to_entries[]
           | "\(.value.make) \(.value.model) (\(.key))"
         ' |
-            fuzzel --dmenu --prompt "Select monitor" |
+            fuzzel --dmenu --prompt "Select monitor: " |
             sed -n 's/.*(\(.*\))$/\1/p'
     )"
 

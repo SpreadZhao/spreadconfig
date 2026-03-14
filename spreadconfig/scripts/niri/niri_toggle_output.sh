@@ -14,7 +14,7 @@ menu=$(jq -r '
   "\($name)|\(if $v.logical != null then "on" else "off" end)|\($v.make // "Unknown") \($v.model // "Unknown")"
 ' <<<"$outputs_json")
 
-selected=$(fuzzel --dmenu --prompt "Toggle output" <<<"$menu")
+selected=$(fuzzel --dmenu --prompt "Toggle output: " <<<"$menu")
 [ -z "$selected" ] && exit 0
 
 IFS="|" read -r output state _ <<<"$selected"
