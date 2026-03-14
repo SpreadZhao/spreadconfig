@@ -27,14 +27,20 @@ TMPFILE=""
 FREEZE_PID=""
 SAVE_PATH="$HOME/Pictures/screenshot"
 USE_OUTPUT_MODE=false
+USE_WINDOW_MODE=false
 OUTPUT_NAME=""
 
 # ===============================
 #        Arg parsing
 # ===============================
-if [[ "${1:-}" == "-o" ]]; then
+case "${1:-}" in
+-o)
     USE_OUTPUT_MODE=true
-fi
+    ;;
+-w)
+    USE_WINDOW_MODE=true
+    ;;
+esac
 
 # ===============================
 #        Notify
@@ -91,6 +97,38 @@ if [ "$USE_OUTPUT_MODE" = true ]; then
     OUTPUT_NAME="${selected%%|*}"
 
     if ! grim -o "$OUTPUT_NAME" "$TMPFILE"; then
+        notify "Capture failed ❌" ""
+        exit 1
+    fi
+
+elif [ "$USE_WINDOW_MODE" = true ]; then
+    # ----- Window selection mode -----
+
+    if ! win_json=$(niri msg -j pick-window); then
+        notify "Window selection failed ❌" ""
+        exit 1
+    fi
+
+    win_id=$(jq '.id' <<<"$win_json")
+
+    # 从窗口列表获取几何信息
+    if ! rect=$(niri msg -j windows | jq -r "
+        .[] | select(.id == $win_id) |
+        .rect |
+        \"\(.x),\(.y) \(.width)x\(.height)\"
+    "); then
+        notify "Failed to get window geometry ❌" ""
+        exit 1
+    fi
+
+    echo "rect: $rect"
+
+    if [ -z "$rect" ]; then
+        notify "Window geometry not found ❌" ""
+        exit 1
+    fi
+
+    if ! grim -g "$rect" "$TMPFILE"; then
         notify "Capture failed ❌" ""
         exit 1
     fi

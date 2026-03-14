@@ -237,6 +237,8 @@ in
             lazygit
             wooz
             file-manager-dbus
+
+            element-desktop
         ];
     };
     systemd.user.services = {
