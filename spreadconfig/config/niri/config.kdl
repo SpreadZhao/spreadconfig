@@ -177,6 +177,18 @@ clipboard {
 // }
 
 window-rule {
+    // Match by "dropdown" app ID.
+    // You need to set this app ID when running your terminal, e.g.:
+    // spawn "alacritty" "--class" "dropdown"
+    match app-id="dropdown-foot"
+
+    open-floating true
+    default-floating-position x=0 y=0 relative-to="top"
+    default-window-height { proportion 0.5; }
+    default-column-width { proportion 0.8; }
+}
+
+window-rule {
     match is-floating=false
     tiled-state true
 }
@@ -236,6 +248,7 @@ binds {
     Mod+Shift+Slash { show-hotkey-overlay; }
 
     Mod+Return hotkey-overlay-title="Open a Terminal" { spawn-sh "footclient"; }
+    Mod+Shift+Return { spawn-sh "$SCRIPT_HOME/niri/drop_down_foot.sh"; }
     Mod+space hotkey-overlay-title="Run an Application" { spawn "fuzzel"; }
     // Super+Alt+L hotkey-overlay-title="Lock the Screen: swaylock" { spawn "swaylock"; }
 
