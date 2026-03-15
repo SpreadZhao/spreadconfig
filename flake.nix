@@ -30,7 +30,7 @@
                     system = "x86_64-linux";
                     specialArgs = { inherit inputs; };
                     modules = [
-                        ./configuration.nix
+                        ./host/thinkbook/configuration.nix
                         home-manager.nixosModules.home-manager
                         {
                             home-manager.useGlobalPkgs = true;
@@ -44,7 +44,7 @@
                             };
                             home-manager.users.spreadzhao = {
                                 imports = [
-                                    ./home.nix
+                                    ./host/thinkbook/home.nix
                                 ];
                             };
                             # Optionally, use home-manager.extraSpecialArgs to pass
