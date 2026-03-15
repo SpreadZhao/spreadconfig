@@ -109,7 +109,7 @@
     "custom/time": {
         "exec": "/home/spreadzhao/scripts/util/get_time.sh",
         "interval": 31,
-        "on-click": "[ -e /tmp/toggle_time_format ] && rm /tmp/toggle_time_format || touch /tmp/toggle_time_format; pkill -RTMIN+9 waybar",
+        "on-click": "exec /home/spreadzhao/scripts/util/toggle_time_format.sh",
         "signal": 9,
         "tooltip": false
     },

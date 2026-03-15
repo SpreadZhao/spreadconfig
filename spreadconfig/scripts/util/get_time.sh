@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 
-STATE_FILE="/tmp/toggle_time_format"
+# https://github.com/Alexays/Waybar/issues/2821
+SUFFIX="default"
+STATE_FILE="/tmp/time_format-$SUFFIX"
 
 DEFAULT_FORMAT="+%H:%M"
 FULL_FORMAT="+%Y-%m-%d %H:%M %a"
