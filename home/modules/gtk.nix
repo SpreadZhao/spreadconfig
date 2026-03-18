@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, fontFamilies, fontSizes, ... }:
 
 {
     gtk = {
@@ -31,8 +31,8 @@
         };
         font = {
             # name = "Noto Sans";
-            name = "IBM Plex Sans";
-            size = 16;
+            name = fontFamilies.sans;
+            size = fontSizes.gtk;
         };
         gtk3 = {
             enable = true;

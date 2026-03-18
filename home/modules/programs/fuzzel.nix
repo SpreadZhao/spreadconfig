@@ -6,6 +6,8 @@
     theme_yellow,
     theme_bright_background,
     theme_blue,
+    fontFamilies,
+    fontSizes,
     ...
 }:
 
@@ -29,7 +31,7 @@
                 counter = "${theme_blue}ff";
             };
             main = {
-                font = "IBM Plex Mono:size=18, Symbols Nerd Font Mono:size=18, Noto Color Emoji:size=18";
+                font = "${fontFamilies.mono}:size=${toString fontSizes.fuzzel}, ${fontFamilies.nerdMono}:size=${toString fontSizes.fuzzel}, ${fontFamilies.emoji}:size=${toString fontSizes.fuzzel}";
                 image-size-ratio = 1;
                 show-actions = "no";
                 tabs = 4;

@@ -7,6 +7,8 @@
     theme_blue,
     theme_radius,
     theme_red,
+    fontFamilies,
+    fontSizes,
     ...
 }:
 
@@ -35,9 +37,9 @@
                 edge-margin-horizontal = 0;
 
                 dpi-aware = "yes";
-                title-font = "IBM Plex Sans:size=20";
-                summary-font = "IBM Plex Sans:size=19";
-                body-font = "IBM Plex Sans:size=18";
+                title-font = "${fontFamilies.sans}:size=${toString fontSizes.fnott.title}";
+                summary-font = "${fontFamilies.sans}:size=${toString fontSizes.fnott.summary}";
+                body-font = "${fontFamilies.sans}:size=${toString fontSizes.fnott.body}";
 
                 title-format = "<b>%a%A</b>";
                 summary-format = "%s";

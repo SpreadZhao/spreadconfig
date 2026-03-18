@@ -7,6 +7,8 @@
     theme_blue,
     theme_bright_blue,
     theme_bright_white,
+    fontFamilies,
+    fontSizes,
     ...
 }:
 
@@ -15,7 +17,7 @@
         enable = true;
         settings = {
             general = {
-                font-regular = "sans:size=26";
+                font-regular = "${fontFamilies.sans}:size=${toString fontSizes.wayprompt}";
                 pin-square-amount = 32;
                 border = 1;
                 pin-square-border = 2;

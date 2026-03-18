@@ -8,6 +8,8 @@
     theme_bright_red,
     theme_white,
     theme_bright_white,
+    fontFamilies,
+    fontSizes,
     ...
 }:
 
@@ -19,8 +21,8 @@
             show-failed-attempts = true;
             daemonize = true;
 
-            font = "IBM Plex Sans";
-            font-size = 30;
+            font = fontFamilies.sans;
+            font-size = fontSizes.swaylock;
 
             color = "${theme_background}";
 

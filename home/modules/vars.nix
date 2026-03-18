@@ -31,6 +31,69 @@ let
     theme_bright_white = "ffffff";
     theme_bright_yellow = "ffc66d";
     theme_radius = "0";
+    fontFamilies = {
+        sans = "IBM Plex Sans";
+        mono = "IBM Plex Mono";
+        serif = "IBM Plex Serif";
+        emoji = "Noto Color Emoji";
+        nerdMono = "Symbols Nerd Font Mono";
+    };
+    fontFallbacks = {
+        emoji = [ fontFamilies.emoji ];
+        monospace = [
+            fontFamilies.mono
+            "Noto Sans Mono"
+            "Noto Sans Mono CJK SC"
+            "Noto Sans Mono CJK HK"
+            "Noto Sans Mono CJK TC"
+            "Noto Sans Mono CJK JP"
+            "Noto Sans Mono CJK KR"
+            fontFamilies.nerdMono
+            # "Noto Color Emoji"
+        ];
+        sansSerif = [
+            fontFamilies.sans
+            "IBM Plex Sans SC"
+            "IBM Plex Sans TC"
+            "IBM Plex Sans JP"
+            "IBM Plex Sans KR"
+            "IBM Plex Sans Thai"
+            "IBM Plex Sans Thai Looped"
+            "IBM Plex Sans Hebrew"
+            "IBM Plex Sans Arabic"
+            "IBM Plex Sans Devanagari"
+            "Noto Sans"
+            "Noto Sans CJK SC"
+            "Noto Sans CJK HK"
+            "Noto Sans CJK TC"
+            "Noto Sans CJK JP"
+            "Noto Sans CJK KR"
+            # "Noto Color Emoji"
+        ];
+        serif = [
+            fontFamilies.serif
+            "Noto Serif"
+            "Noto Serif CJK SC"
+            "Noto Serif CJK HK"
+            "Noto Serif CJK TC"
+            "Noto Serif CJK JP"
+            "Noto Serif CJK KR"
+            # "Noto Color Emoji"
+        ];
+    };
+    fontSizes = {
+        gtk = 16;
+        qt = 16;
+        foot = 16;
+        fuzzel = 18;
+        swaylock = 30;
+        wayprompt = 26;
+        fnott = {
+            title = 20;
+            summary = 19;
+            body = 18;
+        };
+    };
 in
 {
     _module.args = {
@@ -59,6 +122,9 @@ in
             theme_bright_white
             theme_bright_yellow
             theme_radius
+            fontFamilies
+            fontFallbacks
+            fontSizes
             ;
     };
 }

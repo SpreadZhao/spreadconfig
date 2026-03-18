@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, fontFamilies, fontSizes, ... }:
 
 {
     qt = {
@@ -13,8 +13,8 @@
                 standar_dialogs = "xdgdesktopportal";
             };
             Fonts = {
-                fixed = "\"IBM Plex Mono,16\"";
-                general = "\"IBM Plex Sans,16\"";
+                fixed = "\"${fontFamilies.mono},${toString fontSizes.qt}\"";
+                general = "\"${fontFamilies.sans},${toString fontSizes.qt}\"";
             };
         };
         qt6ctSettings = {
@@ -22,8 +22,8 @@
                 standar_dialogs = "xdgdesktopportal";
             };
             Fonts = {
-                fixed = "\"IBM Plex Mono,16\"";
-                general = "\"IBM Plex Sans,16\"";
+                fixed = "\"${fontFamilies.mono},${toString fontSizes.qt}\"";
+                general = "\"${fontFamilies.sans},${toString fontSizes.qt}\"";
             };
         };
     };

@@ -9,6 +9,8 @@
     theme_white,
     theme_bright_dark,
     theme_bright_blue,
+    fontFamilies,
+    fontSizes,
     ...
 }:
 
@@ -18,7 +20,7 @@
         server.enable = true;
         settings = {
             main = {
-                font = "IBM Plex Mono:size=16, Symbols Nerd Font Mono:size=16";
+                font = "${fontFamilies.mono}:size=${toString fontSizes.foot}, ${fontFamilies.nerdMono}:size=${toString fontSizes.foot}";
                 bold-text-in-bright = "yes";
             };
             colors-dark = {
