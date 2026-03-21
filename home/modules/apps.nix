@@ -6,10 +6,13 @@
   ];
 
   home.packages = with pkgs; [
+    # Zsh plugins
     zsh-syntax-highlighting
     zsh-autosuggestions
     zsh-completions
     zsh-fzf-tab
+
+    # Development tools - compilers & build tools
     gcc
     gdb
     gnumake
@@ -22,9 +25,14 @@
     rustc
     python3
     go
+
+    # Coding
     jetbrains-toolbox
     jadx
     ghidra-bin
+    claude-code-bin
+
+    # Language servers & formatters
     bash-language-server
     gopls
     lua-language-server
@@ -36,6 +44,8 @@
     rustfmt
     shfmt
     stylua
+
+    # Multimedia & screenshot tools
     xmlstarlet
     imagemagick
     mpv
@@ -54,6 +64,8 @@
         rm $out/share/applications/scrcpy-console.desktop
       '';
     }))
+
+    # System information & disk utilities
     obsidian
     fastfetch
     onefetch
@@ -65,12 +77,16 @@
     duf
     dust
     diff-so-fancy
+
+    # Archive & compression
     xeyes
     qrencode
     rar
     unzip
     zip
     p7zip
+
+    # Communication
     wechat
     (qq.overrideAttrs (old: {
       postInstall = (old.postInstall or "") + ''
@@ -78,26 +94,35 @@
           --replace-fail "$out/bin/qq" "$out/bin/qq --ozone-platform-hint=auto --enable-wayland-ime --wayland-text-input-version=3"
       '';
     }))
+    telegram-desktop
+    element-desktop
+
+    # Wayland utilities
     xwayland-satellite
     libnotify
     wl-clipboard
     pastel
-    telegram-desktop
+
+    # Misc applications
     pass
     wbg
+    wooz
+
+    # Fonts
     noto-fonts
     noto-fonts-cjk-sans
     noto-fonts-cjk-serif
     noto-fonts-color-emoji
     nerd-fonts.symbols-only
     ibm-plex
+
+    # OCR & PDF
     tesseract
     poppler-utils
+
+    # File & sync utilities
     trash-cli
     rsync
     rclone
-    wooz
-    element-desktop
-    claude-code-bin
   ];
 }

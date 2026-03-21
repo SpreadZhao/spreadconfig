@@ -6,7 +6,10 @@
   ];
 
   environment.systemPackages = with pkgs; [
+    # Network
     wget
+
+    # System utilities
     brightnessctl
     efibootmgr
     exfatprogs
@@ -19,6 +22,8 @@
     pciutils
     file
     killall
+
+    # Monitoring
     clinfo
     nethogs
   ];
