@@ -1,16 +1,16 @@
 { ... }:
 
 {
-    hardware = {
-        bluetooth = {
-            enable = true;
-            powerOnBoot = true;
-            settings = {
-                General = {
-                    Experimental = true;
-                    KernelExperimental = true;
-                };
-            };
+  hardware = {
+    bluetooth = {
+      enable = true;
+      powerOnBoot = true;
+      settings = {
+        General = {
+          Experimental = true;
+          KernelExperimental = true;
         };
+      };
     };
+  };
 }

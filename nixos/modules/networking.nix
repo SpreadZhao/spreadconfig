@@ -1,8 +1,8 @@
 { ... }:
 
 {
-    networking = {
-        hostName = "thinkbook";
-        networkmanager.enable = true;
-    };
+  networking = {
+    hostName = "thinkbook";
+    networkmanager.enable = true;
+  };
 }

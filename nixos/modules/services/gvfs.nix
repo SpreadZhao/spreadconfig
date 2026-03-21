@@ -1,5 +1,5 @@
 { ... }:
 
 {
-    services.gvfs.enable = false;
+  services.gvfs.enable = false;
 }

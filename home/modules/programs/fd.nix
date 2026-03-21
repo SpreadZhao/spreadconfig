@@ -1,14 +1,14 @@
 { ... }:
 
 {
-    programs.fd = {
-        enable = true;
-        extraOptions = [
-            "--no-ignore"
-            "--absolute-path"
-        ];
-        ignores = [
-            ".git/"
-        ];
-    };
+  programs.fd = {
+    enable = true;
+    extraOptions = [
+      "--no-ignore"
+      "--absolute-path"
+    ];
+    ignores = [
+      ".git/"
+    ];
+  };
 }

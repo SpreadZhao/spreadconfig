@@ -1,5 +1,5 @@
 { lib, ... }:
 
 {
-    services.udisks2.enable = lib.mkForce true;
+  services.udisks2.enable = lib.mkForce true;
 }

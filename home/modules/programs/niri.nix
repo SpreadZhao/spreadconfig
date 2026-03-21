@@ -1,12 +1,12 @@
 {
-    config,
-    pkgs,
-    spreadconfigDir,
-    ...
+  config,
+  pkgs,
+  spreadconfigDir,
+  ...
 }:
 
 {
-    home.packages = [ pkgs.niri ];
+  home.packages = [ pkgs.niri ];
 
-    xdg.configFile."niri".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/niri";
+  xdg.configFile."niri".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/niri";
 }

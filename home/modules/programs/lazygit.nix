@@ -1,13 +1,13 @@
 {
-    config,
-    pkgs,
-    spreadconfigDir,
-    ...
+  config,
+  pkgs,
+  spreadconfigDir,
+  ...
 }:
 
 {
-    home.packages = [ pkgs.lazygit ];
+  home.packages = [ pkgs.lazygit ];
 
-    xdg.configFile."lazygit".source =
-        config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/lazygit";
+  xdg.configFile."lazygit".source =
+    config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/lazygit";
 }

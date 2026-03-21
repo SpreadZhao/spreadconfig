@@ -2,56 +2,56 @@
 # and may be overwritten by future invocations.  Please make changes
 # to /etc/nixos/configuration.nix instead.
 {
-    config,
-    lib,
-    modulesPath,
-    ...
+  config,
+  lib,
+  modulesPath,
+  ...
 }:
 
 {
-    imports = [
-        (modulesPath + "/installer/scan/not-detected.nix")
+  imports = [
+    (modulesPath + "/installer/scan/not-detected.nix")
+  ];
+
+  boot.initrd.availableKernelModules = [
+    "nvme"
+    "xhci_pci"
+    "thunderbolt"
+    "usbhid"
+    "usb_storage"
+    "sd_mod"
+    "rtsx_pci_sdmmc"
+  ];
+  boot.initrd.kernelModules = [ ];
+  boot.kernelModules = [ "kvm-amd" ];
+  boot.extraModulePackages = [ ];
+
+  fileSystems."/" = {
+    device = "/dev/disk/by-uuid/480e7e2e-cf27-422e-80bc-9c2b5f834a25";
+    fsType = "ext4";
+  };
+
+  fileSystems."/boot" = {
+    device = "/dev/disk/by-uuid/E6D6-3F42";
+    fsType = "vfat";
+    options = [
+      "fmask=0077"
+      "dmask=0077"
     ];
+  };
 
-    boot.initrd.availableKernelModules = [
-        "nvme"
-        "xhci_pci"
-        "thunderbolt"
-        "usbhid"
-        "usb_storage"
-        "sd_mod"
-        "rtsx_pci_sdmmc"
-    ];
-    boot.initrd.kernelModules = [ ];
-    boot.kernelModules = [ "kvm-amd" ];
-    boot.extraModulePackages = [ ];
+  swapDevices = [ ];
 
-    fileSystems."/" = {
-        device = "/dev/disk/by-uuid/480e7e2e-cf27-422e-80bc-9c2b5f834a25";
-        fsType = "ext4";
+  nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
+  hardware = {
+    cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
+    amdgpu = {
+      opencl.enable = true;
+      initrd.enable = false;
     };
-
-    fileSystems."/boot" = {
-        device = "/dev/disk/by-uuid/E6D6-3F42";
-        fsType = "vfat";
-        options = [
-            "fmask=0077"
-            "dmask=0077"
-        ];
+    graphics = {
+      enable = true;
+      enable32Bit = true;
     };
-
-    swapDevices = [ ];
-
-    nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
-    hardware = {
-        cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
-        amdgpu = {
-            opencl.enable = true;
-            initrd.enable = false;
-        };
-        graphics = {
-            enable = true;
-            enable32Bit = true;
-        };
-    };
+  };
 }

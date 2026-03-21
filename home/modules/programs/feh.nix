@@ -1,21 +1,21 @@
 {
-    config,
-    pkgs,
-    lib,
-    spreadconfigDir,
-    ...
+  config,
+  pkgs,
+  lib,
+  spreadconfigDir,
+  ...
 }:
 
 {
-    home.packages = [
-        (pkgs.feh.overrideAttrs (old: {
-            postInstall = (old.postInstall or "") + ''
-                substituteInPlace $out/share/applications/feh.desktop \
-                  --replace-fail "Exec=feh --start-at %u" \
-                                 "Exec=feh --theme fit --start-at %u"
-            '';
-        }))
-    ];
+  home.packages = [
+    (pkgs.feh.overrideAttrs (old: {
+      postInstall = (old.postInstall or "") + ''
+        substituteInPlace $out/share/applications/feh.desktop \
+          --replace-fail "Exec=feh --start-at %u" \
+                         "Exec=feh --theme fit --start-at %u"
+      '';
+    }))
+  ];
 
-    xdg.configFile."feh".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/feh";
+  xdg.configFile."feh".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/feh";
 }

@@ -1,5 +1,5 @@
 { ... }:
 
 {
-    services.xserver.desktopManager.runXdgAutostartIfNone = true;
+  services.xserver.desktopManager.runXdgAutostartIfNone = true;
 }

@@ -1,13 +1,13 @@
 {
-    config,
-    pkgs,
-    spreadconfigDir,
-    ...
+  config,
+  pkgs,
+  spreadconfigDir,
+  ...
 }:
 
 {
-    home.packages = [ pkgs.zathura ];
+  home.packages = [ pkgs.zathura ];
 
-    xdg.configFile."zathura".source =
-        config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/zathura";
+  xdg.configFile."zathura".source =
+    config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/zathura";
 }

@@ -1,8 +1,8 @@
 { defaultJDK, ... }:
 
 {
-    programs.java = {
-        enable = true;
-        package = defaultJDK;
-    };
+  programs.java = {
+    enable = true;
+    package = defaultJDK;
+  };
 }

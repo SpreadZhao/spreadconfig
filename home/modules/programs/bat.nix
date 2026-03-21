@@ -1,12 +1,12 @@
 {
-    config,
-    pkgs,
-    spreadconfigDir,
-    ...
+  config,
+  pkgs,
+  spreadconfigDir,
+  ...
 }:
 
 {
-    home.packages = [ pkgs.bat ];
+  home.packages = [ pkgs.bat ];
 
-    xdg.configFile."bat".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/bat";
+  xdg.configFile."bat".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/bat";
 }
