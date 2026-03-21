@@ -1,4 +1,9 @@
-{ lib, ... }:
+{
+    lib,
+    config,
+    spreadconfigDir,
+    ...
+}:
 
 {
     programs.opencode = {
@@ -136,4 +141,7 @@
             };
         };
     };
+
+    xdg.configFile."opencode/tui.json".source =
+        config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/opencode/tui.json";
 }

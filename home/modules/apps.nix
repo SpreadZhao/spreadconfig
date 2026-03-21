@@ -39,14 +39,6 @@
         xmlstarlet
         imagemagick
         mpv
-        (feh.overrideAttrs (old: {
-            postInstall = (old.postInstall or "") + ''
-                substituteInPlace $out/share/applications/feh.desktop \
-                  --replace-fail "Exec=feh --start-at %u" \
-                                 "Exec=feh --theme fit --start-at %u"
-            '';
-        }))
-        satty
         wf-recorder
         chafa
         ffmpeg
@@ -62,18 +54,14 @@
                 rm $out/share/applications/scrcpy-console.desktop
             '';
         }))
-        zathura
         obsidian
-        starship
         fastfetch
         onefetch
         tealdeer
         nix-tree
         nvd
-        gdu
         bluetui
         eza
-        bat
         duf
         dust
         diff-so-fancy
@@ -90,20 +78,7 @@
                   --replace-fail "$out/bin/qq" "$out/bin/qq --ozone-platform-hint=auto --enable-wayland-ime --wayland-text-input-version=3"
             '';
         }))
-        (
-            (qutebrowser.overrideAttrs (old: {
-                postInstall = (old.postInstall or "") + ''
-                    substituteInPlace $out/share/applications/org.qutebrowser.qutebrowser.desktop \
-                      --replace-fail "Exec=qutebrowser" "Exec=env QT_SCALE_FACTOR=1.5 qutebrowser"
-                '';
-            })).override
-            {
-                enableWideVine = true;
-            }
-        )
-        niri
         xwayland-satellite
-        waybar
         libnotify
         wl-clipboard
         pastel
@@ -118,13 +93,10 @@
         ibm-plex
         tesseract
         poppler-utils
-        lf
         trash-cli
         rsync
         rclone
-        lazygit
         wooz
-        file-manager-dbus
         element-desktop
         claude-code-bin
     ];

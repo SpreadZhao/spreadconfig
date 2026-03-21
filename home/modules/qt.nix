@@ -1,4 +1,9 @@
-{ pkgs, fontFamilies, fontSizes, ... }:
+{
+    pkgs,
+    fontFamilies,
+    fontSizes,
+    ...
+}:
 
 {
     qt = {

@@ -2,22 +2,35 @@
 
 {
     imports = [
-        ./fuzzel.nix
-        ./swaylock.nix
-        ./foot.nix
+        ./bat.nix
         ./codex.nix
-        ./opencode.nix
-        ./npm.nix
         ./btop.nix
-        ./java.nix
-        ./git.nix
-        ./gh.nix
-        ./obs-studio.nix
-        ./zsh.nix
-        ./zoxide.nix
         ./fd.nix
+        ./feh.nix
+        ./file-manager-dbus.nix
+        ./foot.nix
+        ./fuzzel.nix
         ./fzf.nix
-        ./wayprompt.nix
+        ./gdu.nix
+        ./gh.nix
+        ./git.nix
         ./gpg.nix
+        ./java.nix
+        ./lazygit.nix
+        ./lf.nix
+        ./niri.nix
+        ./npm.nix
+        ./obs-studio.nix
+        ./opencode.nix
+        ./qutebrowser.nix
+        ./satty.nix
+        ./starship.nix
+        ./swaylock.nix
+        ./waybar.nix
+        ./wayprompt.nix
+        ./xdg-desktop-portal-termfilechooser.nix
+        ./zathura.nix
+        ./zoxide.nix
+        ./zsh.nix
     ];
 }

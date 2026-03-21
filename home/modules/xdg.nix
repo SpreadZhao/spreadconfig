@@ -2,7 +2,6 @@
     config,
     pkgs,
     scriptsDir,
-    secretsDir,
     spreadconfigDir,
     ...
 }:
@@ -15,33 +14,6 @@
             readOnly = true;
         };
         configFile = {
-            "opencode/tui.json".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/opencode/tui.json";
-            "niri".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/niri";
-            "waybar".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/waybar";
-            "starship".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/starship";
-            "obs-studio/basic/profiles/Video".source =
-                config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/obs/profiles/Video";
-            "obs-studio/basic/profiles/Audio".source =
-                config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/obs/profiles/Audio";
-            "qutebrowser/quickmarks".source =
-                config.lib.file.mkOutOfStoreSymlink "${secretsDir}/qutebrowser_quickmarks";
-            "qutebrowser/config.py".source =
-                config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/qutebrowser/config.py";
-            "qutebrowser/themes".source =
-                config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/qutebrowser/themes";
-            "gdu".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/gdu";
-            "lf".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/lf";
-            "bat".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/bat";
-            "lazygit".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/lazygit";
-            "xdg-desktop-portal-termfilechooser".source =
-                config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/xdg-desktop-portal-termfilechooser";
-            "feh".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/feh";
-            "satty".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/satty";
-            "zathura".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/zathura";
-            "org.freedesktop.FileManager1.common/config".text = ''
-                cmd="${scriptsDir}/util/lf-wrapper-dbus.sh"
-            '';
-            "systemd/user/waybar.service".source = "${pkgs.waybar}/share/systemd/user/waybar.service";
             # "foot".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/foot";
             # "swaylock".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/swaylock";
             # "fuzzel".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/fuzzel";
