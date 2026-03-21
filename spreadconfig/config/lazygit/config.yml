@@ -26,3 +26,5 @@ gui:
       - '#262626'
     cherryPickedCommitFgColor:
       - '#47CCB1'
+os:
+  editPreset: "nvim-remote"
