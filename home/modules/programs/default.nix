@@ -6,6 +6,7 @@
         ./swaylock.nix
         ./foot.nix
         ./codex.nix
+        ./opencode.nix
         ./npm.nix
         ./btop.nix
         ./java.nix

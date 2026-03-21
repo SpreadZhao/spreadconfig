@@ -15,6 +15,7 @@
             readOnly = true;
         };
         configFile = {
+            "opencode/tui.json".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/opencode/tui.json";
             "niri".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/niri";
             "waybar".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/waybar";
             "starship".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/starship";
