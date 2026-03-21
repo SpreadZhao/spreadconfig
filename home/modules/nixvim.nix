@@ -28,6 +28,7 @@
       tabstop = 4;
       expandtab = true;
       autoindent = true;
+      smartindent = true;
       ignorecase = true;
       smartcase = true;
       signcolumn = "yes";
@@ -541,6 +542,15 @@
               end
             '';
           };
+        };
+      };
+    };
+    files = {
+      "ftplugin/nix.lua" = {
+        opts = {
+          expandtab = true;
+          shiftwidth = 2;
+          tabstop = 2;
         };
       };
     };
