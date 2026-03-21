@@ -35,6 +35,7 @@
 - gh_token: github cli token `pass show github/token`
 - passwd: login password `pass show sudo`
 - qutebrowser_quickmarks: quickmarks of qutebrowser, can be an empty file
+- volcengine_api_key: [火山方舟管理控制台](https://console.volcengine.com/ark/region:ark+cn-beijing/apiKey?apikey=%7B%7D)
 
 ### make a soft link
 
