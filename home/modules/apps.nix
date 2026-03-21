@@ -126,5 +126,6 @@
         wooz
         file-manager-dbus
         element-desktop
+        claude-code-bin
     ];
 }

@@ -1,4 +1,5 @@
 {
+    lib,
     config,
     pkgs,
     installedJDKs,
@@ -20,6 +21,7 @@
             STARSHIP_CONFIG = "${config.xdg.configHome}/starship/starship.toml";
             TERMINAL = "foot";
             TERM = "foot";
+            VOLCENGINE_API_KEY = "${lib.strings.trim (builtins.readFile ../../secrets/volcengine_api_key)}";
         };
         shell.enableShellIntegration = true;
         sessionPath = [
