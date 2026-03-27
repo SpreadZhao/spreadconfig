@@ -18,6 +18,7 @@
     ./java.nix
     ./lazygit.nix
     ./lf.nix
+    ./kitty.nix
     ./niri.nix
     ./npm.nix
     ./obs-studio.nix

@@ -33,7 +33,7 @@ let
   theme_radius = "0";
   fontFamilies = {
     sans = "IBM Plex Sans";
-    mono = "IBM Plex Mono";
+    mono = "Maple Mono NF CN";
     serif = "IBM Plex Serif";
     emoji = "Noto Color Emoji";
     nerdMono = "Symbols Nerd Font Mono";
@@ -85,6 +85,7 @@ let
     gtk = 16;
     qt = 16;
     foot = 16;
+    kitty = 16;
     fuzzel = 18;
     swaylock = 30;
     wayprompt = 26;
