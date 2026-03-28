@@ -35,7 +35,7 @@
         image-size-ratio = 1;
         show-actions = "no";
         tabs = 4;
-        terminal = "footclient -a '{cmd}' -T '{cmd}' {cmd}";
+        terminal = "kitty --class '{cmd}' -T '{cmd}' {cmd}";
         use-bold = "yes";
         width = 50;
       };

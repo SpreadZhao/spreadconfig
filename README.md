@@ -6,7 +6,9 @@
 
 - Shell: Zsh with [Starship](https://starship.rs/)
 - WM: [niri-wm/niri: A scrollable-tiling Wayland compositor.](https://github.com/niri-wm/niri)
-- Terminal: [dnkl/foot: A fast, lightweight and minimalistic Wayland terminal emulator - Codeberg.org](https://codeberg.org/dnkl/foot)
+- Terminal: 
+    - [dnkl/foot: A fast, lightweight and minimalistic Wayland terminal emulator - Codeberg.org](https://codeberg.org/dnkl/foot)
+    - [kovidgoyal/kitty: If you live in the terminal, kitty is made for you! Cross-platform, fast, feature-rich, GPU based.](https://github.com/kovidgoyal/kitty)
 - Launcher: [dnkl/fuzzel: App launcher and fuzzy finder for Wayland, inspired by rofi(1) and dmenu(1). - Codeberg.org](https://codeberg.org/dnkl/fuzzel)
 - Notification: [dnkl/fnott: Keyboard driven and lightweight Wayland notification daemon for wlroots-based compositors. - Codeberg.org](https://codeberg.org/dnkl/fnott)
 - Bar: [Alexays/Waybar: Highly customizable Wayland bar for Sway and Wlroots based compositors. :tada:](https://github.com/Alexays/Waybar)

@@ -1,5 +1,5 @@
 [filechooser]
-cmd=$SCRIPT_HOME/util/lf-wrapper.sh
+cmd=$SCRIPT_HOME/util/lf-wrapper-kitty.sh
 create_help_file=0
 default_dir=$HOME
 open_mode=suggested

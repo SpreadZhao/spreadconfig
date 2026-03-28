@@ -382,6 +382,33 @@ config_foot() {
 }
 
 # ==============================================================================
+# Kitty terminal emulator integration
+# ==============================================================================
+config_kitty() {
+    # OSC 7 escape sequence: notify Kitty of current working directory (open new windows in same dir)
+    autoload -Uz add-zsh-hook
+    function osc7-pwd() {
+        emulate -L zsh  # Use POSIX emulation + local options
+        setopt extendedglob
+        local LC_ALL=C
+        # Encode current directory and send OSC 7 sequence to Kitty
+        printf '\e]7;file://%s%s\e\' $HOST ${PWD//(#m)([^@-Za-z&-;_~])/%${(l:2::0:)$(([##16]#MATCH))}}
+    }
+
+    # Call osc7-pwd on directory change (chpwd hook)
+    function chpwd-osc7-pwd() {
+        # Skip in subshells to avoid unnecessary sequences
+        (( ZSH_SUBSHELL )) || osc7-pwd
+    }
+    add-zsh-hook -Uz chpwd chpwd-osc7-pwd
+
+    # Set Kitty window title to current command (preexec hook: runs before command execution)
+    function preexec {
+        print -Pn "\e]0;${(q)1}(kitty)\e\\"
+    }
+}
+
+# ==============================================================================
 # Other tool integrations (zoxide, starship, fnm)
 # ==============================================================================
 config_other() {
@@ -405,7 +432,7 @@ config_prompt
 config_fzf
 config_fzf_tab          # Must be loaded after FZF config
 config_plugins
-config_foot
+config_kitty
 # config_other
 
 # ==============================================================================
@@ -418,5 +445,5 @@ unset -f config_zsh_completion
 unset -f config_fzf
 unset -f config_fzf_tab
 unset -f config_plugins
-unset -f config_foot
+unset -f config_kitty
 unset -f config_other

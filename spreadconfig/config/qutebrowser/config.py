@@ -44,17 +44,17 @@ config.unbind('co', mode = 'normal')
 config.bind('da', 'tab-only', mode = 'normal')
 
 
-startFloatingFoot = '/home/spreadzhao/scripts/niri/start_floating_foot.sh'
+startFloatingKitty = '/home/spreadzhao/scripts/niri/start_floating_kitty.sh'
 
 c.content.pdfjs = True
 c.downloads.location.suggestion = 'both'
 c.editor.command = [
-    startFloatingFoot,
+    startFloatingKitty,
     'nvim +"set wrap" {file}',
 ]
 
 fileChooser = [
-    startFloatingFoot,
+    startFloatingKitty,
     'lf -selection-path={}'
 ]
 c.fileselect.folder.command = fileChooser

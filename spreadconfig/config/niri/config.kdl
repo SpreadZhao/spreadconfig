@@ -189,6 +189,16 @@ window-rule {
 }
 
 window-rule {
+    // Match by "dropdown" app ID for kitty.
+    match app-id="dropdown-kitty"
+
+    open-floating true
+    default-floating-position x=0 y=0 relative-to="top"
+    default-window-height { proportion 0.5; }
+    default-column-width { proportion 0.8; }
+}
+
+window-rule {
     match is-floating=false
     tiled-state true
 }
@@ -236,9 +246,17 @@ window-rule {
     }
 }
 
-// floating terminal
+// floating terminal (foot)
 window-rule {
     match app-id="lick-foot"
+    open-floating true
+    default-column-width { proportion 0.75; }
+    default-window-height { proportion 0.6; }
+}
+
+// floating terminal (kitty)
+window-rule {
+    match app-id="lick-kitty"
     open-floating true
     default-column-width { proportion 0.75; }
     default-window-height { proportion 0.6; }
@@ -247,8 +265,8 @@ window-rule {
 binds {
     Mod+Shift+Slash { show-hotkey-overlay; }
 
-    Mod+Return hotkey-overlay-title="Open a Terminal" { spawn-sh "footclient"; }
-    Mod+Shift+Return { spawn-sh "$SCRIPT_HOME/niri/drop_down_foot.sh"; }
+    Mod+Return hotkey-overlay-title="Open a Terminal" { spawn-sh "kitty"; }
+    Mod+Shift+Return { spawn-sh "$SCRIPT_HOME/niri/drop_down_kitty.sh"; }
     Mod+space hotkey-overlay-title="Run an Application" { spawn "fuzzel"; }
     // Super+Alt+L hotkey-overlay-title="Lock the Screen: swaylock" { spawn "swaylock"; }
 
@@ -377,7 +395,7 @@ binds {
     Mod+Ctrl+Shift+A { spawn-sh "$SCRIPT_HOME/niri/screenshot.sh -o";  }
     Mod+Shift+S { spawn-sh "$SCRIPT_HOME/niri/screenrecord.sh";  }
 
-    Mod+Shift+V { spawn-sh "cliphist list | fm --dmenu | cliphist decode | wl-copy"; }
+    Mod+Shift+V { spawn-sh "cliphist list | fm-kitty --dmenu | cliphist decode | wl-copy"; }
 
     Mod+Z { spawn-sh "wooz --output $($SCRIPT_HOME/niri/niri_focused_output_name.sh)"; }
     Mod+S { spawn-sh "slurp -b '#000000aa' -c '#ffffff' >/dev/null"; }
