@@ -1,4 +1,5 @@
 {
+  config,
   pkgs,
   fontFamilies,
   fontSizes,
@@ -42,6 +43,9 @@
     gtk3 = {
       enable = true;
     };
-    gtk4.enable = true;
+    gtk4 = {
+      enable = true;
+      theme = config.gtk.theme;
+    };
   };
 }

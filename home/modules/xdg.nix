@@ -187,6 +187,7 @@
     userDirs = {
       enable = true;
       createDirectories = true;
+      setSessionVariables = true;
       extraConfig = {
         LIB = "${config.home.homeDirectory}/Lib";
         WORKSPACE = "${config.home.homeDirectory}/workspaces";
