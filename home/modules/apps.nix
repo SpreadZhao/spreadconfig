@@ -30,7 +30,7 @@
     jetbrains-toolbox
     jadx
     ghidra-bin
-    claude-code-bin
+    claude-code
 
     # Language servers & formatters
     bash-language-server
@@ -125,5 +125,7 @@
     trash-cli
     rsync
     rclone
+
+    chromium
   ];
 }
