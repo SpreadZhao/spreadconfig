@@ -28,3 +28,10 @@ gui:
       - '#47CCB1'
 os:
   editPreset: "nvim-remote"
+
+customCommands:
+  - key: "C"
+    context: "files"
+    description: "Generate commit message with Claude Code"
+    command: "git-ai-commit"
+    output: terminal
