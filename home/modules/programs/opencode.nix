@@ -1,16 +1,14 @@
-{
-  lib,
-  config,
-  spreadconfigDir,
-  ...
-}:
+{ lib, ... }:
 
 {
   programs.opencode = {
     enable = true;
+    tui = {
+      theme = "opencode";
+      "$schema" = "https://opencode.ai/tui.json";
+    };
     settings = {
       "$schema" = "https://opencode.ai/config.json";
-      theme = "opencode";
       model = "volcengine-plan/ark-code-latest";
       autoshare = false;
       autoupdate = true;
@@ -141,7 +139,4 @@
       };
     };
   };
-
-  xdg.configFile."opencode/tui.json".source =
-    config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/opencode/tui.json";
 }

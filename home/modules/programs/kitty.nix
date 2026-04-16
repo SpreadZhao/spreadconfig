@@ -46,6 +46,8 @@
       color14 = "#5fe0c6";
       color15 = "#ffffff";
 
+      touch_scroll_multiplier = 3.0;
+
       selection_foreground = "#adaeac";
       selection_background = "#264e77";
 
