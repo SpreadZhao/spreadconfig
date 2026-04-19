@@ -127,5 +127,7 @@
     rclone
 
     chromium
+
+    hmcl
   ];
 }
