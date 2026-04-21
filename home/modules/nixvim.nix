@@ -45,6 +45,7 @@
       background = "dark";
       # foldenable = false;
       foldlevelstart = 99;
+      # autocomplete = true;
     };
     autoGroups = {
       "highlight-yank" = {
@@ -102,6 +103,7 @@
       }
       {
         key = "gk";
+
         action = "<C-o>";
         mode = "n";
         options = {
@@ -296,6 +298,20 @@
         mode = "n";
         options = {
           desc = "Focus Outline";
+          noremap = true;
+        };
+      }
+      {
+        key = "<leader>u";
+        action.__raw = ''
+          function()
+            vim.cmd.packadd("nvim.undotree")
+            require("undotree").open()
+          end
+        '';
+        mode = "n";
+        options = {
+          desc = "Toggle Builtin Undotree";
           noremap = true;
         };
       }
@@ -693,24 +709,198 @@
       blink-cmp = {
         enable = true;
         setupLspCapabilities = true;
+        keymap = {
+          preset = "default";
+          # "<A-y>".__raw = ''
+          #   require('minuet').make_blink_map()
+          # '';
+        };
         settings = {
+          cmdline = {
+            completion = {
+              list.selection = {
+                preselect = true;
+              };
+              menu.auto_show = true;
+            };
+          };
           appearance = {
             nerd_font_variant = "mono";
           };
           completion = {
+            accept.auto_brackets = {
+              override_brackets_for_filetypes = {
+                lua = [
+                  "{"
+                  "}"
+                ];
+                nix = [
+                  "{"
+                  "}"
+                ];
+              };
+            };
             documentation = {
               auto_show = false;
               auto_show_delay_ms = 500;
             };
+            ghost_text = {
+              enabled = true;
+              # show_with_menu = false;
+            };
+            trigger = {
+              prefetch_on_insert = true;
+              show_on_backspace = true;
+              # Disabled: Prefer manual completion control with <C-.>
+              # Uncomment to auto-show after typing these characters:
+              # show_on_x_blocked_trigger_characters = [
+              #   " "
+              #   ";"
+              # ];
+            };
+            menu = {
+              # border = "rounded";
+              direction_priority.__raw = ''
+                function()
+                  local ctx = require('blink.cmp').get_context()
+                  local item = require('blink.cmp').get_selected_item()
+                  if ctx == nil or item == nil then return { 's', 'n' } end
+
+                  local item_text = item.textEdit ~= nil and item.textEdit.newText or item.insertText or item.label
+                  local is_multi_line = item_text:find('\n') ~= nil
+
+                  -- after showing the menu upwards, we want to maintain that direction
+                  -- until we re-open the menu, so store the context id in a global variable
+                  if is_multi_line or vim.g.blink_cmp_upwards_ctx_id == ctx.id then
+                    vim.g.blink_cmp_upwards_ctx_id = ctx.id
+                    return { 'n', 's' }
+                  end
+                  return { 's', 'n' }
+                end
+              '';
+
+              draw = {
+                snippet_indicator = "◦";
+                treesitter = [ "lsp" ];
+                columns.__raw = ''
+                  function()
+                    return {
+                      { "label" },
+                      { "kind_icon", "kind", gap = 1 },
+                      { "source_name", gap = 1 }
+                    }
+                  end
+                '';
+
+                components = {
+                  kind_icon = {
+                    ellipsis = false;
+                    text.__raw = ''
+                      function(ctx)
+                        local icon = ctx.kind_icon
+                        if vim.tbl_contains({ "Path" }, ctx.source_name) then
+                            local dev_icon, _ = require("nvim-web-devicons").get_icon(ctx.label)
+                            if dev_icon then
+                                icon = dev_icon
+                            end
+                        else
+                            icon = require("lspkind").symbol_map[ctx.kind] or ""
+                        end
+
+                        return icon .. ctx.icon_gap
+                      end
+                    '';
+                    highlight.__raw = ''
+                      function(ctx)
+                        local hl = ctx.kind_hl
+                        if vim.tbl_contains({ "Path" }, ctx.source_name) then
+                          local dev_icon, dev_hl = require("nvim-web-devicons").get_icon(ctx.label)
+                          if dev_icon then
+                            hl = dev_hl
+                          end
+                        end
+                        return hl
+                      end
+                    '';
+                  };
+                };
+              };
+            };
+          };
+          fuzzy = {
+            implementation = "rust";
+            sorts = [
+              "exact"
+              "score"
+              "sort_text"
+            ];
+            prebuilt_binaries = {
+              download = false;
+            };
           };
           sources = {
-            cmdline = [ ];
+            default.__raw = ''
+              function(ctx)
+                local success, node = pcall(vim.treesitter.get_node)
+                local common = { 'buffer' }
+                if success and node and vim.tbl_contains({ 'comment', 'line_comment', 'block_comment' }, node:type()) then
+                  return common
+                elseif vim.bo.filetype == 'lua' then
+                  return vim.list_extend({ 'lsp', 'path' }, common)
+                else
+                  return vim.list_extend({ 'lsp', 'path', 'snippets' }, common)
+                end
+              end
+            '';
             providers = {
+              # copilot = {
+              #   name = "copilot";
+              #   module = "blink-cmp-copilot";
+              #   score_offset = 100;
+              #   async = true;
+              #   transform_items.__raw = ''
+              #     function(_, items)
+              #       local CompletionItemKind = require("blink.cmp.types").CompletionItemKind
+              #       local kind_idx = #CompletionItemKind + 1
+              #       CompletionItemKind[kind_idx] = "Copilot"
+              #       for _, item in ipairs(items) do
+              #         item.kind = kind_idx
+              #       end
+              #       return items
+              #     end
+              #   '';
+              # };
+              # minuet = {
+              #   name = "minuet";
+              #   module = "minuet.blink";
+              #   async = true;
+              #   timeout_ms = 3000;
+              #   score_offset = 50;
+              # };
               buffer = {
                 score_offset = -7;
+                opts = {
+                  get_bufnrs.__raw = ''
+                    function()
+                      return vim.tbl_filter(function(bufnr)
+                        return vim.bo[bufnr].buftype == ${"''"}
+                      end, vim.api.nvim_list_bufs())
+                    end
+                  '';
+                };
               };
+              # https://cmp.saghen.dev/configuration/sources.html#show-buffer-completions-with-lsp
               lsp = {
                 fallbacks = [ ];
+              };
+              path = {
+                opts = {
+                  get_cwd.__raw = ''
+                    function(_)
+                      return vim.fn.getcwd()
+                    end
+                  '';
+                };
               };
             };
           };
@@ -721,6 +911,45 @@
             "InsertEnter"
             "CmdlineEnter"
           ];
+        };
+      };
+      blink-cmp-copilot = {
+        enable = false;
+      };
+      copilot-lua = {
+        enable = false;
+        panel = {
+          enabled = false;
+          auto_refresh = true;
+        };
+        suggestion = {
+          enabled = false;
+          auto_trigger = false;
+          debounce = 90;
+          hide_during_completion = false;
+          keymap = {
+            accept_line = false;
+            accept_word = false;
+          };
+        };
+      };
+      minuet = {
+        enable = false;
+        settings = {
+          provider = "openai_compatible";
+          provider_options = {
+            openai_compatible = {
+              api_key = "${lib.strings.trim (builtins.readFile ../../secrets/api_key_glm_ljx)}";
+              end_point = "https://open.bigmodel.cn/api/coding/paas/v4";
+              model = "glm-5";
+              name = "GLM";
+              optional = {
+                max_tokens = 256;
+                top_p = 0.9;
+              };
+              stream = true;
+            };
+          };
         };
       };
       conform-nvim = {
@@ -1115,6 +1344,15 @@
           ];
         };
       };
+      render-markdown = {
+        enable = true;
+      };
+      web-devicons = {
+        enable = true;
+      };
+      lspkind = {
+        enable = true;
+      };
     };
     extraPlugins = [
       (pkgs.vimUtils.buildVimPlugin {
@@ -1131,6 +1369,7 @@
     ];
     extraConfigLua = ''
       require("outline").setup({})
+      require("vim._core.ui2").enable({})
     '';
     extraConfigVim = ''
       let g:qs_highlight_on_keys = ['f', 'F']
