@@ -1,7 +1,7 @@
 import themes
 
 config.load_autoconfig()
-config.bind('tt', 'config-cycle tabs.width 0% 18 35 10% 15%')
+config.bind('tt', 'config-cycle tabs.width 0% 18 44 10% 15%')
 config.unbind('M', mode = 'normal')
 config.unbind('m', mode = 'normal')
 config.unbind('d')
