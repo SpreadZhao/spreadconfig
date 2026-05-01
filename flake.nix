@@ -20,11 +20,22 @@
     {
       nixpkgs,
       home-manager,
-      nixpkgs-old-dd9b079,
-      nixpkgs-old-a6c3b1b,
       ...
     }@inputs:
     let
+      mkPinnedPkgs =
+        system:
+        nixpkgs.lib.mapAttrs' (
+          name: input:
+          nixpkgs.lib.nameValuePair
+            (nixpkgs.lib.strings.replaceStrings [ "-" ] [ "_" ] (nixpkgs.lib.removePrefix "nixpkgs-" name))
+            (
+              import input {
+                inherit system;
+                config.allowUnfree = true;
+              }
+            )
+        ) (nixpkgs.lib.filterAttrs (name: _: nixpkgs.lib.hasPrefix "nixpkgs-old-" name) inputs);
     in
     {
       nixosConfigurations = {
@@ -39,22 +50,13 @@
               home-manager.useUserPackages = true;
               home-manager.extraSpecialArgs = {
                 inherit inputs;
-                pkgs-old-dd9b079 = import nixpkgs-old-dd9b079 {
-                  inherit system;
-                  config.allowUnfree = true;
-                };
-                pkgs-old-a6c3b1b = import nixpkgs-old-a6c3b1b {
-                  inherit system;
-                  config.allowUnfree = true;
-                };
+                pinnedPkgs = mkPinnedPkgs system;
               };
               home-manager.users.spreadzhao = {
                 imports = [
                   ./host/thinkbook/home.nix
                 ];
               };
-              # Optionally, use home-manager.extraSpecialArgs to pass
-              # arguments to home.nix
             }
           ];
         };
@@ -73,8 +75,6 @@
                   ./home.nix
                 ];
               };
-              # Optionally, use home-manager.extraSpecialArgs to pass
-              # arguments to home.nix
             }
           ];
         };
