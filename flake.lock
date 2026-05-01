@@ -71,6 +71,22 @@
         "type": "github"
       }
     },
+    "nixpkgs-old-a6c3b1b": {
+      "locked": {
+        "lastModified": 1775258401,
+        "narHash": "sha256-EJhEaasgzEtshf47HHX8VCLB63zll5e6hZR1b0Tjofo=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "a6c3b1bbaa0d39d37e8472438c81c7bd7989e453",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "a6c3b1bbaa0d39d37e8472438c81c7bd7989e453",
+        "type": "github"
+      }
+    },
     "nixpkgs-old-dd9b079": {
       "locked": {
         "lastModified": 1772198003,
@@ -130,6 +146,7 @@
         "file-manager-dbus": "file-manager-dbus",
         "home-manager": "home-manager",
         "nixpkgs": "nixpkgs_2",
+        "nixpkgs-old-a6c3b1b": "nixpkgs-old-a6c3b1b",
         "nixpkgs-old-dd9b079": "nixpkgs-old-dd9b079",
         "nixvim": "nixvim"
       }
