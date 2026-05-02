@@ -33,5 +33,5 @@ else
 fi
 
 "$QUERY_SCRIPT" "$target" | \
-jq '.processes |= map(select(.upload_bytes >= 1024 or .download_bytes >= 1024))'
+jq '.processes |= map(select(.upload_bytes >= 1073741824 or .download_bytes >= 1073741824))'
 # "$QUERY_SCRIPT" "$target" | jq
