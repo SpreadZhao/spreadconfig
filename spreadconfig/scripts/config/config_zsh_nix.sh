@@ -266,6 +266,7 @@ config_other() {
         fi
     }
     compdef _nuq_completion nuq
+    source <(tdl completion zsh)
 }
 
 config_cursor_mode

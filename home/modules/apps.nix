@@ -95,6 +95,7 @@
       '';
     }))
     telegram-desktop
+    tdl
     element-desktop
 
     # Wayland utilities
