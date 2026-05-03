@@ -17,6 +17,11 @@
 {
   programs.kitty = {
     enable = true;
+    shellIntegration.enableZshIntegration = true;
+    keybindings =  {
+      "ctrl+alt+shift+n" = "new_os_window_with_cwd";
+      "ctrl+alt+shift+t" = "new_tab_with_cwd";
+    };
     settings = {
       font_family = "family='${fontFamilies.mono}' features='cv01=1 cv03=1 cv07=1 cv09=1 cv10=1 cv66=1 +ss03 +ss10'";
       bold_font = "family='${fontFamilies.mono}' style='Bold' features='cv01=1 cv03=1 cv07=1 cv09=1 cv10=1 cv66=1 +ss03 +ss10'";
@@ -54,6 +59,7 @@
       url_color = "#47a2ed";
 
       scrollback_lines = 10000;
+      scrollback_pager = "nvim --cmd 'set eventignore=FileType' +'nnoremap q ZQ' +'call nvim_open_term(0, {})' +'set nomodified nolist' +'$' -";
       enable_audio_bell = false;
     };
 
