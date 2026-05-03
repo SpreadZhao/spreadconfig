@@ -31,7 +31,7 @@
         counter = "${theme_blue}ff";
       };
       main = {
-        font = "${fontFamilies.mono}:size=${toString fontSizes.fuzzel}, ${fontFamilies.nerdMono}:size=${toString fontSizes.fuzzel}, ${fontFamilies.emoji}:size=${toString fontSizes.fuzzel}";
+        font = "${fontFamilies.sans}:size=${toString fontSizes.fuzzel}, ${fontFamilies.emoji}:size=${toString fontSizes.fuzzel}";
         image-size-ratio = 1;
         show-actions = "no";
         tabs = 4;

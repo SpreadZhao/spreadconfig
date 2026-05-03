@@ -23,10 +23,10 @@
       "ctrl+alt+shift+t" = "new_tab_with_cwd";
     };
     settings = {
-      font_family = "family='${fontFamilies.mono}' features='cv01=1 cv03=1 cv07=1 cv09=1 cv10=1 cv66=1 +ss03 +ss10'";
-      bold_font = "family='${fontFamilies.mono}' style='Bold' features='cv01=1 cv03=1 cv07=1 cv09=1 cv10=1 cv66=1 +ss03 +ss10'";
-      italic_font = "family='${fontFamilies.mono}' style='Italic' features='cv01=1 cv66=1 +ss03 +ss10 cv40=1 cv42=1 cv43=1'";
-      bold_italic_font = "family='${fontFamilies.mono}' style='Bold Italic' features='cv01=1 cv66=1 +ss03 +ss10 cv40=1 cv42=1 cv43=1'";
+      font_family = "family='${fontFamilies.mono}'";
+      bold_font = "family='${fontFamilies.mono}' style='Bold'";
+      italic_font = "family='${fontFamilies.mono}' style='Italic'";
+      bold_italic_font = "family='${fontFamilies.mono}' style='Bold Italic'";
       font_size = fontSizes.kitty;
       disable_ligatures = "cursor";
 

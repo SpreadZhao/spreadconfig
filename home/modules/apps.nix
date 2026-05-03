@@ -115,9 +115,6 @@
     noto-fonts-cjk-serif
     noto-fonts-color-emoji
     nerd-fonts.symbols-only
-    maple-mono.NF-CN-unhinted
-    ibm-plex
-    terminus_font_ttf
 
     # OCR & PDF
     tesseract

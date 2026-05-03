@@ -97,16 +97,11 @@ c.fonts.web.size.minimum_logical = 6
 c.fonts.default_family = [
     'Noto Color Emoji'
     'Symbols Nerd Font Mono'
-    'IBM Plex Sans'
-    'IBM Plex Sans SC'
-    'IBM Plex Sans TC'
-    'IBM Plex Sans JP'
-    'IBM Plex Sans KR'
-    'IBM Plex Sans Thai'
-    'IBM Plex Sans Thai Looped'
-    'IBM Plex Sans Hebrew'
-    'IBM Plex Sans Arabic'
-    'IBM Plex Sans Devanagari'
+    'Noto Sans'
+    'Noto Sans CJK SC'
+    'Noto Sans CJK TC'
+    'Noto Sans CJK JP'
+    'Noto Sans CJK KR'
 ]
 c.fonts.default_size = '12pt'
 

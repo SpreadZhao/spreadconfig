@@ -32,9 +32,9 @@ let
   theme_bright_yellow = "ffc66d";
   theme_radius = "0";
   fontFamilies = {
-    sans = "IBM Plex Sans";
-    mono = "Maple Mono NF CN";
-    serif = "IBM Plex Serif";
+    sans = "Noto Sans";
+    mono = "Noto Sans Mono";
+    serif = "Noto Serif";
     emoji = "Noto Color Emoji";
     nerdMono = "Symbols Nerd Font Mono";
   };
@@ -42,43 +42,31 @@ let
     emoji = [ fontFamilies.emoji ];
     monospace = [
       fontFamilies.mono
-      "Noto Sans Mono"
       "Noto Sans Mono CJK SC"
       "Noto Sans Mono CJK HK"
       "Noto Sans Mono CJK TC"
       "Noto Sans Mono CJK JP"
       "Noto Sans Mono CJK KR"
       fontFamilies.nerdMono
-      # "Noto Color Emoji"
+      fontFamilies.emoji
     ];
     sansSerif = [
       fontFamilies.sans
-      "IBM Plex Sans SC"
-      "IBM Plex Sans TC"
-      "IBM Plex Sans JP"
-      "IBM Plex Sans KR"
-      "IBM Plex Sans Thai"
-      "IBM Plex Sans Thai Looped"
-      "IBM Plex Sans Hebrew"
-      "IBM Plex Sans Arabic"
-      "IBM Plex Sans Devanagari"
-      "Noto Sans"
       "Noto Sans CJK SC"
       "Noto Sans CJK HK"
       "Noto Sans CJK TC"
       "Noto Sans CJK JP"
       "Noto Sans CJK KR"
-      # "Noto Color Emoji"
+      fontFamilies.emoji
     ];
     serif = [
       fontFamilies.serif
-      "Noto Serif"
       "Noto Serif CJK SC"
       "Noto Serif CJK HK"
       "Noto Serif CJK TC"
       "Noto Serif CJK JP"
       "Noto Serif CJK KR"
-      # "Noto Color Emoji"
+      fontFamilies.emoji
     ];
   };
   fontSizes = {
