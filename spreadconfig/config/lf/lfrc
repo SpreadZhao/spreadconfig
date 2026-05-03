@@ -3,7 +3,6 @@ set icons
 set ignorecase
 set relativenumber
 set smartcase
-set cleaner ~/.config/lf/clean.sh
 set previewer ~/.config/lf/pv.sh
 set errorfmt "\033[1;38;2;243;139;168m%s\033[0m"
 set shell zsh
@@ -189,7 +188,7 @@ cmd open &{{
     mime_type="$(xdg-mime query filetype "$fx")"
     case "$mime_type" in
         text/*)
-            kitty --class "nvim" -T "nvim" -- nvim "$fx"
+            footclient -a "nvim" -T "nvim" -- nvim "$fx"
         ;;
         *)
             xdg-open $fx

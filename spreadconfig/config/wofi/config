@@ -1,7 +1,7 @@
 mode=drun
 allow_images=true
 image_size=25
-term=kitty
+term=foot
 insensitive=true
 location=center
 line_wrap=word

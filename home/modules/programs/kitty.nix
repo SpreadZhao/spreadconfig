@@ -16,7 +16,7 @@
 
 {
   programs.kitty = {
-    enable = true;
+    enable = false;
     shellIntegration.enableZshIntegration = true;
     keybindings =  {
       "ctrl+alt+shift+n" = "new_os_window_with_cwd";

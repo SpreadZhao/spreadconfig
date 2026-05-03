@@ -273,12 +273,12 @@ config_cursor_mode
 config_prompt
 config_fzf
 config_fzf_tab          # Must be loaded after FZF config
-config_kitty
+config_foot
 config_other
 
 unset -f config_cursor_mode
 unset -f config_prompt
 unset -f config_fzf
 unset -f config_fzf_tab
-unset -f config_kitty
+unset -f config_foot
 unset -f config_other

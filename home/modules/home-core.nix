@@ -19,8 +19,8 @@
       QT_ENABLE_HIGHDPI_SCALING = "1";
       PASSWORD_STORE_DIR = "${config.home.homeDirectory}/.password-store";
       STARSHIP_CONFIG = "${config.xdg.configHome}/starship/starship.toml";
-      TERMINAL = "kitty";
-      TERM = "kitty";
+      TERMINAL = "foot";
+      TERM = "foot";
       VOLCENGINE_API_KEY = "${lib.strings.trim (builtins.readFile ../../secrets/volcengine_api_key)}";
     };
     shell.enableShellIntegration = true;

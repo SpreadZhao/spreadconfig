@@ -34,20 +34,20 @@
         type = "Application";
         icon = "";
       };
-      # foot_new_tab = {
-      #   name = "Foot New Tab";
-      #   type = "Application";
-      #   exec = "${scriptsDir}/niri/foot_new_tab.sh";
-      #   icon = "";
-      #   terminal = false;
-      # };
-      kitty_new_tab = {
-        name = "Kitty New Tab";
+      foot_new_tab = {
+        name = "Foot New Tab";
         type = "Application";
-        exec = "${scriptsDir}/niri/kitty_new_tab.sh";
+        exec = "${scriptsDir}/niri/foot_new_tab.sh";
         icon = "";
         terminal = false;
       };
+      # kitty_new_tab = {
+      #   name = "Kitty New Tab";
+      #   type = "Application";
+      #   exec = "${scriptsDir}/niri/kitty_new_tab.sh";
+      #   icon = "";
+      #   terminal = false;
+      # };
       change_audio = {
         name = "Change Audio Device";
         type = "Application";
