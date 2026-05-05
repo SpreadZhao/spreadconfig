@@ -25,6 +25,5 @@
 
     # Monitoring
     clinfo
-    nethogs
   ];
 }

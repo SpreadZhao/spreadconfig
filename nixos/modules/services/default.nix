@@ -3,6 +3,7 @@
 {
   imports = [
     ./lact.nix
+    ./tlp.nix
     ./upower.nix
     ./udisks2.nix
     ./pipewire.nix
