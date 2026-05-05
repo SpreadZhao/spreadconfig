@@ -1,7 +1,14 @@
-#/usr/bin/env bash
+#!/usr/bin/env bash
+
+action="${1:-boot}"
+
+if [[ "$action" != "switch" && "$action" != "boot" ]]; then
+  echo "Usage: nix_update [switch|boot]" >&2
+  exit 1
+fi
 
 until nix flake update --flake "path://$HOME/workspaces/spreadconfig"; do
     sleep 1
 done
 
-sns_until
+sns_until "$action"

@@ -1,5 +1,12 @@
 #!/usr/bin/env bash
 
-until nh os switch -d always -t "path://$HOME/workspaces/spreadconfig"; do
+action="${1:-switch}"
+
+if [[ "$action" != "switch" && "$action" != "boot" ]]; then
+  echo "Usage: sns_until [switch|boot]" >&2
+  exit 1
+fi
+
+until nh os "$action" -d always -t "path://$HOME/workspaces/spreadconfig"; do
     sleep 1
 done

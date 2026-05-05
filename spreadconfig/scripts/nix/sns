@@ -1,4 +1,10 @@
 #!/usr/bin/env bash
 
-# sudo nixos-rebuild switch --flake "path://$HOME/workspaces/spreadconfig"
-nh os switch -d always -t "path://$HOME/workspaces/spreadconfig#thinkbook"
+action="${1:-switch}"
+
+if [[ "$action" != "switch" && "$action" != "boot" ]]; then
+  echo "Usage: sns [switch|boot]" >&2
+  exit 1
+fi
+
+nh os "$action" -d always -t "path://$HOME/workspaces/spreadconfig#thinkbook"

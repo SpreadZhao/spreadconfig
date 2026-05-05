@@ -1,5 +1,12 @@
 #!/usr/bin/env bash
 
-sns_until
-nix_update
-nix_clean
+action="${1:-boot}"
+
+if [[ "$action" != "switch" && "$action" != "boot" ]]; then
+  echo "Usage: nix_full_update [switch|boot]" >&2
+  exit 1
+fi
+
+sns_until "$action"
+nix_update "$action"
+nix_clean "$action"
