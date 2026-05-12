@@ -31,6 +31,7 @@
     jadx
     ghidra-bin
     claude-code
+    codex
 
     # Language servers & formatters
     bash-language-server

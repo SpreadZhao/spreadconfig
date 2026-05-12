@@ -2,7 +2,7 @@
 
 {
   programs.codex = {
-    enable = true;
+    enable = false;
     settings = {
       model = "ark-code-latest";
       model_provider = "volcengine";
