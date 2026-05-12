@@ -126,7 +126,7 @@
     rclone
 
     chromium
-
     hmcl
+    clash-verge-rev
   ];
 }
