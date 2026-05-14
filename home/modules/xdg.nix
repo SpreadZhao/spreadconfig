@@ -37,6 +37,14 @@
         type = "Application";
         icon = "";
       };
+      lock_policy = {
+        name = "Lock Policy";
+        comment = "Control automatic locking and monitor power";
+        exec = "${scriptsDir}/niri/lock_policy.sh";
+        type = "Application";
+        icon = "";
+        terminal = false;
+      };
       foot_new_tab = {
         name = "Foot New Tab";
         type = "Application";
