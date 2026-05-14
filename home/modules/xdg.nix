@@ -12,6 +12,9 @@
     autostart = {
       enable = true;
       readOnly = true;
+      entries = [
+        "${pkgs.clash-verge-rev}/share/applications/clash-verge.desktop"
+      ];
     };
     configFile = {
       # "foot".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/foot";
