@@ -9,7 +9,7 @@
     ./dconf.nix
     ./gtk.nix
     ./qt.nix
-    ./apps.nix
+    ./programs
     ./nixvim.nix
     ./services
     ./fonts.nix

@@ -3,33 +3,92 @@
 {
   imports = [
     ./bat.nix
+    ./bluetui.nix
     ./btop.nix
+    ./chafa.nix
+    ./chromium.nix
+    ./clash-verge-rev.nix
+    ./claude-code.nix
     ./codex.nix
+    ./diff-so-fancy.nix
     ./direnv.nix
+    ./duf.nix
+    ./dust.nix
+    ./element-desktop.nix
+    ./eza.nix
+    ./fastfetch.nix
     ./fd.nix
     ./feh.nix
+    ./ffmpeg.nix
+    ./ffmpegthumbnailer.nix
     ./file-manager-dbus.nix
     ./foot.nix
     ./fuzzel.nix
     ./fzf.nix
     ./gdu.nix
     ./gh.nix
+    ./ghidra-bin.nix
     ./git.nix
     ./gpg.nix
+    ./grim.nix
+    ./hmcl.nix
+    ./imagemagick.nix
+    ./jadx.nix
+    ./jetbrains-toolbox.nix
+    ./kitty.nix
     ./lazygit.nix
     ./lf.nix
-    ./kitty.nix
+    ./libnotify.nix
+    ./mpv.nix
+    ./nerd-fonts-symbols-only.nix
     ./niri.nix
+    ./nix-tree.nix
+    ./noto-fonts-cjk-sans.nix
+    ./noto-fonts-cjk-serif.nix
+    ./noto-fonts-color-emoji.nix
+    ./noto-fonts.nix
+    ./nvd.nix
     ./obs-studio.nix
+    ./obsidian.nix
+    ./onefetch.nix
+    ./p7zip.nix
+    ./pass.nix
+    ./pastel.nix
+    ./poppler-utils.nix
+    ./qq.nix
+    ./qrencode.nix
     ./qutebrowser.nix
+    ./rar.nix
+    ./rclone.nix
+    ./rsync.nix
     ./satty.nix
+    ./scrcpy.nix
+    ./slurp.nix
     ./starship.nix
     ./swaylock.nix
+    ./tdl.nix
+    ./tealdeer.nix
+    ./telegram-desktop.nix
+    ./tesseract.nix
+    ./trash-cli.nix
+    ./unzip.nix
     ./waybar.nix
+    ./wayfreeze.nix
     ./wayprompt.nix
+    ./wechat.nix
+    ./wf-recorder.nix
+    ./wl-clipboard.nix
+    ./wooz.nix
     ./xdg-desktop-portal-termfilechooser.nix
+    ./xeyes.nix
+    ./xwayland-satellite.nix
     ./zathura.nix
+    ./zip.nix
     ./zoxide.nix
     ./zsh.nix
+    ./zsh-autosuggestions.nix
+    ./zsh-completions.nix
+    ./zsh-fzf-tab.nix
+    ./zsh-syntax-highlighting.nix
   ];
 }

@@ -8,7 +8,7 @@
     ./networking.nix
     ./time-console.nix
     ./filesystems.nix
-    ./apps.nix
+    ./programs
     ./services
     ./systemd.nix
     ./users.nix
