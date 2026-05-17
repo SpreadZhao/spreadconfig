@@ -26,6 +26,8 @@
       "fcitx5/rime/rime-data".source = "${pkgs.rime-ice}/share/rime-data";
       "fcitx5/rime/default.custom.yaml".source =
         config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/input/default.custom.yaml";
+      "fcitx5/rime/rime_ice.custom.yaml".source =
+        config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/input/rime_ice.custom.yaml";
       # "fcitx5/themes/catppuccin-mocha-rosewater".source =
       #     config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/input/fcitx5-catppuccin/src/catppuccin-mocha-rosewater";
     };
