@@ -17,7 +17,6 @@
     jadx
     ghidra-bin
     claude-code
-    codex
 
     # Multimedia & screenshot tools
     imagemagick

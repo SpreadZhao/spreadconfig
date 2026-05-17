@@ -1,20 +1,13 @@
-{ ... }:
+{
+  config,
+  spreadconfigDir,
+  pkgs,
+  ...
+}:
 
 {
-  programs.codex = {
-    enable = false;
-    settings = {
-      model = "ark-code-latest";
-      model_provider = "volcengine";
-      model_providers = {
-        volcengine = {
-          name = "volcengine";
-          base_url = "https://ark.cn-beijing.volces.com/api/coding/v3";
-          env_key = "VOLCENGINE_API_KEY";
-          wire_api = "chat";
-          requires_openai_auth = false;
-        };
-      };
-    };
-  };
+  home.packages = [ pkgs.codex ];
+
+  home.file.".codex/themes/spreadzhao.tmTheme".source =
+    config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/config/codex/themes/spreadzhao.tmTheme";
 }
