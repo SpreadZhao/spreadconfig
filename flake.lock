@@ -1,19 +1,5 @@
 {
   "nodes": {
-    "file-manager-dbus": {
-      "inputs": {
-        "nixpkgs": "nixpkgs"
-      },
-      "locked": {
-        "path": "./packages/file-manager-dbus",
-        "type": "path"
-      },
-      "original": {
-        "path": "./packages/file-manager-dbus",
-        "type": "path"
-      },
-      "parent": []
-    },
     "flake-parts": {
       "inputs": {
         "nixpkgs-lib": [
@@ -59,13 +45,13 @@
       "locked": {
         "lastModified": 1778443072,
         "narHash": "sha256-zi7/fsqM/kFdNuED//4WOCUtezGtKKqRNORjMvfwjnA=",
-        "owner": "NixOS",
+        "owner": "nixos",
         "repo": "nixpkgs",
         "rev": "da5ad661ba4e5ef59ba743f0d112cbc30e474f32",
         "type": "github"
       },
       "original": {
-        "owner": "NixOS",
+        "owner": "nixos",
         "ref": "nixos-unstable",
         "repo": "nixpkgs",
         "type": "github"
@@ -103,22 +89,6 @@
         "type": "github"
       }
     },
-    "nixpkgs_2": {
-      "locked": {
-        "lastModified": 1778443072,
-        "narHash": "sha256-zi7/fsqM/kFdNuED//4WOCUtezGtKKqRNORjMvfwjnA=",
-        "owner": "nixos",
-        "repo": "nixpkgs",
-        "rev": "da5ad661ba4e5ef59ba743f0d112cbc30e474f32",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nixos",
-        "ref": "nixos-unstable",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
     "nixvim": {
       "inputs": {
         "flake-parts": "flake-parts",
@@ -143,9 +113,8 @@
     },
     "root": {
       "inputs": {
-        "file-manager-dbus": "file-manager-dbus",
         "home-manager": "home-manager",
-        "nixpkgs": "nixpkgs_2",
+        "nixpkgs": "nixpkgs",
         "nixpkgs-old-a6c3b1b": "nixpkgs-old-a6c3b1b",
         "nixpkgs-old-dd9b079": "nixpkgs-old-dd9b079",
         "nixvim": "nixvim"

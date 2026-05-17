@@ -95,8 +95,6 @@ My personal NixOS configuration, built with [flakes](https://wiki.nixos.org/wiki
 │       ├── ollama.nix
 │       ├── pass-secret-service.nix
 │       └── swayidle.nix
-├── packages/
-│   └── file-manager-dbus/             # Custom D-Bus file manager service
 ├── spreadconfig/
 │   ├── config/                        # Application config files (dotfiles)
 │   └── scripts/                       # Shell scripts
@@ -119,7 +117,6 @@ My personal NixOS configuration, built with [flakes](https://wiki.nixos.org/wiki
 | `nixpkgs-old-a6c3b1b` | Pinned nixpkgs for compatibility |
 | `home-manager` | User environment management |
 | `nixvim` | Declarative Neovim configuration |
-| `file-manager-dbus` | Custom D-Bus file manager service |
 
 ## Hosts
 
