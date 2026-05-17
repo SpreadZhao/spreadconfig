@@ -19,13 +19,6 @@
       STARSHIP_CONFIG = "${config.xdg.configHome}/starship/starship.toml";
       TERMINAL = "foot";
       TERM = "foot";
-      http_proxy = "http://127.0.0.1:7897";
-      https_proxy = "http://127.0.0.1:7897";
-      ftp_proxy = "http://127.0.0.1:7897";
-      rsync_proxy = "http://127.0.0.1:7897";
-      no_proxy = "localhost,127.0.0.1,localaddress,.localdomain.com";
-      HTTP_PROXY = "http://127.0.0.1:7897";
-      HTTPS_PROXY = "http://127.0.0.1:7897";
     };
     shell.enableShellIntegration = true;
     sessionPath = [
