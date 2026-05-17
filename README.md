@@ -101,7 +101,7 @@ My personal NixOS configuration, built with [flakes](https://wiki.nixos.org/wiki
 │       ├── niri/                      # Niri WM scripts (screenshots, audio, etc.)
 │       ├── sway/                      # Legacy Sway scripts
 │       ├── nix/                       # Nix maintenance scripts
-│       ├── util/                      # Utility scripts (wallpaper, audio, git-ai-commit)
+│       ├── util/                      # Utility scripts (audio, lf wrappers, git-ai-commit)
 │       ├── config/                    # Zsh config, aliases, color output
 │       ├── legacy/                    # Retired scripts
 │       └── test/                      # Test scripts
@@ -144,7 +144,6 @@ A fully Wayland-native desktop built around [niri](https://github.com/niri-wm/ni
 | Idle Manager | swayidle |
 | Screenshots | grim + slurp + satty + wayfreeze |
 | Screen Recording | wf-recorder, [OBS Studio](https://obsproject.com/) |
-| Wallpaper | wbg |
 | Clipboard | cliphist + wl-clipboard |
 | File Manager | [lf](https://github.com/gokcehan/lf) with D-Bus integration + [xdg-desktop-portal-termfilechooser](https://github.com/hunkyburrito/xdg-desktop-portal-termfilechooser) |
 | Browser | [qutebrowser](https://github.com/qutebrowser/qutebrowser) (keyboard-driven, vim-like) |
@@ -198,7 +197,7 @@ Located in `spreadconfig/scripts/`:
 |-----------|----------|
 | `niri/` | Window management, screenshots, screen recording, dropdown terminals, audio control, app launching |
 | `nix/` | System update (`nix_full_update`), garbage collection (`nix_clean`), generation management |
-| `util/` | Wallpaper rotation, battery/brightness info, audio switching, lf wrappers, git-ai-commit |
+| `util/` | Battery/brightness info, audio switching, lf wrappers, git-ai-commit |
 | `config/` | Zsh config, aliases, colored output, fzf preview |
 | `sway/` | Legacy Sway scripts (retained for reference) |
 | `legacy/` | Retired scripts (moved, not deleted) |

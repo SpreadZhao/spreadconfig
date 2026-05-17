@@ -78,7 +78,6 @@
 
     # Misc applications
     pass
-    wbg
     wooz
 
     # Fonts
