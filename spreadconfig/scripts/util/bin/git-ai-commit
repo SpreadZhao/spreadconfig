@@ -1,12 +1,14 @@
 #!/usr/bin/env bash
 
-set -e
+set -euo pipefail
 
 TMP_FILE=$(mktemp)
+LOG_FILE=$(mktemp)
+trap 'rm -f "$TMP_FILE" "$LOG_FILE"' EXIT
 
 PROMPT=$(
     cat <<'EOF'
-Your task is to help the user to generate a commit message and commit the changes using git.
+Your task is to generate a commit message for the staged changes.
 
 ## Guidelines
 
@@ -64,8 +66,32 @@ Avoid
 EOF
 )
 
-git diff --staged | claude -p "$PROMPT" --output-format text >"$TMP_FILE"
+if git diff --staged --quiet; then
+    echo "No staged changes to commit."
+    exit 1
+fi
 
+echo "==> Reading staged changes"
+echo "==> Generating commit message with Codex (gpt-5.5, xhigh)"
+
+if ! git diff --staged |
+    codex exec \
+        --model gpt-5.5 \
+        --config 'model_reasoning_effort="xhigh"' \
+        --sandbox read-only \
+        --ephemeral \
+        --output-last-message "$TMP_FILE" \
+        "$PROMPT" >"$LOG_FILE" 2>&1; then
+    echo "Codex failed while generating the commit message:" >&2
+    cat "$LOG_FILE" >&2
+    exit 1
+fi
+
+if [[ ! -s "$TMP_FILE" ]]; then
+    echo "Codex did not produce a commit message." >&2
+    cat "$LOG_FILE" >&2
+    exit 1
+fi
+
+echo "==> Opening git commit editor"
 git commit -e -F "$TMP_FILE"
-
-rm "$TMP_FILE"
