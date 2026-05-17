@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -euo pipefail
 
 action="${1:-boot}"
 
@@ -10,4 +11,3 @@ fi
 sns_until "$action"
 nh clean all
 sns_until "$action"
-nh clean all
