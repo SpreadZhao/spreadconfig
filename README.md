@@ -62,6 +62,7 @@ My personal NixOS configuration, built with [flakes](https://wiki.nixos.org/wiki
 │   │   ├── bat.nix
 │   │   ├── btop.nix
 │   │   ├── codex.nix
+│   │   ├── direnv.nix
 │   │   ├── fd.nix
 │   │   ├── feh.nix
 │   │   ├── file-manager-dbus.nix
@@ -72,12 +73,10 @@ My personal NixOS configuration, built with [flakes](https://wiki.nixos.org/wiki
 │   │   ├── gh.nix
 │   │   ├── git.nix
 │   │   ├── gpg.nix
-│   │   ├── java.nix
 │   │   ├── kitty.nix
 │   │   ├── lazygit.nix
 │   │   ├── lf.nix
 │   │   ├── niri.nix
-│   │   ├── npm.nix
 │   │   ├── obs-studio.nix
 │   │   ├── qutebrowser.nix
 │   │   ├── satty.nix
@@ -155,18 +154,11 @@ A fully Wayland-native desktop built around [niri](https://github.com/niri-wm/ni
 
 ## Development Setup
 
-### Languages & Toolchains
+### Development Environments
 
-| Language | Compiler/Tools |
-|----------|---------------|
-| C/C++ | gcc, clang (hiPrio), lldb, gdb, cmake, ninja |
-| Rust | rustc, cargo, rust-analyzer, rustfmt |
-| Go | go, gopls |
-| Python | python3 |
-| Java | JDK 25 (default), 21, 17, 11, 8 |
-| Bash | bash-language-server, shfmt |
-| Lua | lua-language-server, stylua |
-| Nix | nixd, nixfmt, nixfmt-tree |
+This repository's default devShell is for maintaining the NixOS configuration. It is loaded by the root `.envrc` through direnv/nix-direnv and includes Nix maintenance tools such as `nixfmt`, `statix`, `deadnix`, `shellcheck`, `shfmt`, `jq`, `git`, and `ripgrep`.
+
+Language runtimes and project-specific build tools are intentionally not installed globally here. Put them in each project's own `flake.nix`/`devShell` and load that environment with direnv.
 
 ### Editor
 
@@ -265,7 +257,6 @@ Place the following files in `./secrets/` (sourced from `pass`):
 | `gh_token` | `pass show github/token` | GitHub CLI token |
 | `passwd` | `pass show sudo` | Login password |
 | `qutebrowser_quickmarks` | manual | Qutebrowser quickmarks (can be empty) |
-| `volcengine_api_key` | [Volcengine console](https://console.volcengine.com/ark) | API key |
 
 ### Repository Location
 

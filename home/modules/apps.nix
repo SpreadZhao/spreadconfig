@@ -1,4 +1,4 @@
-{ lib, pkgs, ... }:
+{ pkgs, ... }:
 
 {
   imports = [
@@ -12,20 +12,6 @@
     zsh-completions
     zsh-fzf-tab
 
-    # Development tools - compilers & build tools
-    gcc
-    gdb
-    gnumake
-    cmake
-    ninja
-    (lib.hiPrio clang)
-    clang-tools
-    lldb
-    cargo
-    rustc
-    python3
-    go
-
     # Coding
     jetbrains-toolbox
     jadx
@@ -33,21 +19,7 @@
     claude-code
     codex
 
-    # Language servers & formatters
-    bash-language-server
-    gopls
-    lua-language-server
-    nixd
-    rust-analyzer
-    cmake-format
-    nixfmt
-    nixfmt-tree
-    rustfmt
-    shfmt
-    stylua
-
     # Multimedia & screenshot tools
-    xmlstarlet
     imagemagick
     mpv
     wf-recorder

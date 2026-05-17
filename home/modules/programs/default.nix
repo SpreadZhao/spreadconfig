@@ -3,8 +3,9 @@
 {
   imports = [
     ./bat.nix
-    ./codex.nix
     ./btop.nix
+    ./codex.nix
+    ./direnv.nix
     ./fd.nix
     ./feh.nix
     ./file-manager-dbus.nix
@@ -15,12 +16,10 @@
     ./gh.nix
     ./git.nix
     ./gpg.nix
-    ./java.nix
     ./lazygit.nix
     ./lf.nix
     ./kitty.nix
     ./niri.nix
-    ./npm.nix
     ./obs-studio.nix
     ./qutebrowser.nix
     ./satty.nix

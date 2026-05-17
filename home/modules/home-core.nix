@@ -1,8 +1,6 @@
 {
-  lib,
   config,
   pkgs,
-  installedJDKs,
   scriptsDir,
   spreadconfigDir,
   ...
@@ -28,7 +26,6 @@
       no_proxy = "localhost,127.0.0.1,localaddress,.localdomain.com";
       HTTP_PROXY = "http://127.0.0.1:7897";
       HTTPS_PROXY = "http://127.0.0.1:7897";
-      VOLCENGINE_API_KEY = "${lib.strings.trim (builtins.readFile ../../secrets/volcengine_api_key)}";
     };
     shell.enableShellIntegration = true;
     sessionPath = [
@@ -36,25 +33,11 @@
       "$SCRIPT_HOME/util/bin"
       "$SCRIPT_HOME/nix"
       "$HOME/.local/bin"
-      "$HOME/.cargo/bin"
-      "$HOME/go/bin"
-      "$HOME/Android/Sdk/platform-tools"
-      "$HOME/Lib/jdks/bin"
-      "$HOME/.npm/bin"
     ];
     file = {
       "${scriptsDir}".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/scripts";
       ".ideavimrc".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/Jetbrains/.ideavimrc";
-    }
-    # jdk
-    // (builtins.listToAttrs (
-      map (jdk: {
-        name = "${config.xdg.userDirs.extraConfig.LIB}/jdks/${jdk.version}";
-        value = {
-          source = jdk;
-        };
-      }) installedJDKs
-    ));
+    };
     pointerCursor = {
       enable = true;
       name = "Adwaita";

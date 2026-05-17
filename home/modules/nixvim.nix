@@ -974,7 +974,7 @@
           };
           formatters = {
             nixfmt = {
-              command = lib.getExe pkgs.nixfmt;
+              command = "nixfmt";
               # args = [
               #     "--indent=4"
               #     "--width=140" # because my Xiaomi Monitor can show 140 characters

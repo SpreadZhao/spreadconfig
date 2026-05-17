@@ -64,7 +64,7 @@
       change_audio = {
         name = "Change Audio Device";
         type = "Application";
-        exec = "/usr/bin/env python3 ${scriptsDir}/util/change_audio.py";
+        exec = "${pkgs.python3}/bin/python3 ${scriptsDir}/util/change_audio.py";
         icon = "";
         categories = [
           "AudioVideo"
@@ -202,7 +202,6 @@
       createDirectories = true;
       setSessionVariables = true;
       extraConfig = {
-        LIB = "${config.home.homeDirectory}/Lib";
         WORKSPACE = "${config.home.homeDirectory}/workspaces";
         TEMP = "${config.home.homeDirectory}/temp";
         SATTY = "${config.xdg.userDirs.pictures}/satty";

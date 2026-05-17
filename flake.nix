@@ -38,6 +38,28 @@
         ) (nixpkgs.lib.filterAttrs (name: _: nixpkgs.lib.hasPrefix "nixpkgs-old-" name) inputs);
     in
     {
+      devShells.x86_64-linux.default =
+        let
+          system = "x86_64-linux";
+          pkgs = import nixpkgs {
+            inherit system;
+            config.allowUnfree = true;
+          };
+        in
+        pkgs.mkShell {
+          packages = with pkgs; [
+            deadnix
+            git
+            jq
+            nixfmt
+            nixfmt-tree
+            ripgrep
+            shellcheck
+            shfmt
+            statix
+          ];
+        };
+
       nixosConfigurations = {
         thinkbook = nixpkgs.lib.nixosSystem rec {
           system = "x86_64-linux";
