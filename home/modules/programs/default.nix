@@ -22,7 +22,6 @@
     ./niri.nix
     ./npm.nix
     ./obs-studio.nix
-    ./opencode.nix
     ./qutebrowser.nix
     ./satty.nix
     ./starship.nix

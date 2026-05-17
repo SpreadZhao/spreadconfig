@@ -79,7 +79,6 @@ My personal NixOS configuration, built with [flakes](https://wiki.nixos.org/wiki
 │   │   ├── niri.nix
 │   │   ├── npm.nix
 │   │   ├── obs-studio.nix
-│   │   ├── opencode.nix
 │   │   ├── qutebrowser.nix
 │   │   ├── satty.nix
 │   │   ├── starship.nix

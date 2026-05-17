@@ -53,7 +53,6 @@
       ts = "gio trash";
       rsync = "rsync --progress";
       slurp = "slurp -b #0e1117aa -c #f5e0dc";
-      oc = "opencode";
     };
     shellGlobalAliases = { };
     initContent = lib.mkOrder 2000 ''
