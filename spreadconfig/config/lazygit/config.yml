@@ -29,9 +29,14 @@ gui:
 os:
   editPreset: "nvim-remote"
 
+keybinding:
+  files:
+    commitChanges: <disabled>
+    commitChangesWithEditor: c
+
 customCommands:
   - key: "C"
     context: "files"
-    description: "Generate commit message with Claude Code"
+    description: "Generate commit message with Codex"
     command: "git-ai-commit"
     output: terminal
