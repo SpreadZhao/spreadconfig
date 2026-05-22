@@ -23,15 +23,15 @@ set which-key
 set notimeout
 set easymotion
 set anyobject
-set quickscope
+" set quickscope
 set peekaboo
 packadd matchit
 
 let mapleader = " "
 set keep-english-in-normal-and-restore-in-insert
 
-let g:qs_primary_color   = '#ff0000'
-let g:qs_secondary_color = '#00ff00'
+" let g:qs_primary_color   = '#ff0000'
+" let g:qs_secondary_color = '#00ff00'
 
 nmap <leader>si <Action>(SelectInProjectView)
 nmap <leader>ge <Action>(RecentFiles)
