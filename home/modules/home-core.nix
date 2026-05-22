@@ -1,6 +1,7 @@
 {
   config,
   pkgs,
+  installedJDKs,
   scriptsDir,
   spreadconfigDir,
   ...
@@ -26,11 +27,20 @@
       "$SCRIPT_HOME/util/bin"
       "$SCRIPT_HOME/nix"
       "$HOME/.local/bin"
+      "$HOME/Lib/jdks/bin"
     ];
     file = {
       "${scriptsDir}".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/scripts";
       ".ideavimrc".source = config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/Jetbrains/.ideavimrc";
-    };
+    }
+    // (builtins.listToAttrs (
+      map (jdk: {
+        name = "${config.xdg.userDirs.extraConfig.LIB}/jdks/${jdk.version}";
+        value = {
+          source = jdk;
+        };
+      }) installedJDKs
+    ));
     pointerCursor = {
       enable = true;
       name = "Adwaita";

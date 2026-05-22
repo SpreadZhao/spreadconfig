@@ -34,6 +34,7 @@
     ./hmcl.nix
     ./imagemagick.nix
     ./jadx.nix
+    ./java.nix
     ./jetbrains-toolbox.nix
     ./kitty.nix
     ./lazygit.nix

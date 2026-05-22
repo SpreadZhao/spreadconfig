@@ -1,6 +1,14 @@
-{ config, ... }:
+{ config, pkgs, ... }:
 
 let
+  installedJDKs = with pkgs; [
+    jdk25
+    jdk21
+    jdk17
+    jdk11
+    jdk8
+  ];
+  defaultJDK = builtins.elemAt installedJDKs 0;
   projDir = "${config.xdg.userDirs.extraConfig.WORKSPACE}/spreadconfig";
   scriptsDir = "${config.home.homeDirectory}/scripts";
   secretsDir = "${projDir}/secrets";
@@ -79,6 +87,8 @@ in
 {
   _module.args = {
     inherit
+      installedJDKs
+      defaultJDK
       projDir
       scriptsDir
       secretsDir
