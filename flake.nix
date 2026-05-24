@@ -9,6 +9,7 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     nixvim = {
       url = "github:nix-community/nixvim";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -19,6 +20,7 @@
     {
       nixpkgs,
       home-manager,
+      nixos-hardware,
       ...
     }@inputs:
     let
@@ -76,6 +78,28 @@
               home-manager.users.spreadzhao = {
                 imports = [
                   ./host/thinkbook/home.nix
+                ];
+              };
+            }
+          ];
+        };
+        zephyrus-m16 = nixpkgs.lib.nixosSystem rec {
+          system = "x86_64-linux";
+          specialArgs = { inherit inputs; };
+          modules = [
+            nixos-hardware.nixosModules.asus-zephyrus-gu603h
+            ./host/zephyrus-m16/configuration.nix
+            home-manager.nixosModules.home-manager
+            {
+              home-manager.useGlobalPkgs = true;
+              home-manager.useUserPackages = true;
+              home-manager.extraSpecialArgs = {
+                inherit inputs;
+                pinnedPkgs = mkPinnedPkgs system;
+              };
+              home-manager.users.spreadzhao = {
+                imports = [
+                  ./host/zephyrus-m16/home.nix
                 ];
               };
             }
