@@ -12,16 +12,7 @@ let
 in
 
 {
-  programs.gh = {
-    enable = true;
-    settings = {
-      git_protocol = "https";
-      prompt = "enabled";
-      aliases = {
-        co = "pr checkout";
-      };
-    };
-  };
+  home.packages = [ pkgs.gh ];
 
   home.activation.writeGhHosts = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
     token_file=${lib.escapeShellArg ghTokenFile}
