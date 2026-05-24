@@ -10,42 +10,31 @@ My personal NixOS configuration, built with [flakes](https://wiki.nixos.org/wiki
 .
 ├── flake.nix                          # Flake entry point
 ├── host/
-│   └── thinkbook/                     # Thinkbook laptop host config
-│       ├── configuration.nix          # System config (imports nixos/modules)
-│       ├── hardware-configuration.nix # Auto-generated hardware config
-│       └── home.nix                   # Home-manager config (imports home/modules)
-├── nixos/modules/                     # System-level NixOS modules
-│   ├── apps.nix                       # System packages
-│   ├── boot.nix                       # systemd-boot, v4l2loopback
-│   ├── environment.nix                # Environment variables & paths
-│   ├── filesystems.nix                # Mount points
-│   ├── fonts.nix                      # System font packages
-│   ├── hardware.nix                   # Bluetooth
-│   ├── networking.nix                 # Network, firewall, DNS
-│   ├── nix.nix                        # Nix daemon settings
-│   ├── security.nix                   # Polkit, sudo
-│   ├── state-version.nix              # system.stateVersion
-│   ├── systemd.nix                    # systemd services & timers
-│   ├── time-console.nix               # Time zone, locale, console
-│   ├── users.nix                      # User accounts
-│   ├── programs/                      # System-level programs
-│   │   ├── dconf.nix
-│   │   ├── nano.nix
-│   │   ├── nh.nix
-│   │   ├── nix-ld.nix
-│   │   ├── vim.nix
-│   │   └── zsh.nix
-│   └── services/                      # System-level services
-│       ├── davfs2.nix
-│       ├── greetd.nix                 # Login manager (agreety → niri)
-│       ├── gvfs.nix
-│       ├── lact.nix                   # AMD GPU control
-│       ├── libinput.nix
-│       ├── openssh.nix
-│       ├── pipewire.nix               # Audio/video
-│       ├── udisks2.nix
-│       ├── upower.nix
-│       └── xdg-autostart.nix
+│   ├── thinkbook/                     # AMD laptop host config
+│   │   ├── configuration.nix          # Imports generated hardware, common modules, host modules
+│   │   ├── hardware-configuration.nix # nixos-generate-config hardware facts
+│   │   ├── home.nix                   # Imports common and host Home Manager modules
+│   │   ├── home/default.nix           # Host-specific Home Manager overrides
+│   │   └── nixos/                     # Host-specific NixOS modules
+│   │       ├── identity.nix           # Hostname and identity
+│   │       ├── hardware.nix           # CPU/GPU/hardware policy
+│   │       └── services.nix           # Host-only services such as LACT/TLP
+│   └── zephyrus-m16/                  # ASUS ROG host config
+│       ├── configuration.nix
+│       ├── hardware-configuration.nix
+│       ├── home.nix
+│       ├── home/default.nix
+│       └── nixos/
+│           ├── identity.nix
+│           ├── hardware.nix           # nixos-hardware, Intel/NVIDIA PRIME
+│           ├── services.nix           # ROG service entry point
+│           └── services/asusd.nix     # asusd/supergfxd declarative config
+├── nixos/modules/                     # Shared system-level NixOS modules
+│   ├── core/                          # Base OS policy: boot, nix, users, security, networking
+│   ├── desktop/                       # Shared desktop/session services
+│   ├── hardware/                      # Hardware features common to every host
+│   ├── programs/                      # Shared system-level programs
+│   └── services/                      # Shared system-level services
 ├── home/modules/                      # User-level home-manager modules
 │   ├── vars.nix                       # Centralized theme colors, fonts, paths
 │   ├── apps.nix                       # User packages
@@ -116,6 +105,7 @@ My personal NixOS configuration, built with [flakes](https://wiki.nixos.org/wiki
 | `nixpkgs-old-dd9b079` | Pinned nixpkgs for compatibility |
 | `nixpkgs-old-a6c3b1b` | Pinned nixpkgs for compatibility |
 | `home-manager` | User environment management |
+| `nixos-hardware` | Hardware presets for supported laptops |
 | `nixvim` | Declarative Neovim configuration |
 
 ## Hosts
@@ -128,6 +118,15 @@ My primary laptop — AMD CPU/GPU with a Wayland-native desktop stack.
 - **Login**: greetd with agreety, auto-starts niri
 - **Audio**: PipeWire
 - **GPU**: AMD with OpenCL support, managed via LACT
+
+### zephyrus-m16
+
+ASUS ROG laptop — Intel CPU with NVIDIA hybrid graphics.
+
+- **Hardware preset**: nixos-hardware ASUS Zephyrus GU603H module
+- **GPU**: Intel/NVIDIA PRIME offload with Dynamic Boost
+- **ASUS controls**: asusd and supergfxd
+- **Power**: Host-specific TLP charging policy
 
 ## Desktop Environment
 
@@ -250,8 +249,8 @@ Place the following files in `./secrets/` (sourced from `pass`):
 
 | File | Source | Description |
 |------|--------|-------------|
-| `gh_token` | `pass show github/token` | GitHub CLI token |
-| `passwd` | `pass show sudo` | Login password |
+| `gh_token` | `pass show github/token` | GitHub CLI token, read during Home Manager activation |
+| `passwd_hash` | `mkpasswd -m yescrypt` | Hashed login password for `users.users.spreadzhao.hashedPasswordFile` |
 | `qutebrowser_quickmarks` | manual | Qutebrowser quickmarks (can be empty) |
 
 ### Repository Location
@@ -277,6 +276,7 @@ Input method framework is enabled but UI/theme configuration must be done manual
 ```bash
 # Full rebuild & switch
 sudo nixos-rebuild switch --flake ~/workspaces/spreadconfig#thinkbook
+sudo nixos-rebuild switch --flake ~/workspaces/spreadconfig#zephyrus-m16
 
 # Or use the helper script
 ~/scripts/nix/nix_full_update

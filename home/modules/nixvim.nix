@@ -939,7 +939,7 @@
           provider = "openai_compatible";
           provider_options = {
             openai_compatible = {
-              api_key = "${lib.strings.trim (builtins.readFile ../../secrets/api_key_glm_ljx)}";
+              api_key = "";
               end_point = "https://open.bigmodel.cn/api/coding/paas/v4";
               model = "glm-5";
               name = "GLM";

@@ -2,8 +2,6 @@
 
 {
   imports = [
-    ./lact.nix
-    ./tlp.nix
     ./upower.nix
     ./udisks2.nix
     ./pipewire.nix
@@ -11,7 +9,5 @@
     ./openssh.nix
     ./gvfs.nix
     ./davfs2.nix
-    ./greetd.nix
-    ./xdg-autostart.nix
   ];
 }

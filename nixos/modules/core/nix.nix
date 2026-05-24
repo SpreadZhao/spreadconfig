@@ -6,11 +6,6 @@
 }:
 
 {
-  nixpkgs.config = {
-    allowUnfree = true;
-    rocmSupport = true;
-  };
-
   nix =
     let
       flakeInputs = lib.filterAttrs (name: input: name != "self" && lib.isType "flake" input) inputs;

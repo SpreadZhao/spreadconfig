@@ -1,4 +1,4 @@
-{ lib, pkgs, ... }:
+{ pkgs, secretsDir, ... }:
 
 {
   users = {
@@ -12,7 +12,7 @@
       #   tree
       # ];
       # shell = pkgs.zsh;
-      initialPassword = "${lib.strings.trim (builtins.readFile ../../secrets/passwd)}";
+      initialPassword = "${secretsDir}/passwd";
     };
     defaultUserShell = pkgs.zsh;
   };

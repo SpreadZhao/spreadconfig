@@ -20,7 +20,6 @@
     {
       nixpkgs,
       home-manager,
-      nixos-hardware,
       ...
     }@inputs:
     let
@@ -37,6 +36,38 @@
               }
             )
         ) (nixpkgs.lib.filterAttrs (name: _: nixpkgs.lib.hasPrefix "nixpkgs-old-" name) inputs);
+
+      mkHost =
+        {
+          name,
+          system ? "x86_64-linux",
+        }:
+        let
+          hostDir = ./host + "/${name}";
+          pkgsPinned = mkPinnedPkgs system;
+        in
+        nixpkgs.lib.nixosSystem {
+          inherit system;
+          specialArgs = {
+            inherit inputs pkgsPinned;
+          };
+          modules = [
+            (hostDir + "/configuration.nix")
+            home-manager.nixosModules.home-manager
+            {
+              home-manager.useGlobalPkgs = true;
+              home-manager.useUserPackages = true;
+              home-manager.extraSpecialArgs = {
+                inherit inputs pkgsPinned;
+              };
+              home-manager.users.spreadzhao = {
+                imports = [
+                  (hostDir + "/home.nix")
+                ];
+              };
+            }
+          ];
+        };
     in
     {
       devShells.x86_64-linux.default =
@@ -62,67 +93,8 @@
         };
 
       nixosConfigurations = {
-        thinkbook = nixpkgs.lib.nixosSystem rec {
-          system = "x86_64-linux";
-          specialArgs = { inherit inputs; };
-          modules = [
-            ./host/thinkbook/configuration.nix
-            home-manager.nixosModules.home-manager
-            {
-              home-manager.useGlobalPkgs = true;
-              home-manager.useUserPackages = true;
-              home-manager.extraSpecialArgs = {
-                inherit inputs;
-                pinnedPkgs = mkPinnedPkgs system;
-              };
-              home-manager.users.spreadzhao = {
-                imports = [
-                  ./host/thinkbook/home.nix
-                ];
-              };
-            }
-          ];
-        };
-        zephyrus-m16 = nixpkgs.lib.nixosSystem rec {
-          system = "x86_64-linux";
-          specialArgs = { inherit inputs; };
-          modules = [
-            nixos-hardware.nixosModules.asus-zephyrus-gu603h
-            ./host/zephyrus-m16/configuration.nix
-            home-manager.nixosModules.home-manager
-            {
-              home-manager.useGlobalPkgs = true;
-              home-manager.useUserPackages = true;
-              home-manager.extraSpecialArgs = {
-                inherit inputs;
-                pinnedPkgs = mkPinnedPkgs system;
-              };
-              home-manager.users.spreadzhao = {
-                imports = [
-                  ./host/zephyrus-m16/home.nix
-                ];
-              };
-            }
-          ];
-        };
-        desktop1 = nixpkgs.lib.nixosSystem {
-          # system = "x86_64-linux";
-          specialArgs = { inherit inputs; };
-          modules = [
-            ./configuration.nix
-            home-manager.nixosModules.home-manager
-            {
-              home-manager.useGlobalPkgs = true;
-              home-manager.useUserPackages = true;
-              home-manager.extraSpecialArgs = { inherit inputs; };
-              home-manager.users.spreadzhao = {
-                imports = [
-                  ./home.nix
-                ];
-              };
-            }
-          ];
-        };
+        thinkbook = mkHost { name = "thinkbook"; };
+        zephyrus-m16 = mkHost { name = "zephyrus-m16"; };
       };
     };
 }

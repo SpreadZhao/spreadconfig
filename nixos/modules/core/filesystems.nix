@@ -1,10 +1,10 @@
-{ lib, ... }:
+{ ... }:
 
 {
   fileSystems = {
     "/home/spreadzhao/mnt/dav" = {
       enable = false;
-      device = "${lib.strings.trim (builtins.readFile ../../secrets/nas_url)}";
+      device = "https://example.invalid";
       fsType = "davfs";
       options = [
         "_netdev"
