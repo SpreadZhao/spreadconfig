@@ -1,0 +1,207 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+TARGET_REV="${1:-HEAD}"
+TMP_FILE=$(mktemp)
+LOG_FILE=$(mktemp)
+SEQUENCE_EDITOR=$(mktemp)
+MESSAGE_EDITOR=$(mktemp)
+trap 'rm -f "$TMP_FILE" "$LOG_FILE" "$SEQUENCE_EDITOR" "$MESSAGE_EDITOR"' EXIT
+
+PROMPT=$(
+    cat <<'EOF'
+Your task is to generate a replacement commit message for one existing commit.
+
+## Guidelines
+
+- Use only the provided commit metadata and diff.
+- Preserve the intent of the commit.
+- Improve clarity and specificity.
+- Do not invent changes that are not present in the diff.
+- Only generate text as described in `Example`, no other redundant words (including markdown symbols like ```).
+- Follow the rules below for the commit message.
+
+## Format
+
+<type>:<space><message title>
+
+<bullet points summarizing what was updated>
+
+## Example Titles
+
+feat(auth): add JWT login flow
+fix(ui): handle null pointer in sidebar
+refactor(api): split user controller logic
+docs(readme): add usage section
+
+## Example with Title and Body
+
+feat(auth): add JWT login flow
+
+- Implemented JWT token validation logic
+- Added documentation for the validation component
+
+## Rules
+
+* title is lowercase, no period at the end.
+* Title should be a clear summary, max 50 characters.
+* Use the body (optional) to explain *why*, not just *what*.
+* Bullet points should be concise and high-level.
+
+Avoid
+
+* Vague titles like: "update", "fix stuff"
+* Overly long or unfocused titles
+* Excessive detail in bullet points
+
+## Allowed Types
+
+| Type     | Description                           |
+| -------- | ------------------------------------- |
+| feat     | New feature                           |
+| fix      | Bug fix                               |
+| chore    | Maintenance (e.g., tooling, deps)     |
+| docs     | Documentation changes                 |
+| refactor | Code restructure (no behavior change) |
+| test     | Adding or refactoring tests           |
+| style    | Code formatting (no logic change)     |
+| perf     | Performance improvements              |
+EOF
+)
+
+usage() {
+    echo "Usage: git-ai-reword [commit]"
+}
+
+if [[ "${TARGET_REV}" == "-h" || "${TARGET_REV}" == "--help" ]]; then
+    usage
+    exit 0
+fi
+
+if ! TARGET_COMMIT=$(git rev-parse --verify "${TARGET_REV}^{commit}" 2>/dev/null); then
+    echo "Commit not found: $TARGET_REV" >&2
+    usage >&2
+    exit 1
+fi
+
+HEAD_COMMIT=$(git rev-parse --verify HEAD)
+SHORT_COMMIT=$(git rev-parse --short "$TARGET_COMMIT")
+PARENT_COUNT=$(git show -s --format=%P "$TARGET_COMMIT" | wc -w | tr -d ' ')
+
+if [[ "$PARENT_COUNT" -ne 1 ]]; then
+    echo "Only non-root, non-merge commits are supported." >&2
+    exit 1
+fi
+
+if ! git merge-base --is-ancestor "$TARGET_COMMIT" HEAD; then
+    echo "Commit is not an ancestor of HEAD: $SHORT_COMMIT" >&2
+    exit 1
+fi
+
+if [[ "$TARGET_COMMIT" != "$HEAD_COMMIT" ]]; then
+    REBASE_MERGE=$(git rev-parse --git-path rebase-merge)
+    REBASE_APPLY=$(git rev-parse --git-path rebase-apply)
+
+    if [[ -d "$REBASE_MERGE" || -d "$REBASE_APPLY" ]]; then
+        echo "A rebase is already in progress." >&2
+        exit 1
+    fi
+
+    if ! git diff --quiet || ! git diff --cached --quiet; then
+        echo "Rewording a non-HEAD commit requires no tracked working tree changes." >&2
+        exit 1
+    fi
+fi
+
+echo "==> Reading commit $SHORT_COMMIT"
+echo "==> Generating replacement commit message with Codex (gpt-5.5, xhigh)"
+
+if ! git show --format=fuller --stat --patch "$TARGET_COMMIT" |
+    codex exec \
+        --model gpt-5.5 \
+        --config 'model_reasoning_effort="xhigh"' \
+        --sandbox read-only \
+        --ephemeral \
+        --output-last-message "$TMP_FILE" \
+        "$PROMPT" >"$LOG_FILE" 2>&1; then
+    echo "Codex failed while generating the commit message:" >&2
+    cat "$LOG_FILE" >&2
+    exit 1
+fi
+
+if [[ ! -s "$TMP_FILE" ]]; then
+    echo "Codex did not produce a commit message." >&2
+    cat "$LOG_FILE" >&2
+    exit 1
+fi
+
+if [[ "$TARGET_COMMIT" == "$HEAD_COMMIT" ]]; then
+    echo "==> Opening git commit editor"
+    git commit --amend --only --allow-empty -e -F "$TMP_FILE"
+    exit 0
+fi
+
+cat >"$SEQUENCE_EDITOR" <<'EOF'
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+TODO_FILE="$1"
+TMP_TODO=$(mktemp)
+FOUND=0
+
+while IFS= read -r line; do
+    if [[ "$line" == pick\ * ]]; then
+        SHA_AND_REST=${line#pick }
+        SHA=${SHA_AND_REST%% *}
+        FULL_SHA=$(git rev-parse --verify "${SHA}^{commit}" 2>/dev/null || true)
+
+        if [[ "$FULL_SHA" == "$AI_REWORD_TARGET" ]]; then
+            printf 'reword %s\n' "$SHA_AND_REST" >>"$TMP_TODO"
+            FOUND=1
+            continue
+        fi
+    fi
+
+    printf '%s\n' "$line" >>"$TMP_TODO"
+done <"$TODO_FILE"
+
+if [[ "$FOUND" -ne 1 ]]; then
+    echo "Target commit was not found in the rebase todo." >&2
+    rm -f "$TMP_TODO"
+    exit 1
+fi
+
+mv "$TMP_TODO" "$TODO_FILE"
+EOF
+
+cat >"$MESSAGE_EDITOR" <<'EOF'
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+MESSAGE_FILE="$1"
+cp "$AI_REWORD_MESSAGE" "$MESSAGE_FILE"
+
+if [[ -n "${AI_REWORD_REAL_EDITOR:-}" ]]; then
+    editor_cmd="$AI_REWORD_REAL_EDITOR"
+else
+    editor_cmd="vi"
+fi
+
+eval "$editor_cmd \"\$MESSAGE_FILE\""
+EOF
+
+chmod +x "$SEQUENCE_EDITOR" "$MESSAGE_EDITOR"
+
+BASE_COMMIT=$(git rev-parse "${TARGET_COMMIT}^")
+REAL_EDITOR="${VISUAL:-${EDITOR:-}}"
+
+echo "==> Opening git reword editor"
+AI_REWORD_TARGET="$TARGET_COMMIT" \
+    AI_REWORD_MESSAGE="$TMP_FILE" \
+    AI_REWORD_REAL_EDITOR="$REAL_EDITOR" \
+    GIT_SEQUENCE_EDITOR="$SEQUENCE_EDITOR" \
+    GIT_EDITOR="$MESSAGE_EDITOR" \
+    git rebase -i "$BASE_COMMIT"
