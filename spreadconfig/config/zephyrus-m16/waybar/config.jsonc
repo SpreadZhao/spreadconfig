@@ -1,6 +1,6 @@
 // -*- mode: jsonc -*-
 {
-    "height": 30,
+    "height": 25,
     "spacing": 0,
     "modules-left": [
         "group/niri-workspace-window",

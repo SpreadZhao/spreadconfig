@@ -49,7 +49,7 @@ settings:
     global:
     - Noto Sans
   fonts.default_size:
-    global: 16pt
+    global: 12pt
   hints.next_regexes:
     global:
     - \bnext\b

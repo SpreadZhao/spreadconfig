@@ -40,7 +40,7 @@ c.colors.webpage.preferred_color_scheme = 'dark'
 # }
 
 c.fonts.default_family = ['Noto Sans']
-c.fonts.default_size = '16pt'
+c.fonts.default_size = '12pt'
 
 c.hints.next_regexes = [
     r'\bnext\b',

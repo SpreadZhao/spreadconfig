@@ -11,7 +11,7 @@ if [[ "$action" != "switch" && "$action" != "boot" ]]; then
 fi
 
 attempt=1
-while ! nh os "$action" -d always -t "path://$HOME/workspaces/spreadconfig#thinkbook"; do
+while ! nh os "$action" -d always -t "path://$HOME/workspaces/spreadconfig#zephyrus-m16"; do
   if ((attempt >= max_attempts)); then
     echo "sns_until: nh os $action failed after $max_attempts attempts" >&2
     exit 1

@@ -10,6 +10,8 @@
     inputs.nixos-hardware.nixosModules.asus-zephyrus-gu603h
   ];
 
+  time.hardwareClockInLocalTime = true;
+
   hardware = {
     cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
 

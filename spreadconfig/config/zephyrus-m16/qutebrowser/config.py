@@ -89,10 +89,10 @@ c.fonts.web.family.fixed = ''
 c.fonts.web.family.sans_serif = ''
 c.fonts.web.family.serif = ''
 c.fonts.web.family.standard = ''
-c.fonts.web.size.default = 16
-c.fonts.web.size.default_fixed = 13
+c.fonts.web.size.default = 12
+c.fonts.web.size.default_fixed = 9
 c.fonts.web.size.minimum = 0
-c.fonts.web.size.minimum_logical = 6
+c.fonts.web.size.minimum_logical = 2
 
 c.fonts.default_family = [
     'Noto Color Emoji'
@@ -103,7 +103,7 @@ c.fonts.default_family = [
     'Noto Sans CJK JP'
     'Noto Sans CJK KR'
 ]
-c.fonts.default_size = '12pt'
+c.fonts.default_size = '8pt'
 
 c.statusbar.position = 'top'
 c.statusbar.widgets = [
@@ -160,7 +160,7 @@ c.url.searchengines = {
 c.search.incremental = False;
 
 
-c.zoom.default = '100%'
+c.zoom.default = '70%'
 c.zoom.levels = [
     '25%',
     '33%',

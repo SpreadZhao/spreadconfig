@@ -7,4 +7,4 @@ if [[ "$action" != "switch" && "$action" != "boot" ]]; then
   exit 1
 fi
 
-nh os "$action" -d always -t "path://$HOME/workspaces/spreadconfig#thinkbook"
+nh os "$action" -d always -t "path://$HOME/workspaces/spreadconfig#zephyrus-m16"

@@ -3,7 +3,7 @@ show-failed-attempts
 daemonize
 
 font=Noto Sans
-font-size=30
+font-size=26
 
 color=1e1e2e
 bs-hl-color=f5e0dc
