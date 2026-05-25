@@ -9,84 +9,45 @@ My personal NixOS configuration, built with [flakes](https://wiki.nixos.org/wiki
 ```
 .
 ├── flake.nix                          # Flake entry point
-├── host/
+├── hosts/
 │   ├── thinkbook/                     # AMD laptop host config
-│   │   ├── configuration.nix          # Imports generated hardware, common modules, host modules
+│   │   ├── configuration.nix          # Imports generated hardware and host-only system modules
 │   │   ├── hardware-configuration.nix # nixos-generate-config hardware facts
-│   │   ├── home.nix                   # Imports common and host Home Manager modules
-│   │   ├── home/default.nix           # Host-specific Home Manager overrides
-│   │   └── nixos/                     # Host-specific NixOS modules
+│   │   ├── home.nix                   # Host-only Home Manager module entry
+│   │   ├── home/profile.nix           # Host Home Manager profile values
+│   │   └── nixos/                     # Host-only NixOS modules
 │   │       ├── identity.nix           # Hostname and identity
 │   │       ├── hardware.nix           # CPU/GPU/hardware policy
+│   │       ├── profile.nix            # Host NixOS profile values
 │   │       └── services.nix           # Host-only services such as LACT/TLP
 │   └── zephyrus-m16/                  # ASUS ROG host config
 │       ├── configuration.nix
 │       ├── hardware-configuration.nix
 │       ├── home.nix
-│       ├── home/default.nix
+│       ├── home/profile.nix
 │       └── nixos/
 │           ├── identity.nix
 │           ├── hardware.nix           # nixos-hardware, Intel/NVIDIA PRIME
+│           ├── profile.nix
 │           ├── services.nix           # ROG service entry point
 │           └── services/asusd.nix     # asusd/supergfxd declarative config
-├── nixos/modules/                     # Shared system-level NixOS modules
-│   ├── core/                          # Base OS policy: boot, nix, users, security, networking
-│   ├── desktop/                       # Shared desktop/session services
-│   ├── hardware/                      # Hardware features common to every host
-│   ├── programs/                      # Shared system-level programs
-│   └── services/                      # Shared system-level services
-├── home/modules/                      # User-level home-manager modules
-│   ├── vars.nix                       # Centralized theme colors, fonts, paths
-│   ├── apps.nix                       # User packages
-│   ├── dconf.nix                      # GNOME/dconf settings
-│   ├── fonts.nix                      # Fontconfig
-│   ├── gtk.nix                        # GTK theme
-│   ├── qt.nix                         # Qt theme
-│   ├── home-core.nix                  # Home session variables
-│   ├── i18n.nix                       # Input method (fcitx5)
-│   ├── nixvim.nix                     # Neovim via nixvim
-│   ├── xdg.nix                        # XDG user dirs & MIME
-│   ├── systemd.nix                    # User systemd services
-│   ├── programs/                      # Program configurations
-│   │   ├── bat.nix
-│   │   ├── btop.nix
-│   │   ├── codex.nix
-│   │   ├── direnv.nix
-│   │   ├── fd.nix
-│   │   ├── feh.nix
-│   │   ├── file-manager-dbus.nix
-│   │   ├── foot.nix
-│   │   ├── fuzzel.nix
-│   │   ├── fzf.nix
-│   │   ├── gdu.nix
-│   │   ├── gh.nix
-│   │   ├── git.nix
-│   │   ├── gpg.nix
-│   │   ├── kitty.nix
-│   │   ├── lazygit.nix
-│   │   ├── lf.nix
-│   │   ├── niri.nix
-│   │   ├── obs-studio.nix
-│   │   ├── qutebrowser.nix
-│   │   ├── satty.nix
-│   │   ├── starship.nix
-│   │   ├── swaylock.nix
-│   │   ├── waybar.nix
-│   │   ├── wayprompt.nix
-│   │   ├── xdg-desktop-portal-termfilechooser.nix
-│   │   ├── zathura.nix
-│   │   ├── zoxide.nix
+├── modules/
+│   ├── nixos/                         # Shared system-level NixOS modules
+│   │   ├── boot.nix
+│   │   ├── greetd.nix
+│   │   ├── pipewire.nix
 │   │   └── zsh.nix
-│   └── services/                      # User services
-│       ├── cliphist.nix
+│   └── home/                          # Shared Home Manager modules
+│       ├── vars.nix                   # Centralized theme colors, fonts, paths, host helpers
+│       ├── home-core.nix              # Home session variables
+│       ├── nixvim.nix                 # Neovim via nixvim
+│       ├── niri.nix                   # Shared program module with host-specific external config
+│       ├── waybar.nix
 │       ├── fnott.nix
-│       ├── gpg-agent.nix
-│       ├── ollama.nix
-│       ├── pass-secret-service.nix
-│       └── swayidle.nix
+│       └── zsh.nix
 ├── spreadconfig/
-│   ├── config/                        # Application config files (dotfiles)
-│   └── scripts/                       # Shell scripts
+│   ├── config/<host>/                 # Host-specific application config files
+│   └── scripts/<host>/                # Host-specific shell scripts
 │       ├── niri/                      # Niri WM scripts (screenshots, audio, etc.)
 │       ├── sway/                      # Legacy Sway scripts
 │       ├── nix/                       # Nix maintenance scripts
@@ -190,7 +151,7 @@ Zsh with:
 
 ## Custom Scripts
 
-Located in `spreadconfig/scripts/`:
+Located in `spreadconfig/scripts/<host>/`:
 
 | Directory | Contents |
 |-----------|----------|
@@ -203,7 +164,7 @@ Located in `spreadconfig/scripts/`:
 
 ## Theme System
 
-All applications share a single dark color palette defined in `home/modules/vars.nix`. Colors are injected into every config via Nix module arguments — no duplicated hex values.
+All applications share a single dark color palette defined in `modules/home/vars.nix`. Colors are injected into every config via Nix module arguments — no duplicated hex values.
 
 ### Color Palette
 

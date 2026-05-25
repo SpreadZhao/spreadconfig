@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+action="${1:-boot}"
+max_attempts="${NIX_RETRY_ATTEMPTS:-3}"
+retry_delay="${NIX_RETRY_DELAY:-1}"
+
+if [[ "$action" != "switch" && "$action" != "boot" ]]; then
+  echo "Usage: nix_update [switch|boot]" >&2
+  exit 1
+fi
+
+attempt=1
+while ! nix flake update --flake "path://$HOME/workspaces/spreadconfig"; do
+  if ((attempt >= max_attempts)); then
+    echo "nix_update: nix flake update failed after $max_attempts attempts" >&2
+    exit 1
+  fi
+
+  attempt=$((attempt + 1))
+  sleep "$retry_delay"
+done
+
+sns_until "$action"

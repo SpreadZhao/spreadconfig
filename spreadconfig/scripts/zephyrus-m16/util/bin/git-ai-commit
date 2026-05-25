@@ -1,0 +1,97 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+TMP_FILE=$(mktemp)
+LOG_FILE=$(mktemp)
+trap 'rm -f "$TMP_FILE" "$LOG_FILE"' EXIT
+
+PROMPT=$(
+    cat <<'EOF'
+Your task is to generate a commit message for the staged changes.
+
+## Guidelines
+
+- Only generate the message for staged files/changes
+- Don't add any files using `git add`. The user will decide what to add. 
+- Don't commit any files either. You can only generate commit messages.
+- Only generate text as described in `Example`, no other redundant words (including markdown symbols like ```).
+- Follow the rules below for the commit message.
+
+## Format
+
+<type>:<space><message title>
+
+<bullet points summarizing what was updated>
+
+## Example Titles
+
+feat(auth): add JWT login flow
+fix(ui): handle null pointer in sidebar
+refactor(api): split user controller logic
+docs(readme): add usage section
+
+## Example with Title and Body
+
+feat(auth): add JWT login flow
+
+- Implemented JWT token validation logic
+- Added documentation for the validation component
+
+## Rules
+
+* title is lowercase, no period at the end.
+* Title should be a clear summary, max 50 characters.
+* Use the body (optional) to explain *why*, not just *what*.
+* Bullet points should be concise and high-level.
+
+Avoid
+
+* Vague titles like: "update", "fix stuff"
+* Overly long or unfocused titles
+* Excessive detail in bullet points
+
+## Allowed Types
+
+| Type     | Description                           |
+| -------- | ------------------------------------- |
+| feat     | New feature                           |
+| fix      | Bug fix                               |
+| chore    | Maintenance (e.g., tooling, deps)     |
+| docs     | Documentation changes                 |
+| refactor | Code restructure (no behavior change) |
+| test     | Adding or refactoring tests           |
+| style    | Code formatting (no logic change)     |
+| perf     | Performance improvements              |
+EOF
+)
+
+if git diff --staged --quiet; then
+    echo "No staged changes to commit."
+    exit 1
+fi
+
+echo "==> Reading staged changes"
+echo "==> Generating commit message with Codex (gpt-5.5, xhigh)"
+
+if ! git diff --staged |
+    codex exec \
+        --model gpt-5.5 \
+        --config 'model_reasoning_effort="xhigh"' \
+        --sandbox read-only \
+        --ephemeral \
+        --output-last-message "$TMP_FILE" \
+        "$PROMPT" >"$LOG_FILE" 2>&1; then
+    echo "Codex failed while generating the commit message:" >&2
+    cat "$LOG_FILE" >&2
+    exit 1
+fi
+
+if [[ ! -s "$TMP_FILE" ]]; then
+    echo "Codex did not produce a commit message." >&2
+    cat "$LOG_FILE" >&2
+    exit 1
+fi
+
+echo "==> Opening git commit editor"
+git commit -e -F "$TMP_FILE"

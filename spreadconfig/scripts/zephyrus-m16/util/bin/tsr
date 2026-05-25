@@ -1,0 +1,53 @@
+#!/bin/bash
+
+# toggle_sb_remote
+
+# Define your two remote repository URLs
+REMOTE_NAS="ssh://gitter@spreadzhao.cloud:10112/volume1/repositories/SecondBrain"
+REMOTE_GITHUB="https://github.com/SpreadZhao/SecondBrain.git"
+REMOTE_NAME="origin"  # Name of the remote to operate on, default is origin
+
+# Check if current directory is a git repository
+if ! git rev-parse --is-inside-work-tree &>/dev/null; then
+    echo "❌ Error: Current directory is not a git repository root. Please switch to the repository root and try again!"
+    exit 1
+fi
+
+# Get current remote URL
+CURRENT_URL=$(git remote get-url $REMOTE_NAME 2>/dev/null)
+if [ -z "$CURRENT_URL" ]; then
+    echo "❌ Error: Failed to get URL for remote '$REMOTE_NAME'. Please check your remote configuration!"
+    exit 1
+fi
+
+# Switch remote URL
+if [ "$CURRENT_URL" = "$REMOTE_NAS" ]; then
+    # Current URL is NAS address, switch to GitHub
+    git remote set-url $REMOTE_NAME $REMOTE_GITHUB
+    echo "✅ Switched to GitHub URL:"
+    echo "   $REMOTE_GITHUB"
+elif [ "$CURRENT_URL" = "$REMOTE_GITHUB" ]; then
+    # Current URL is GitHub address, switch to NAS
+    git remote set-url $REMOTE_NAME $REMOTE_NAS
+    echo "✅ Switched to NAS URL:"
+    echo "   $REMOTE_NAS"
+else
+    # Current URL is not one of the predefined URLs
+    echo "⚠️  Current remote URL is not one of the predefined addresses:"
+    echo "   Current URL: $CURRENT_URL"
+    read -p "Do you want to initialize to NAS URL? (y/n) " -n 1 -r
+    echo
+    if [[ $REPLY =~ ^[Yy]$ ]]; then
+        git remote set-url $REMOTE_NAME $REMOTE_NAS
+        echo "✅ Initialized to NAS URL:"
+        echo "   $REMOTE_NAS"
+    else
+        echo "❌ Operation cancelled. Remote URL not modified."
+        exit 0
+    fi
+fi
+
+# Verify switch result
+FINAL_URL=$(git remote get-url $REMOTE_NAME)
+echo "🔍 Verification: Current URL for '$REMOTE_NAME' is:"
+echo "   $FINAL_URL"

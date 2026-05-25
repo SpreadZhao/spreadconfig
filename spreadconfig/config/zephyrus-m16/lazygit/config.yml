@@ -1,0 +1,42 @@
+git:
+  autoFetch: false
+  pagers:
+  - pager: diff-so-fancy
+gui:
+  authorColors:
+    '*': '#b4befe'
+  nerdFontsVersion: '3'
+  theme:
+    activeBorderColor:
+      - '#FFC66D'
+      - bold
+    inactiveBorderColor:
+      - '#7C7C7C'
+    defaultFgColor:
+      - '#ADAEAC'
+    selectedLineBgColor:
+      - '#262626'
+    optionsTextColor:
+      - '#CC85C6'
+    searchingActiveBorderColor:
+      - '#E6E6AA'
+    unstagedChangesColor:
+      - '#F44747'
+    cherryPickedCommitBgColor:
+      - '#262626'
+    cherryPickedCommitFgColor:
+      - '#47CCB1'
+os:
+  editPreset: "nvim-remote"
+
+keybinding:
+  files:
+    commitChanges: <disabled>
+    commitChangesWithEditor: c
+
+customCommands:
+  - key: "C"
+    context: "files"
+    description: "Generate commit message with Codex"
+    command: "git-ai-commit"
+    output: terminal

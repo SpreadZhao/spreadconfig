@@ -1,0 +1,127 @@
+@import "spreadzhao.css";
+
+* {
+    border: none;
+    border-radius: 0;
+    font-family: Symbols Nerd Font Mono, Noto Sans, Noto Sans CJK SC, Noto Sans CJK TC, Noto Sans CJK JP, Noto Sans CJK KR, Noto Color Emoji;
+    font-size: 20px;
+    font-weight: normal;
+    min-height: 0px;
+}
+
+
+/* all */
+window#waybar {
+    background-color: transparent;
+    color: @theme_white;
+}
+
+/* spacer */
+#custom-spacer {
+    background: @theme_background;
+}
+
+/* niri workspaces and windows */
+#niri-workspace-window {
+    background: @theme_background;
+}
+
+#workspaces {
+    padding-right: 5px;
+}
+
+#workspaces button {
+    padding: 0 0;
+    border-top: 2px solid transparent;
+    background-color: transparent;
+    color: @theme_white;
+}
+
+#workspaces button.focused {
+    border-top: 2px solid @theme_bright_yellow;
+    color: @theme_bright_yellow;
+}
+
+/* niri window indicator */
+#custom-window-indicator {
+    padding-right: 5px;
+}
+
+/* niri window title */
+#window {
+    background: @theme_background;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+window#waybar.empty #window {
+    background-color: transparent;
+}
+
+/* right */
+#cpu {
+    background: @theme_background;
+    padding-left: 5px;
+    padding-right: 5px;
+    color: @theme_bright_yellow;
+}
+
+#memory {
+    background: @theme_background;
+    padding-right: 5px;
+    color: @theme_purple;
+}
+
+#temperature {
+    background: @theme_background;
+    padding-right: 5px;
+    color: @theme_green;
+}
+
+#temperature.warning {
+    color: @theme_yellow;
+}
+
+#temperature.critical {
+    color: @theme_bright_red;
+}
+
+#network {
+    background: @theme_background;
+    padding-right: 5px;
+    color: @theme_magenta;
+}
+
+#custom-sink {
+    background: @theme_background;
+    padding-right: 5px;
+    color: @theme_blue;
+}
+
+#custom-source {
+    background: @theme_background;
+    padding-right: 5px;
+    color: @theme_blue;
+}
+
+#custom-battery {
+    background: @theme_background;
+    padding-right: 5px;
+    color: @theme_red;
+}
+
+#upower {
+    background: @theme_background;
+    padding-right: 5px;
+    color: @theme_white;
+}
+
+#custom-time {
+    background: @theme_background;
+    padding-right: 5px;
+    color: @theme_green;
+}
+
+#tray {
+    background: @theme_background;
+}

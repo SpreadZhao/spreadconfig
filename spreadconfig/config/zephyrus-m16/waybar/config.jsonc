@@ -1,0 +1,165 @@
+// -*- mode: jsonc -*-
+{
+    "height": 30,
+    "spacing": 0,
+    "modules-left": [
+        "group/niri-workspace-window",
+        "custom/screen-record-time"
+    ],
+    "modules-center": [
+        "niri/window"
+    ],
+    "modules-right": [
+        "group/usage",
+        "network",
+        "group/audio",
+        "group/power",
+        "custom/time",
+        "tray"
+    ],
+    "group/power": {
+        "orientation": "horizontal",
+        "drawer": {
+            "transition-duration": 0,
+            "click-to-reveal": true
+        },
+        "modules": [
+            "custom/battery",
+            "upower"
+        ]
+    },
+    "group/audio": {
+        "orientation": "horizontal",
+        "drawer": {
+            "transition-duration": 0,
+            "click-to-reveal": true
+        },
+        "modules": [
+            "custom/sink",
+            "custom/source"
+        ]
+    },
+    "group/usage": {
+        "orientation": "horizontal",
+        "drawer": {
+            "transition-duration": 0,
+            "click-to-reveal": true
+        },
+        "modules": [
+            "cpu",
+            "memory",
+            "temperature"
+        ]
+    },
+    "group/niri-workspace-window": {
+        "orientation": "horizontal",
+        "modules": [
+            "niri/workspaces",
+            "custom/window-indicator"
+        ]
+    },
+    "custom/spacer": {
+        "format": "|"
+    },
+    "custom/window-indicator": {
+        "format": "{}",
+        "exec": "/home/spreadzhao/scripts/niri/niri_windows.sh",
+        "interval": "once",
+        "signal": 8,
+        "hide-empty-text": true
+    },
+    "niri/window": {
+        "format": "{}",
+        "hide-empty-text": true,
+        "separate-outputs": true
+    },
+    "custom/screen-record-time": {
+        "format": "  {}",
+        "exec": "/home/spreadzhao/scripts/util/get_screenrecord_time.sh",
+        "interval": 1,
+        "hide-empty-text": true
+    },
+    "custom/info": {
+        "exec": "/home/spreadzhao/scripts/util/round_info.sh",
+        "interval": 10
+    },
+    "custom/brightness": {
+        "exec": "/home/spreadzhao/scripts/util/get_brightness.sh",
+        "interval": "once"
+    },
+    "custom/sink": {
+        "exec": "/home/spreadzhao/scripts/niri/sink_niri.sh",
+        "interval": 10,
+        "signal": 7
+    },
+    "custom/source": {
+        "exec": "/home/spreadzhao/scripts/niri/source_niri.sh",
+        "interval": 10,
+        "signal": 7
+    },
+    "custom/battery": {
+        "exec": "/home/spreadzhao/scripts/util/get_battery.sh",
+        "interval": 10
+    },
+    "upower": {
+        "native-path": "hid-3c:34:64:0a:eb:7c-battery",
+        "show-icon": false,
+        "format": "{percentage}"
+    },
+    "custom/time": {
+        "exec": "/home/spreadzhao/scripts/util/get_time.sh",
+        "interval": 31,
+        "on-click": "exec /home/spreadzhao/scripts/util/toggle_time_format.sh",
+        "signal": 9,
+        "tooltip": false
+    },
+    "tray": {
+        "format": "{}",
+        "icon-size": 25,
+        "spacing": 0
+    },
+    "clock": {
+        "format": "{:%Y-%m-%d %H:%M %a}|",
+        "format-alt": "{:%H:%M}|"
+    },
+    "cpu": {
+        "interval": 10,
+        "format": "{usage}"
+    },
+    "memory": {
+        "interval": 10,
+        "format": "{percentage}"
+    },
+    "temperature": {
+        "interval": 10,
+        "hwmon-path-abs": "/sys/devices/pci0000:00/0000:00:18.3/hwmon",
+        "input-filename": "temp1_input",
+        "tooltip": false,
+        "warning-threshold": 60,
+        "critical-threshold": 80,
+        "format": "{temperatureC}{icon}",
+        "format-icons": ["", "", "", "", ""]
+    },
+    "backlight": {
+        "format": "{percent}% {icon}",
+        "format-icons": [""]
+    },
+    "wireplumber": {
+        "format": "{volume}%{icon}|",
+        "format-muted": "",
+        "on-click": "helvum",
+        "max-volume": 150,
+        "scroll-step": 5,
+        "format-icons": ["", "", ""]
+    },
+    "network": {
+        "format-wifi": "",
+        "format-ethernet": "󰈀",
+        "format-disconnected": "󰯡",
+        "tooltip-format": "{ifname} via {gwaddr} 󰊗",
+        "tooltip-format-wifi": "{essid} ({signalStrength}%) ",
+        "tooltip-format-ethernet": "{ifname} 󰈀",
+        "tooltip-format-disconnected": "Disconnected",
+        "max-length": 50
+    }
+}

@@ -43,25 +43,46 @@
           system ? "x86_64-linux",
         }:
         let
-          hostDir = ./host + "/${name}";
+          hostName = name;
+          hostDir = ./hosts + "/${hostName}";
+          repoRoot = ./.;
           pkgsPinned = mkPinnedPkgs system;
+          hostProfile = {
+            nixos = import (hostDir + "/nixos/profile.nix");
+            home = import (hostDir + "/home/profile.nix");
+          };
         in
         nixpkgs.lib.nixosSystem {
           inherit system;
           specialArgs = {
-            inherit inputs pkgsPinned;
+            inherit
+              inputs
+              pkgsPinned
+              hostName
+              repoRoot
+              hostProfile
+              ;
           };
           modules = [
+            ./modules/nixos
             (hostDir + "/configuration.nix")
             home-manager.nixosModules.home-manager
             {
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
               home-manager.extraSpecialArgs = {
-                inherit inputs pkgsPinned;
+                inherit
+                  inputs
+                  pkgsPinned
+                  hostName
+                  repoRoot
+                  hostProfile
+                  ;
               };
               home-manager.users.spreadzhao = {
                 imports = [
+                  inputs.nixvim.homeModules.nixvim
+                  ./modules/home
                   (hostDir + "/home.nix")
                 ];
               };

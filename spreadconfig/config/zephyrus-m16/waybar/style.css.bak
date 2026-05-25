@@ -1,0 +1,136 @@
+@import "mocha.css";
+
+* {
+    border: none;
+    border-radius: 0;
+    font-family: Symbols Nerd Font Mono, IBM Plex Sans, IBM Plex Sans SC, IBM Plex Sans TC, IBM Plex Sans JP, IBM Plex Sans KR, Noto Color Emoji;
+    font-size: 20px;
+    font-weight: normal;
+    min-height: 0px;
+}
+
+
+/* all */
+window#waybar {
+    background-color: transparent;
+    color: @text;
+}
+
+/* spacer */
+#custom-spacer {
+    background: rgba(14, 17, 23, 0.8);
+    margin-top: 10px;
+}
+
+/* niri workspaces and windows */
+#niri-workspace-window {
+    background: rgba(14, 17, 23, 0.8);
+    border-radius: 8px;
+    margin-top: 10px;
+    margin-left: 10px;
+}
+
+#workspaces {
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+#workspaces button {
+    padding: 0 0;
+    border-top: 2px solid transparent;
+    background-color: transparent;
+    color: @text;
+}
+
+#workspaces button.focused {
+    border-top: 2px solid @rosewater;
+    color: @rosewater;
+}
+
+/* niri window indicator */
+#custom-window-indicator {
+    padding-right: 5px;
+}
+
+/* niri window title */
+#window {
+    border-radius: 8px;
+    background: rgba(14, 17, 23, 0.8);
+    margin-top: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+window#waybar.empty #window {
+    background-color: transparent;
+}
+
+/* right */
+#cpu {
+    background: rgba(14, 17, 23, 0.8);
+    border-radius: 8px 0px 0px 8px;
+    margin-top: 10px;
+    padding-left: 5px;
+    padding-right: 5px;
+    color: @yellow;
+}
+
+#memory {
+    background: rgba(14, 17, 23, 0.8);
+    margin-top: 10px;
+    padding-right: 5px;
+    color: @pink;
+}
+
+#temperature {
+    background: rgba(14, 17, 23, 0.8);
+    margin-top: 10px;
+    padding-right: 5px;
+    color: @rosewater
+}
+
+#temperature.warning {
+    color: @peach;
+}
+
+#temperature.critical {
+    color: @red;
+}
+
+#network {
+    background: rgba(14, 17, 23, 0.8);
+    margin-top: 10px;
+    padding-right: 5px;
+    color: @maroon;
+}
+
+#custom-audio {
+    background: rgba(14, 17, 23, 0.8);
+    margin-top: 10px;
+    padding-right: 5px;
+    color: @mauve;
+}
+
+#custom-battery {
+    background: rgba(14, 17, 23, 0.8);
+    margin-top: 10px;
+    padding-right: 5px;
+    color: @Red;
+}
+
+#custom-time {
+    background: rgba(14, 17, 23, 0.8);
+    margin-top: 10px;
+    padding-right: 5px;
+    color: @green;
+}
+
+#tray {
+    background: rgba(14, 17, 23, 0.8);
+    margin-top: 10px;
+    margin-right: 10px;
+    border-radius: 0px 8px 8px 0px;
+    padding-right: 5px;
+}

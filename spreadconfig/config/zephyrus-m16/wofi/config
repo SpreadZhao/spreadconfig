@@ -1,0 +1,17 @@
+mode=drun
+allow_images=true
+image_size=25
+term=foot
+insensitive=true
+location=center
+line_wrap=word
+layer=overlay
+matching=fuzzy
+gtk_dark=true
+key_up=Ctrl-k
+key_down=Ctrl-j
+key_left=Ctrl-h
+key_right=Ctrl-l
+key_forward=Ctrl-n
+key_backward=Ctrl-p
+key_expand=Shift-L
