@@ -1,5 +1,0 @@
-#!/usr/bin/env bash
-
-# https://discourse.nixos.org/t/is-it-possible-to-reset-nixos-generation-counter/52620/3
-sudo rm /nix/var/nix/profiles/system-*
-sns
