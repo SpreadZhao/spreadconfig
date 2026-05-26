@@ -1,4 +1,4 @@
-{ config, ... }:
+{ pkgs, config, ... }:
 
 {
   boot = {
@@ -12,6 +12,7 @@
     extraModulePackages = with config.boot.kernelPackages; [
       v4l2loopback
     ];
+    kernelPackages = pkgs.linuxPackages_latest;
     kernelModules = [ "v4l2loopback" ];
     # see:
     # https://wiki.archlinux.org/title/V4l2loopback#Loading_the_kernel_module
