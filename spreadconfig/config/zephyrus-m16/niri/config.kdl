@@ -68,7 +68,7 @@ layout {
 output "eDP-1" {
     // off
     scale 2
-    position x=5360 y=500
+    position x=4288 y=500
     // position x=3440 y=1439          // ensure monitor has left/right relationship
     layout {
         default-column-width { proportion 1.0; }
@@ -82,6 +82,7 @@ output "eDP-1" {
 output "HDMI-A-1" {
     scale 1.25
     position x=0 y=0
+    mode "3440x1440@100.000"
     layout {
         default-column-width { proportion 0.5; }
         preset-column-widths {
@@ -93,7 +94,7 @@ output "HDMI-A-1" {
 
 output "DP-1" {
     scale 1.25
-    position x=3440 y=180
+    position x=2752 y=180
     focus-at-startup
     layout {
         default-column-width { proportion 1.0; }
