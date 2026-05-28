@@ -1,7 +1,7 @@
 import themes
 
 config.load_autoconfig()
-config.bind('tt', 'config-cycle tabs.width 0% 18 44 10% 180 20%')
+config.bind('tt', 'config-cycle tabs.width 0% 18 44 10% 20%')
 config.unbind('M', mode = 'normal')
 config.unbind('m', mode = 'normal')
 config.unbind('d')
@@ -143,7 +143,7 @@ c.tabs.show = 'always'
 c.tabs.title.format = '{audio}{relative_index}:{current_title}'
 c.tabs.title.format_pinned = '{audio}{relative_index}:{current_title}'
 c.tabs.title.elide = 'none'
-c.tabs.width = 180
+c.tabs.width = '0%'
 c.tabs.favicons.show = 'always'
 c.tabs.mousewheel_switching = False;
 c.tabs.new_position.related = 'next';
