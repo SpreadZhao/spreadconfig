@@ -1,4 +1,6 @@
 {
   fontScalePercent = 100;
-  fontSizes = { };
+  fontSizes = {
+    foot = 14;
+  };
 }
