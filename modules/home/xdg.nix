@@ -138,6 +138,7 @@
       enable = true;
       defaultApplications = {
         "text/html" = "org.qutebrowser.qutebrowser.desktop";
+        "application/pdf" = "org.pwmt.zathura.desktop";
         "image/bmp" = "feh.desktop";
         "image/gif" = "feh.desktop";
         "image/jpeg" = "feh.desktop";
@@ -164,6 +165,7 @@
         "x-scheme-handler/tonsite" = "org.telegram.desktop.desktop";
       };
       associations.added = {
+        "application/pdf" = "org.pwmt.zathura.desktop";
         "x-scheme-handler/tg" = "org.telegram.desktop.desktop";
         "x-scheme-handler/tonsite" = "org.telegram.desktop.desktop";
       };
