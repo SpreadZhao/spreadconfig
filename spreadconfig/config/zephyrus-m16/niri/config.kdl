@@ -178,6 +178,12 @@ clipboard {
 // }
 
 window-rule {
+    match app-id="^waydroid"
+    open-on-output "HDMI-A-1"
+    open-focused false
+}
+
+window-rule {
     // Match by "dropdown" app ID.
     // You need to set this app ID when running your terminal, e.g.:
     // spawn "alacritty" "--class" "dropdown"

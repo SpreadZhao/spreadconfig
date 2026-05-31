@@ -45,7 +45,7 @@
         summary-format = "%s";
         body-format = "%b";
 
-        max-timeout = 0;
+        max-timeout = 10;
         default-timeout = 10;
         idle-timeout = 5;
       };
