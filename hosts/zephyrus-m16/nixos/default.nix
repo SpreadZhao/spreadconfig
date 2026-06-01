@@ -6,6 +6,5 @@
     ./hardware.nix
     ./services.nix
     ./time.nix
-    ./waydroid.nix
   ];
 }
