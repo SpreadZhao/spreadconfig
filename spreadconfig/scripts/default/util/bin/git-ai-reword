@@ -5,13 +5,24 @@ set -euo pipefail
 TARGET_REV="${1:-HEAD}"
 TMP_FILE=$(mktemp)
 LOG_FILE=$(mktemp)
+CONTEXT_FILE=$(mktemp)
+FULL_DIFF_FILE=$(mktemp)
 SEQUENCE_EDITOR=$(mktemp)
 MESSAGE_EDITOR=$(mktemp)
-trap 'rm -f "$TMP_FILE" "$LOG_FILE" "$SEQUENCE_EDITOR" "$MESSAGE_EDITOR"' EXIT
+trap 'rm -f "$TMP_FILE" "$LOG_FILE" "$CONTEXT_FILE" "$FULL_DIFF_FILE" "$SEQUENCE_EDITOR" "$MESSAGE_EDITOR"' EXIT
+
+MAX_FULL_CONTEXT_BYTES="${GIT_AI_MAX_FULL_CONTEXT_BYTES:-200000}"
+MAX_COMPACT_DIFF_LINES="${GIT_AI_MAX_COMPACT_DIFF_LINES:-900}"
+MAX_COMPACT_FILE_DIFF_LINES="${GIT_AI_MAX_COMPACT_FILE_DIFF_LINES:-120}"
 
 PROMPT=$(
     cat <<'EOF'
 Your task is to generate a replacement commit message for one existing commit.
+
+The input may be either the full commit diff or a compact context generated from
+a large commit. When the input is compact, use the metadata, file summary, name
+status, and diff excerpts to infer the intent. Do not invent changes that are
+not supported by the provided context.
 
 ## Guidelines
 
@@ -74,6 +85,96 @@ usage() {
     echo "Usage: git-ai-reword [commit]"
 }
 
+file_size_bytes() {
+    wc -c <"$1" | tr -d ' '
+}
+
+write_compact_diff() {
+    local diff_file="$1"
+
+    awk \
+        -v max_total="$MAX_COMPACT_DIFF_LINES" \
+        -v max_file="$MAX_COMPACT_FILE_DIFF_LINES" '
+        BEGIN {
+            total = 0
+            file_lines = 0
+            omitted_file = 0
+            omitted_all = 0
+        }
+
+        /^diff --git / {
+            if (omitted_file && total < max_total) {
+                print "[... omitted additional lines for previous file ...]"
+                total++
+            }
+            file_lines = 0
+            omitted_file = 0
+        }
+
+        {
+            if (total >= max_total) {
+                if (!omitted_all) {
+                    print "[... omitted remaining diff because context is large ...]"
+                    omitted_all = 1
+                }
+                next
+            }
+
+            is_header = ($0 ~ /^diff --git / || $0 ~ /^index / || $0 ~ /^(---|\+\+\+) / || $0 ~ /^@@ /)
+
+            if (is_header || file_lines < max_file) {
+                print
+                total++
+                file_lines++
+                next
+            }
+
+            if (!omitted_file) {
+                print "[... omitted additional lines for this file ...]"
+                total++
+                omitted_file = 1
+            }
+        }
+    ' "$diff_file"
+}
+
+build_context() {
+    local target_commit="$1"
+    local diff_size
+
+    git show --format= --patch --find-renames --find-copies "$target_commit" >"$FULL_DIFF_FILE"
+    diff_size=$(file_size_bytes "$FULL_DIFF_FILE")
+
+    {
+        echo "# Commit context"
+        echo
+        echo "## Commit metadata and existing message"
+        git show -s --format=fuller "$target_commit"
+        echo
+        echo "## Changed file summary"
+        git show --format= --stat --find-renames --find-copies "$target_commit"
+        echo
+        echo "## Changed file name status"
+        git show --format= --name-status --find-renames --find-copies "$target_commit"
+        echo
+
+        if ((diff_size <= MAX_FULL_CONTEXT_BYTES)); then
+            echo "## Full commit diff"
+            cat "$FULL_DIFF_FILE"
+        else
+            echo "## Compact commit diff"
+            echo "Full commit diff is ${diff_size} bytes, over the ${MAX_FULL_CONTEXT_BYTES} byte limit."
+            echo "Use this compact context to generate a high-level replacement commit message."
+            echo
+            write_compact_diff "$FULL_DIFF_FILE"
+        fi
+    } >"$CONTEXT_FILE"
+
+    if ((diff_size > MAX_FULL_CONTEXT_BYTES)); then
+        echo "==> Commit diff is large; using compact context (${diff_size} bytes)"
+    fi
+}
+
 if [[ "${TARGET_REV}" == "-h" || "${TARGET_REV}" == "--help" ]]; then
     usage
     exit 0
@@ -115,16 +216,16 @@ if [[ "$TARGET_COMMIT" != "$HEAD_COMMIT" ]]; then
 fi
 
 echo "==> Reading commit $SHORT_COMMIT"
+build_context "$TARGET_COMMIT"
 echo "==> Generating replacement commit message with Codex (gpt-5.5, xhigh)"
 
-if ! git show --format=fuller --stat --patch "$TARGET_COMMIT" |
-    codex exec \
-        --model gpt-5.5 \
-        --config 'model_reasoning_effort="xhigh"' \
-        --sandbox read-only \
-        --ephemeral \
-        --output-last-message "$TMP_FILE" \
-        "$PROMPT" >"$LOG_FILE" 2>&1; then
+if ! codex exec \
+    --model gpt-5.5 \
+    --config 'model_reasoning_effort="xhigh"' \
+    --sandbox read-only \
+    --ephemeral \
+    --output-last-message "$TMP_FILE" \
+    "$PROMPT" <"$CONTEXT_FILE" >"$LOG_FILE" 2>&1; then
     echo "Codex failed while generating the commit message:" >&2
     cat "$LOG_FILE" >&2
     exit 1
