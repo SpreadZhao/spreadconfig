@@ -4,6 +4,83 @@
   ...
 }:
 
+let
+  normalMode = "n";
+  visualMode = "v";
+  normalVisualModes = [
+    normalMode
+    visualMode
+  ];
+
+  leaderKey = "<leader>";
+  leader = suffix: "${leaderKey}${suffix}";
+  cmd = command: "<CMD>${command}<CR>";
+  cmds = commands: builtins.concatStringsSep "" (map cmd commands);
+  normalDesc = desc: { inherit desc; };
+  noremapDesc = desc: {
+    inherit desc;
+    noremap = true;
+  };
+  normalKey = key: action: desc: {
+    inherit key action;
+    mode = normalMode;
+    options = normalDesc desc;
+  };
+  normalNoremapKey = key: action: desc: {
+    inherit key action;
+    mode = normalMode;
+    options = noremapDesc desc;
+  };
+  fzfLuaAction = call: {
+    __raw = ''
+      function()
+          require('fzf-lua').${call}
+      end
+    '';
+  };
+
+  vimEnter = "VimEnter";
+  insertEnter = "InsertEnter";
+  cmdlineEnter = "CmdlineEnter";
+  lspAttach = "LspAttach";
+  bufWritePre = "BufWritePre";
+  lazyLoadOn = event: {
+    enable = true;
+    settings.event = event;
+  };
+  vimEnterLazyLoad = lazyLoadOn vimEnter;
+  insertEnterLazyLoad = lazyLoadOn insertEnter;
+
+  bold = "bold";
+  italic = "italic";
+  underline = "underline";
+  boldStyle = [ bold ];
+  italicStyle = [ italic ];
+  underlineStyle = [ underline ];
+
+  vscodeColors = {
+    lineNumber = "#a6adc8";
+    back = "#000000";
+    lineNumberDark = "#7C7C7C";
+    cursorDarkDark = "#262626";
+    selection = "#262626";
+    foreground = "#ADAEAC";
+    comment = "#6A9955";
+    keyword = "#47A2ED";
+    static = "#FFC66D";
+    type = "#47CCB1";
+    function = "#E6E6AA";
+    error = "#F44747";
+    string = "#CD9069";
+  };
+
+  singleCommand = command: [ command ];
+  singleFiletype = filetype: [ filetype ];
+  shfmtFormatter = singleCommand "shfmt";
+  clangFormatFormatter = singleCommand "clang-format";
+  xmlstarletFormatter = singleCommand "xmlstarlet";
+  gitRootMarker = ".git";
+in
 {
   programs.nixvim = {
     enable = true;
@@ -63,256 +140,101 @@
       }
     ];
     highlightOverride = {
-      LineNrAbove.fg = "#a6adc8";
-      LineNrBelow.fg = "#a6adc8";
+      LineNrAbove.fg = vscodeColors.lineNumber;
+      LineNrBelow.fg = vscodeColors.lineNumber;
     };
     keymaps = [
       {
         key = "'";
         action = "$";
-        mode = [
-          "n"
-          "v"
-        ];
+        mode = normalVisualModes;
       }
       {
         key = "<Esc>";
-        action = "<CMD>nohlsearch<CR>";
-        mode = "n";
+        action = cmd "nohlsearch";
+        mode = normalMode;
       }
       {
         key = "<C-h>";
         action = "<C-w><C-h>";
-        mode = "n";
+        mode = normalMode;
       }
       {
         key = "<C-l>";
         action = "<C-w><C-l>";
-        mode = "n";
+        mode = normalMode;
       }
       {
         key = "<C-j>";
         action = "<C-w><C-j>";
-        mode = "n";
+        mode = normalMode;
       }
       {
         key = "<C-k>";
         action = "<C-w><C-k>";
-        mode = "n";
+        mode = normalMode;
       }
       {
         key = "gk";
 
         action = "<C-o>";
-        mode = "n";
-        options = {
-          desc = "go back";
-          noremap = true;
-        };
+        mode = normalMode;
+        options = noremapDesc "go back";
       }
       {
         key = "gj";
         action = "<C-i>";
-        mode = "n";
-        options = {
-          desc = "go forward";
-          noremap = true;
-        };
+        mode = normalMode;
+        options = noremapDesc "go forward";
       }
       {
         key = "/";
-        mode = "v";
+        mode = visualMode;
         action = ''""y/\V<C-R>=escape(@", '/\')<CR><CR>'';
-        options = {
-          desc = "Search Visual Selection";
-        };
+        options = normalDesc "Search Visual Selection";
       }
+      (normalKey (leader "fs") (cmd "Oil") "File System")
+      (normalKey (leader "nt") (cmds [
+        "tabnew"
+        "Oil"
+      ]) "New Tab")
+      (normalKey (leader "lg") (cmd "LazyGit") "LazyGit")
       {
-        key = "<leader>fs";
-        action = "<CMD>Oil<CR>";
-        mode = "n";
-        options = {
-          desc = "File System";
-        };
-      }
-      {
-        key = "<leader>nt";
-        action = "<CMD>tabnew<CR><CMD>Oil<CR>";
-        mode = "n";
-        options = {
-          desc = "New Tab";
-        };
-      }
-      {
-        key = "<leader>lg";
-        action = "<CMD>LazyGit<CR>";
-        mode = "n";
-        options = {
-          desc = "LazyGit";
-        };
-      }
-      {
-        key = "<leader>;";
+        key = leader ";";
         action.__raw = ''
           function()
               require('flash').jump()
           end
         '';
-        mode = "n";
-        options.desc = "Jump Code";
+        mode = normalMode;
+        options = normalDesc "Jump Code";
       }
+      (normalKey (leader "ff") (fzfLuaAction "files()") "Find Files")
+      (normalKey (leader "ge") (fzfLuaAction "buffers()") "Find Buffers")
+      (normalKey (leader "fh") (fzfLuaAction "oldfiles()") "Find History")
+      (normalKey (leader "ft") (fzfLuaAction "tabs()") "Find Tab")
+      (normalKey (leader "fk") (fzfLuaAction "keymaps()") "Find Keymaps")
+      (normalKey (leader "fe") (fzfLuaAction "live_grep({ resume = true })") "Find Everything")
+      (normalKey (leader "?") (fzfLuaAction "helptags()") "Find Helps")
       {
-        key = "<leader>ff";
-        action = {
-          __raw = ''
-            function()
-                require('fzf-lua').files()
-            end
-          '';
-        };
-        mode = "n";
-        options = {
-          desc = "Find Files";
-        };
+        key = leader "fe";
+        action = fzfLuaAction "grep_visual()";
+        mode = visualMode;
+        options = normalDesc "Find Under Cursor";
       }
+      (normalNoremapKey (leader "tt") (cmd "ToggleTerm") "Toggle Term")
+      (normalNoremapKey (leader "ot") (cmd "Outline") "Toggle Outline")
+      (normalNoremapKey (leader "of") (cmd "OutlineFocus") "Focus Outline")
       {
-        key = "<leader>ge";
-        action = {
-          __raw = ''
-            function()
-                require('fzf-lua').buffers()
-            end
-          '';
-        };
-        mode = "n";
-        options = {
-          desc = "Find Buffers";
-        };
-      }
-      {
-        key = "<leader>fh";
-        action = {
-          __raw = ''
-            function()
-                require('fzf-lua').oldfiles()
-            end
-          '';
-        };
-        mode = "n";
-        options = {
-          desc = "Find History";
-        };
-      }
-      {
-        key = "<leader>ft";
-        action = {
-          __raw = ''
-            function()
-                require('fzf-lua').tabs()
-            end
-          '';
-        };
-        mode = "n";
-        options = {
-          desc = "Find Tab";
-        };
-      }
-      {
-        key = "<leader>fk";
-        action = {
-          __raw = ''
-            function()
-                require('fzf-lua').keymaps()
-            end
-          '';
-        };
-        mode = "n";
-        options = {
-          desc = "Find Keymaps";
-        };
-      }
-      {
-        key = "<leader>fe";
-        action = {
-          __raw = ''
-            function()
-                require('fzf-lua').live_grep({ resume = true })
-            end
-          '';
-        };
-        mode = "n";
-        options = {
-          desc = "Find Everything";
-        };
-      }
-      {
-        key = "<leader>?";
-        action = {
-          __raw = ''
-            function()
-                require('fzf-lua').helptags()
-            end
-          '';
-        };
-        mode = "n";
-        options = {
-          desc = "Find Helps";
-        };
-      }
-      {
-        key = "<leader>fe";
-        action = {
-          __raw = ''
-            function()
-                require('fzf-lua').grep_visual()
-            end
-          '';
-        };
-        mode = "v";
-        options = {
-          desc = "Find Under Cursor";
-        };
-      }
-      {
-        key = "<leader>tt";
-        action = "<CMD>ToggleTerm<CR>";
-        mode = "n";
-        options = {
-          desc = "Toggle Term";
-          noremap = true;
-        };
-      }
-      {
-        key = "<leader>ot";
-        action = "<CMD>Outline<CR>";
-        mode = "n";
-        options = {
-          desc = "Toggle Outline";
-          noremap = true;
-        };
-      }
-      {
-        key = "<leader>of";
-        action = "<CMD>OutlineFocus<CR>";
-        mode = "n";
-        options = {
-          desc = "Focus Outline";
-          noremap = true;
-        };
-      }
-      {
-        key = "<leader>u";
+        key = leader "u";
         action.__raw = ''
           function()
             vim.cmd.packadd("nvim.undotree")
             require("undotree").open()
           end
         '';
-        mode = "n";
-        options = {
-          desc = "Toggle Builtin Undotree";
-          noremap = true;
-        };
+        mode = normalMode;
+        options = noremapDesc "Toggle Builtin Undotree";
       }
     ];
     colorscheme = "vscode";
@@ -328,63 +250,63 @@
           terminal_colors = true;
 
           color_overrides = {
-            vscBack = "#000000";
-            vscLineNumber = "#7C7C7C";
-            vscCursorDarkDark = "#262626";
-            vscSelection = "#262626";
-            vscForeground = "#ADAEAC";
+            vscBack = vscodeColors.back;
+            vscLineNumber = vscodeColors.lineNumberDark;
+            vscCursorDarkDark = vscodeColors.cursorDarkDark;
+            vscSelection = vscodeColors.selection;
+            vscForeground = vscodeColors.foreground;
           };
 
           group_overrides = {
             # ===== 注释 =====
             Comment = {
-              fg = "#6A9955";
+              fg = vscodeColors.comment;
               italic = false;
             };
 
             # ===== 关键字 =====
             Keyword = {
-              fg = "#47A2ED";
+              fg = vscodeColors.keyword;
             };
 
             # ===== static =====
             StorageClass = {
-              fg = "#FFC66D";
+              fg = vscodeColors.static;
             };
 
             # ===== 类 =====
             Type = {
-              fg = "#47CCB1";
+              fg = vscodeColors.type;
             };
 
             # ===== 类成员 =====
             Field = {
-              fg = "#47CCB1";
+              fg = vscodeColors.type;
             };
 
             Property = {
-              fg = "#47CCB1";
+              fg = vscodeColors.type;
             };
 
             # ===== 函数 =====
             Function = {
-              fg = "#E6E6AA";
+              fg = vscodeColors.function;
             };
 
             # ===== 错误 =====
             DiagnosticError = {
-              fg = "#F44747";
+              fg = vscodeColors.error;
               bold = true;
             };
 
             # ===== 字符串 =====
             String = {
-              fg = "#CD9069";
+              fg = vscodeColors.string;
             };
 
             # ===== 常量 =====
             Constant = {
-              fg = "#FFC66D";
+              fg = vscodeColors.static;
             };
           };
         };
@@ -403,15 +325,15 @@
           show_end_of_buffer = false;
           term_colors = true;
           styles = {
-            comments = [ "italic" ];
-            functions = [ "bold" ];
-            keywords = [ "italic" ];
-            operators = [ "bold" ];
-            conditionals = [ "bold" ];
-            loops = [ "bold" ];
+            comments = italicStyle;
+            functions = boldStyle;
+            keywords = italicStyle;
+            operators = boldStyle;
+            conditionals = boldStyle;
+            loops = boldStyle;
             booleans = [
-              "bold"
-              "italic"
+              bold
+              italic
             ];
           };
           integrations = {
@@ -443,16 +365,16 @@
             native_lsp = {
               enabled = true;
               virtual_text = {
-                errors = [ "italic" ];
-                hints = [ "italic" ];
-                warnings = [ "italic" ];
-                information = [ "italic" ];
+                errors = italicStyle;
+                hints = italicStyle;
+                warnings = italicStyle;
+                information = italicStyle;
               };
               underlines = {
-                errors = [ "underline" ];
-                hints = [ "underline" ];
-                warnings = [ "underline" ];
-                information = [ "underline" ];
+                errors = underlineStyle;
+                hints = underlineStyle;
+                warnings = underlineStyle;
+                information = underlineStyle;
               };
             };
             notify = true;
@@ -583,7 +505,7 @@
         };
         lazyLoad = {
           enable = true;
-          settings.event = "VimEnter";
+          settings.event = vimEnter;
         };
       };
       which-key = {
@@ -593,7 +515,7 @@
         };
         lazyLoad = {
           enable = true;
-          settings.keys = [ "<leader>" ];
+          settings.keys = [ leaderKey ];
         };
       };
       gitsigns = {
@@ -671,10 +593,7 @@
             end
           '';
         };
-        lazyLoad = {
-          enable = true;
-          settings.event = "VimEnter";
-        };
+        lazyLoad = vimEnterLazyLoad;
       };
       lazygit = {
         enable = true;
@@ -700,10 +619,7 @@
       };
       nvim-autopairs = {
         enable = true;
-        lazyLoad = {
-          enable = true;
-          settings.event = "InsertEnter";
-        };
+        lazyLoad = insertEnterLazyLoad;
       };
       blink-cmp = {
         enable = true;
@@ -907,8 +823,8 @@
         lazyLoad = {
           enable = true;
           settings.event = [
-            "InsertEnter"
-            "CmdlineEnter"
+            insertEnter
+            cmdlineEnter
           ];
         };
       };
@@ -958,18 +874,18 @@
           notify_no_formatters = true;
           format_on_save = null;
           formatters_by_ft = {
-            bash = [ "shfmt" ];
-            zsh = [ "shfmt" ];
-            sh = [ "shfmt" ];
-            c = [ "clang-format" ];
-            cpp = [ "clang-format" ];
+            bash = shfmtFormatter;
+            zsh = shfmtFormatter;
+            sh = shfmtFormatter;
+            c = clangFormatFormatter;
+            cpp = clangFormatFormatter;
             cmake = [ "cmake-format" ];
-            html = [ "xmlstarlet" ];
-            xml = [ "xmlstarlet" ];
-            rust = [ "rustfmt" ];
-            lua = [ "stylua" ];
-            json = [ "jq" ];
-            nix = [ "nixfmt" ];
+            html = xmlstarletFormatter;
+            xml = xmlstarletFormatter;
+            rust = singleCommand "rustfmt";
+            lua = singleCommand "stylua";
+            json = singleCommand "jq";
+            nix = singleCommand "nixfmt";
           };
           formatters = {
             nixfmt = {
@@ -985,16 +901,16 @@
           enable = true;
           settings = {
             cmd = "ConformInfo";
-            event = "BufWritePre";
+            event = bufWritePre;
             keys = [
               {
-                __unkeyed-1 = "<leader>cb";
+                __unkeyed-1 = leader "cb";
                 __unkeyed-2.__raw = ''
                   function()
                       require('conform').format { async = true, lsp_format = 'fallback' }
                   end
                 '';
-                mode = "n";
+                mode = normalMode;
                 desc = "Conform Buffer";
               }
             ];
@@ -1014,10 +930,7 @@
             char.enabled = false;
           };
         };
-        lazyLoad = {
-          enable = true;
-          settings.event = "VimEnter";
-        };
+        lazyLoad = vimEnterLazyLoad;
       };
       fzf-lua = {
         enable = true;
@@ -1032,7 +945,7 @@
         };
         lazyLoad = {
           enable = false;
-          settings.event = [ "LspAttach" ];
+          settings.event = [ lspAttach ];
         };
       };
       indent-blankline = {
@@ -1063,10 +976,7 @@
             show_start = false;
           };
         };
-        lazyLoad = {
-          enable = true;
-          settings.event = "VimEnter";
-        };
+        lazyLoad = vimEnterLazyLoad;
       };
       lualine = {
         enable = true;
@@ -1246,10 +1156,7 @@
               },
           }
         '';
-        lazyLoad = {
-          enable = true;
-          settings.event = "VimEnter";
-        };
+        lazyLoad = vimEnterLazyLoad;
       };
       treesitter = {
         enable = true;
@@ -1259,10 +1166,7 @@
       };
       todo-comments = {
         enable = true;
-        lazyLoad = {
-          enable = true;
-          settings.event = "VimEnter";
-        };
+        lazyLoad = vimEnterLazyLoad;
       };
       toggleterm = {
         enable = true;
@@ -1275,24 +1179,15 @@
       };
       nvim-surround = {
         enable = true;
-        lazyLoad = {
-          enable = true;
-          settings.event = "VimEnter";
-        };
+        lazyLoad = vimEnterLazyLoad;
       };
       fidget = {
         enable = true;
-        lazyLoad = {
-          enable = true;
-          settings.event = "VimEnter";
-        };
+        lazyLoad = vimEnterLazyLoad;
       };
       rainbow-delimiters = {
         enable = true;
-        lazyLoad = {
-          enable = true;
-          settings.event = "VimEnter";
-        };
+        lazyLoad = vimEnterLazyLoad;
       };
       neorg = {
         enable = false;
@@ -1472,17 +1367,15 @@
               "stylua.toml"
               "selene.toml"
               "selene.yml"
-              ".git"
+              gitRootMarker
             ];
-            filetypes = [
-              "lua"
-            ];
+            filetypes = singleFiletype "lua";
           };
         };
         clangd = {
           enable = true;
           config = {
-            cmd = [ "clangd" ];
+            cmd = singleCommand "clangd";
             filetypes = [
               "c"
               "cpp"
@@ -1498,22 +1391,22 @@
               "compile_commands.json"
               "compile_flags.txt"
               "configure.ac"
-              ".git"
+              gitRootMarker
             ];
           };
         };
         nixd = {
           enable = true;
           config = {
-            cmd = [ "nixd" ];
-            filetypes = [ "nix" ];
+            cmd = singleCommand "nixd";
+            filetypes = singleFiletype "nix";
           };
         };
         rust_analyzer = {
           enable = true;
           config = {
-            cmd = [ "rust-analyzer" ];
-            filetypes = [ "rust" ];
+            cmd = singleCommand "rust-analyzer";
+            filetypes = singleFiletype "rust";
             root_dir.__raw = ''
               function(bufnr, on_dir)
                   local function is_library(fname)
@@ -1545,7 +1438,7 @@
                   if cargo_crate_dir == nil then
                       on_dir(
                           vim.fs.root(fname, { "rust-project.json" })
-                              or vim.fs.dirname(vim.fs.find(".git", { path = fname, upward = true })[1])
+                              or vim.fs.dirname(vim.fs.find("${gitRootMarker}", { path = fname, upward = true })[1])
                       )
                       return
                   end
@@ -1623,17 +1516,13 @@
               "sh"
               "zsh"
             ];
-            root_markers = [
-              ".git"
-            ];
+            root_markers = [ gitRootMarker ];
           };
         };
         gopls = {
           enable = true;
           config = {
-            cmd = [
-              "gopls"
-            ];
+            cmd = singleCommand "gopls";
             filetypes = [
               "go"
               "gomod"
@@ -1710,7 +1599,7 @@
                               return clients[#clients].config.root_dir
                           end
                       end
-                      return vim.fs.root(fname, 'go.work') or vim.fs.root(fname, 'go.mod') or vim.fs.root(fname, '.git')
+                      return vim.fs.root(fname, 'go.work') or vim.fs.root(fname, 'go.mod') or vim.fs.root(fname, '${gitRootMarker}')
                   end
                   local fname = vim.api.nvim_buf_get_name(bufnr)
                   get_mod_cache_dir()
@@ -1734,9 +1623,7 @@
               "yaml.gitlab"
               "yaml.helm-values"
             ];
-            root_markers = [
-              ".git"
-            ];
+            root_markers = [ gitRootMarker ];
             settings = {
               redhat.telemetry.enabled = false;
               yaml.format.enable = true;
