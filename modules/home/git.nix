@@ -1,9 +1,11 @@
 {
   programs.git = {
     enable = true;
-    userName = "SpreadZhao";
-    userEmail = "spreadzhao@outlook.com";
     settings = {
+      user = {
+        name = "SpreadZhao";
+        email = "spreadzhao@outlook.com";
+      };
       credential = {
         "https://github.com".helper = [
           ""
