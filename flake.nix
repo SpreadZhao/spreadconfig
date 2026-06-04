@@ -22,6 +22,15 @@
       ...
     }@inputs:
     let
+      mkPkgs =
+        system:
+        import nixpkgs {
+          inherit system;
+          config.allowUnfree = true;
+        };
+
+      mkPackages = system: import ./packages { pkgs = mkPkgs system; };
+
       mkPinnedPkgs =
         system:
         nixpkgs.lib.mapAttrs' (
@@ -93,10 +102,7 @@
       devShells.x86_64-linux.default =
         let
           system = "x86_64-linux";
-          pkgs = import nixpkgs {
-            inherit system;
-            config.allowUnfree = true;
-          };
+          pkgs = mkPkgs system;
         in
         pkgs.mkShell {
           packages = with pkgs; [
@@ -111,6 +117,8 @@
             statix
           ];
         };
+
+      packages.x86_64-linux = mkPackages "x86_64-linux";
 
       nixosConfigurations = {
         thinkbook = mkHost { name = "thinkbook"; };

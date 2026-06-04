@@ -1,4 +1,4 @@
-{ ... }:
+{ repoRoot, ... }:
 
 {
   nixpkgs = {
@@ -8,6 +8,8 @@
     };
 
     # Keep overlays here because Home Manager uses the system package set.
-    overlays = [ ];
+    overlays = [
+      (final: _: import (repoRoot + "/packages") { pkgs = final; })
+    ];
   };
 }
