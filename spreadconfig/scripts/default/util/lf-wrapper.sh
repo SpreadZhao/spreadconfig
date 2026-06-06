@@ -24,8 +24,9 @@ if [ "$save" = "1" ]; then
     cmd="env FILE_CHOOSER_SAVE_FILE_NAME=\"$filename\" $cmd"
     set -- -selection-path "$out" "$path"
 elif [ "$directory" = "1" ]; then
-    # upload files from a directory
-	set -- -last-dir-path "$out" "$path"
+    # select a directory explicitly with lfrc's choose-dir command
+    cmd="env LF_SELECTED_DIR_PATH=\"$out\" $cmd"
+	set -- "$path"
 elif [ "$multiple" = "1" ]; then
     # upload multiple files
 	set -- -selection-path "$out" "$path"

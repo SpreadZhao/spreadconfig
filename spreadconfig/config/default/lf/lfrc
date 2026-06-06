@@ -219,6 +219,25 @@ cmd paste &{{
     esac
 }}
 
+cmd choose-dir ${{
+    if [ "$LF_LEVEL" -ne 1 ]; then
+        exit 0
+    fi
+
+    out="${LF_SELECTED_DIR_PATH:-${XDG_RUNTIME_DIR:-/tmp}/lf-selected-dir}"
+    target="$PWD"
+    if [ -d "$f" ]; then
+        target="$f"
+    fi
+
+    mkdir -p "$(dirname "$out")"
+    if ! printf '%s\n' "$target" > "$out"; then
+        exit 1
+    fi
+
+    lf -remote "send $id quit"
+}}
+
 # cmd end
 
 map gs :fzf_search
@@ -231,6 +250,7 @@ map zi zi
 map t
 map tp toggle-preview
 map tt tag-toggle
+map D choose-dir
 
 
 &[ "$LF_LEVEL" -eq 1 ] || lf -remote "send $id echoerr \"Warning: You're in a nested lf instance!\""
