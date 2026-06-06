@@ -80,6 +80,16 @@ let
   clangFormatFormatter = singleCommand "clang-format";
   xmlstarletFormatter = singleCommand "xmlstarlet";
   gitRootMarker = ".git";
+  pythonFiletype = singleFiletype "python";
+  pythonRootMarkers = [
+    "pyproject.toml"
+    "setup.py"
+    "setup.cfg"
+    "requirements.txt"
+    "Pipfile"
+    "pyrightconfig.json"
+    gitRootMarker
+  ];
 in
 {
   programs.nixvim = {
@@ -1478,6 +1488,17 @@ in
           config = {
             cmd = singleCommand "nixd";
             filetypes = singleFiletype "nix";
+          };
+        };
+        basedpyright = {
+          enable = true;
+          config = {
+            cmd = [
+              "basedpyright-langserver"
+              "--stdio"
+            ];
+            filetypes = pythonFiletype;
+            root_markers = pythonRootMarkers;
           };
         };
         rust_analyzer = {
