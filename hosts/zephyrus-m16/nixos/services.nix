@@ -22,7 +22,7 @@
             platform_profile_linked_epp: true,
             platform_profile_on_battery: Quiet,
             change_platform_profile_on_battery: true,
-            platform_profile_on_ac: Performance,
+            platform_profile_on_ac: Balanced,
             change_platform_profile_on_ac: true,
             profile_quiet_epp: Power,
             profile_balanced_epp: BalancePower,

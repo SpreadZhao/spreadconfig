@@ -1,0 +1,4 @@
+interface:
+  display_name: "Spreadconfig Nix"
+  short_description: "Maintain this multi-host NixOS repo"
+  default_prompt: "Use $spreadconfig-nix to modify and validate the spreadconfig NixOS repository."
