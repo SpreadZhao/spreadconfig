@@ -1,0 +1,44 @@
+{
+  lib,
+  pkgs,
+  repoRoot,
+  ...
+}:
+
+let
+  registry = import (repoRoot + "/skills/sources.nix") {
+    inherit lib pkgs;
+  };
+
+  normalizeSkill =
+    name: value:
+    if lib.isAttrs value && value ? source then
+      {
+        source = value.source;
+        target = value.target or name;
+        recursive = value.recursive or false;
+      }
+    else
+      {
+        source = value;
+        target = name;
+        recursive = false;
+      };
+
+  skillFiles =
+    root: skills:
+    lib.mapAttrs' (
+      name: value:
+      let
+        skill = normalizeSkill name value;
+      in
+      lib.nameValuePair "${root}/${skill.target}" {
+        inherit (skill) source recursive;
+      }
+    ) skills;
+in
+{
+  home.file =
+    (skillFiles ".agents/skills" (registry.user or { }))
+    // (skillFiles ".codex/skills" (registry.codex or { }));
+}
