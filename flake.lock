@@ -239,6 +239,22 @@
         "type": "github"
       }
     },
+    "obsidian-skills": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1780769686,
+        "narHash": "sha256-s75QpBBA2RNnVIwJeLN3WnT3doby6n9HUhR2yAcfJDk=",
+        "owner": "kepano",
+        "repo": "obsidian-skills",
+        "rev": "c4728b3e751e089592812becea7ffc5bec0dbcd6",
+        "type": "github"
+      },
+      "original": {
+        "owner": "kepano",
+        "repo": "obsidian-skills",
+        "type": "github"
+      }
+    },
     "pyproject-build-systems": {
       "inputs": {
         "nixpkgs": [
@@ -335,7 +351,8 @@
         "nixpkgs": "nixpkgs_3",
         "nixpkgs-old-a6c3b1b": "nixpkgs-old-a6c3b1b",
         "nixpkgs-old-dd9b079": "nixpkgs-old-dd9b079",
-        "nixvim": "nixvim"
+        "nixvim": "nixvim",
+        "obsidian-skills": "obsidian-skills"
       }
     },
     "systems": {

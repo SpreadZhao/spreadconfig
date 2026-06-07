@@ -1,13 +1,18 @@
 {
   lib,
   pkgs,
+  inputs,
   repoRoot,
   ...
 }:
 
 let
   registry = import (repoRoot + "/skills/sources.nix") {
-    inherit lib pkgs;
+    inherit
+      lib
+      pkgs
+      inputs
+      ;
   };
 
   normalizeSkill =

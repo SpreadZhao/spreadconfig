@@ -14,6 +14,8 @@
     nixvim = {
       url = "github:nix-community/nixvim";
     };
+    obsidian-skills.url = "github:kepano/obsidian-skills";
+    obsidian-skills.flake = false;
   };
 
   outputs =

@@ -1,8 +1,23 @@
 {
   lib,
   pkgs,
+  inputs ? { },
   ...
 }:
+
+let
+  obsidianSkills =
+    if inputs ? "obsidian-skills" then
+      {
+        obsidian = {
+          source = "${inputs."obsidian-skills"}/skills";
+          target = "obsidian-skills";
+        };
+      }
+    else
+      { };
+
+in
 
 {
   # User-global skills exposed at ~/.agents/skills.
@@ -17,7 +32,7 @@
   #   rev = "v1.0.0";
   #   hash = "sha256-...";
   # }}/skills/some-github-skill";
-  user = { };
+  user = obsidianSkills;
 
   # Codex-home skills exposed at ~/.codex/skills. Prefer user above for normal
   # personal skills; keep this for compatibility with installers or experiments
