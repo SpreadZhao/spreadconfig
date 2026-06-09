@@ -52,11 +52,11 @@
         "uv2nix": "uv2nix_2"
       },
       "locked": {
-        "lastModified": 1780810345,
-        "narHash": "sha256-MNaojMnLiwLxcNE2arIb2+IKLLxBHt7Y6ZH87PkLnA4=",
+        "lastModified": 1780890081,
+        "narHash": "sha256-AAUE6YMwJIAA/O/TKUC4qBYLXZx+/LlaCLXO/C9Mps8=",
         "owner": "NousResearch",
         "repo": "hermes-agent",
-        "rev": "846821d8c0b57808a24ef8f3de21e072c573db1d",
+        "rev": "d65b513f23d79d72f70bcd3b0ca9c8c229e9ce08",
         "type": "github"
       },
       "original": {
@@ -72,11 +72,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1780408569,
-        "narHash": "sha256-s7Tv6FUQThRAvW8En8XVC6HMb0uiikzVccCcCo9u/Bg=",
+        "lastModified": 1780885330,
+        "narHash": "sha256-aMA5oAq2Iv467U9s8YOb50DYQT9w0WJbyWqwlzHuLMs=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "f384af1bec6423a0d4ba1855917ab948f64e5808",
+        "rev": "4fe95527cbe952713318ada8a4d122e1a6ab120f",
         "type": "github"
       },
       "original": {
@@ -168,11 +168,11 @@
     },
     "nixpkgs_3": {
       "locked": {
-        "lastModified": 1780243769,
-        "narHash": "sha256-x5UQuRsH3MqI0U9afaXSNqzTPSeZlRLvFAav2Ux1pNw=",
+        "lastModified": 1780749050,
+        "narHash": "sha256-3av0pIjlOWQ6rDbNOmpUSvbNnJkGORQKKjb4LtCZsIY=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "331800de5053fcebacf6813adb5db9c9dca22a0c",
+        "rev": "a799d3e3886da994fa307f817a6bc705ae538eeb",
         "type": "github"
       },
       "original": {
@@ -205,11 +205,11 @@
         "systems": "systems"
       },
       "locked": {
-        "lastModified": 1780421606,
-        "narHash": "sha256-ZRAMRXQE1UKBtpnPwwOqV8teaPDD/fdABvUXMjcyhow=",
+        "lastModified": 1780884186,
+        "narHash": "sha256-ueTLp7DofvIZ0BXEWwi8AjP1cCsuEfO445dk6DtmfKc=",
         "owner": "nix-community",
         "repo": "nixvim",
-        "rev": "b7521616f15ad73c6bec458d64ed7f06f4095edb",
+        "rev": "82f2ec369eb597554a71ec82f33922d01b7dba8f",
         "type": "github"
       },
       "original": {
@@ -242,11 +242,11 @@
     "obsidian-skills": {
       "flake": false,
       "locked": {
-        "lastModified": 1780769686,
-        "narHash": "sha256-s75QpBBA2RNnVIwJeLN3WnT3doby6n9HUhR2yAcfJDk=",
+        "lastModified": 1780884120,
+        "narHash": "sha256-NPh2N6Jf3MRvl/UyJ9isTVy4oCdeJPk7runKp6024AM=",
         "owner": "kepano",
         "repo": "obsidian-skills",
-        "rev": "c4728b3e751e089592812becea7ffc5bec0dbcd6",
+        "rev": "084643c6e1dcef9034ceb8e87709e8f7f80c6a84",
         "type": "github"
       },
       "original": {
