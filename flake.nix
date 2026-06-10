@@ -25,11 +25,17 @@
       ...
     }@inputs:
     let
+      localOverlay = final: _: import ./packages { pkgs = final; };
+
       mkPkgs =
         system:
         import nixpkgs {
           inherit system;
-          config.allowUnfree = true;
+          config = {
+            allowUnfree = true;
+            rocmSupport = true;
+          };
+          overlays = [ localOverlay ];
         };
 
       mkPackages = system: import ./packages { pkgs = mkPkgs system; };
@@ -48,7 +54,7 @@
             )
         ) (nixpkgs.lib.filterAttrs (name: _: nixpkgs.lib.hasPrefix "nixpkgs-old-" name) inputs);
 
-      mkHost =
+      mkHostContext =
         {
           name,
           system ? "x86_64-linux",
@@ -62,6 +68,30 @@
             nixos = import (hostDir + "/nixos/profile.nix");
             home = import (hostDir + "/home/profile.nix");
           };
+        in
+        {
+          inherit
+            system
+            hostName
+            hostDir
+            repoRoot
+            pkgsPinned
+            hostProfile
+            ;
+        };
+
+      mkHost =
+        args:
+        let
+          hostContext = mkHostContext args;
+          inherit (hostContext)
+            system
+            hostName
+            hostDir
+            repoRoot
+            pkgsPinned
+            hostProfile
+            ;
         in
         nixpkgs.lib.nixosSystem {
           inherit system;
@@ -77,27 +107,38 @@
           modules = [
             ./modules/nixos
             (hostDir + "/configuration.nix")
-            home-manager.nixosModules.home-manager
-            {
-              home-manager.useGlobalPkgs = true;
-              home-manager.useUserPackages = true;
-              home-manager.extraSpecialArgs = {
-                inherit
-                  inputs
-                  pkgsPinned
-                  hostName
-                  repoRoot
-                  hostProfile
-                  ;
-              };
-              home-manager.users.spreadzhao = {
-                imports = [
-                  inputs.nixvim.homeModules.nixvim
-                  ./modules/home
-                  (hostDir + "/home.nix")
-                ];
-              };
-            }
+          ];
+        };
+
+      mkHome =
+        args:
+        let
+          hostContext = mkHostContext args;
+          inherit (hostContext)
+            system
+            hostName
+            hostDir
+            repoRoot
+            pkgsPinned
+            hostProfile
+            ;
+          pkgs = mkPkgs system;
+        in
+        home-manager.lib.homeManagerConfiguration {
+          inherit pkgs;
+          extraSpecialArgs = {
+            inherit
+              inputs
+              pkgsPinned
+              hostName
+              repoRoot
+              hostProfile
+              ;
+          };
+          modules = [
+            inputs.nixvim.homeModules.nixvim
+            ./modules/home
+            (hostDir + "/home.nix")
           ];
         };
     in
@@ -122,6 +163,11 @@
         };
 
       packages.x86_64-linux = mkPackages "x86_64-linux";
+
+      homeConfigurations = {
+        "spreadzhao@thinkbook" = mkHome { name = "thinkbook"; };
+        "spreadzhao@zephyrus-m16" = mkHome { name = "zephyrus-m16"; };
+      };
 
       nixosConfigurations = {
         thinkbook = mkHost { name = "thinkbook"; };

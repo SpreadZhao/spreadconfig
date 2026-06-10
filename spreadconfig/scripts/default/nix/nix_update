@@ -21,4 +21,4 @@ while ! nix flake update --flake "path://$HOME/workspaces/spreadconfig"; do
   sleep "$retry_delay"
 done
 
-sns_until "$action"
+sfull "$action"

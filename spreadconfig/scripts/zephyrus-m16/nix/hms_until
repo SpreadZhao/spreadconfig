@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+max_attempts="${NIX_RETRY_ATTEMPTS:-3}"
+retry_delay="${NIX_RETRY_DELAY:-1}"
+
+attempt=1
+while ! hms; do
+  if ((attempt >= max_attempts)); then
+    echo "hms_until: nh home switch failed after $max_attempts attempts" >&2
+    exit 1
+  fi
+
+  attempt=$((attempt + 1))
+  sleep "$retry_delay"
+done

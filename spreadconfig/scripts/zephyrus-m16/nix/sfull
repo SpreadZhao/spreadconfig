@@ -1,13 +1,12 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-action="${1:-boot}"
+action="${1:-switch}"
 
 if [[ "$action" != "switch" && "$action" != "boot" ]]; then
-  echo "Usage: nix_clean [switch|boot]" >&2
+  echo "Usage: sfull [switch|boot]" >&2
   exit 1
 fi
 
-sfull "$action"
-nh clean all
-sfull "$action"
+sns_until "$action"
+hms_until
