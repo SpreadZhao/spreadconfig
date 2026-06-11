@@ -1,3 +1,0 @@
-#!/usr/bin/env bash
-
-nh home switch -d always -t -c "spreadzhao@zephyrus-m16" "path://$HOME/workspaces/spreadconfig"

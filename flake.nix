@@ -123,38 +123,27 @@
           modules = [
             ./modules/nixos
             (hostDir + "/configuration.nix")
-          ];
-        };
-
-      mkHome =
-        args:
-        let
-          hostContext = mkHostContext args;
-          inherit (hostContext)
-            system
-            hostName
-            hostDir
-            repoRoot
-            pkgsPinned
-            hostProfile
-            ;
-          pkgs = mkPkgs system;
-        in
-        home-manager.lib.homeManagerConfiguration {
-          inherit pkgs;
-          extraSpecialArgs = {
-            inherit
-              inputs
-              pkgsPinned
-              hostName
-              repoRoot
-              hostProfile
-              ;
-          };
-          modules = [
-            inputs.nixvim.homeModules.nixvim
-            ./modules/home
-            (hostDir + "/home.nix")
+            home-manager.nixosModules.home-manager
+            {
+              home-manager.useGlobalPkgs = true;
+              home-manager.useUserPackages = true;
+              home-manager.extraSpecialArgs = {
+                inherit
+                  inputs
+                  pkgsPinned
+                  hostName
+                  repoRoot
+                  hostProfile
+                  ;
+              };
+              home-manager.users.spreadzhao = {
+                imports = [
+                  inputs.nixvim.homeModules.nixvim
+                  ./modules/home
+                  (hostDir + "/home.nix")
+                ];
+              };
+            }
           ];
         };
     in
@@ -179,11 +168,6 @@
         };
 
       packages.x86_64-linux = mkPackages "x86_64-linux";
-
-      homeConfigurations = {
-        "spreadzhao@thinkbook" = mkHome { name = "thinkbook"; };
-        "spreadzhao@zephyrus-m16" = mkHome { name = "zephyrus-m16"; };
-      };
 
       nixosConfigurations = {
         thinkbook = mkHost { name = "thinkbook"; };

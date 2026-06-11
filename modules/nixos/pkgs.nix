@@ -7,7 +7,7 @@
       rocmSupport = true;
     };
 
-    # Keep local packages available to system modules.
+    # Keep overlays here because Home Manager uses the system package set.
     overlays = [
       (final: _: import (repoRoot + "/packages") { pkgs = final; })
     ];
