@@ -22,12 +22,14 @@ let
         source = value.source;
         target = value.target or name;
         recursive = value.recursive or false;
+        force = value.force or false;
       }
     else
       {
         source = value;
         target = name;
         recursive = false;
+        force = false;
       };
 
   skillFiles =
@@ -38,7 +40,7 @@ let
         skill = normalizeSkill name value;
       in
       lib.nameValuePair "${root}/${skill.target}" {
-        inherit (skill) source recursive;
+        inherit (skill) source recursive force;
       }
     ) skills;
 in

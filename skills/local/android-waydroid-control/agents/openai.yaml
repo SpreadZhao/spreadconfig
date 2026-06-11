@@ -1,0 +1,4 @@
+interface:
+  display_name: "Android Waydroid Control"
+  short_description: "Drive Waydroid with Android Studio adb."
+  default_prompt: "Start Waydroid, connect Android Studio SDK adb, capture UI state, and drive taps, swipes, text, keyevents, screenshots, UI dumps, APK install, launch, and logcat for automated Android app debugging."

@@ -18,7 +18,7 @@ trap 'rm -f "$tmp"' EXIT
 for root in "${roots[@]}"; do
     [ -d "$root" ] || continue
 
-    find "$root" -mindepth 2 -maxdepth 2 -name SKILL.md -print | sort | while IFS= read -r skill_file; do
+    find -L "$root" -mindepth 2 -maxdepth 2 -name SKILL.md -print | sort | while IFS= read -r skill_file; do
         dir="$(dirname "$skill_file")"
         name="$(
             awk -F ': *' '/^name:/ { print $2; exit }' "$skill_file" |

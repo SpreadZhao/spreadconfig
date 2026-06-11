@@ -42,6 +42,22 @@
         "type": "github"
       }
     },
+    "frontend-design-skill": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1774840228,
+        "narHash": "sha256-dYanvbL7Dq2G0OxTuy/4nR5okjFuec/u85crxqlKO1g=",
+        "owner": "Aston1690",
+        "repo": "frontend-design",
+        "rev": "59c1ec751ba6f69ee65894be595aeae06f869281",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Aston1690",
+        "repo": "frontend-design",
+        "type": "github"
+      }
+    },
     "hermes-agent": {
       "inputs": {
         "flake-parts": "flake-parts",
@@ -255,6 +271,22 @@
         "type": "github"
       }
     },
+    "openai-skills": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1780071638,
+        "narHash": "sha256-drA/ypVE+yK4W2Bj8IUtWaVLF390Pfy7YLcmdju5dow=",
+        "owner": "openai",
+        "repo": "skills",
+        "rev": "a8924c2a35cfa290458852c4fad17c9133054c2e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "openai",
+        "repo": "skills",
+        "type": "github"
+      }
+    },
     "pyproject-build-systems": {
       "inputs": {
         "nixpkgs": [
@@ -345,6 +377,7 @@
     },
     "root": {
       "inputs": {
+        "frontend-design-skill": "frontend-design-skill",
         "hermes-agent": "hermes-agent",
         "home-manager": "home-manager",
         "nixos-hardware": "nixos-hardware",
@@ -352,7 +385,10 @@
         "nixpkgs-old-a6c3b1b": "nixpkgs-old-a6c3b1b",
         "nixpkgs-old-dd9b079": "nixpkgs-old-dd9b079",
         "nixvim": "nixvim",
-        "obsidian-skills": "obsidian-skills"
+        "obsidian-skills": "obsidian-skills",
+        "openai-skills": "openai-skills",
+        "web-artifacts-builder-skill": "web-artifacts-builder-skill",
+        "web-interface-guidelines": "web-interface-guidelines"
       }
     },
     "systems": {
@@ -417,6 +453,38 @@
       "original": {
         "owner": "pyproject-nix",
         "repo": "uv2nix",
+        "type": "github"
+      }
+    },
+    "web-artifacts-builder-skill": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1773519380,
+        "narHash": "sha256-6NwxxU2dXXK+PHhTW9TD4BtygmfRApms5igG4qPb8AE=",
+        "owner": "CuriousAquarius",
+        "repo": "claude-skill-web-artifacts-builder",
+        "rev": "07c7ce3b3a5e0992837607ec1cfb1c0d325adde6",
+        "type": "github"
+      },
+      "original": {
+        "owner": "CuriousAquarius",
+        "repo": "claude-skill-web-artifacts-builder",
+        "type": "github"
+      }
+    },
+    "web-interface-guidelines": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1775513501,
+        "narHash": "sha256-zUuwGkcxtep5awSbykzI2inZk4HP2mcK9S8y9LHjsxc=",
+        "owner": "vercel-labs",
+        "repo": "web-interface-guidelines",
+        "rev": "4e799d45c17aec1498c269287a83b9dba22b966b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "vercel-labs",
+        "repo": "web-interface-guidelines",
         "type": "github"
       }
     }

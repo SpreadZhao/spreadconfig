@@ -14,8 +14,24 @@
     nixvim = {
       url = "github:nix-community/nixvim";
     };
+    frontend-design-skill = {
+      url = "github:Aston1690/frontend-design";
+      flake = false;
+    };
     obsidian-skills.url = "github:kepano/obsidian-skills";
     obsidian-skills.flake = false;
+    openai-skills = {
+      url = "github:openai/skills";
+      flake = false;
+    };
+    web-artifacts-builder-skill = {
+      url = "github:CuriousAquarius/claude-skill-web-artifacts-builder";
+      flake = false;
+    };
+    web-interface-guidelines = {
+      url = "github:vercel-labs/web-interface-guidelines";
+      flake = false;
+    };
   };
 
   outputs =
