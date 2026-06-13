@@ -13,7 +13,10 @@ source "$GIT_AI_LIB_DIR/../config/git-ai.sh"
 git_ai_backend_description() {
     case "$GIT_AI_AGENT" in
     codex)
-        printf 'Codex (%s, %s)' "$GIT_AI_MODEL" "$GIT_AI_REASONING_EFFORT"
+        printf 'Codex (%s, %s)' "$GIT_AI_CODEX_MODEL" "$GIT_AI_CODEX_REASONING_EFFORT"
+        ;;
+    claude)
+        printf 'Claude Code (%s, %s)' "$GIT_AI_CLAUDE_MODEL" "$GIT_AI_CLAUDE_EFFORT"
         ;;
     *)
         printf '%s' "$GIT_AI_AGENT"
@@ -31,8 +34,8 @@ git_ai_run() {
     codex)
         local -a args=(
             exec
-            --model "$GIT_AI_MODEL"
-            --config "model_reasoning_effort=\"$GIT_AI_REASONING_EFFORT\""
+            --model "$GIT_AI_CODEX_MODEL"
+            --config "model_reasoning_effort=\"$GIT_AI_CODEX_REASONING_EFFORT\""
             --sandbox "$GIT_AI_CODEX_SANDBOX"
         )
 
@@ -47,9 +50,20 @@ git_ai_run() {
 
         codex "${args[@]}" <"$context_file" >"$log_file" 2>&1
         ;;
+    claude)
+        local -a args=(
+            -p
+            --model "$GIT_AI_CLAUDE_MODEL"
+            --effort "$GIT_AI_CLAUDE_EFFORT"
+            --output-format text
+            "$prompt"
+        )
+
+        claude "${args[@]}" <"$context_file" >"$output_file" 2>"$log_file"
+        ;;
     *)
         echo "Unsupported git AI agent: $GIT_AI_AGENT" >&2
-        echo "Currently supported agents: codex" >&2
+        echo "Currently supported agents: codex, claude" >&2
         return 2
         ;;
     esac
