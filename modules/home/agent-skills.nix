@@ -47,5 +47,6 @@ in
 {
   home.file =
     (skillFiles ".agents/skills" (registry.user or { }))
-    // (skillFiles ".codex/skills" (registry.codex or { }));
+    // (skillFiles ".codex/skills" (registry.codex or { }))
+    // (skillFiles ".claude/skills" (registry.claude or { }));
 }

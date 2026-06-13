@@ -235,6 +235,7 @@ in
       (normalNoremapKey (leader "tt") (cmd "ToggleTerm") "Toggle Term")
       (normalNoremapKey (leader "ot") (cmd "Outline") "Toggle Outline")
       (normalNoremapKey (leader "of") (cmd "OutlineFocus") "Focus Outline")
+      (normalNoremapKey (leader "sw") (cmd "set wrap!") "Toggle Wrap")
       {
         key = leader "u";
         action.__raw = ''

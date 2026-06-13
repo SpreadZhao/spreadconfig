@@ -6,6 +6,7 @@
 }:
 
 let
+  # Bundle install for the agents target: the whole skills dir becomes ~/.agents/skills/obsidian-skills.
   obsidianSkills =
     if inputs ? "obsidian-skills" then
       {
@@ -13,6 +14,20 @@ let
           source = "${inputs."obsidian-skills"}/skills";
           target = "obsidian-skills";
         };
+      }
+    else
+      { };
+
+  # Per-skill install for the Claude target: each sub-skill becomes ~/.claude/skills/<name> so
+  # Claude Code discovers it as ~/.claude/skills/<skill>/SKILL.md.
+  obsidianClaudeSkills =
+    if inputs ? "obsidian-skills" then
+      {
+        defuddle.source = "${inputs."obsidian-skills"}/skills/defuddle";
+        json-canvas.source = "${inputs."obsidian-skills"}/skills/json-canvas";
+        obsidian-bases.source = "${inputs."obsidian-skills"}/skills/obsidian-bases";
+        obsidian-cli.source = "${inputs."obsidian-skills"}/skills/obsidian-cli";
+        obsidian-markdown.source = "${inputs."obsidian-skills"}/skills/obsidian-markdown";
       }
     else
       { };
@@ -89,11 +104,13 @@ in
   # }}/skills/some-github-skill";
   user = obsidianSkills // externalUserSkills;
 
+  # Claude Code skills exposed at ~/.claude/skills. Each entry becomes
+  # ~/.claude/skills/<name>; obsidian-skills are installed per-skill so Claude
+  # discovers each as ~/.claude/skills/<skill>/SKILL.md.
+  claude = obsidianClaudeSkills;
+
   # Codex-home skills exposed at ~/.codex/skills. Prefer user above for normal
   # personal skills; keep this for compatibility with installers or experiments
   # that explicitly expect CODEX_HOME/skills.
   codex = migratedCodexSkills;
-
-  # Machine-wide skills exposed at /etc/codex/skills.
-  system = { };
 }
