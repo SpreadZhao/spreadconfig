@@ -1,5 +1,5 @@
 {
-  hostConfigSource,
+  # hostConfigSource,
   pkgs,
   ...
 }:
@@ -14,6 +14,6 @@
     ];
   };
 
-  xdg.configFile."obs-studio/basic/profiles/Video".source = hostConfigSource "obs/profiles/Video";
-  xdg.configFile."obs-studio/basic/profiles/Audio".source = hostConfigSource "obs/profiles/Audio";
+  # xdg.configFile."obs-studio/basic/profiles/Video".source = hostConfigSource "obs/profiles/Video";
+  # xdg.configFile."obs-studio/basic/profiles/Audio".source = hostConfigSource "obs/profiles/Audio";
 }
