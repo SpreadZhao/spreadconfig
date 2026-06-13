@@ -1,4 +1,5 @@
-/secrets/
 /.direnv/
+/secrets/gh_token
+/secrets/passwd
 __pycache__/
 *.py[cod]

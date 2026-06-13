@@ -11,9 +11,11 @@
       flakeInputs = lib.filterAttrs (name: input: name != "self" && lib.isType "flake" input) inputs;
       proxy = config.networking.proxy.default or "";
       noProxy = config.networking.proxy.noProxy or "";
-    in
-    {
-      envVars = lib.mkIf (proxy != "") {
+      goEnvVars = {
+        GOPROXY = "https://goproxy.cn,https://proxy.golang.org,direct";
+        GOSUMDB = "sum.golang.org";
+      };
+      proxyEnvVars = lib.optionalAttrs (proxy != "") {
         all_proxy = proxy;
         ftp_proxy = proxy;
         http_proxy = proxy;
@@ -35,6 +37,9 @@
         NPM_CONFIG_HTTPS_PROXY = proxy;
         NPM_CONFIG_NOPROXY = noProxy;
       };
+    in
+    {
+      envVars = goEnvVars // proxyEnvVars;
 
       settings = {
         # Enable flakes and new 'nix' command
@@ -48,6 +53,9 @@
           "https://mirrors.tuna.tsinghua.edu.cn/nix-channels/store"
           "https://cache.nixos.org"
         ];
+        download-attempts = 5;
+        connect-timeout = 15;
+        stalled-download-timeout = 60;
         max-jobs = 2;
         cores = 4;
       };

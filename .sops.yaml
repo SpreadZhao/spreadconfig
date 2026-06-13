@@ -1,0 +1,12 @@
+keys:
+  - &admin_spreadzhao age1c8cztrfjd42qtyjqdcu8493e4cullcw070ejhuyrt5k07y8dwgtq2pg77n
+  - &host_zephyrus_m16 age136qu2q7rv5vjx2daawnzldstjs9pkla4hrl5ue354l3ug6kh5pss4dxxun
+  - &host_thinkbook age12csz8hfkhvvmss4p9cy5r3pwjjtznjyjnhl9wn4pvsy3hx2v4qqsptrnjf
+
+creation_rules:
+  - path_regex: secrets/[^/]+\.(yaml|json|env|ini)$
+    key_groups:
+      - age:
+          - *admin_spreadzhao
+          - *host_zephyrus_m16
+          - *host_thinkbook

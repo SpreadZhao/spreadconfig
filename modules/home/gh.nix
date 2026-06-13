@@ -1,43 +1,37 @@
 {
   config,
   lib,
+  osConfig,
   pkgs,
-  secretsDir,
   ...
 }:
 
 let
   ghHostsFile = "${config.xdg.configHome}/gh/hosts.yml";
-  ghTokenFile = "${secretsDir}/gh_token";
-in
+  ghTokenFile = osConfig.sops.secrets."github-token".path;
+  writeGhHosts = pkgs.writeShellScript "write-gh-hosts" ''
+    set -euo pipefail
 
+    token_file=$1
+    hosts_file=$2
+
+    [ -s "$token_file" ] || exit 0
+    token="$(${pkgs.coreutils}/bin/tr -d '\r\n' < "$token_file")"
+    [ -n "$token" ] || exit 0
+
+    ${pkgs.coreutils}/bin/install -d -m 700 "$(${pkgs.coreutils}/bin/dirname "$hosts_file")"
+    ${pkgs.coreutils}/bin/install -m 600 /dev/null "$hosts_file"
+    ${pkgs.coreutils}/bin/printf "%s\n" \
+      "github.com:" \
+      "    user: SpreadZhao" \
+      "    oauth_token: $token" \
+      "    git_protocol: https" > "$hosts_file"
+  '';
+in
 {
   home.packages = [ pkgs.gh ];
 
   home.activation.writeGhHosts = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-    token_file=${lib.escapeShellArg ghTokenFile}
-    hosts_file=${lib.escapeShellArg ghHostsFile}
-
-    if [ -s "$token_file" ]; then
-      $DRY_RUN_CMD ${pkgs.coreutils}/bin/mkdir -p "$(${pkgs.coreutils}/bin/dirname "$hosts_file")"
-      $DRY_RUN_CMD ${pkgs.coreutils}/bin/chmod 700 "$(${pkgs.coreutils}/bin/dirname "$hosts_file")"
-
-      token="$(${pkgs.coreutils}/bin/cat "$token_file")"
-      token="$(${pkgs.coreutils}/bin/printf '%s' "$token" | ${pkgs.gnused}/bin/sed 's/[[:space:]]*$//')"
-
-      if [ -n "$token" ]; then
-        $DRY_RUN_CMD ${pkgs.coreutils}/bin/install -m 600 /dev/null "$hosts_file"
-        $DRY_RUN_CMD ${pkgs.bash}/bin/bash -c '
-          hosts_file=$1
-          token=$2
-
-          ${pkgs.coreutils}/bin/printf "%s\n" \
-            "github.com:" \
-            "    user: SpreadZhao" \
-            "    oauth_token: $token" \
-            "    git_protocol: https" > "$hosts_file"
-        ' gh-hosts "$hosts_file" "$token"
-      fi
-    fi
+    $DRY_RUN_CMD ${writeGhHosts} ${lib.escapeShellArg ghTokenFile} ${lib.escapeShellArg ghHostsFile}
   '';
 }
