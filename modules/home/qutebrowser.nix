@@ -3,7 +3,6 @@
   hostConfigSource,
   lib,
   pkgsPinned,
-  secretsDir,
   ...
 }:
 
@@ -27,7 +26,7 @@ in
   ];
 
   xdg.configFile."qutebrowser/quickmarks".source =
-    config.lib.file.mkOutOfStoreSymlink "${secretsDir}/qutebrowser_quickmarks";
+    config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.password-store/qutebrowser/qutebrowser_quickmarks";
   xdg.configFile."qutebrowser/config.py".source = hostConfigSource "qutebrowser/config.py";
   xdg.configFile."qutebrowser/themes".source = hostConfigSource "qutebrowser/themes";
 }
