@@ -1,4 +1,4 @@
-{ ... }:
+{ scriptsDir, ... }:
 
 {
   programs.fzf = {
@@ -10,7 +10,7 @@
     defaultCommand = "fd --type f";
     fileWidgetCommand = "fd --type f";
     fileWidgetOptions = [
-      "--preview 'bat --color=always --style=numbers --line-range=:500 {}'"
+      "--preview '${scriptsDir}/config/fzf_preview.sh {} \${FZF_PREVIEW_COLUMNS:-80} \${FZF_PREVIEW_LINES:-24}'"
     ];
     historyWidgetOptions = [
       "--sort"
