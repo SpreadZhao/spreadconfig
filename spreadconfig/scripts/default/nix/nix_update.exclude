@@ -1,0 +1,6 @@
+# Exclude flake inputs from nix_update by default.
+# One input name per line. Blank lines and comments are ignored.
+#
+# Examples:
+# nixvim
+# hermes-agent

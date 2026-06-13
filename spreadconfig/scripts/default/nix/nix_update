@@ -1,24 +1,221 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-action="${1:-boot}"
+script_path="$(readlink -f "${BASH_SOURCE[0]}")"
+script_dir="$(cd -- "$(dirname -- "$script_path")" && pwd -P)"
+repo_dir="${SPREADCONFIG_REPO:-$(cd -- "$script_dir/../../../.." && pwd -P)}"
+flake_url="path://$repo_dir"
+
+action="boot"
+action_set=0
+list_inputs=0
+use_exclude_file=1
+exclude_file="$script_dir/nix_update.exclude"
+exclude_file_explicit=0
 max_attempts="${NIX_RETRY_ATTEMPTS:-3}"
 retry_delay="${NIX_RETRY_DELAY:-1}"
 
-if [[ "$action" != "switch" && "$action" != "boot" ]]; then
-  echo "Usage: nix_update [switch|boot]" >&2
-  exit 1
+declare -a cli_excludes=()
+declare -a file_excludes=()
+
+usage() {
+	cat <<'EOF'
+Usage: nix_update [switch|boot] [OPTIONS]
+
+Update spreadconfig flake inputs and then run sns_until.
+
+Options:
+  -e, --exclude INPUT[,INPUT...]  Exclude one or more flake inputs for this run
+      --exclude-file PATH        Read excluded inputs from PATH
+      --no-exclude-file          Ignore the default exclude file
+      --list-inputs              List current flake inputs and exit
+  -h, --help                     Show this help
+
+The default exclude file is nix_update.exclude next to this script.
+It supports one input name per line, blank lines, and # comments.
+EOF
+}
+
+die() {
+	echo "nix_update: $*" >&2
+	exit 1
+}
+
+trim() {
+	local value="$1"
+	value="${value#"${value%%[![:space:]]*}"}"
+	value="${value%"${value##*[![:space:]]}"}"
+	printf '%s' "$value"
+}
+
+add_cli_excludes() {
+	local csv="$1"
+	local -a parts=()
+	local part
+
+	IFS=',' read -r -a parts <<<"$csv"
+	for part in "${parts[@]}"; do
+		part="$(trim "$part")"
+		[[ -n "$part" ]] && cli_excludes+=("$part")
+	done
+}
+
+load_file_excludes() {
+	local line
+
+	if ((use_exclude_file == 0)); then
+		return
+	fi
+
+	if [[ ! -f "$exclude_file" ]]; then
+		if ((exclude_file_explicit)); then
+			die "exclude file does not exist: $exclude_file"
+		fi
+		return
+	fi
+
+	while IFS= read -r line || [[ -n "$line" ]]; do
+		line="${line%%#*}"
+		line="$(trim "$line")"
+		[[ -n "$line" ]] && file_excludes+=("$line")
+	done <"$exclude_file"
+}
+
+join_words() {
+	local word
+	local sep=""
+
+	for word in "$@"; do
+		printf '%s%s' "$sep" "$word"
+		sep=" "
+	done
+}
+
+read_flake_inputs() {
+	local inputs_json
+	local inputs_text
+
+	inputs_json="$(nix eval --impure --json --expr "builtins.attrNames (import $repo_dir/flake.nix).inputs")"
+	inputs_text="$(jq -r '.[]' <<<"$inputs_json")"
+	mapfile -t all_inputs <<<"$inputs_text"
+}
+
+while (($# > 0)); do
+	case "$1" in
+	switch | boot)
+		if ((action_set)); then
+			die "action specified more than once"
+		fi
+		action="$1"
+		action_set=1
+		shift
+		;;
+	-e | --exclude)
+		(($# >= 2)) || die "--exclude requires a value"
+		add_cli_excludes "$2"
+		shift 2
+		;;
+	--exclude=*)
+		add_cli_excludes "${1#--exclude=}"
+		shift
+		;;
+	--exclude-file)
+		(($# >= 2)) || die "--exclude-file requires a path"
+		exclude_file="$2"
+		exclude_file_explicit=1
+		use_exclude_file=1
+		shift 2
+		;;
+	--exclude-file=*)
+		exclude_file="${1#--exclude-file=}"
+		exclude_file_explicit=1
+		use_exclude_file=1
+		shift
+		;;
+	--no-exclude-file)
+		use_exclude_file=0
+		shift
+		;;
+	--list-inputs)
+		list_inputs=1
+		shift
+		;;
+	-h | --help)
+		usage
+		exit 0
+		;;
+	*)
+		die "unknown argument: $1"
+		;;
+	esac
+done
+
+command -v jq >/dev/null || die "jq is required"
+
+declare -a all_inputs=()
+read_flake_inputs
+
+if ((list_inputs)); then
+	printf '%s\n' "${all_inputs[@]}"
+	exit 0
 fi
 
-attempt=1
-while ! nix flake update --flake "path://$HOME/workspaces/spreadconfig"; do
-  if ((attempt >= max_attempts)); then
-    echo "nix_update: nix flake update failed after $max_attempts attempts" >&2
-    exit 1
-  fi
+load_file_excludes
 
-  attempt=$((attempt + 1))
-  sleep "$retry_delay"
+declare -A known_inputs=()
+declare -A excluded=()
+declare -a update_inputs=()
+declare -a excluded_inputs=()
+declare -a unknown_excludes=()
+
+for input in "${all_inputs[@]}"; do
+	known_inputs["$input"]=1
+done
+
+for input in "${file_excludes[@]}" "${cli_excludes[@]}"; do
+	excluded["$input"]=1
+done
+
+for input in "${!excluded[@]}"; do
+	if [[ -z "${known_inputs[$input]+x}" ]]; then
+		unknown_excludes+=("$input")
+	fi
+done
+
+for input in "${unknown_excludes[@]}"; do
+	echo "nix_update: warning: excluded input is not defined in flake.nix: $input" >&2
+done
+
+for input in "${all_inputs[@]}"; do
+	if [[ -n "${excluded[$input]+x}" ]]; then
+		excluded_inputs+=("$input")
+	else
+		update_inputs+=("$input")
+	fi
+done
+
+if ((${#excluded_inputs[@]} > 0)); then
+	echo "nix_update: excluding ${#excluded_inputs[@]} input(s): $(join_words "${excluded_inputs[@]}")"
+fi
+
+if ((${#update_inputs[@]} == 0)); then
+	echo "nix_update: all flake inputs are excluded; skipping nix flake update"
+	sns_until "$action"
+	exit 0
+fi
+
+echo "nix_update: updating ${#update_inputs[@]} flake input(s)"
+
+attempt=1
+while ! nix flake update "${update_inputs[@]}" --flake "$flake_url"; do
+	if ((attempt >= max_attempts)); then
+		echo "nix_update: nix flake update failed after $max_attempts attempts" >&2
+		exit 1
+	fi
+
+	attempt=$((attempt + 1))
+	echo "nix_update: retrying flake update ($attempt/$max_attempts) in $retry_delay seconds" >&2
+	sleep "$retry_delay"
 done
 
 sns_until "$action"
