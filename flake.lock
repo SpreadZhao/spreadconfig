@@ -1,5 +1,21 @@
 {
   "nodes": {
+    "drawio-skill": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1780505611,
+        "narHash": "sha256-UhDFmA9f9hLGaUg6XeQb9vSqqcu13zvphMXIwsKHsOo=",
+        "owner": "Agents365-ai",
+        "repo": "drawio-skill",
+        "rev": "00ed825c4aec623a5838a16d1ad6b7a2c603dfa6",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Agents365-ai",
+        "repo": "drawio-skill",
+        "type": "github"
+      }
+    },
     "flake-parts": {
       "inputs": {
         "nixpkgs-lib": [
@@ -361,6 +377,7 @@
     },
     "root": {
       "inputs": {
+        "drawio-skill": "drawio-skill",
         "frontend-design-skill": "frontend-design-skill",
         "hermes-agent": "hermes-agent",
         "home-manager": "home-manager",

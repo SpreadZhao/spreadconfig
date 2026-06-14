@@ -32,6 +32,11 @@ let
     else
       { };
 
+  # draw.io diagramming skill; shared across the agents and Claude targets.
+  drawioSkill = {
+    drawio-skill.source = "${inputs."drawio-skill"}/skills/drawio-skill";
+  };
+
   externalUserSkills = {
     frontend-design = {
       source = inputs."frontend-design-skill";
@@ -102,12 +107,12 @@ in
   #   rev = "v1.0.0";
   #   hash = "sha256-...";
   # }}/skills/some-github-skill";
-  user = obsidianSkills // externalUserSkills;
+  user = obsidianSkills // externalUserSkills // drawioSkill;
 
   # Claude Code skills exposed at ~/.claude/skills. Each entry becomes
   # ~/.claude/skills/<name>; obsidian-skills are installed per-skill so Claude
   # discovers each as ~/.claude/skills/<skill>/SKILL.md.
-  claude = obsidianClaudeSkills;
+  claude = obsidianClaudeSkills // drawioSkill;
 
   # Codex-home skills exposed at ~/.codex/skills. Prefer user above for normal
   # personal skills; keep this for compatibility with installers or experiments

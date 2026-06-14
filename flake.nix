@@ -17,6 +17,10 @@
     nixvim = {
       url = "github:nix-community/nixvim";
     };
+    drawio-skill = {
+      url = "github:Agents365-ai/drawio-skill";
+      flake = false;
+    };
     frontend-design-skill = {
       url = "github:Aston1690/frontend-design";
       flake = false;
