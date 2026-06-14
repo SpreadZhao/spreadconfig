@@ -4,14 +4,13 @@
   hostName,
   lib,
   pkgs,
-  pkgsPinned,
   ...
 }:
 
 let
   qutebrowserDesktopExec = "Exec=env QT_SCALE_FACTOR=1.5 qutebrowser";
   qutebrowserBasePackage = (
-    (pkgsPinned.old_a6c3b1b.qutebrowser.overrideAttrs (old: {
+    (pkgs.qutebrowser.overrideAttrs (old: {
       postInstall = (old.postInstall or "") + ''
         substituteInPlace $out/share/applications/org.qutebrowser.qutebrowser.desktop \
           --replace-fail "Exec=qutebrowser" ${lib.escapeShellArg qutebrowserDesktopExec}
