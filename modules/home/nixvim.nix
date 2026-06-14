@@ -635,13 +635,13 @@ in
       blink-cmp = {
         enable = true;
         setupLspCapabilities = true;
-        keymap = {
-          preset = "default";
-          # "<A-y>".__raw = ''
-          #   require('minuet').make_blink_map()
-          # '';
-        };
         settings = {
+          keymap = {
+            preset = "default";
+            # "<A-y>".__raw = ''
+            #   require('minuet').make_blink_map()
+            # '';
+          };
           cmdline = {
             completion = {
               list.selection = {
@@ -844,18 +844,20 @@ in
       };
       copilot-lua = {
         enable = false;
-        panel = {
-          enabled = false;
-          auto_refresh = true;
-        };
-        suggestion = {
-          enabled = false;
-          auto_trigger = false;
-          debounce = 90;
-          hide_during_completion = false;
-          keymap = {
-            accept_line = false;
-            accept_word = false;
+        settings = {
+          panel = {
+            enabled = false;
+            auto_refresh = true;
+          };
+          suggestion = {
+            enabled = false;
+            auto_trigger = false;
+            debounce = 90;
+            hide_during_completion = false;
+            keymap = {
+              accept_line = false;
+              accept_word = false;
+            };
           };
         };
       };

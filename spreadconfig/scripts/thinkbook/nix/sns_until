@@ -6,17 +6,24 @@ max_attempts="${NIX_RETRY_ATTEMPTS:-3}"
 retry_delay="${NIX_RETRY_DELAY:-1}"
 
 if [[ "$action" != "switch" && "$action" != "boot" ]]; then
-  echo "Usage: sns_until [switch|boot]" >&2
-  exit 1
+	echo "Usage: sns_until [switch|boot]" >&2
+	exit 1
 fi
 
 attempt=1
-while ! nh os "$action" -d always -t "path://$HOME/workspaces/spreadconfig#thinkbook"; do
-  if ((attempt >= max_attempts)); then
-    echo "sns_until: nh os $action failed after $max_attempts attempts" >&2
-    exit 1
-  fi
+while true; do
+	echo "sns_until: running nh os $action for thinkbook (attempt $attempt/$max_attempts)"
 
-  attempt=$((attempt + 1))
-  sleep "$retry_delay"
+	if nh os "$action" -d always -t "path://$HOME/workspaces/spreadconfig#thinkbook"; then
+		break
+	fi
+
+	if ((attempt >= max_attempts)); then
+		echo "sns_until: nh os $action failed after $max_attempts attempts" >&2
+		exit 1
+	fi
+
+	attempt=$((attempt + 1))
+	echo "sns_until: retrying nh os $action in $retry_delay seconds" >&2
+	sleep "$retry_delay"
 done

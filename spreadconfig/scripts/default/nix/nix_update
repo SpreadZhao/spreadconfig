@@ -1,5 +1,12 @@
 #!/usr/bin/env bash
-set -euo pipefail
+set -Eeuo pipefail
+
+nix_update_err() {
+	local status=$?
+	echo "nix_update: failed at line ${BASH_LINENO[0]}: $BASH_COMMAND (exit $status)" >&2
+}
+
+trap nix_update_err ERR
 
 script_path="$(readlink -f "${BASH_SOURCE[0]}")"
 script_dir="$(cd -- "$(dirname -- "$script_path")" && pwd -P)"
@@ -56,7 +63,9 @@ add_cli_excludes() {
 	IFS=',' read -r -a parts <<<"$csv"
 	for part in "${parts[@]}"; do
 		part="$(trim "$part")"
-		[[ -n "$part" ]] && cli_excludes+=("$part")
+		if [[ -n "$part" ]]; then
+			cli_excludes+=("$part")
+		fi
 	done
 }
 
@@ -77,7 +86,9 @@ load_file_excludes() {
 	while IFS= read -r line || [[ -n "$line" ]]; do
 		line="${line%%#*}"
 		line="$(trim "$line")"
-		[[ -n "$line" ]] && file_excludes+=("$line")
+		if [[ -n "$line" ]]; then
+			file_excludes+=("$line")
+		fi
 	done <"$exclude_file"
 }
 
@@ -95,8 +106,14 @@ read_flake_inputs() {
 	local inputs_json
 	local inputs_text
 
-	inputs_json="$(nix eval --impure --json --expr "builtins.attrNames (import $repo_dir/flake.nix).inputs")"
-	inputs_text="$(jq -r '.[]' <<<"$inputs_json")"
+	if ! inputs_json="$(nix eval --impure --json --expr "builtins.attrNames (import $repo_dir/flake.nix).inputs")"; then
+		die "failed to read flake inputs from $repo_dir/flake.nix"
+	fi
+
+	if ! inputs_text="$(jq -r '.[]' <<<"$inputs_json")"; then
+		die "failed to parse flake inputs"
+	fi
+
 	mapfile -t all_inputs <<<"$inputs_text"
 }
 
@@ -150,10 +167,21 @@ while (($# > 0)); do
 	esac
 done
 
+command -v nix >/dev/null || die "nix is required"
 command -v jq >/dev/null || die "jq is required"
+command -v sns_until >/dev/null || die "sns_until is required"
+
+if ((list_inputs == 0)); then
+	echo "nix_update: repo: $repo_dir"
+	echo "nix_update: action: $action"
+fi
 
 declare -a all_inputs=()
 read_flake_inputs
+
+if ((${#all_inputs[@]} == 0)); then
+	die "flake.nix has no inputs"
+fi
 
 if ((list_inputs)); then
 	printf '%s\n' "${all_inputs[@]}"
