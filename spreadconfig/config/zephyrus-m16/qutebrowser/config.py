@@ -48,6 +48,16 @@ startFloatingFoot = '/home/spreadzhao/scripts/niri/start_floating_foot.sh'
 
 c.content.pdfjs = True
 c.downloads.location.suggestion = 'both'
+
+# Keep QtWebEngine on the GPU path for video overlays such as live danmaku.
+c.qt.args = [
+    'ignore-gpu-blocklist',
+    'enable-gpu-rasterization',
+    'enable-zero-copy',
+]
+c.qt.workarounds.disable_accelerated_2d_canvas = 'never'
+c.content.webgl = True
+
 c.editor.command = [
     startFloatingFoot,
     'nvim +"set wrap" {file}',
@@ -199,6 +209,6 @@ c.hints.padding = {
 }
 
 c.content.javascript.clipboard = "access-paste"
-c.qt.force_software_rendering = "chromium"
+# c.qt.force_software_rendering = "chromium"
 
 themes.setup(c)
