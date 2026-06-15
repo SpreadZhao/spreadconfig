@@ -18,25 +18,27 @@
       url = "github:nix-community/nixvim";
     };
     drawio-skill = {
-      url = "github:Agents365-ai/drawio-skill";
+      url = "git+https://github.com/Agents365-ai/drawio-skill.git?ref=main";
       flake = false;
     };
     frontend-design-skill = {
-      url = "github:Aston1690/frontend-design";
+      url = "git+https://github.com/Aston1690/frontend-design.git?ref=main";
       flake = false;
     };
-    obsidian-skills.url = "github:kepano/obsidian-skills";
-    obsidian-skills.flake = false;
+    obsidian-skills = {
+      url = "git+https://github.com/kepano/obsidian-skills.git?ref=main";
+      flake = false;
+    };
     openai-skills = {
-      url = "github:openai/skills";
+      url = "git+https://github.com/openai/skills.git?ref=main";
       flake = false;
     };
     web-artifacts-builder-skill = {
-      url = "github:CuriousAquarius/claude-skill-web-artifacts-builder";
+      url = "git+https://github.com/CuriousAquarius/claude-skill-web-artifacts-builder.git?ref=main";
       flake = false;
     };
     web-interface-guidelines = {
-      url = "github:vercel-labs/web-interface-guidelines";
+      url = "git+https://github.com/vercel-labs/web-interface-guidelines.git?ref=main";
       flake = false;
     };
   };

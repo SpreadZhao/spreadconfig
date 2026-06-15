@@ -5,15 +5,16 @@
       "locked": {
         "lastModified": 1780505611,
         "narHash": "sha256-UhDFmA9f9hLGaUg6XeQb9vSqqcu13zvphMXIwsKHsOo=",
-        "owner": "Agents365-ai",
-        "repo": "drawio-skill",
+        "ref": "main",
         "rev": "00ed825c4aec623a5838a16d1ad6b7a2c603dfa6",
-        "type": "github"
+        "revCount": 152,
+        "type": "git",
+        "url": "https://github.com/Agents365-ai/drawio-skill.git"
       },
       "original": {
-        "owner": "Agents365-ai",
-        "repo": "drawio-skill",
-        "type": "github"
+        "ref": "main",
+        "type": "git",
+        "url": "https://github.com/Agents365-ai/drawio-skill.git"
       }
     },
     "flake-parts": {
@@ -63,15 +64,16 @@
       "locked": {
         "lastModified": 1774840228,
         "narHash": "sha256-dYanvbL7Dq2G0OxTuy/4nR5okjFuec/u85crxqlKO1g=",
-        "owner": "Aston1690",
-        "repo": "frontend-design",
+        "ref": "main",
         "rev": "59c1ec751ba6f69ee65894be595aeae06f869281",
-        "type": "github"
+        "revCount": 1,
+        "type": "git",
+        "url": "https://github.com/Aston1690/frontend-design.git"
       },
       "original": {
-        "owner": "Aston1690",
-        "repo": "frontend-design",
-        "type": "github"
+        "ref": "main",
+        "type": "git",
+        "url": "https://github.com/Aston1690/frontend-design.git"
       }
     },
     "hermes-agent": {
@@ -84,11 +86,11 @@
         "uv2nix": "uv2nix_2"
       },
       "locked": {
-        "lastModified": 1781430054,
-        "narHash": "sha256-3wOY6Yqo/NnLIMvu5ctE/aFHgQuoJz05wumnLZvpYX4=",
+        "lastModified": 1781501780,
+        "narHash": "sha256-e6SW4z6Alsk6tlvirD5pkrlaRi++bQ3Kbh1XXnzNhes=",
         "owner": "NousResearch",
         "repo": "hermes-agent",
-        "rev": "afc86155094c75266b03eb4dd7344f3509bede52",
+        "rev": "95715dcb03003eab086eb0494083e6dc1c65f3b3",
         "type": "github"
       },
       "original": {
@@ -104,11 +106,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1781365335,
-        "narHash": "sha256-zqDBhXMzfbdlO7F2bGHe7MOtB3xngd/+4ieMHDC+ZXo=",
+        "lastModified": 1781497404,
+        "narHash": "sha256-9GAF8sSsnkyCVCWkomXR0T+zdSxyUlfPt6neQidimdg=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "5b6f5733726a1b2ccafb5dec6ac4ca7299fad66c",
+        "rev": "1285cd3d6882a9847f2d56ed5541b3350c8a6162",
         "type": "github"
       },
       "original": {
@@ -221,11 +223,11 @@
         "systems": "systems"
       },
       "locked": {
-        "lastModified": 1781388258,
-        "narHash": "sha256-Kx1zxra9sZ215H3OiWUfkulu8N2v3iu19wqlzpD/Ac0=",
+        "lastModified": 1781496494,
+        "narHash": "sha256-SfOg25O4vI7jVl4hwxiLAgsa0oiu2K1SPoDtRT3ECNc=",
         "owner": "nix-community",
         "repo": "nixvim",
-        "rev": "e3c908fdf6dff268b04ffb6758bcfc7c018489b9",
+        "rev": "586286af54a314a24566811ce44eb9f380696e6e",
         "type": "github"
       },
       "original": {
@@ -260,15 +262,16 @@
       "locked": {
         "lastModified": 1780935121,
         "narHash": "sha256-/Kr3cMaN81WXFxgWMNt/QQhEMzuu3e3WJpspqjrnPss=",
-        "owner": "kepano",
-        "repo": "obsidian-skills",
+        "ref": "main",
         "rev": "a1dc48e68138490d522c04cbf5822214c6eb1202",
-        "type": "github"
+        "revCount": 46,
+        "type": "git",
+        "url": "https://github.com/kepano/obsidian-skills.git"
       },
       "original": {
-        "owner": "kepano",
-        "repo": "obsidian-skills",
-        "type": "github"
+        "ref": "main",
+        "type": "git",
+        "url": "https://github.com/kepano/obsidian-skills.git"
       }
     },
     "openai-skills": {
@@ -276,15 +279,16 @@
       "locked": {
         "lastModified": 1780071638,
         "narHash": "sha256-drA/ypVE+yK4W2Bj8IUtWaVLF390Pfy7YLcmdju5dow=",
-        "owner": "openai",
-        "repo": "skills",
+        "ref": "main",
         "rev": "a8924c2a35cfa290458852c4fad17c9133054c2e",
-        "type": "github"
+        "revCount": 111,
+        "type": "git",
+        "url": "https://github.com/openai/skills.git"
       },
       "original": {
-        "owner": "openai",
-        "repo": "skills",
-        "type": "github"
+        "ref": "main",
+        "type": "git",
+        "url": "https://github.com/openai/skills.git"
       }
     },
     "pyproject-build-systems": {
@@ -482,15 +486,16 @@
       "locked": {
         "lastModified": 1773519380,
         "narHash": "sha256-6NwxxU2dXXK+PHhTW9TD4BtygmfRApms5igG4qPb8AE=",
-        "owner": "CuriousAquarius",
-        "repo": "claude-skill-web-artifacts-builder",
+        "ref": "main",
         "rev": "07c7ce3b3a5e0992837607ec1cfb1c0d325adde6",
-        "type": "github"
+        "revCount": 1,
+        "type": "git",
+        "url": "https://github.com/CuriousAquarius/claude-skill-web-artifacts-builder.git"
       },
       "original": {
-        "owner": "CuriousAquarius",
-        "repo": "claude-skill-web-artifacts-builder",
-        "type": "github"
+        "ref": "main",
+        "type": "git",
+        "url": "https://github.com/CuriousAquarius/claude-skill-web-artifacts-builder.git"
       }
     },
     "web-interface-guidelines": {
@@ -498,15 +503,16 @@
       "locked": {
         "lastModified": 1775513501,
         "narHash": "sha256-zUuwGkcxtep5awSbykzI2inZk4HP2mcK9S8y9LHjsxc=",
-        "owner": "vercel-labs",
-        "repo": "web-interface-guidelines",
+        "ref": "main",
         "rev": "4e799d45c17aec1498c269287a83b9dba22b966b",
-        "type": "github"
+        "revCount": 54,
+        "type": "git",
+        "url": "https://github.com/vercel-labs/web-interface-guidelines.git"
       },
       "original": {
-        "owner": "vercel-labs",
-        "repo": "web-interface-guidelines",
-        "type": "github"
+        "ref": "main",
+        "type": "git",
+        "url": "https://github.com/vercel-labs/web-interface-guidelines.git"
       }
     }
   },
