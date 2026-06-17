@@ -1,0 +1,4 @@
+interface:
+  display_name: "WeChat Article Fetcher"
+  short_description: "Fetch WeChat articles with local assets"
+  default_prompt: "抓取这个微信公众号文章，保存 Markdown，并把正文图片下载到本地 assets 目录："
