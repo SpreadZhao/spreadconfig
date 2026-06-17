@@ -6,7 +6,8 @@
 }:
 
 let
-  # Bundle install for the agents target: the whole skills dir becomes ~/.agents/skills/obsidian-skills.
+  # Bundle install for an agents target: the whole skills dir becomes
+  # <target>/obsidian-skills.
   obsidianSkills =
     if inputs ? "obsidian-skills" then
       {
@@ -18,8 +19,8 @@ let
     else
       { };
 
-  # Per-skill install for the Claude target: each sub-skill becomes ~/.claude/skills/<name> so
-  # Claude Code discovers it as ~/.claude/skills/<skill>/SKILL.md.
+  # Per-skill install for a Claude target: each sub-skill becomes
+  # <target>/<name> so Claude Code discovers it as <target>/<skill>/SKILL.md.
   obsidianClaudeSkills =
     if inputs ? "obsidian-skills" then
       {
@@ -40,26 +41,21 @@ let
   wechatArticleFetcherSkill = {
     wechat-article-fetcher = {
       source = ./local/wechat-article-fetcher;
-      force = true;
     };
   };
 
   externalUserSkills = {
     frontend-design = {
       source = inputs."frontend-design-skill";
-      force = true;
     };
     web-artifacts-builder = {
       source = inputs."web-artifacts-builder-skill";
-      force = true;
     };
     figma-create-design-system-rules = {
       source = "${inputs."openai-skills"}/skills/.curated/figma-create-design-system-rules";
-      force = true;
     };
     figma-implement-design = {
       source = "${inputs."openai-skills"}/skills/.curated/figma-implement-design";
-      force = true;
     };
     web-design-guidelines = {
       source = pkgs.runCommand "web-design-guidelines-skill" { } ''
@@ -88,41 +84,75 @@ let
           ' ${inputs."web-interface-guidelines"}/command.md
         } > "$out/SKILL.md"
       '';
-      force = true;
     };
   };
 
   migratedCodexSkills = {
     android-waydroid-control = {
       source = ./local/android-waydroid-control;
-      force = true;
     };
   };
 
 in
 
 {
-  # User-global skills exposed at ~/.agents/skills.
+  # Skill install directories. Keys are Home Manager file targets relative to
+  # $HOME, and values can be either one skill attrset or a list of skill
+  # attrsets. Later list entries override earlier entries with the same name.
   #
   # Example:
-  # user.my-skill = ./local/my-skill;
+  # skillDirs.".agents/skills" = [
+  #   commonSkills
+  #   localSkills
+  # ];
+  #
+  # To control missing target directory behavior:
+  # skillDirs."path/to/dir/skills" = {
+  #   onMissing = "create"; # create | fail | skip
+  #   skills = [ commonSkills localSkills ];
+  # };
   #
   # Example with an external pinned source:
-  # user.some-github-skill = "${pkgs.fetchFromGitHub {
+  # skillDirs.".codex/skills".some-github-skill = "${pkgs.fetchFromGitHub {
   #   owner = "owner";
   #   repo = "repo";
   #   rev = "v1.0.0";
   #   hash = "sha256-...";
   # }}/skills/some-github-skill";
-  user = obsidianSkills // externalUserSkills // drawioSkill // wechatArticleFetcherSkill;
+  skillDirs = {
+    ".agents/skills" = {
+      onMissing = "fail";
+      skills = [
+        externalUserSkills
+        drawioSkill
+        wechatArticleFetcherSkill
+      ];
+    };
 
-  # Claude Code skills exposed at ~/.claude/skills. Each entry becomes
-  # ~/.claude/skills/<name>; obsidian-skills are installed per-skill so Claude
-  # discovers each as ~/.claude/skills/<skill>/SKILL.md.
-  claude = obsidianClaudeSkills // drawioSkill // wechatArticleFetcherSkill;
+    ".claude/skills" = {
+      onMissing = "fail";
+      skills = [
+        drawioSkill
+        wechatArticleFetcherSkill
+      ];
+    };
 
-  # Codex-home skills exposed at ~/.codex/skills. Prefer user above for normal
-  # personal skills; keep this for compatibility with installers or experiments
-  # that explicitly expect CODEX_HOME/skills.
-  codex = migratedCodexSkills // wechatArticleFetcherSkill;
+    ".codex/skills" = {
+      onMissing = "fail";
+      skills = [
+        migratedCodexSkills
+        wechatArticleFetcherSkill
+      ];
+    };
+
+    "workspaces/SecondBrain/.agents/skills" = {
+      onMissing = "fail";
+      skills = [ obsidianSkills ];
+    };
+
+    "workspaces/SecondBrain/.claude/skills" = {
+      onMissing = "fail";
+      skills = [ obsidianClaudeSkills ];
+    };
+  };
 }
