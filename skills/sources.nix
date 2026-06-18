@@ -93,6 +93,13 @@ let
     };
   };
 
+  spreadconfigNixSkill = {
+    spreadconfig-nix = {
+      source = ./local/spreadconfig-nix;
+      force = true;
+    };
+  };
+
 in
 
 {
@@ -153,6 +160,16 @@ in
     "workspaces/SecondBrain/.claude/skills" = {
       onMissing = "fail";
       skills = [ obsidianClaudeSkills ];
+    };
+
+    "workspaces/spreadconfig/.agents/skills" = {
+      onMissing = "fail";
+      skills = [ spreadconfigNixSkill ];
+    };
+
+    "workspaces/spreadconfig/.claude/skills" = {
+      onMissing = "fail";
+      skills = [ spreadconfigNixSkill ];
     };
   };
 }

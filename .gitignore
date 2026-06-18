@@ -1,4 +1,7 @@
 /.direnv/
+/.agents/
+/.claude/
+/.codex/
 /secrets/gh_token
 /secrets/passwd
 __pycache__/

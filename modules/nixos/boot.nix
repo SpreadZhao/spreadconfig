@@ -5,14 +5,14 @@
     loader = {
       systemd-boot = {
         enable = true;
-        configurationLimit = 3;
+        configurationLimit = 8;
       };
       efi.canTouchEfiVariables = true;
     };
     extraModulePackages = with config.boot.kernelPackages; [
       v4l2loopback
     ];
-    kernelPackages = pkgs.linuxPackages_latest;
+    kernelPackages = pkgs.linuxPackages;
     kernelModules = [ "v4l2loopback" ];
     # see:
     # https://wiki.archlinux.org/title/V4l2loopback#Loading_the_kernel_module
