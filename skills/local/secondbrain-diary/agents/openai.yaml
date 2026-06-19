@@ -1,0 +1,4 @@
+interface:
+  display_name: "SecondBrain Diary"
+  short_description: "Manage this repository diary notes"
+  default_prompt: "Use $secondbrain-diary to create or update a diary note in the SecondBrain repository."

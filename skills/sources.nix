@@ -87,7 +87,7 @@ let
     };
   };
 
-  migratedCodexSkills = {
+  codexAgentSkills = {
     android-waydroid-control = {
       source = ./local/android-waydroid-control;
     };
@@ -97,6 +97,12 @@ let
     spreadconfig-nix = {
       source = ./local/spreadconfig-nix;
       force = true;
+    };
+  };
+
+  secondbrainDiarySkill = {
+    secondbrain-diary = {
+      source = ./local/secondbrain-diary;
     };
   };
 
@@ -128,47 +134,46 @@ in
   # }}/skills/some-github-skill";
   skillDirs = {
     ".agents/skills" = {
-      onMissing = "fail";
+      onMissing = "skip";
       skills = [
         externalUserSkills
+        codexAgentSkills
         drawioSkill
         wechatArticleFetcherSkill
       ];
     };
 
     ".claude/skills" = {
-      onMissing = "fail";
+      onMissing = "skip";
       skills = [
         drawioSkill
         wechatArticleFetcherSkill
       ];
     };
 
-    ".codex/skills" = {
-      onMissing = "fail";
+    "workspaces/SecondBrain/.agents/skills" = {
+      onMissing = "skip";
       skills = [
-        migratedCodexSkills
-        wechatArticleFetcherSkill
+        obsidianSkills
+        secondbrainDiarySkill
       ];
     };
 
-    "workspaces/SecondBrain/.agents/skills" = {
-      onMissing = "fail";
-      skills = [ obsidianSkills ];
-    };
-
     "workspaces/SecondBrain/.claude/skills" = {
-      onMissing = "fail";
-      skills = [ obsidianClaudeSkills ];
+      onMissing = "skip";
+      skills = [
+        obsidianClaudeSkills
+        secondbrainDiarySkill
+      ];
     };
 
     "workspaces/spreadconfig/.agents/skills" = {
-      onMissing = "fail";
+      onMissing = "skip";
       skills = [ spreadconfigNixSkill ];
     };
 
     "workspaces/spreadconfig/.claude/skills" = {
-      onMissing = "fail";
+      onMissing = "skip";
       skills = [ spreadconfigNixSkill ];
     };
   };
