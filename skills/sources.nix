@@ -6,22 +6,7 @@
 }:
 
 let
-  # Bundle install for an agents target: the whole skills dir becomes
-  # <target>/obsidian-skills.
   obsidianSkills =
-    if inputs ? "obsidian-skills" then
-      {
-        obsidian = {
-          source = "${inputs."obsidian-skills"}/skills";
-          target = "obsidian-skills";
-        };
-      }
-    else
-      { };
-
-  # Per-skill install for a Claude target: each sub-skill becomes
-  # <target>/<name> so Claude Code discovers it as <target>/<skill>/SKILL.md.
-  obsidianClaudeSkills =
     if inputs ? "obsidian-skills" then
       {
         defuddle.source = "${inputs."obsidian-skills"}/skills/defuddle";
@@ -41,6 +26,12 @@ let
   wechatArticleFetcherSkill = {
     wechat-article-fetcher = {
       source = ./local/wechat-article-fetcher;
+    };
+  };
+
+  smartmontoolsDiskHealthSkill = {
+    smartmontools-disk-health = {
+      source = ./local/smartmontools-disk-health;
     };
   };
 
@@ -168,7 +159,6 @@ in
     "workspaces/SecondBrain/.claude/skills" = {
       onMissing = "skip";
       skills = [
-        obsidianClaudeSkills
         secondbrainDiarySkill
       ];
     };
@@ -177,13 +167,17 @@ in
       onMissing = "skip";
       skills = [
         spreadconfigNixSkill
+        smartmontoolsDiskHealthSkill
         # nixosBestPracticesSkill
       ];
     };
 
     "workspaces/spreadconfig/.claude/skills" = {
       onMissing = "skip";
-      skills = [ spreadconfigNixSkill ];
+      skills = [
+        spreadconfigNixSkill
+        smartmontoolsDiskHealthSkill
+      ];
     };
   };
 }

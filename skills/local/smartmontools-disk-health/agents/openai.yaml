@@ -1,0 +1,4 @@
+interface:
+  display_name: "Smartmontools Disk Health"
+  short_description: "Monitor disks with smartctl and smartd"
+  default_prompt: "Use $smartmontools-disk-health to check disk health and configure smartd monitoring."
