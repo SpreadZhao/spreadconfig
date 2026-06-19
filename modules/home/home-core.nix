@@ -14,6 +14,7 @@
     homeDirectory = "/home/spreadzhao";
     stateVersion = "25.11";
     sessionVariables = {
+      ANDROID_HOME = "${config.xdg.userDirs.extraConfig.LIB}/Android/Sdk";
       SCRIPT_HOME = scriptsDir;
       QT_QPA_PLATFORM = "wayland";
       QT_ENABLE_HIGHDPI_SCALING = "1";
@@ -27,8 +28,9 @@
       "$SCRIPT_HOME/niri/bin"
       "$SCRIPT_HOME/util/bin"
       "$SCRIPT_HOME/nix"
+      "$ANDROID_HOME/platform-tools"
       "$HOME/.local/bin"
-      "$HOME/Lib/jdks/bin"
+      "${config.xdg.userDirs.extraConfig.LIB}/jdks/bin"
     ];
     file = {
       "${scriptsDir}".source = hostScriptSource "";
