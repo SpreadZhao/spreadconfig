@@ -1,0 +1,194 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+qute_command() {
+    if [ -n "${QUTE_FIFO:-}" ]; then
+        printf '%s\n' "$1" >> "$QUTE_FIFO"
+    else
+        printf '%s\n' "$1" >&2
+    fi
+}
+
+qute_error() {
+    local message="${1//$'\n'/ }"
+    qute_command "message-error ${message}"
+}
+
+urlencode() {
+    jq -rn --arg value "$1" '$value | @uri'
+}
+
+usage() {
+    cat <<'EOF'
+Usage: translate [--provider google|codex] [-s LANG] [-t LANG] [--text]
+
+Translate qutebrowser's selected text. Codex is the default provider.
+EOF
+}
+
+provider="${QUTE_TRANS_PROVIDER:-codex}"
+source_lang="${QUTE_TRANS_SOURCE:-auto}"
+target_lang="${QUTE_TRANS_TARGET:-}"
+codex_home="${QUTE_TRANS_CODEX_HOME:-${CODEX_HOME:-$HOME/.codex}}"
+codex_model="${QUTE_TRANS_CODEX_MODEL:-${CODEX_MODEL:-}}"
+codex_reasoning_effort="${QUTE_TRANS_CODEX_REASONING_EFFORT:-medium}"
+
+while [ "$#" -gt 0 ]; do
+    case "$1" in
+        -p | --provider)
+            [ "$#" -ge 2 ] || {
+                qute_error "translate: --provider requires a value"
+                exit 2
+            }
+            provider="$2"
+            shift 2
+            ;;
+        --google)
+            provider="google"
+            shift
+            ;;
+        --codex)
+            provider="codex"
+            shift
+            ;;
+        -s | --source)
+            [ "$#" -ge 2 ] || {
+                qute_error "translate: --source requires a value"
+                exit 2
+            }
+            source_lang="$2"
+            shift 2
+            ;;
+        -t | --target)
+            [ "$#" -ge 2 ] || {
+                qute_error "translate: --target requires a value"
+                exit 2
+            }
+            target_lang="$2"
+            shift 2
+            ;;
+        --text)
+            shift
+            ;;
+        --url)
+            qute_error "translate: only selected text translation is supported"
+            exit 2
+            ;;
+        -h | --help)
+            usage
+            exit 0
+            ;;
+        *)
+            qute_error "translate: unknown argument: $1"
+            exit 2
+            ;;
+    esac
+done
+
+selected_text="${QUTE_SELECTED_TEXT:-}"
+if [ -z "$selected_text" ]; then
+    qute_error "translate: no selected text"
+    exit 1
+fi
+
+case "$provider" in
+    google)
+        google_source="${source_lang:-auto}"
+        google_target="${target_lang:-zh-CN}"
+        encoded_text="$(urlencode "$selected_text")"
+        encoded_source="$(urlencode "$google_source")"
+        encoded_target="$(urlencode "$google_target")"
+        qute_command "open -t https://translate.google.com/?sl=${encoded_source}&tl=${encoded_target}&text=${encoded_text}&op=translate"
+        ;;
+
+    codex)
+        tmpdir="$(mktemp -d "${TMPDIR:-/tmp}/qute-translate.XXXXXX")"
+        context_file="$tmpdir/context.txt"
+        result_file="$tmpdir/result.txt"
+        log_file="$tmpdir/codex.log"
+        output_file="$tmpdir/translation.txt"
+        viewer_file="$tmpdir/view-translation"
+
+        cleanup_on_error() {
+            rm -rf "$tmpdir"
+        }
+
+        printf '%s\n' "$selected_text" > "$context_file"
+
+        codex_target="${target_lang:-zh-CN}"
+        codex_source_note=""
+        if [ -n "$source_lang" ] && [ "$source_lang" != "auto" ]; then
+            codex_source_note=" The source language is ${source_lang}."
+        fi
+        codex_prompt="Translate the stdin text to ${codex_target}.${codex_source_note} Output only the translated text. Do not add explanations, labels, quotes, markdown fences, or commentary. Preserve paragraph breaks, list structure, code blocks, URLs, numbers, and proper nouns unless translating a term is clearly appropriate."
+
+        codex_args=(
+            exec
+            --ephemeral
+            --ignore-rules
+            --skip-git-repo-check
+            --sandbox read-only
+            --color never
+            --output-last-message "$result_file"
+        )
+
+        if [ -n "$codex_model" ]; then
+            codex_args+=(--model "$codex_model")
+        fi
+
+        if [ -n "$codex_reasoning_effort" ]; then
+            codex_args+=(--config "model_reasoning_effort=\"${codex_reasoning_effort}\"")
+        fi
+
+        codex_args+=("$codex_prompt")
+
+        if ! CODEX_HOME="$codex_home" codex "${codex_args[@]}" < "$context_file" > "$log_file" 2>&1; then
+            log_message="$(tail -n 3 "$log_file" 2> /dev/null | tr '\n' ' ' || true)"
+            cleanup_on_error
+            qute_error "translate: Codex request failed${log_message:+: ${log_message}}"
+            exit 1
+        fi
+
+        if [ ! -s "$result_file" ]; then
+            cleanup_on_error
+            qute_error "translate: Codex response did not contain translated text"
+            exit 1
+        fi
+
+        {
+            printf 'Original\n'
+            printf '========\n\n'
+            printf '%s\n\n' "$selected_text"
+            printf 'Translation\n'
+            printf '===========\n\n'
+            cat "$result_file"
+            printf '\n'
+        } > "$output_file"
+
+        cat > "$viewer_file" <<EOF
+#!/usr/bin/env bash
+set -euo pipefail
+trap 'rm -rf "$tmpdir"' EXIT
+nvim -R +"set wrap" "$output_file"
+EOF
+        chmod +x "$viewer_file"
+
+        floating_foot="${QUTE_TRANSLATE_FLOATING_FOOT:-$HOME/scripts/niri/start_floating_foot.sh}"
+        if [ ! -x "$floating_foot" ]; then
+            cleanup_on_error
+            qute_error "translate: floating terminal launcher not found"
+            exit 1
+        fi
+
+        "$floating_foot" "exec $(printf '%q' "$viewer_file")" || {
+            cleanup_on_error
+            qute_error "translate: failed to launch floating terminal"
+            exit 1
+        }
+        ;;
+
+    *)
+        qute_error "translate: unsupported provider: $provider"
+        exit 2
+        ;;
+esac

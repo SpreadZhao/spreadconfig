@@ -1,6 +1,7 @@
 {
   config,
   hostConfigSource,
+  hostScriptSource,
   hostName,
   lib,
   pkgs,
@@ -41,8 +42,13 @@ let
 in
 
 {
-  home.packages = [ qutebrowserPackage ];
+  home.packages = [
+    qutebrowserPackage
+    pkgs.codex
+    pkgs.jq
+  ];
 
+  xdg.dataFile."qutebrowser/userscripts/translate".source = hostScriptSource "qutebrowser/translate";
   xdg.configFile."qutebrowser/quickmarks".source =
     config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.password-store/qutebrowser/qutebrowser_quickmarks";
   xdg.configFile."qutebrowser/config.py".source = hostConfigSource "qutebrowser/config.py";
