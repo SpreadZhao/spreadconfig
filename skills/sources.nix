@@ -44,6 +44,12 @@ let
     };
   };
 
+  nixosBestPracticesSkill = {
+    nixos-best-practices = {
+      source = "${inputs."nixos-best-practices-skill"}/skills/nixos-best-practices";
+    };
+  };
+
   externalUserSkills = {
     frontend-design = {
       source = inputs."frontend-design-skill";
@@ -169,7 +175,10 @@ in
 
     "workspaces/spreadconfig/.agents/skills" = {
       onMissing = "skip";
-      skills = [ spreadconfigNixSkill ];
+      skills = [
+        spreadconfigNixSkill
+        # nixosBestPracticesSkill
+      ];
     };
 
     "workspaces/spreadconfig/.claude/skills" = {

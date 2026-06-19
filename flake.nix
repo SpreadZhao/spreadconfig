@@ -17,6 +17,10 @@
     nixvim = {
       url = "github:nix-community/nixvim";
     };
+    nixos-best-practices-skill = {
+      url = "git+https://github.com/lihaoze123/my-claude-code.git?ref=main";
+      flake = false;
+    };
     drawio-skill = {
       url = "git+https://github.com/Agents365-ai/drawio-skill.git?ref=main";
       flake = false;
