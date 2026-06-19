@@ -13,7 +13,7 @@
       enable = true;
       readOnly = true;
       entries = [
-        "${pkgs.clash-verge-rev}/share/applications/clash-verge.desktop"
+        "${pkgs.flclash}/share/applications/flclash.desktop"
       ];
     };
     configFile = { };
