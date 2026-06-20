@@ -5,6 +5,10 @@ set relativenumber
 set smartcase
 set previewer ~/.config/lf/pv.sh
 set errorfmt "\033[1;38;2;243;139;168m%s\033[0m"
+set selectfmt "\033[7;38;2;71;162;237m"
+set visualfmt "\033[7;38;2;71;204;177m"
+set copyfmt "\033[7;38;2;230;230;170m"
+set cutfmt "\033[7;38;2;188;63;60m"
 set shell zsh
 set shellopts '-euy'
 set ifs "\n"
@@ -241,6 +245,8 @@ cmd choose-dir ${{
 # cmd end
 
 map gs :fzf_search
+map sg push :glob-select<space>
+map sG push :glob-unselect<space>
 map <gt> :shell-pipe
 map O push :open-with-gui<space>
 map o push :open-with-tui<space>
