@@ -1,0 +1,12 @@
+.agents/
+.direnv/
+.gradle/
+.idea/
+*.iml
+build/
+captures/
+local.properties
+*.apk
+*.ap_
+*.aab
+*.hprof

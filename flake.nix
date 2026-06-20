@@ -70,6 +70,11 @@
 
       mkPackages = system: import ./packages { pkgs = mkPkgs system; };
 
+      androidTemplate = {
+        path = ./templates/android;
+        description = "Android development environment with project-local agent skills";
+      };
+
       mkPinnedPkgs =
         system:
         nixpkgs.lib.mapAttrs' (
@@ -183,6 +188,11 @@
         };
 
       packages.x86_64-linux = mkPackages "x86_64-linux";
+
+      templates = {
+        default = androidTemplate;
+        android = androidTemplate;
+      };
 
       nixosConfigurations = {
         thinkbook = mkHost { name = "thinkbook"; };
