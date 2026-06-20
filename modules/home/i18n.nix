@@ -1,5 +1,8 @@
 { inputs, pkgs, ... }:
 
+let
+  system = pkgs.stdenv.hostPlatform.system;
+in
 {
   i18n.inputMethod = {
     enable = true;
@@ -13,7 +16,7 @@
             rime-ice
           ];
         })
-        inputs.textbridge.packages.${pkgs.system}.fcitx5-textbridge
+        inputs.textbridge.packages.${system}.fcitx5-textbridge
       ];
       # settings = {
       #   inputMethod = {
