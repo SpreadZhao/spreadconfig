@@ -233,6 +233,22 @@
         "type": "github"
       }
     },
+    "nixpkgs_5": {
+      "locked": {
+        "lastModified": 1781577229,
+        "narHash": "sha256-lrp67w8AulE9Ks53n27I45ADSzbOCn4H+CNW1Ck8B+8=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "567a49d1913ce81ac6e9582e3553dd90a955875f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "nixvim": {
       "inputs": {
         "flake-parts": "flake-parts_2",
@@ -410,6 +426,7 @@
         "obsidian-skills": "obsidian-skills",
         "openai-skills": "openai-skills",
         "sops-nix": "sops-nix",
+        "textbridge": "textbridge",
         "web-artifacts-builder-skill": "web-artifacts-builder-skill",
         "web-interface-guidelines": "web-interface-guidelines"
       }
@@ -447,6 +464,24 @@
         "owner": "nix-systems",
         "ref": "future-26.11",
         "repo": "default",
+        "type": "github"
+      }
+    },
+    "textbridge": {
+      "inputs": {
+        "nixpkgs": "nixpkgs_5"
+      },
+      "locked": {
+        "lastModified": 1781962066,
+        "narHash": "sha256-iM/5SRhXhjEDqjijqbloWxjIDTbztwZUKG5BTXx8kVM=",
+        "owner": "SpreadZhao",
+        "repo": "textbridge",
+        "rev": "dfcf126ecbabe2b167abcb9676c9e313fc4e64b8",
+        "type": "github"
+      },
+      "original": {
+        "owner": "SpreadZhao",
+        "repo": "textbridge",
         "type": "github"
       }
     },

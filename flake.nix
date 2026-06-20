@@ -45,6 +45,7 @@
       url = "git+https://github.com/vercel-labs/web-interface-guidelines.git?ref=main";
       flake = false;
     };
+    textbridge.url = "github:SpreadZhao/textbridge";
   };
 
   outputs =

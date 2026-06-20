@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ inputs, pkgs, ... }:
 
 {
   i18n.inputMethod = {
@@ -13,6 +13,7 @@
             rime-ice
           ];
         })
+        inputs.textbridge.packages.${pkgs.system}.fcitx5-textbridge
       ];
       # settings = {
       #   inputMethod = {

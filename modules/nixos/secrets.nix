@@ -14,6 +14,12 @@
         mode = "0400";
       };
 
+      textbridge-token = {
+        owner = "spreadzhao";
+        group = "users";
+        mode = "0400";
+      };
+
       spreadzhao-password-hash.neededForUsers = true;
     };
   };
