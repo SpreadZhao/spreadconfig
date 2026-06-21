@@ -4,14 +4,28 @@
   theme_white,
   theme_bright_red,
   theme_bright_background,
+  theme_yellow,
   theme_blue,
   theme_bright_blue,
   theme_bright_white,
+  theme_cyan,
   fontFamilies,
   fontSizes,
   ...
 }:
 
+let
+  surface = theme_background;
+  elevatedSurface = theme_bright_background;
+  outline = theme_bright_dark;
+  text = theme_bright_white;
+  mutedText = theme_white;
+  primary = theme_blue;
+  primaryOutline = theme_bright_blue;
+  accent = theme_cyan;
+  warning = theme_yellow;
+  danger = theme_bright_red;
+in
 {
   programs.wayprompt = {
     enable = true;
@@ -24,42 +38,42 @@
         corner-radius = 0;
       };
       colours = {
-        background = "${theme_background}cc";
-        border = "${theme_bright_dark}ff";
-        text = "${theme_white}ff";
-        error-text = "${theme_bright_red}ff";
+        background = "${surface}e6";
+        border = "${outline}ff";
+        text = "${text}ff";
+        error-text = "${danger}ff";
 
         # =========================
         # PIN
         # =========================
 
-        pin-background = "${theme_bright_background}cc";
-        pin-border = "${theme_bright_dark}ff";
-        pin-square = "${theme_bright_background}cc";
+        pin-background = "${elevatedSurface}dd";
+        pin-border = "${outline}ff";
+        pin-square = "${accent}e6";
 
         # =========================
         # OK button (primary)
         # =========================
 
-        ok-button = "${theme_blue}cc";
-        ok-button-border = "${theme_bright_blue}ff";
-        ok-button-text = "${theme_bright_white}ff";
+        ok-button = "${primary}dd";
+        ok-button-border = "${primaryOutline}ff";
+        ok-button-text = "${text}ff";
 
         # =========================
         # NOT OK (secondary)
         # =========================
 
-        not-ok-button = "${theme_bright_background}cc";
-        not-ok-button-border = "${theme_bright_dark}ff";
-        not-ok-button-text = "${theme_white}ff";
+        not-ok-button = "${elevatedSurface}dd";
+        not-ok-button-border = "${warning}ff";
+        not-ok-button-text = "${text}ff";
 
         # =========================
         # Cancel (low emphasis)
         # =========================
 
-        cancel-button = "${theme_bright_background}cc";
-        cancel-button-border = "${theme_bright_dark}ff";
-        cancel-button-text = "${theme_bright_dark}ff";
+        cancel-button = "${elevatedSurface}cc";
+        cancel-button-border = "${outline}ff";
+        cancel-button-text = "${mutedText}ff";
       };
     };
   };
