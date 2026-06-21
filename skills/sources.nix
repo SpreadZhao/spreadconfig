@@ -103,6 +103,12 @@ let
     };
   };
 
+  wechatDiarySkill = {
+    wechat-diary = {
+      source = ./local/wechat-diary;
+    };
+  };
+
 in
 
 {
@@ -153,6 +159,7 @@ in
       skills = [
         obsidianSkills
         secondbrainDiarySkill
+        wechatDiarySkill
       ];
     };
 
