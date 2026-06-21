@@ -6,6 +6,14 @@
   ...
 }:
 
+let
+  disabledFcitxAutostart = pkgs.writeTextDir "share/applications/org.fcitx.Fcitx5.desktop" ''
+    [Desktop Entry]
+    Type=Application
+    Name=Fcitx 5
+    Hidden=true
+  '';
+in
 {
   xdg = {
     enable = true;
@@ -13,6 +21,7 @@
       enable = true;
       readOnly = true;
       entries = [
+        "${disabledFcitxAutostart}/share/applications/org.fcitx.Fcitx5.desktop"
         "${pkgs.flclash}/share/applications/flclash.desktop"
       ];
     };
