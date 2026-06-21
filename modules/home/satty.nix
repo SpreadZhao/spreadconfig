@@ -5,7 +5,9 @@
 }:
 
 {
-  home.packages = [ pkgs.satty ];
+  home.packages = [
+    pkgs.satty
+  ];
 
   xdg.configFile."satty".source = hostConfigSource "satty";
 }

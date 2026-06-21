@@ -56,9 +56,17 @@ blur = "u"
 highlight = "g"
 
 # Font to use for text annotations
-# [font]
-# family = "Noto Sans CJK SC"
-# style = "Regular"
+[font]
+family = "Unifont"
+style = "Regular"
+# fallback = [
+#     "Noto Sans",
+#     "Noto Sans CJK SC",
+#     "Noto Sans CJK TC",
+#     "Noto Sans CJK JP",
+#     "Noto Sans CJK KR",
+#     "Noto Color Emoji",
+# ]
 
 # Custom colours for the colour palette
 [color-palette]
