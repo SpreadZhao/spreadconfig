@@ -11,6 +11,7 @@
   theme_bright_blue,
   fontFamilies,
   fontSizes,
+  scriptsDir,
   ...
 }:
 
@@ -18,6 +19,14 @@
   programs.foot = {
     enable = true;
     server.enable = true;
+  };
+
+  xdg.desktopEntries.foot_new_tab = {
+    name = "Foot New Tab";
+    type = "Application";
+    exec = "${scriptsDir}/niri/foot_new_tab.sh";
+    icon = "";
+    terminal = false;
   };
 
   xdg.configFile."foot/foot.ini".text = ''

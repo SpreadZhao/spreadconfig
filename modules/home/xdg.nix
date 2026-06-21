@@ -36,35 +36,6 @@ in
       #     config.lib.file.mkOutOfStoreSymlink "${spreadconfigDir}/input/fcitx5-catppuccin/src/catppuccin-mocha-rosewater";
     };
     desktopEntries = {
-      toggle_monitor = {
-        name = "Toggle Monitor";
-        comment = "Toggle Monitor on and off";
-        exec = "${scriptsDir}/niri/niri_toggle_output.sh";
-        type = "Application";
-        icon = "";
-      };
-      lock_policy = {
-        name = "Lock Policy";
-        comment = "Control automatic locking and monitor power";
-        exec = "${scriptsDir}/niri/lock_policy.sh";
-        type = "Application";
-        icon = "";
-        terminal = false;
-      };
-      foot_new_tab = {
-        name = "Foot New Tab";
-        type = "Application";
-        exec = "${scriptsDir}/niri/foot_new_tab.sh";
-        icon = "";
-        terminal = false;
-      };
-      # kitty_new_tab = {
-      #   name = "Kitty New Tab";
-      #   type = "Application";
-      #   exec = "${scriptsDir}/niri/kitty_new_tab.sh";
-      #   icon = "";
-      #   terminal = false;
-      # };
       change_audio = {
         name = "Change Audio Device";
         type = "Application";
@@ -103,16 +74,6 @@ in
         icon = "";
         terminal = false;
       };
-      wechat = {
-        name = "wechat";
-        exec = "${scriptsDir}/util/start_wechat.sh";
-        terminal = false;
-        icon = "wechat";
-        type = "Application";
-        categories = [
-          "Utility"
-        ];
-      };
       pmenu = {
         name = "pmenu";
         exec = "${scriptsDir}/util/bin/pmenu";
@@ -123,20 +84,6 @@ in
       pmenu_last = {
         name = "pmenu_last";
         exec = "${scriptsDir}/util/bin/pmenu_last";
-        type = "Application";
-        icon = "";
-        terminal = false;
-      };
-      niri_set_dynamic_target = {
-        name = "niri_set_dynamic_target";
-        exec = "${scriptsDir}/niri/niri_set_dynamic_target.sh";
-        type = "Application";
-        icon = "";
-        terminal = false;
-      };
-      niri_focus_window = {
-        name = "niri_focus_window";
-        exec = "${scriptsDir}/niri/niri_focus_window.sh";
         type = "Application";
         icon = "";
         terminal = false;

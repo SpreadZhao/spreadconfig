@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, scriptsDir, ... }:
 
 let
   wechat = pkgs.callPackage "${pkgs.path}/pkgs/by-name/we/wechat/linux.nix" {
@@ -14,4 +14,15 @@ in
 
 {
   home.packages = [ wechat ];
+
+  xdg.desktopEntries.wechat = {
+    name = "wechat";
+    exec = "${scriptsDir}/util/start_wechat.sh";
+    terminal = false;
+    icon = "wechat";
+    type = "Application";
+    categories = [
+      "Utility"
+    ];
+  };
 }
