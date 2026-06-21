@@ -13,16 +13,26 @@ Prefer the bundled script instead of hand-copying image URLs. It uses the existi
 
 ## Quick Start
 
-Run:
+Resolve the bundled script relative to this `SKILL.md` directory. Do not hardcode
+`~/.codex`, `/nix/store`, or any other absolute installation path.
 
 ```bash
-python3 /home/spreadzhao/.codex/skills/wechat-article-fetcher/scripts/fetch_wechat_article.py "https://mp.weixin.qq.com/s/..." -o article.md
+SKILL_DIR="<directory containing this SKILL.md>"
+SCRIPT="$SKILL_DIR/scripts/fetch_wechat_article.py"
 ```
 
-If `python3` is not on PATH in this environment, run through Nix:
+Run with an existing Python 3 interpreter when available:
 
 ```bash
-nix shell nixpkgs#python3 --command python3 /home/spreadzhao/.codex/skills/wechat-article-fetcher/scripts/fetch_wechat_article.py "https://mp.weixin.qq.com/s/..." -o article.md
+python3 "$SCRIPT" "https://mp.weixin.qq.com/s/..." -o article.md
+```
+
+The script only uses the Python standard library. On NixOS, do not assume
+`python3` is globally available. If no Python interpreter is on `PATH`, run
+through Nix:
+
+```bash
+nix shell nixpkgs#python3 --command python3 "$SCRIPT" "https://mp.weixin.qq.com/s/..." -o article.md
 ```
 
 The default output layout is:
@@ -37,10 +47,11 @@ article_assets/
 ## Workflow
 
 1. Choose an output filename. For article IDs, prefer `wechat_<id>.md`.
-2. Run the script with the URL and output path.
-3. If the first run fails due to network sandboxing, rerun the same command with escalation approval.
-4. Inspect the top and tail of the Markdown for WeChat UI noise.
-5. Verify that no remote image CDN URLs remain:
+2. Resolve `scripts/fetch_wechat_article.py` from the active skill directory, not from the current working directory or a hardcoded install path.
+3. Run the script with the URL and output path using `python3`, or the Nix command above when Python is not on `PATH`.
+4. If the run fails due to network sandboxing or Nix daemon access, rerun the same command with escalation approval.
+5. Inspect the top and tail of the Markdown for WeChat UI noise.
+6. Verify that no remote image CDN URLs remain:
 
 ```bash
 rg -n "mmbiz\.qpic\.cn|!\[[^]]*\]\(https?://" article.md
@@ -66,7 +77,7 @@ Use `--best-effort-images` only when a partial archive is acceptable. Use `--no-
 Common options:
 
 ```bash
-python3 scripts/fetch_wechat_article.py URL \
+python3 "$SCRIPT" URL \
   -o output.md \
   --assets-dir output_assets \
   --wechat-api http://localhost:3000 \
