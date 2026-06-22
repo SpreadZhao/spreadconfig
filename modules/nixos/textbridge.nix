@@ -12,4 +12,9 @@
     port = 17321;
     discovery.port = 17322;
   };
+
+  services.textbridge.bluetooth = {
+    enable = true;
+    channel = 22;
+  };
 }

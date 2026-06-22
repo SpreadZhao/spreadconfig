@@ -117,11 +117,13 @@ in
         "x-scheme-handler/https" = "org.qutebrowser.qutebrowser.desktop";
         "x-scheme-handler/about" = "org.qutebrowser.qutebrowser.desktop";
         "x-scheme-handler/unknown" = "org.qutebrowser.qutebrowser.desktop";
+        "x-scheme-handler/antigravity" = "antigravity.desktop";
         "x-scheme-handler/tg" = "org.telegram.desktop.desktop";
         "x-scheme-handler/tonsite" = "org.telegram.desktop.desktop";
       };
       associations.added = {
         "application/pdf" = "org.pwmt.zathura.desktop";
+        "x-scheme-handler/antigravity" = "antigravity.desktop";
         "x-scheme-handler/tg" = "org.telegram.desktop.desktop";
         "x-scheme-handler/tonsite" = "org.telegram.desktop.desktop";
       };

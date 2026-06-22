@@ -527,11 +527,11 @@
         "nixpkgs": "nixpkgs_5"
       },
       "locked": {
-        "lastModified": 1781981894,
-        "narHash": "sha256-MEdk90cB1f6EVv9WwMY5GwarWYOq1zsRuGkzEqLwuhw=",
+        "lastModified": 1782118699,
+        "narHash": "sha256-EfvWZgO4wTPrm5ZGMj35+thLr8lZP3uobDheq7t/h/c=",
         "owner": "SpreadZhao",
         "repo": "textbridge",
-        "rev": "63d9924e5e2e125ad6ba7589df25b0d99d6c1ccf",
+        "rev": "88f8372608cf6414887cb3ee4bf15696595df660",
         "type": "github"
       },
       "original": {
