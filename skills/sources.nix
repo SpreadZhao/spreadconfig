@@ -18,6 +18,13 @@ let
     else
       { };
 
+  niriComputerUseSkill = {
+    niri-computer-use = {
+      source = "${inputs.niri-computer-use}/overlay/skills/local/niri-computer-use";
+      force = true;
+    };
+  };
+
   # draw.io diagramming skill; shared across the agents and Claude targets.
   drawioSkill = {
     drawio-skill.source = "${inputs."drawio-skill"}/skills/drawio-skill";
@@ -141,6 +148,7 @@ in
       skills = [
         externalUserSkills
         codexAgentSkills
+        niriComputerUseSkill
         drawioSkill
         wechatArticleFetcherSkill
       ];
@@ -149,6 +157,7 @@ in
     ".claude/skills" = {
       onMissing = "skip";
       skills = [
+        niriComputerUseSkill
         drawioSkill
         wechatArticleFetcherSkill
       ];
@@ -173,6 +182,7 @@ in
     "workspaces/spreadconfig/.agents/skills" = {
       onMissing = "skip";
       skills = [
+        niriComputerUseSkill
         spreadconfigNixSkill
         smartmontoolsDiskHealthSkill
         # nixosBestPracticesSkill
@@ -182,6 +192,7 @@ in
     "workspaces/spreadconfig/.claude/skills" = {
       onMissing = "skip";
       skills = [
+        niriComputerUseSkill
         spreadconfigNixSkill
         smartmontoolsDiskHealthSkill
       ];

@@ -21,6 +21,10 @@
     nixvim = {
       url = "github:nix-community/nixvim";
     };
+    niri-computer-use = {
+      url = "github:SpreadZhao/niri-computer-use-spreadconfig-v2";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     nixos-best-practices-skill = {
       url = "git+https://github.com/lihaoze123/my-claude-code.git?ref=main";
       flake = false;

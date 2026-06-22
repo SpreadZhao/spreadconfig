@@ -159,6 +159,26 @@
         "type": "github"
       }
     },
+    "niri-computer-use": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1782139864,
+        "narHash": "sha256-l2N3qzawf9wBb1Jw/u1wGpGfYCitXOOfMwkpwbVc9k4=",
+        "owner": "SpreadZhao",
+        "repo": "niri-computer-use-spreadconfig-v2",
+        "rev": "145b4858dd35d8bdcfcbfa08c98542405575cdef",
+        "type": "github"
+      },
+      "original": {
+        "owner": "SpreadZhao",
+        "repo": "niri-computer-use-spreadconfig-v2",
+        "type": "github"
+      }
+    },
     "nixos-best-practices-skill": {
       "flake": false,
       "locked": {
@@ -458,6 +478,7 @@
         "frontend-design-skill": "frontend-design-skill",
         "hermes-agent": "hermes-agent",
         "home-manager": "home-manager",
+        "niri-computer-use": "niri-computer-use",
         "nixos-best-practices-skill": "nixos-best-practices-skill",
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs_3",
