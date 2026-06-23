@@ -10,10 +10,12 @@ This directory is the declarative source registry for Codex skills.
 - Use `{ onMissing = "..."; skills = ...; }` when a target directory needs an
   explicit missing-directory policy.
 
-Local skill snapshots live in `skills/local/<name>/` when there is no pinned
-external source or the currently installed version should be preserved exactly.
-Prefer flake inputs or fixed-output fetchers for skills with a clear upstream so
-the skill source does not need to be vendored into this repository.
+Local skills live in `skills/local/<name>/`. Home Manager installs these as
+direct symlinks to the working tree path under `$HOME/workspaces/spreadconfig`,
+so editing a local skill changes the installed skill immediately after the
+initial symlink has been created. Prefer flake inputs or fixed-output fetchers
+for skills with a clear upstream so the skill source does not need to be
+vendored into this repository.
 
 Missing-directory policies:
 
@@ -40,7 +42,7 @@ skillDirs = {
   "workspaces/SecondBrain/.agents/skills" = {
     onMissing = "fail";
     skills = {
-      my-skill.source = ./local/my-skill;
+      my-skill.source = localSkillSource "my-skill";
     };
   };
 };

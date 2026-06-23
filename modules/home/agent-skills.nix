@@ -8,11 +8,14 @@
 }:
 
 let
+  localSkillSource = name: "${config.xdg.userDirs.extraConfig.WORKSPACE}/spreadconfig/skills/local/${name}";
+
   registry = import (repoRoot + "/skills/sources.nix") {
     inherit
       lib
       pkgs
       inputs
+      localSkillSource
       ;
   };
 
@@ -55,6 +58,13 @@ let
 
   toAbsoluteRoot = root: if lib.hasPrefix "/" root then root else "${homeDir}/${root}";
 
+  homeFileSource =
+    source:
+    if lib.isString source && lib.hasPrefix "/" source then
+      config.lib.file.mkOutOfStoreSymlink source
+    else
+      source;
+
   normalizeDir =
     root: value:
     let
@@ -81,7 +91,8 @@ let
         skill = normalizeSkill name value;
       in
       lib.nameValuePair "${dir.homeTargetRoot}/${skill.target}" {
-        inherit (skill) source recursive force;
+        source = homeFileSource skill.source;
+        inherit (skill) recursive force;
       }
     ) dir.skills;
 

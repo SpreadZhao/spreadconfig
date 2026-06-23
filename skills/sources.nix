@@ -2,6 +2,7 @@
   lib,
   pkgs,
   inputs ? { },
+  localSkillSource ? (name: ./local + "/${name}"),
   ...
 }:
 
@@ -32,13 +33,13 @@ let
 
   wechatArticleFetcherSkill = {
     wechat-article-fetcher = {
-      source = ./local/wechat-article-fetcher;
+      source = localSkillSource "wechat-article-fetcher";
     };
   };
 
   smartmontoolsDiskHealthSkill = {
     smartmontools-disk-health = {
-      source = ./local/smartmontools-disk-health;
+      source = localSkillSource "smartmontools-disk-health";
     };
   };
 
@@ -93,26 +94,32 @@ let
 
   codexAgentSkills = {
     android-waydroid-control = {
-      source = ./local/android-waydroid-control;
+      source = localSkillSource "android-waydroid-control";
     };
   };
 
   spreadconfigNixSkill = {
     spreadconfig-nix = {
-      source = ./local/spreadconfig-nix;
+      source = localSkillSource "spreadconfig-nix";
       force = true;
     };
   };
 
   secondbrainDiarySkill = {
     secondbrain-diary = {
-      source = ./local/secondbrain-diary;
+      source = localSkillSource "secondbrain-diary";
+    };
+  };
+
+  secondbrainConversationDiarySkill = {
+    secondbrain-conversation-diary = {
+      source = localSkillSource "secondbrain-conversation-diary";
     };
   };
 
   wechatDiarySkill = {
     wechat-diary = {
-      source = ./local/wechat-diary;
+      source = localSkillSource "wechat-diary";
     };
   };
 
@@ -168,6 +175,7 @@ in
       skills = [
         obsidianSkills
         secondbrainDiarySkill
+        secondbrainConversationDiarySkill
         wechatDiarySkill
       ];
     };
@@ -176,6 +184,9 @@ in
       onMissing = "skip";
       skills = [
         secondbrainDiarySkill
+        secondbrainConversationDiarySkill
+        wechatArticleFetcherSkill
+        wechatDiarySkill
       ];
     };
 
