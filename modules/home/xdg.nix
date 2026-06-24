@@ -22,7 +22,6 @@ in
       readOnly = true;
       entries = [
         "${disabledFcitxAutostart}/share/applications/org.fcitx.Fcitx5.desktop"
-        "${pkgs.flclash}/share/applications/flclash.desktop"
       ];
     };
     configFile = { };
