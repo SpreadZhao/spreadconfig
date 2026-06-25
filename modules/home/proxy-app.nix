@@ -1,45 +1,19 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}:
+{ pkgs, pkgsPinned, ... }:
 
 let
-  cfg = config.spreadzhao.proxyApp;
-
-  proxyApps = {
-    clash-verge-rev = {
-      package = pkgs.clash-verge-rev;
-      desktopEntry = "${pkgs.clash-verge-rev}/share/applications/clash-verge.desktop";
-    };
-    flclash = {
-      package = pkgs.flclash;
-      desktopEntry = "${pkgs.flclash}/share/applications/flclash.desktop";
-    };
-    nekobox = {
-      package = pkgs.nekobox;
-      desktopEntry = "${pkgs.nekobox}/share/applications/nekobox.desktop";
-    };
-  };
-
-  selectedApp = proxyApps.${cfg.selected};
+  # Keep the pre-update nixpkgs package: clash-verge-rev 2.4.7.
+  clashVergeRev = pkgsPinned.old_a6c3b1b.clash-verge-rev;
 in
 {
-  options.spreadzhao.proxyApp.selected = lib.mkOption {
-    type = lib.types.nullOr (lib.types.enum (builtins.attrNames proxyApps));
-    default = "nekobox";
-    description = ''
-      Proxy GUI client to install and start through XDG autostart.
-      Set to null to install no proxy GUI client.
-    '';
-  };
+  home.packages = [
+    clashVergeRev
+    # pkgs.flclash
+    # pkgs.nekobox
+  ];
 
-  config = lib.mkIf (cfg.selected != null) {
-    home.packages = [ selectedApp.package ];
-
-    xdg.autostart.entries = [
-      selectedApp.desktopEntry
-    ];
-  };
+  xdg.autostart.entries = [
+    "${clashVergeRev}/share/applications/clash-verge.desktop"
+    # "${pkgs.flclash}/share/applications/flclash.desktop"
+    # "${pkgs.nekobox}/share/applications/nekobox.desktop"
+  ];
 }
