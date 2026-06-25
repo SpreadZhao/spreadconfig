@@ -3,12 +3,14 @@
   hostConfigSource,
   hostScriptSource,
   hostName,
+  inputs,
   lib,
   pkgs,
   ...
 }:
 
 let
+  codexPackage = inputs.codex-cli-nix.packages.${pkgs.stdenv.hostPlatform.system}.default;
   qutebrowserDesktopExec = "Exec=env QT_SCALE_FACTOR=1.5 qutebrowser";
   qutebrowserBasePackage = (
     (pkgs.qutebrowser.overrideAttrs (old: {
@@ -44,7 +46,7 @@ in
 {
   home.packages = [
     qutebrowserPackage
-    pkgs.codex
+    codexPackage
     pkgs.jq
   ];
 

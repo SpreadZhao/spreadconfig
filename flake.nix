@@ -8,6 +8,14 @@
       url = "github:jacopone/antigravity-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    codex-cli-nix = {
+      url = "github:sadjow/codex-cli-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    claude-code-nix = {
+      url = "github:sadjow/claude-code-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     hermes-agent.url = "github:NousResearch/hermes-agent";
     home-manager = {
       url = "github:nix-community/home-manager/master";
@@ -22,7 +30,7 @@
       url = "github:nix-community/nixvim";
     };
     niri-computer-use = {
-      url = "github:SpreadZhao/niri-computer-use-spreadconfig-v2";
+      url = "github:SpreadZhao/niri-computer-use";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixos-best-practices-skill = {
