@@ -53,9 +53,10 @@
           "https://mirrors.tuna.tsinghua.edu.cn/nix-channels/store"
           "https://cache.nixos.org"
         ];
-        download-attempts = 5;
-        connect-timeout = 15;
-        stalled-download-timeout = 60;
+        download-attempts = 10;
+        connect-timeout = 60;
+        stalled-download-timeout = 600;
+        http-connections = 10;
         max-jobs = 2;
         cores = 4;
       };

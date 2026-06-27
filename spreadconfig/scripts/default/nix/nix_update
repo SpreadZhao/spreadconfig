@@ -19,8 +19,9 @@ list_inputs=0
 use_exclude_file=1
 exclude_file="$script_dir/nix_update.exclude"
 exclude_file_explicit=0
-max_attempts="${NIX_RETRY_ATTEMPTS:-3}"
-retry_delay="${NIX_RETRY_DELAY:-1}"
+max_attempts="${NIX_RETRY_ATTEMPTS:-5}"
+retry_delay="${NIX_RETRY_DELAY:-2}"
+flake_update_retry_patterns='Failed to fetch git repository|could not update local clone|unable to download|TLS connect error|Connection timed out|Timeout was reached|unexpected eof while reading|early EOF|HTTP/2 stream.*not closed cleanly'
 
 declare -a cli_excludes=()
 declare -a file_excludes=()
@@ -40,6 +41,10 @@ Options:
 
 The default exclude file is nix_update.exclude next to this script.
 It supports one input name per line, blank lines, and # comments.
+
+Environment:
+  NIX_RETRY_ATTEMPTS                 Outer flake update attempts, default 5
+  NIX_RETRY_DELAY                    Initial retry delay in seconds, default 2
 EOF
 }
 
@@ -115,6 +120,34 @@ read_flake_inputs() {
 	fi
 
 	mapfile -t all_inputs <<<"$inputs_text"
+}
+
+flake_update_log_has_retryable_warning() {
+	local log_file="$1"
+
+	grep -Eiq "$flake_update_retry_patterns" "$log_file"
+}
+
+cleanup_flake_update_log() {
+	if [[ -n "${flake_update_log:-}" ]]; then
+		rm -f "$flake_update_log"
+	fi
+}
+
+run_flake_update_once() {
+	local log_file="$1"
+	local status
+
+	: >"$log_file"
+
+	set +e
+	nix flake update \
+		--flake "$flake_url" \
+		"${update_inputs[@]}" 2>&1 | tee "$log_file"
+	status="${PIPESTATUS[0]}"
+	set -e
+
+	return "$status"
 }
 
 while (($# > 0)); do
@@ -235,15 +268,36 @@ fi
 echo "nix_update: updating ${#update_inputs[@]} flake input(s)"
 
 attempt=1
-while ! nix flake update "${update_inputs[@]}" --flake "$flake_url"; do
-	if ((attempt >= max_attempts)); then
-		echo "nix_update: nix flake update failed after $max_attempts attempts" >&2
-		exit 1
+flake_update_log="$(mktemp "${TMPDIR:-/tmp}/nix_update_flake_update.XXXXXX.log")"
+trap cleanup_flake_update_log EXIT
+
+while true; do
+	echo "nix_update: flake update attempt $attempt/$max_attempts"
+
+	if run_flake_update_once "$flake_update_log"; then
+		if ! flake_update_log_has_retryable_warning "$flake_update_log"; then
+			break
+		fi
+
+		if ((attempt >= max_attempts)); then
+			echo "nix_update: nix flake update still had retryable fetch warnings after $max_attempts attempts" >&2
+			exit 1
+		fi
+
+		echo "nix_update: nix flake update exited successfully, but retryable fetch warnings were detected" >&2
+	else
+		if ((attempt >= max_attempts)); then
+			echo "nix_update: nix flake update failed after $max_attempts attempts" >&2
+			exit 1
+		fi
+
+		echo "nix_update: nix flake update failed" >&2
 	fi
 
 	attempt=$((attempt + 1))
 	echo "nix_update: retrying flake update ($attempt/$max_attempts) in $retry_delay seconds" >&2
 	sleep "$retry_delay"
+	retry_delay=$((retry_delay * 2))
 done
 
 sns_until "$action"
