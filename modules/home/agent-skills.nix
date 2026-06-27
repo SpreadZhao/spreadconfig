@@ -8,7 +8,8 @@
 }:
 
 let
-  localSkillSource = name: "${config.xdg.userDirs.extraConfig.WORKSPACE}/spreadconfig/skills/local/${name}";
+  localSkillSource =
+    name: "${config.xdg.userDirs.extraConfig.WORKSPACE}/spreadconfig/skills/local/${name}";
 
   registry = import (repoRoot + "/skills/sources.nix") {
     inherit
@@ -19,12 +20,20 @@ let
       ;
   };
 
+  skillTargets = {
+    agents = ".agents/skills";
+    claude = ".claude/skills";
+    codex = ".codex/skills";
+  };
+  validSkillTargets = builtins.attrNames skillTargets;
+
   normalizeSkill =
     name: value:
     if lib.isAttrs value && value ? source then
       {
         source = value.source;
         target = value.target or name;
+        targets = value.targets or [ "agents" ];
         recursive = value.recursive or false;
         force = value.force or false;
       }
@@ -32,12 +41,63 @@ let
       {
         source = value;
         target = name;
+        targets = [ "agents" ];
         recursive = false;
         force = false;
       };
 
   mergeSkillSets =
-    value: if lib.isList value then lib.foldl' (skills: item: skills // item) { } value else value;
+    value:
+    if lib.isList value then
+      lib.foldl' (skills: item: skills // mergeSkillSets item) { } value
+    else
+      value;
+
+  validateSkillTargets =
+    skill:
+    let
+      unknownTargets = lib.filter (target: !(lib.elem target validSkillTargets)) skill.targets;
+    in
+    if unknownTargets != [ ] then
+      throw "Invalid targets for skill '${skill.target}': ${lib.concatStringsSep ", " unknownTargets}. Expected one of: ${lib.concatStringsSep ", " validSkillTargets}"
+    else
+      skill;
+
+  globalSkillsToSkillDirs =
+    value:
+    let
+      skills = mergeSkillSets value;
+      emptyTargetSkillDirs = lib.mapAttrs' (
+        _: root:
+        lib.nameValuePair root {
+          onMissing = "skip";
+          skills = { };
+        }
+      ) skillTargets;
+
+      targetSkillDirs = lib.foldl' (
+        dirs: name:
+        let
+          skill = validateSkillTargets (normalizeSkill name skills.${name});
+          skillValue = builtins.removeAttrs skill [ "targets" ];
+        in
+        lib.foldl' (
+          nextDirs: target:
+          let
+            root = skillTargets.${target};
+          in
+          nextDirs
+          // {
+            ${root} = nextDirs.${root} // {
+              skills = nextDirs.${root}.skills // {
+                ${name} = skillValue;
+              };
+            };
+          }
+        ) dirs skill.targets
+      ) emptyTargetSkillDirs (builtins.attrNames skills);
+    in
+    lib.filterAttrs (_: dir: dir.skills != { }) targetSkillDirs;
 
   homeDir = config.home.homeDirectory;
   validMissingPolicies = [
@@ -101,7 +161,11 @@ let
     // (lib.optionalAttrs (registry ? codex) { ".codex/skills" = registry.codex; })
     // (lib.optionalAttrs (registry ? claude) { ".claude/skills" = registry.claude; });
 
-  skillDirs = registry.skillDirs or legacySkillDirs;
+  skillDirs =
+    if registry ? globalSkills then
+      globalSkillsToSkillDirs registry.globalSkills
+    else
+      registry.skillDirs or legacySkillDirs;
   dirEntries = lib.mapAttrsToList normalizeDir skillDirs;
   homeFileDirs = lib.filter (dir: dir.onMissing != "skip") dirEntries;
   failDirs = lib.filter (dir: dir.onMissing == "fail") dirEntries;

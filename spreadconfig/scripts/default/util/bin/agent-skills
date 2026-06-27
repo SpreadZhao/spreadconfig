@@ -1,0 +1,358 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+
+workspace_root="${AGENT_WORKSPACE_ROOT:-${WORKSPACE:-$HOME/workspaces}}"
+manifest="${AGENT_SKILL_PROFILE_MANIFEST:-${XDG_CONFIG_HOME:-$HOME/.config}/spreadconfig/agent-skill-profiles.tsv}"
+state_root="${XDG_STATE_HOME:-$HOME/.local/state}/spreadconfig/agent-skills"
+force_replace=0
+
+usage() {
+	cat <<'EOF'
+Usage: agent-skills [OPTIONS] COMMAND [ARGS...]
+
+Switch project-local agent skills for a workspace.
+
+Options:
+  --workspace DIR       Use DIR as the workspace root, default $WORKSPACE or ~/workspaces
+  --manifest FILE      Read profile manifest from FILE
+  --force              Replace existing non-symlink targets during use/add
+  -h, --help           Show this help
+
+Commands:
+  list                 List available profiles
+  show [PROFILE...]    Show skills in profiles
+  use PROFILE...       Replace the active managed skill set with profiles
+  add PROFILE...       Add profiles to the active managed skill set
+  remove PROFILE...    Remove profiles from the active managed skill set
+  clear                Remove active managed skills
+  status               Show active profiles and managed targets
+EOF
+}
+
+die() {
+	echo "agent-skills: $*" >&2
+	exit 1
+}
+
+need_manifest() {
+	[[ -f "$manifest" ]] || die "manifest does not exist: $manifest"
+}
+
+target_dir() {
+	case "$1" in
+	agents)
+		printf '%s/.agents/skills' "$workspace_root"
+		;;
+	claude)
+		printf '%s/.claude/skills' "$workspace_root"
+		;;
+	codex)
+		printf '%s/.codex/skills' "$workspace_root"
+		;;
+	*)
+		die "unknown skill target: $1"
+		;;
+	esac
+}
+
+target_key() {
+	printf '%s' "$workspace_root" | sha256sum | awk '{ print $1 }'
+}
+
+state_file() {
+	local key
+	key="$(target_key)"
+	printf '%s/%s.%s' "$state_root" "$key" "$1"
+}
+
+list_profiles() {
+	need_manifest
+	awk -F '\t' 'NF >= 5 && $1 !~ /^#/ { print $1 }' "$manifest" | sort -u
+}
+
+profile_exists() {
+	local profile="$1"
+	awk -F '\t' -v profile="$profile" 'NF >= 5 && $1 == profile { found = 1 } END { exit found ? 0 : 1 }' "$manifest"
+}
+
+require_profiles() {
+	local profile
+
+	need_manifest
+	(($# > 0)) || die "at least one profile is required"
+
+	for profile in "$@"; do
+		profile_exists "$profile" || die "unknown profile: $profile"
+	done
+}
+
+show_profiles() {
+	local profile
+	local -a profiles=()
+
+	need_manifest
+	if (($# == 0)); then
+		mapfile -t profiles < <(list_profiles)
+	else
+		profiles=("$@")
+	fi
+
+	for profile in "${profiles[@]}"; do
+		profile_exists "$profile" || die "unknown profile: $profile"
+		echo "[$profile]"
+		awk -F '\t' -v profile="$profile" 'NF >= 5 && $1 == profile { printf "  %s/%s -> %s\n", $2, $3, $4 }' "$manifest"
+	done
+}
+
+remove_managed_targets() {
+	local managed_file="$1"
+	local target_name
+	local name
+	local dir
+	local target
+
+	[[ -f "$managed_file" ]] || return 0
+
+	while IFS=$'\t' read -r target_name name || [[ -n "${target_name:-}${name:-}" ]]; do
+		if [[ -z "${name:-}" ]]; then
+			name="$target_name"
+			target_name="agents"
+		fi
+		[[ -n "$name" ]] || continue
+		dir="$(target_dir "$target_name")"
+		target="$dir/$name"
+		if [[ -L "$target" ]]; then
+			rm -f "$target"
+		elif [[ -e "$target" ]]; then
+			echo "Keeping non-symlink skill target: $target" >&2
+		fi
+	done <"$managed_file"
+}
+
+install_profile_rows() {
+	local managed_tmp="$1"
+	local profile
+	local row
+	local target_name
+	local name
+	local source
+	local force
+	local dir
+	local target
+
+	shift
+
+	for profile in "$@"; do
+		while IFS= read -r row || [[ -n "$row" ]]; do
+			[[ -n "$row" ]] || continue
+			IFS=$'\t' read -r _ target_name name source force <<<"$row"
+			dir="$(target_dir "$target_name")"
+			target="$dir/$name"
+
+			[[ -d "$source" ]] || die "skill source does not exist for $profile/$name: $source"
+			[[ -f "$source/SKILL.md" ]] || die "skill source has no SKILL.md for $profile/$name: $source"
+			mkdir -p "$dir"
+
+			if [[ -e "$target" || -L "$target" ]]; then
+				if [[ -L "$target" ]]; then
+					rm -f "$target"
+				elif ((force_replace)) || [[ "$force" = "1" ]]; then
+					rm -rf "$target"
+				else
+					die "target already exists and is not a symlink: $target"
+				fi
+			fi
+
+			ln -s "$source" "$target"
+			printf '%s\t%s\n' "$target_name" "$name" >>"$managed_tmp"
+		done < <(awk -F '\t' -v profile="$profile" 'NF >= 5 && $1 == profile { print }' "$manifest")
+	done
+}
+
+activate_profiles() {
+	local managed_file
+	local active_file
+	local managed_tmp
+	local active_tmp
+
+	require_profiles "$@"
+
+	mkdir -p "$state_root"
+	managed_file="$(state_file managed)"
+	active_file="$(state_file active)"
+	managed_tmp="$(mktemp "${TMPDIR:-/tmp}/agent-skills-managed.XXXXXX")"
+	active_tmp="$(mktemp "${TMPDIR:-/tmp}/agent-skills-active.XXXXXX")"
+
+	remove_managed_targets "$managed_file"
+	install_profile_rows "$managed_tmp" "$@"
+
+	sort -u "$managed_tmp" >"$managed_file"
+	printf '%s\n' "$@" >"$active_tmp"
+	awk 'NF && !seen[$0]++' "$active_tmp" >"$active_file"
+	rm -f "$managed_tmp" "$active_tmp"
+
+	echo "agent-skills: active profiles: $*"
+	echo "agent-skills: workspace: $workspace_root"
+}
+
+clear_profiles() {
+	local managed_file
+	local active_file
+
+	mkdir -p "$state_root"
+	managed_file="$(state_file managed)"
+	active_file="$(state_file active)"
+	remove_managed_targets "$managed_file"
+	rm -f "$managed_file" "$active_file"
+	echo "agent-skills: cleared managed skills from $workspace_root"
+}
+
+read_active_profiles() {
+	local active_file
+
+	active_file="$(state_file active)"
+	[[ -f "$active_file" ]] || return 0
+	awk 'NF && !seen[$0]++' "$active_file"
+}
+
+add_profiles() {
+	local -a profiles=()
+
+	require_profiles "$@"
+	mapfile -t profiles < <(
+		{
+			read_active_profiles
+			printf '%s\n' "$@"
+		} | awk 'NF && !seen[$0]++'
+	)
+	activate_profiles "${profiles[@]}"
+}
+
+remove_profiles() {
+	local remove_list
+	local -a profiles=()
+
+	require_profiles "$@"
+	remove_list="$(printf '%s\n' "$@")"
+	mapfile -t profiles < <(
+		read_active_profiles |
+			awk -v remove_list="$remove_list" '
+				BEGIN {
+					n = split(remove_list, remove, "\n")
+					for (i = 1; i <= n; i++) skip[remove[i]] = 1
+				}
+				NF && !skip[$0] && !seen[$0]++
+			'
+	)
+
+	if ((${#profiles[@]} == 0)); then
+		clear_profiles
+	else
+		activate_profiles "${profiles[@]}"
+	fi
+}
+
+status() {
+	local managed_file
+	local active_file
+	local target_name
+	local name
+	local dir
+
+	managed_file="$(state_file managed)"
+	active_file="$(state_file active)"
+
+	echo "manifest: $manifest"
+	echo "workspace: $workspace_root"
+	echo "targets:"
+	echo "  agents: $(target_dir agents)"
+	echo "  claude: $(target_dir claude)"
+	echo "  codex:  $(target_dir codex)"
+
+	if [[ -f "$active_file" ]]; then
+		echo "active profiles:"
+		sed 's/^/  /' "$active_file"
+	else
+		echo "active profiles: none"
+	fi
+
+	if [[ -f "$managed_file" ]]; then
+		echo "managed skills:"
+		while IFS=$'\t' read -r target_name name || [[ -n "${target_name:-}${name:-}" ]]; do
+			if [[ -z "${name:-}" ]]; then
+				name="$target_name"
+				target_name="agents"
+			fi
+			[[ -n "$name" ]] || continue
+			dir="$(target_dir "$target_name")"
+			if [[ -L "$dir/$name" ]]; then
+				printf '  %s/%s -> %s\n' "$target_name" "$name" "$(readlink "$dir/$name")"
+			else
+				printf '  %s/%s (missing or not symlink)\n' "$target_name" "$name"
+			fi
+		done <"$managed_file"
+	else
+		echo "managed skills: none"
+	fi
+}
+
+while (($# > 0)); do
+	case "$1" in
+	--workspace)
+		(($# >= 2)) || die "--workspace requires a directory"
+		workspace_root="$2"
+		shift 2
+		;;
+	--manifest)
+		(($# >= 2)) || die "--manifest requires a file"
+		manifest="$2"
+		shift 2
+		;;
+	--force)
+		force_replace=1
+		shift
+		;;
+	-h | --help)
+		usage
+		exit 0
+		;;
+	*)
+		break
+		;;
+	esac
+done
+
+command="${1:-status}"
+if (($# > 0)); then
+	shift
+fi
+
+case "$command" in
+list)
+	list_profiles
+	;;
+show)
+	show_profiles "$@"
+	;;
+use)
+	activate_profiles "$@"
+	;;
+add)
+	add_profiles "$@"
+	;;
+remove | rm)
+	remove_profiles "$@"
+	;;
+clear)
+	clear_profiles
+	;;
+status)
+	status
+	;;
+help)
+	usage
+	;;
+*)
+	die "unknown command: $command"
+	;;
+esac
