@@ -1,0 +1,4 @@
+interface:
+  display_name: "LeetCode Coach"
+  short_description: "Coach LeetCode practice with runs, review, notes"
+  default_prompt: "Use $leetcode-coach to run, review, and write a note patch for my LeetCode attempt."

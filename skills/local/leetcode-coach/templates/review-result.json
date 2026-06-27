@@ -1,0 +1,49 @@
+{
+  "problem": {
+    "num": "",
+    "title": ""
+  },
+  "language": "",
+  "code_file": "",
+  "run_evidence": {
+    "available": false,
+    "source": "agent_run",
+    "command": "",
+    "cwd": "",
+    "exit_code": null,
+    "stdout_summary": "",
+    "stderr_summary": "",
+    "failure_type": null,
+    "failed_case": null,
+    "duration_ms": null
+  },
+  "verdict": "needs_revision",
+  "correctness": {
+    "status": "unknown",
+    "issues": []
+  },
+  "complexity": {
+    "expected": "",
+    "actual": "",
+    "status": "unknown",
+    "notes": ""
+  },
+  "edge_cases": {
+    "covered": [],
+    "missing": [],
+    "recommended_to_run": []
+  },
+  "language_specific": {
+    "pitfalls": [],
+    "notes": []
+  },
+  "main_issue": {
+    "type": "",
+    "description": "",
+    "evidence": "",
+    "minimal_hint": ""
+  },
+  "note_worthy_insights": [],
+  "memory_candidates": [],
+  "next_action": "revise_and_rerun"
+}

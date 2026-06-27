@@ -1,0 +1,21 @@
+{
+  "available": false,
+  "source": "agent_run",
+  "problem": {
+    "num": "",
+    "title": ""
+  },
+  "language": "",
+  "code_file": "",
+  "command": "",
+  "cwd": "",
+  "exit_code": null,
+  "duration_ms": null,
+  "stdout": "",
+  "stderr": "",
+  "stdout_summary": "",
+  "stderr_summary": "",
+  "failure_type": null,
+  "failed_case": null,
+  "created_at": ""
+}

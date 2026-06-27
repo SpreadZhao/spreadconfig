@@ -1,0 +1,71 @@
+repos:
+  code:
+    name: SpreadStudy
+    remote: https://github.com/SpreadZhao/SpreadStudy
+    local_path: ""
+    leetcode_root: Leetcode
+
+  notes:
+    name: SecondBrain
+    remote: https://github.com/SpreadZhao/SecondBrain
+    local_path: ""
+    leetcode_notes: Projects/leetcode
+    leetcode_template: templates/leetcode.md
+
+model_policy:
+  default: runtime_default
+  review: runtime_default
+  note_writer: runtime_default
+  report: runtime_default
+  rule: "Do not hard-code model names. Use the current agent runtime model unless the runtime itself supports model routing and this config is explicitly extended."
+
+review:
+  default_mode: run_then_review
+  require_run_before_final_accept: true
+  allow_static_review_without_run: true
+  static_review_verdict: cannot_prove_correctness
+  max_hint_level_before_user_requests_solution: 2
+  do_not_open_ide: true
+  do_not_generate_unconfigured_runner: true
+
+languages:
+  cpp:
+    enabled: true
+    source_root: "{code.local_path}/Leetcode/LeetcodeCpp"
+    primary_files:
+      - "Questions/Solution.h"
+      - "Questions/Solution.cpp"
+    run_command: ""
+    cwd: "{code.local_path}/Leetcode/LeetcodeCpp"
+
+  kotlin:
+    enabled: true
+    source_root: "{code.local_path}/Leetcode/LeetcodeJava"
+    primary_globs:
+      - "src/questions/*.kt"
+    run_command: ""
+    cwd: "{code.local_path}/Leetcode/LeetcodeJava"
+
+  java:
+    enabled: true
+    source_root: "{code.local_path}/Leetcode/LeetcodeJava"
+    primary_globs:
+      - "src/questions/*.java"
+    run_command: ""
+    cwd: "{code.local_path}/Leetcode/LeetcodeJava"
+
+notes:
+  patch_first: true
+  apply_requires_explicit_user_request: true
+  one_problem_one_note: true
+  merge_multi_language_into_same_note: true
+  update_mtrace: true
+  preserve_existing_todo: true
+  preserve_existing_manual_notes: true
+  add_implementations_frontmatter: true
+
+memory:
+  enabled: true
+  record_failed_runs: true
+  record_language_pitfalls: true
+  record_reusable_insights: true
