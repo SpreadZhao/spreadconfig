@@ -7,6 +7,7 @@
       settings = {
         START_CHARGE_THRESH_BAT0 = lib.mkForce 0;
         STOP_CHARGE_THRESH_BAT0 = lib.mkForce 80;
+        USB_DENYLIST = "04e8:6860";
       };
     };
     asusd = {
