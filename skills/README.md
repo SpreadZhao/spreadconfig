@@ -32,8 +32,8 @@ Dynamic workspace profiles:
   `~/.config/spreadconfig/agent-skill-profiles.tsv`.
 - Use `agent-skills use <profile...>` to replace the active symlink set under
   `~/workspaces` without rebuilding.
-- Use multiple profiles together, such as `agent-skills use base leetcode` or
-  `agent-skills use base android frontend`.
+- Use multiple profiles together, such as `agent-skills use leetcode notes` or
+  `agent-skills use android frontend`.
 - Use `agent-skills add <profile...>` and `agent-skills remove <profile...>`
   for incremental changes.
 - The dynamic switcher only removes symlinks it previously managed. Existing

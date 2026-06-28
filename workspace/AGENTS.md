@@ -19,12 +19,12 @@ directory:
 
 ```bash
 agent-skills list
-agent-skills use base leetcode
+agent-skills use leetcode
 agent-skills add frontend
 agent-skills status
 ```
 
-Profiles can be combined. `agent-skills use base leetcode` replaces the active
+Profiles can be combined. `agent-skills use leetcode notes` replaces the active
 managed set with the union of those profiles. `agent-skills add frontend` keeps
 the current set and adds another profile. Switching profiles only changes
 symlinks managed by `agent-skills`.
@@ -42,7 +42,6 @@ work, runtime state lives under `./SpreadStudy/Leetcode/.leetcode-coach`.
 
 Common profiles:
 
-- `base`: minimal cross-workspace tools.
 - `leetcode`: review code in `SpreadStudy`, use the `leetcode-coach` skill, and
   write notes to `SecondBrain`.
 - `notes`: note ingestion, Obsidian, diary, and WeChat workflows.

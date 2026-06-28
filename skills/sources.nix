@@ -186,6 +186,7 @@ rec {
       drawioSkill
       externalUserSkills
       leetcodeCoachSkill
+      nixosBestPracticesSkill
       niriComputerUseSkill
       obsidianSkills
       secondbrainConversationDiarySkill
@@ -201,11 +202,6 @@ rec {
   # They are exposed through a manifest consumed by the agent-skills script,
   # so switching a profile does not require a rebuild.
   workspaceProfiles = {
-    base = [
-      niriComputerUseSkill
-      drawioSkill
-    ];
-
     leetcode = [
       leetcodeCoachSkill
       secondbrainDiarySkill
@@ -221,9 +217,9 @@ rec {
     ];
 
     nixos = [
-      niriComputerUseSkill
       spreadconfigNixSkill
       smartmontoolsDiskHealthSkill
+      nixosBestPracticesSkill
     ];
 
     android = [
@@ -233,7 +229,6 @@ rec {
 
     frontend = [
       externalUserSkills
-      drawioSkill
     ];
   };
 
@@ -241,10 +236,7 @@ rec {
   # `targets` field: agents -> ~/.agents/skills, claude -> ~/.claude/skills,
   # codex -> ~/.codex/skills.
   globalSkills = [
-    externalUserSkills
-    codexAgentSkills
     niriComputerUseSkill
     drawioSkill
-    wechatArticleFetcherSkill
   ];
 }
