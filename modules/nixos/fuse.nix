@@ -1,0 +1,5 @@
+{ ... }:
+
+{
+  programs.fuse.enable = true;
+}
