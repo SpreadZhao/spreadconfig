@@ -11,6 +11,10 @@ Use this skill to turn a WeChat public account article URL into a local Markdown
 
 Prefer the bundled script instead of hand-copying image URLs. It uses the existing fetch-skill backend order for WeChat content, then adds deterministic local asset handling.
 
+This skill does not own a repository. The output path decides where the archive
+is written. Resolve bundled scripts from the active skill directory, and do not
+use the spreadconfig skill source directory as an implicit archive destination.
+
 ## Quick Start
 
 Resolve the bundled script relative to this `SKILL.md` directory. Do not hardcode

@@ -11,6 +11,12 @@ Use this skill as an umbrella workflow above `secondbrain-diary`. Support open-e
 
 Do not reimplement repository layout, filename rules, frontmatter rules, resource handling, Obsidian wikilink style, or quality checks. When writing files, load and follow `secondbrain-diary`.
 
+## Workspace Scope
+
+- During conversation, do not assume the current working directory is the target notes repo.
+- When saving, delegate repository writes to `secondbrain-diary`, whose target repo is `/home/spreadzhao/workspaces/SecondBrain`.
+- Keep temporary reasoning in the conversation only; do not create runtime state under the spreadconfig skill source.
+
 ## Dependent Skills
 
 - Use this skill to guide the conversation, identify diary-worthy material, and build a Diary Packet.

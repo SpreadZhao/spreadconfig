@@ -8,6 +8,8 @@ description: Manage diary notes in the SecondBrain repository. Use when Codex ne
 ## Core Rules
 
 - Work from `/home/spreadzhao/workspaces/SecondBrain`.
+- When invoked from a cross-repository workspace session, change into the SecondBrain repo before running git, search, or edit commands.
+- This skill owns SecondBrain diary content only; do not write diary runtime files into the spreadconfig skill source directory.
 - Check `git status --short` before editing. Preserve unrelated user changes.
 - Keep diary entries under `StudyLogNew/diary/<year>/`.
 - Name entries `YYYY-MM-DD_slug.md`, where the date is the entry date and the slug is lowercase hyphen-case English when possible.

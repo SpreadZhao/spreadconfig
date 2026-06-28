@@ -7,6 +7,12 @@ description: Control local Waydroid or Android devices through Android Studio SD
 
 Use this skill to make Android UI debugging agent-controllable. Prefer the user's Android Studio SDK adb at `~/Android/Sdk/platform-tools/adb`; do not install a global adb unless the user explicitly asks.
 
+## Workspace Scope
+
+- This skill controls local Android or Waydroid state; it does not own a repository or write repo-local runtime state.
+- It may be installed globally or exposed by a workspace profile. Resolve bundled helpers from the directory containing this `SKILL.md`, not from `~/.codex`, the current working directory, or a project `.agents/skills` path.
+- When debugging an app inside a specific repository, run build commands from that repository root, then return to this skill's helper only for adb and Waydroid control.
+
 ## Tooling
 
 Use these paths and commands by default:
@@ -102,11 +108,12 @@ Use a loop of screenshot -> UI dump -> targeted input -> logcat. Report concrete
 The bundled `scripts/waydroid_adb_control.sh` wraps the common operations while still using Android Studio SDK adb. Prefer it for repeatable actions:
 
 ```bash
-SKILL_DIR="$HOME/.codex/skills/android-waydroid-control"
-"$SKILL_DIR/scripts/waydroid_adb_control.sh" start
-"$SKILL_DIR/scripts/waydroid_adb_control.sh" screenshot /tmp/waydroid.png
-"$SKILL_DIR/scripts/waydroid_adb_control.sh" tap 540 1800
-"$SKILL_DIR/scripts/waydroid_adb_control.sh" dump-ui /tmp/window.xml
+SKILL_DIR="<directory containing this SKILL.md>"
+HELPER="$SKILL_DIR/scripts/waydroid_adb_control.sh"
+"$HELPER" start
+"$HELPER" screenshot /tmp/waydroid.png
+"$HELPER" tap 540 1800
+"$HELPER" dump-ui /tmp/window.xml
 ```
 
 If the helper reports `unauthorized`, open the UI and accept the RSA prompt. If the helper blocks while launching the UI, stop the foreground process and use the `show` command again from a user shell.

@@ -9,6 +9,12 @@ description: Umbrella workflow for turning WeChat public account articles into S
 
 Use this skill to coordinate the existing `wechat-article-fetcher` and `secondbrain-diary` skills. Do not reimplement article fetching or diary conventions here; load and follow those skills when available, then apply the integration rules below.
 
+## Workspace Scope
+
+- Final diary edits belong in `/home/spreadzhao/workspaces/SecondBrain`.
+- Fetch raw article Markdown into a temporary path first; copy only selected images and final diary content into the SecondBrain diary tree.
+- Do not create raw article archives or resource folders under the spreadconfig skill source directory.
+
 ## Dependent Skills
 
 - Use `wechat-article-fetcher` to fetch the article Markdown and local images.

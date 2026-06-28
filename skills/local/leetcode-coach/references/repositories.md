@@ -11,6 +11,11 @@ workspace root, or `.leetcode-coach/config.yaml` when running from
 `SpreadStudy/Leetcode`. This file is runtime state and must not be generated or
 managed by NixOS/Home Manager.
 
+Do not use the spreadconfig skill source directory as a runtime root. If the
+skill is loaded from `/home/spreadzhao/workspaces/.agents/skills/leetcode-coach`
+or `/home/spreadzhao/workspaces/spreadconfig/skills/local/leetcode-coach`, keep
+using the configured SpreadStudy and SecondBrain paths for real work.
+
 ## Expected Code Shape
 
 Known reference paths in SpreadStudy:

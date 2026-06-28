@@ -25,6 +25,13 @@ local repository paths must come from the runtime `config.yaml`; never guess
 paths, scan the home directory, or ask the user for configuration during a
 skill action.
 
+## Workspace Scope
+
+- Work with code in the configured SpreadStudy checkout, normally `/home/spreadzhao/workspaces/SpreadStudy`.
+- Work with notes in the configured SecondBrain checkout, normally `/home/spreadzhao/workspaces/SecondBrain`.
+- Read and write LeetCode coach runtime state only under `/home/spreadzhao/workspaces/SpreadStudy/Leetcode/.leetcode-coach`.
+- Do not treat the spreadconfig skill source directory as the LeetCode project root.
+
 ## Required First Steps
 
 1. Read the runtime config with `scripts/load_config.py` or by direct inspection.
@@ -58,7 +65,21 @@ skill action.
 
 ## Helper Scripts
 
-Run helpers from the workspace root or from `SpreadStudy/Leetcode`. They only use Python standard library modules. Treat them as internal skill helpers, not a user-facing CLI product.
+Run helpers from the workspace root or from `SpreadStudy/Leetcode`; do not run
+them from the spreadconfig repository root because default runtime config
+discovery is relative to the current working directory. Treat helpers as
+internal skill tools, not a user-facing CLI product.
+
+Resolve helper scripts from the active skill directory:
+
+```bash
+SKILL_DIR="<directory containing this SKILL.md>"
+"$SKILL_DIR/scripts/run_python_helper.sh" load_config.py --pretty
+```
+
+The Python helpers only use standard library modules. On NixOS, do not assume
+`python3` is globally available; use `scripts/run_python_helper.sh`, which uses
+`python3` from `PATH` when present and falls back to `nix shell nixpkgs#python3`.
 
 - `scripts/load_config.py`: load and validate the runtime config.
 - `scripts/write_event.py`: append JSONL events to a session.

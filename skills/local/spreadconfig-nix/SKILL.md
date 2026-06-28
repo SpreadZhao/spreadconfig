@@ -5,6 +5,12 @@ description: Maintain the spreadconfig multi-host NixOS repository. Use for inst
 
 # Spreadconfig Nix
 
+## Workspace Scope
+
+- This skill owns the spreadconfig repository at `/home/spreadzhao/workspaces/spreadconfig`.
+- When a session starts from `/home/spreadzhao/workspaces`, change into the spreadconfig repo before running git, Nix, or helper commands for this skill.
+- The skill may be exposed through a workspace profile under `/home/spreadzhao/workspaces/.agents/skills`; do not assume `.agents/skills` exists inside the spreadconfig repository itself.
+
 ## Core Rules
 
 - Work from the repo root `/home/spreadzhao/workspaces/spreadconfig`.
@@ -54,12 +60,14 @@ Runtime scripts are installed at `~/scripts/nix` from merged `spreadconfig/scrip
 - Full update plus cleanup: `~/scripts/nix/nix_full_update boot`
 - Clean generations: `~/scripts/nix/nix_clean boot`
 
-When operating from the repo, use `scripts/resolve-nix-script` to choose the correct source script:
+When operating from the repo, resolve bundled helpers from the active skill
+directory, not from a repo-local `.agents/skills` directory:
 
 ```bash
-.agents/skills/spreadconfig-nix/scripts/resolve-nix-script sns_until
-.agents/skills/spreadconfig-nix/scripts/resolve-nix-script nix_update
-SPREADCONFIG_HOST=thinkbook .agents/skills/spreadconfig-nix/scripts/resolve-nix-script sns
+SKILL_DIR="${AGENT_WORKSPACE_ROOT:-${WORKSPACE:-$HOME/workspaces}}/.agents/skills/spreadconfig-nix"
+"$SKILL_DIR/scripts/resolve-nix-script" sns_until
+"$SKILL_DIR/scripts/resolve-nix-script" nix_update
+SPREADCONFIG_HOST=thinkbook "$SKILL_DIR/scripts/resolve-nix-script" sns
 ```
 
 The resolver prefers `spreadconfig/scripts/<host>/nix/<name>` and falls back to `spreadconfig/scripts/default/nix/<name>`.

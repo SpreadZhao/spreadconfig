@@ -9,6 +9,12 @@ description: Use when checking disk, SSD, or NVMe S.M.A.R.T. health with root-on
 
 Use this skill to inspect disk health with `smartctl`, configure continuous monitoring with `smartd`, and encode the result declaratively in NixOS. Prefer device evidence from the current machine over assumptions.
 
+## Workspace Scope
+
+- Device inspection is machine-scoped and does not require a repository working directory.
+- Persistent NixOS configuration changes belong in `/home/spreadzhao/workspaces/spreadconfig`; when editing configuration, load and follow `spreadconfig-nix`.
+- Do not store health-check runtime output under the spreadconfig skill source unless the user explicitly asks for a reusable skill resource.
+
 ## Privileges
 
 Run real device checks with root privileges. In non-interactive agent contexts, prefer `sudo -n smartctl ...` and `sudo -n smartd ...`; if sudo is unavailable, report that the health check cannot be completed and give the exact command for the user to run.
