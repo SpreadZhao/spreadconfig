@@ -141,6 +141,13 @@ let
     };
   };
 
+  spreadconfigSkillAuthoringSkill = {
+    spreadconfig-skill-authoring = {
+      source = localSkillSource "spreadconfig-skill-authoring";
+      targets = agentTargets;
+    };
+  };
+
   secondbrainDiarySkill = {
     secondbrain-diary = {
       source = localSkillSource "secondbrain-diary";
@@ -192,6 +199,7 @@ rec {
       secondbrainConversationDiarySkill
       secondbrainDiarySkill
       smartmontoolsDiskHealthSkill
+      spreadconfigSkillAuthoringSkill
       spreadconfigNixSkill
       wechatArticleFetcherSkill
       wechatDiarySkill
@@ -218,6 +226,7 @@ rec {
 
     nixos = [
       spreadconfigNixSkill
+      spreadconfigSkillAuthoringSkill
       smartmontoolsDiskHealthSkill
       nixosBestPracticesSkill
     ];

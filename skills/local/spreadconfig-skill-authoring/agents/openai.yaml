@@ -1,0 +1,4 @@
+interface:
+  display_name: "Spreadconfig Skill Authoring"
+  short_description: "Author Nix-managed spreadconfig skills"
+  default_prompt: "Use $spreadconfig-skill-authoring to create or update a Nix-managed skill in spreadconfig."
