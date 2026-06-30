@@ -30,11 +30,14 @@ tags:
   - tag
 mtrace:
   - YYYY-MM-DD
+star: false
 description: One concise sentence describing the note
 ---
 ```
 
 Then start the body with one H1. Use the article title, technical topic, or a concise Chinese title depending on the surrounding diary style.
+
+`star` is a boolean used by `StudyLogNew/all_study_log.md` to show selected notes in the Star section. Default it to `false`. Set it to `true` only when the user explicitly asks to star, favorite, highlight, pin, or otherwise put the diary in the starred/featured section.
 
 Common observed patterns:
 
@@ -45,7 +48,7 @@ Common observed patterns:
 
 ## Create Or Update
 
-1. Determine the target date, title, tags, and whether the user wants a new entry or an update.
+1. Determine the target date, title, tags, star value, and whether the user wants a new entry or an update.
 2. Inspect nearby entries in the same year and topic before writing:
    - `rg --files StudyLogNew/diary/<year>`
    - `rg -n "<topic>|<keyword>" StudyLogNew/diary`
@@ -64,7 +67,7 @@ Common observed patterns:
 
 ## Quality Pass
 
-- Run `rg -n "^---$|^title:|^date:|^tags:|^mtrace:|^description:" <file>` for frontmatter sanity on new or heavily edited notes.
+- Run `rg -n "^---$|^title:|^date:|^tags:|^mtrace:|^star:|^description:" <file>` for frontmatter sanity on new or heavily edited notes.
 - Check that wikilinks point to vault-relative paths and that resource paths include the correct year.
 - For generated or summarized content, keep claims traceable to user-provided material or cited sources.
 - Report the diary file path changed and any remaining open questions.

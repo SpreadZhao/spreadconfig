@@ -54,6 +54,7 @@ tags:
   - ai
 mtrace:
   - YYYY-MM-DD
+star: false
 description: One concise sentence
 ---
 
@@ -65,6 +66,8 @@ description: One concise sentence
 ```
 
 Choose tags from nearby diary notes when possible. Use Chinese prose for the diary body unless the surrounding note style or source material clearly suggests otherwise.
+
+Keep `star: false` by default. Set `star: true` only when the user explicitly asks to star, favorite, highlight, pin, or put the diary in the Star section.
 
 ## External Context Research
 

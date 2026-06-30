@@ -48,6 +48,7 @@ date: YYYY-MM-DD
 action: create | update | uncertain
 candidate_title:
 topic:
+star: false
 summary:
 transcript_scope: full | partial
 full_conversation_transcript:
@@ -80,6 +81,8 @@ confidence:
 Use the packet to make the write decision and communicate intent to `secondbrain-diary`. `full_conversation_transcript` must preserve every in-scope user message and every visible assistant reply in order before summarization.
 
 `external_sources`, `related_discussions`, `source_notes`, `related_notes`, and `note_context_summary` are supporting context gathered before invoking `secondbrain-diary`. They must not replace the transcript, and they must not be used to invent user experiences, decisions, or emotions.
+
+Set `star: true` only when the user explicitly asks to star, favorite, highlight, pin, or put the diary in the Star section; otherwise keep `star: false`.
 
 ## Transcript Preservation
 
