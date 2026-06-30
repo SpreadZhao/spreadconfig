@@ -1,4 +1,4 @@
 interface:
   display_name: "WeChat Diary"
-  short_description: "Turn WeChat articles into diary notes"
-  default_prompt: "Use $wechat-diary to turn this WeChat article into a SecondBrain diary with archived images and inline understanding."
+  short_description: "Archive WeChat article正文 into diary notes"
+  default_prompt: "Use $wechat-diary to turn this WeChat article into a SecondBrain diary that preserves the original article正文, archives useful images, and adds inline understanding."
