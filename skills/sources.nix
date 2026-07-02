@@ -148,6 +148,13 @@ let
     };
   };
 
+  paperReaderSkill = {
+    paper-reader = {
+      source = localSkillSource "paper-reader";
+      targets = agentTargets;
+    };
+  };
+
   secondbrainDiarySkill = {
     secondbrain-diary = {
       source = localSkillSource "secondbrain-diary";
@@ -196,6 +203,7 @@ rec {
       nixosBestPracticesSkill
       niriComputerUseSkill
       obsidianSkills
+      paperReaderSkill
       secondbrainConversationDiarySkill
       secondbrainDiarySkill
       smartmontoolsDiskHealthSkill
@@ -218,6 +226,7 @@ rec {
 
     notes = [
       obsidianSkills
+      paperReaderSkill
       secondbrainDiarySkill
       secondbrainConversationDiarySkill
       wechatArticleFetcherSkill
