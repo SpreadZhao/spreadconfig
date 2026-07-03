@@ -12,6 +12,10 @@
       url = "github:sadjow/codex-cli-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    codex-desktop-linux = {
+      url = "github:ilysenko/codex-desktop-linux";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     claude-code-nix = {
       url = "github:sadjow/claude-code-nix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -174,6 +178,7 @@
               };
               home-manager.users.spreadzhao = {
                 imports = [
+                  inputs.codex-desktop-linux.homeManagerModules.default
                   inputs.nixvim.homeModules.nixvim
                   ./modules/home
                   (hostDir + "/home.nix")
