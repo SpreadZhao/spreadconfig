@@ -26,7 +26,7 @@ Do not directly edit installed skill locations such as `~/.agents/skills`, `~/.c
 - Existing local skill content change: edit `skills/local/<skill-name>/`; no switch is needed if the existing installed path is already a symlink to this source.
 - Profile or global exposure change: edit `skills/sources.nix`; tell the user a Home Manager switch is required before relying on regenerated manifests or global symlinks.
 - External/upstream skill: prefer adding or reusing a flake input plus a `skills/sources.nix` source entry instead of vendoring files, unless the user explicitly wants a local fork.
-- Workspace activation: after a switch updates the manifest, use `agent-skills use <profile>`, `agent-skills add <profile>`, or `agent-skills status` from `/home/spreadzhao/workspaces`.
+- Workspace activation: after a switch updates the manifest, use `agent-skills refresh` to reapply the currently active profiles, or `agent-skills use <profile>` / `agent-skills add <profile>` when changing the active profile set.
 
 ## Creating a Local Skill
 
@@ -68,7 +68,7 @@ Use `agentTargets` for the common `agents` plus `claude` install shape. Use an e
 
 - Content-only edits to an already linked local skill usually take effect immediately because Home Manager links to the working tree source.
 - Changes to `globalSkills` require a Home Manager switch to create or update home-level symlinks.
-- Changes to `workspaceProfiles` require a Home Manager switch to regenerate `~/.config/spreadconfig/agent-skill-profiles.tsv`; after that, run `agent-skills use` or `agent-skills add` for the desired workspace profile.
+- Changes to `workspaceProfiles` require a Home Manager switch to regenerate `~/.config/spreadconfig/agent-skill-profiles.tsv`; after that, run `agent-skills refresh` from `/home/spreadzhao/workspaces` to sync the current active profiles, or `agent-skills use` / `agent-skills add` when changing which profiles are active.
 - Do not run Home Manager, NixOS, `sns_until switch`, or any equivalent switch command for this skill. Report that a switch is required and leave the actual switch to the user.
 - When useful, mention the host-specific spreadconfig switch script chosen by `$spreadconfig-nix`, but present it as the command for the user to run.
 

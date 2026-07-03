@@ -36,6 +36,11 @@ Dynamic workspace profiles:
   `agent-skills use android frontend`.
 - Use `agent-skills add <profile...>` and `agent-skills remove <profile...>`
   for incremental changes.
+- Use `agent-skills refresh` after a Home Manager switch to reapply the current
+  active profiles from the regenerated manifest.
+- Editing a local skill's content usually takes effect immediately because the
+  workspace link points at the source directory. Editing `workspaceProfiles`
+  requires a Home Manager switch first, then `agent-skills refresh`.
 - The dynamic switcher only removes symlinks it previously managed. Existing
   non-symlink skill directories are left alone unless `agent-skills --force`
   is used.

@@ -21,6 +21,7 @@ directory:
 agent-skills list
 agent-skills use leetcode
 agent-skills add frontend
+agent-skills refresh
 agent-skills status
 ```
 
@@ -28,6 +29,12 @@ Profiles can be combined. `agent-skills use leetcode notes` replaces the active
 managed set with the union of those profiles. `agent-skills add frontend` keeps
 the current set and adds another profile. Switching profiles only changes
 symlinks managed by `agent-skills`.
+
+Editing local skill content usually takes effect immediately because active
+workspace skills are symlinks to their sources. After changing profile
+membership in `spreadconfig/skills/sources.nix`, switch Home Manager first so
+the manifest is regenerated, then run `agent-skills refresh` to reapply the
+currently active profiles.
 
 Global home skills remain managed by Nix under `~/.agents/skills`,
 `~/.claude/skills`, or `~/.codex/skills`. Workspace profiles are for

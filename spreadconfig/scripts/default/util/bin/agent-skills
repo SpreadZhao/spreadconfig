@@ -24,6 +24,7 @@ Commands:
   use PROFILE...       Replace the active managed skill set with profiles
   add PROFILE...       Add profiles to the active managed skill set
   remove PROFILE...    Remove profiles from the active managed skill set
+  refresh              Reapply currently active profiles from the current manifest
   clear                Remove active managed skills
   status               Show active profiles and managed targets
 EOF
@@ -228,6 +229,15 @@ add_profiles() {
 	activate_profiles "${profiles[@]}"
 }
 
+refresh_profiles() {
+	local -a profiles=()
+
+	mapfile -t profiles < <(read_active_profiles)
+	((${#profiles[@]} > 0)) || die "no active profiles to refresh; run 'agent-skills use <profile...>' first"
+
+	activate_profiles "${profiles[@]}"
+}
+
 remove_profiles() {
 	local remove_list
 	local -a profiles=()
@@ -342,6 +352,9 @@ add)
 	;;
 remove | rm)
 	remove_profiles "$@"
+	;;
+refresh)
+	refresh_profiles
 	;;
 clear)
 	clear_profiles
