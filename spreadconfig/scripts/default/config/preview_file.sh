@@ -66,6 +66,20 @@ preview_audio() {
 	rm -f "$tmp_img"
 }
 
+preview_webp() {
+	file="$1"
+	width="$2"
+	height="$3"
+
+	tmp_img="$(mktemp --suffix=.png)"
+
+	if magick "$file[0]" "$tmp_img" 2>/dev/null; then
+		show_by_chafa "$tmp_img" "$width" "$height"
+	fi
+
+	rm -f "$tmp_img"
+}
+
 preview_bat() {
 	file="$1"
 	width="$2"
@@ -125,6 +139,10 @@ case "$mime_type" in
 
 *image/svg+xml*)
 	show_by_chafa "$file" "$width" "$height" white
+	;;
+
+*image/webp*)
+	preview_webp "$file" "$width" "$height"
 	;;
 
 *image/*)
