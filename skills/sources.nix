@@ -126,6 +126,18 @@ let
     };
   };
 
+  xiaohongshuSummarizerSkill = {
+    xiaohongshu-search-summarizer = {
+      source = pkgs.runCommand "xiaohongshu-search-summarizer-skill" { } ''
+        cp -R ${inputs."xiaohongshu-summarizer-skill"}/xiaohongshu-search-summarizer "$out"
+        chmod -R u+w "$out"
+        awk '$0 !~ /^compatibility:/' "$out/SKILL.md" > "$out/SKILL.md.tmp"
+        mv "$out/SKILL.md.tmp" "$out/SKILL.md"
+      '';
+      targets = agentTargets;
+    };
+  };
+
   codexAgentSkills = {
     android-waydroid-control = {
       source = localSkillSource "android-waydroid-control";
@@ -211,6 +223,7 @@ rec {
       spreadconfigNixSkill
       wechatArticleFetcherSkill
       wechatDiarySkill
+      xiaohongshuSummarizerSkill
       ;
   };
 
@@ -231,6 +244,7 @@ rec {
       secondbrainConversationDiarySkill
       wechatArticleFetcherSkill
       wechatDiarySkill
+      xiaohongshuSummarizerSkill
     ];
 
     nixos = [

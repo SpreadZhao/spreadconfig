@@ -65,6 +65,10 @@
       url = "git+https://github.com/vercel-labs/web-interface-guidelines.git?ref=main";
       flake = false;
     };
+    xiaohongshu-summarizer-skill = {
+      url = "git+https://github.com/piekill/xiaohongshu-summarizer-skill.git?ref=main";
+      flake = false;
+    };
     textbridge.url = "github:SpreadZhao/textbridge";
   };
 
