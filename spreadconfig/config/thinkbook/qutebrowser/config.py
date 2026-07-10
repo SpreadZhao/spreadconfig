@@ -100,13 +100,13 @@ c.fonts.web.size.minimum = 0
 c.fonts.web.size.minimum_logical = 6
 
 c.fonts.default_family = [
-    'Noto Color Emoji'
-    'Symbols Nerd Font Mono'
-    'Noto Sans'
-    'Noto Sans CJK SC'
-    'Noto Sans CJK TC'
-    'Noto Sans CJK JP'
-    'Noto Sans CJK KR'
+    'Noto Sans',
+    'Noto Sans CJK SC',
+    'Noto Sans CJK TC',
+    'Noto Sans CJK JP',
+    'Noto Sans CJK KR',
+    'Symbols Nerd Font Mono',
+    'Noto Color Emoji',
 ]
 c.fonts.default_size = '12pt'
 

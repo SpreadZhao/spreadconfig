@@ -8,11 +8,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1783497076,
-        "narHash": "sha256-NMMOfgLJPZU6yimIOVk8LnM5+SZlWwz6XG9zdDbZ/2c=",
+        "lastModified": 1783671102,
+        "narHash": "sha256-0HGdmT8LpUpn2s8pkp4FewHclRZM+BEOWnz1ekNuPcU=",
         "owner": "jacopone",
         "repo": "antigravity-nix",
-        "rev": "4f034162ad799768a372e4ce32bc6a95f7d056d5",
+        "rev": "40ae76f9b845c3b84cae66a017db8a0a9c934a63",
         "type": "github"
       },
       "original": {
@@ -71,11 +71,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1783665130,
-        "narHash": "sha256-jXVHKbVWNI9SU8V3/5uW+nNA/ZF3Ucb6W3BHaAofaBY=",
+        "lastModified": 1783686742,
+        "narHash": "sha256-yy/DDtZ+E2uXfcSUyrqtr5K/9ZWV8pCjDWAPb6p3HiU=",
         "owner": "ilysenko",
         "repo": "codex-desktop-linux",
-        "rev": "460f1f7194ad7c0174e536aa8eb5053932f52c48",
+        "rev": "808bb2552772250c80e21489a0d1ad9e1b12c9b4",
         "type": "github"
       },
       "original": {
@@ -87,11 +87,11 @@
     "drawio-skill": {
       "flake": false,
       "locked": {
-        "lastModified": 1783478595,
-        "narHash": "sha256-gk4d0G7eF+LW3YBXoDiF9dEmDcZoLmuL2hQxqjQ4aNk=",
+        "lastModified": 1783667410,
+        "narHash": "sha256-rbvt52QUv/4cQ1AHmTz4ZrES3CTIEXinMcxyxLEEu2E=",
         "ref": "main",
-        "rev": "e740fb2898c08217952c4337b7f0c89864ce7a7e",
-        "revCount": 186,
+        "rev": "6c53172d28698b7f148f5be9b296f236216f9814",
+        "revCount": 187,
         "type": "git",
         "url": "https://github.com/Agents365-ai/drawio-skill.git"
       },
@@ -242,11 +242,11 @@
         "uv2nix": "uv2nix"
       },
       "locked": {
-        "lastModified": 1783666140,
-        "narHash": "sha256-faM2mAyr2Q8DkYhw2TGgYsP5A+AlcJ8gfnL+Pu5j4i4=",
+        "lastModified": 1783687157,
+        "narHash": "sha256-uP+ou3tuTCS6TveVyvBAeYSAJrX8D4K2cvY0ZYKREK0=",
         "owner": "NousResearch",
         "repo": "hermes-agent",
-        "rev": "9cb2a8abb009f656c184fac78f04c3d0329be092",
+        "rev": "d37090ac363b7a3112ba89b32837fad69270594f",
         "type": "github"
       },
       "original": {
@@ -318,11 +318,11 @@
         "nixpkgs": "nixpkgs_2"
       },
       "locked": {
-        "lastModified": 1783582157,
-        "narHash": "sha256-EteIu2AVVbxzkBnBKjrbdknbpjxBkWTMNg02rXj4mgU=",
+        "lastModified": 1783673680,
+        "narHash": "sha256-ardRVG+ipnyyxVdIsbLMy5foO6gDqN/yIi8v10HTJqs=",
         "owner": "NixOS",
         "repo": "nixos-hardware",
-        "rev": "968980fba2c290b5529025636474eae8457b854c",
+        "rev": "0b655af52b5b89bcceb88737efdc3a7498e751ee",
         "type": "github"
       },
       "original": {
@@ -379,11 +379,11 @@
     },
     "nixpkgs_3": {
       "locked": {
-        "lastModified": 1783224372,
-        "narHash": "sha256-8i/87eeoqiGE4yOTjwSA3Eh/ziJRQEmd/unYU+K27sk=",
+        "lastModified": 1783522502,
+        "narHash": "sha256-iffAls3iaNTyJC2faYcUXSI+Gp02cDjYl+MygxKl2GI=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "d407951447dcd00442e97087bf374aad70c04cea",
+        "rev": "0bb7ec54c8483066ec9d7720e780a5caa71f8612",
         "type": "github"
       },
       "original": {
