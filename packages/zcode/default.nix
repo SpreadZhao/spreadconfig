@@ -1,22 +1,44 @@
 {
   appimageTools,
+  cacert,
   fetchurl,
   lib,
+  nix,
+  python3,
+  writeShellApplication,
 }:
 
 let
   pname = "zcode";
-  version = "3.2.2";
+  sourceInfo = lib.importJSON ./source.json;
+  inherit (sourceInfo) version;
   src = fetchurl {
     url = "https://cdn-zcode.z.ai/zcode/electron/releases/${version}/ZCode-${version}-linux-x64.AppImage";
-    hash = "sha256-QL9y2KCGtN3fHZ0IZgAaag9Uf4RHXE0FrFi+Ohd8Cz0=";
+    inherit (sourceInfo) hash;
   };
   appimageContents = appimageTools.extractType2 {
     inherit pname version src;
   };
+  updateScript = writeShellApplication {
+    name = "update-zcode";
+    runtimeInputs = [
+      nix
+      python3
+    ];
+    runtimeEnv.SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+    text = ''
+      exec python3 ${./update.py} "$PWD/packages/zcode"
+    '';
+    meta.mainProgram = "update-zcode";
+  };
 in
 appimageTools.wrapType2 {
   inherit pname version src;
+
+  passthru = {
+    inherit src;
+    updateScript = lib.getExe updateScript;
+  };
 
   extraInstallCommands = ''
     install -Dm444 "${appimageContents}/zcode.desktop" \

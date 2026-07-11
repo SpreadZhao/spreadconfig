@@ -1,0 +1,124 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+
+update_local_packages_err() {
+	local status=$?
+
+	echo "update_local_packages: failed at line ${BASH_LINENO[0]}: $BASH_COMMAND (exit $status)" >&2
+}
+
+trap update_local_packages_err ERR
+
+die() {
+	echo "update_local_packages: $*" >&2
+	exit 1
+}
+
+usage() {
+	cat <<'EOF'
+Usage: update_local_packages
+
+Update and build every package exported by the spreadconfig root flake.
+EOF
+}
+
+if (($# > 0)); then
+	case "$1" in
+	-h | --help)
+		usage
+		exit 0
+		;;
+	*)
+		die "this command does not accept arguments"
+		;;
+	esac
+fi
+
+command -v nix >/dev/null || die "nix is required"
+command -v nix-update >/dev/null || die "nix-update is required"
+command -v jq >/dev/null || die "jq is required"
+
+script_path="$(readlink -f "${BASH_SOURCE[0]}")"
+script_dir="$(cd -- "$(dirname -- "$script_path")" && pwd -P)"
+repo_dir="${SPREADCONFIG_REPO:-$(cd -- "$script_dir/../../../.." && pwd -P)}"
+flake_url="path://$repo_dir"
+update_attempts=3
+initial_retry_delay=2
+
+if ! system="$(nix eval --impure --raw --expr builtins.currentSystem)"; then
+	die "failed to determine the current Nix system"
+fi
+
+if ! package_status_json="$(
+	nix eval --json "$flake_url#packages.${system}" \
+		--apply 'packages: builtins.mapAttrs (_: package: package ? updateScript) packages'
+)"; then
+	die "failed to evaluate local package update contracts for $system"
+fi
+
+if ! package_names_text="$(jq -er 'if type == "object" then keys | sort | join("\n") else error("expected an object") end' <<<"$package_status_json")"; then
+	die "failed to parse the local package set"
+fi
+
+declare -a packages=()
+if [[ -n "$package_names_text" ]]; then
+	mapfile -t packages <<<"$package_names_text"
+fi
+
+if ((${#packages[@]} == 0)); then
+	die "the root flake exports no packages for $system"
+fi
+
+if ! missing_updaters="$(
+	jq -er '[to_entries[] | select(.value != true) | .key] | sort | join(" ")' \
+		<<<"$package_status_json"
+)"; then
+	die "failed to validate local package update contracts"
+fi
+
+if [[ -n "$missing_updaters" ]]; then
+	die "packages missing updateScript: $missing_updaters"
+fi
+
+echo "update_local_packages: repo: $repo_dir"
+echo "update_local_packages: system: $system"
+echo "update_local_packages: updating ${#packages[@]} package(s): ${packages[*]}"
+
+run_package_update() {
+	local package="$1"
+	local attempt=1
+	local retry_delay="$initial_retry_delay"
+
+	while true; do
+		echo "update_local_packages: updating $package (attempt $attempt/$update_attempts)"
+		if (
+			cd -- "$repo_dir"
+			nix-update "$package" --flake --use-update-script
+		); then
+			return 0
+		fi
+
+		if ((attempt >= update_attempts)); then
+			return 1
+		fi
+
+		echo "update_local_packages: $package failed; retrying in $retry_delay seconds" >&2
+		sleep "$retry_delay"
+		attempt=$((attempt + 1))
+		retry_delay=$((retry_delay * 2))
+	done
+}
+
+for package in "${packages[@]}"; do
+	if ! run_package_update "$package"; then
+		die "failed to update $package after $update_attempts attempts"
+	fi
+done
+
+declare -a build_targets=()
+for package in "${packages[@]}"; do
+	build_targets+=("$flake_url#$package")
+done
+
+echo "update_local_packages: building ${#packages[@]} package(s)"
+nix build --no-link "${build_targets[@]}"

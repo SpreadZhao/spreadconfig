@@ -3,14 +3,15 @@
   fetchurl,
   lib,
   makeDesktopItem,
+  nix-update-script,
 }:
 
 let
   pname = "nekobox";
-  version = "5.11.23";
+  version = "5.11.26";
   src = fetchurl {
     url = "https://github.com/qr243vbi/nekobox/releases/download/${version}/nekobox-${version}-x86_64-linux.AppImage";
-    hash = "sha256-/TPmn+XF1nP+byuXeXufTSEKlDHmbdvPUyhA5Ykp28c=";
+    hash = "sha256-WwTwRV9Wi7ZtQuS8ydGxJvHGhHNqffC23xQFXoEkMpo=";
   };
   appimageContents = appimageTools.extractType2 {
     inherit pname version src;
@@ -29,6 +30,14 @@ let
 in
 appimageTools.wrapType2 {
   inherit pname version src;
+
+  passthru = {
+    inherit src;
+    updateScript = nix-update-script {
+      attrPath = pname;
+      extraArgs = [ "--flake" ];
+    };
+  };
 
   extraInstallCommands = ''
     install -Dm444 "${desktopItem}/share/applications/nekobox.desktop" \

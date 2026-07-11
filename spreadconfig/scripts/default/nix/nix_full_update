@@ -4,8 +4,8 @@ set -euo pipefail
 action="${1:-boot}"
 
 if [[ "$action" != "switch" && "$action" != "boot" ]]; then
-  echo "Usage: nix_full_update [switch|boot]" >&2
-  exit 1
+	echo "Usage: nix_full_update [switch|boot]" >&2
+	exit 1
 fi
 
 nix_update "$action"

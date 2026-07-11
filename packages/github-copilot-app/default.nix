@@ -2,14 +2,15 @@
   appimageTools,
   fetchurl,
   lib,
+  nix-update-script,
 }:
 
 let
   pname = "github-copilot-app";
-  version = "1.0.2";
+  version = "1.0.19";
   src = fetchurl {
     url = "https://github.com/github/app/releases/download/v${version}/GitHub-Copilot-linux-x64.AppImage";
-    hash = "sha256-IFUhSwvI/+bBEwf3iFd4+IHOgDCF/+DBmiHME6MrSLU=";
+    hash = "sha256-j/+oc1Y+srTNOt7dhS04wp66CVHsDUCW+Qjake1Ak38=";
   };
   appimageContents = appimageTools.extractType2 {
     inherit pname version src;
@@ -17,6 +18,14 @@ let
 in
 appimageTools.wrapType2 {
   inherit pname version src;
+
+  passthru = {
+    inherit src;
+    updateScript = nix-update-script {
+      attrPath = pname;
+      extraArgs = [ "--flake" ];
+    };
+  };
 
   extraInstallCommands = ''
     install -Dm444 "${appimageContents}/usr/share/applications/GitHub Copilot.desktop" \

@@ -1,19 +1,43 @@
 {
+  cacert,
   lib,
   buildNpmPackage,
   fetchurl,
   importNpmLock,
+  nix,
+  nodejs,
+  python3,
+  writeShellApplication,
 }:
 
 let
-  version = "1.3.4";
+  package = lib.importJSON ./package.json;
+  sourceInfo = lib.importJSON ./source.json;
+  version =
+    if sourceInfo.version == package.version then
+      package.version
+    else
+      throw "cc-connect package.json and source.json versions differ";
 
   ccConnectBinary = fetchurl {
     urls = [
       "https://github.com/chenhg5/cc-connect/releases/download/v${version}/cc-connect-v${version}-linux-amd64.tar.gz"
       "https://gitee.com/cg33/cc-connect/releases/download/v${version}/cc-connect-v${version}-linux-amd64.tar.gz"
     ];
-    hash = "sha256-4O9RxoCnfUsfuISZn7kWowBvvjbKdLh8IWn+KiHR7fg=";
+    inherit (sourceInfo) hash;
+  };
+  updateScript = writeShellApplication {
+    name = "update-cc-connect";
+    runtimeInputs = [
+      nix
+      nodejs
+      python3
+    ];
+    runtimeEnv.SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+    text = ''
+      exec python3 ${./update.py} "$PWD/packages/cc-connect"
+    '';
+    meta.mainProgram = "update-cc-connect";
   };
 in
 buildNpmPackage {
@@ -40,6 +64,8 @@ buildNpmPackage {
 
     ln -s "$ccConnectDir/bin/cc-connect" "$out/bin/cc-connect"
   '';
+
+  passthru.updateScript = lib.getExe updateScript;
 
   meta = {
     description = "Bridge local AI coding agents to messaging platforms";

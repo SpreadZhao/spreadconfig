@@ -20,6 +20,7 @@
   libxkbcommon,
   makeDesktopItem,
   makeWrapper,
+  nix-update-script,
   qt6,
   stdenv,
   wayland,
@@ -108,6 +109,11 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = nix-update-script {
+    attrPath = finalAttrs.pname;
+    extraArgs = [ "--flake" ];
+  };
 
   meta = {
     description = "Cross-platform Bilibili video downloader";
