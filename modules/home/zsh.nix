@@ -66,49 +66,6 @@
           cd "$(command lf -print-last-dir "$@")"
       }
 
-      feh () {
-          local explicit_theme=0
-          local expecting_theme=0
-          local has_directory=0
-          local arg
-
-          for arg in "$@"; do
-              if (( expecting_theme )); then
-                  expecting_theme=0
-                  continue
-              fi
-
-              case "$arg" in
-                  --theme|-T)
-                      explicit_theme=1
-                      expecting_theme=1
-                      ;;
-                  --theme=*|-T*)
-                      explicit_theme=1
-                      ;;
-                  --)
-                      ;;
-                  -*)
-                      ;;
-                  *)
-                      if [[ -d "$arg" ]]; then
-                          has_directory=1
-                      fi
-                      ;;
-              esac
-          done
-
-          if (( explicit_theme )); then
-              command feh "$@"
-          elif (( $# == 0 )); then
-              command feh --theme gallery .
-          elif (( has_directory )); then
-              command feh --theme gallery "$@"
-          else
-              command feh --theme fit "$@"
-          fi
-      }
-
       function vi-yank-wlclip {
           zle vi-yank
           print -rn -- "$CUTBUFFER" | wl-copy

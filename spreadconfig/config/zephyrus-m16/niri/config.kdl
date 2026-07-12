@@ -227,13 +227,13 @@ window-rule {
 // }
 
 window-rule {
-    match app-id="feh"
+    match app-id="swayimg"
     match app-id="org.qutebrowser.qutebrowser"
     open-fullscreen false
 }
 
 window-rule {
-    match app-id="feh" title=".*\/tmp.*"
+    match app-id="swayimg-pin"
     match app-id=".*jetbrains.*" title=".*Welcome.*"
     match app-id="com.gabm.satty"
     open-floating true

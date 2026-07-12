@@ -5,7 +5,10 @@
   ...
 }:
 
-{
+let
+  enable = false;
+in
+lib.mkIf enable {
   home.packages = [
     (pkgs.feh.overrideAttrs (old: {
       postInstall = (old.postInstall or "") + ''

@@ -190,7 +190,7 @@ case "$choice" in
     ;;
 
 "$OPTION_PIN")
-    feh --theme "fit" --output-dir "$SAVE_PATH" "$TMPFILE"
+    swayimg --viewer --appid=swayimg-pin "$TMPFILE"
     ;;
 
 "$OPTION_SAVE")
