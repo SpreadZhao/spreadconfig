@@ -85,7 +85,6 @@ partial diff is useful for diagnosing the failed update.
 | Package | Update source | Strategy |
 | --- | --- | --- |
 | `bili23-downloader` | GitHub releases | `nix-update-script` plus archive hash refresh |
-| `nekobox` | GitHub releases | `nix-update-script` plus AppImage hash refresh |
 | `github-copilot-app` | GitHub releases | `nix-update-script` plus AppImage hash refresh |
 | `zcode` | Official ZCode release/download metadata | Custom version and AppImage hash updater |
 | `docsify-cli` | npm | Custom npm metadata and lockfile updater |

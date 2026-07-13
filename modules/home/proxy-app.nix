@@ -8,12 +8,10 @@ in
   home.packages = [
     clashVergeRev
     # pkgs.flclash
-    # pkgs.nekobox
   ];
 
   xdg.autostart.entries = [
     "${clashVergeRev}/share/applications/clash-verge.desktop"
     # "${pkgs.flclash}/share/applications/flclash.desktop"
-    # "${pkgs.nekobox}/share/applications/nekobox.desktop"
   ];
 }
