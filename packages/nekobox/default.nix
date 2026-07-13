@@ -8,10 +8,10 @@
 
 let
   pname = "nekobox";
-  version = "5.11.26";
+  version = "5.11.27";
   src = fetchurl {
     url = "https://github.com/qr243vbi/nekobox/releases/download/${version}/nekobox-${version}-x86_64-linux.AppImage";
-    hash = "sha256-WwTwRV9Wi7ZtQuS8ydGxJvHGhHNqffC23xQFXoEkMpo=";
+    hash = "sha256-oaPCDhOjjiiCNtVOOHHh5Eudfm+Qp8TQtF23ev+6SQ0=";
   };
   appimageContents = appimageTools.extractType2 {
     inherit pname version src;

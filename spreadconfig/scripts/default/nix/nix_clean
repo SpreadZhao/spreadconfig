@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-action="${1:-boot}"
+action="${1:-switch}"
 
 if [[ "$action" != "switch" && "$action" != "boot" ]]; then
   echo "Usage: nix_clean [switch|boot]" >&2
