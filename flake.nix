@@ -79,8 +79,6 @@
       ...
     }@inputs:
     let
-      localOverlay = final: _: import ./packages { pkgs = final; };
-
       mkPkgs =
         system:
         import nixpkgs {
@@ -89,10 +87,7 @@
             allowUnfree = true;
             rocmSupport = true;
           };
-          overlays = [ localOverlay ];
         };
-
-      mkPackages = system: import ./packages { pkgs = mkPkgs system; };
 
       androidTemplate = {
         path = ./templates/android;
@@ -211,8 +206,6 @@
             statix
           ];
         };
-
-      packages.x86_64-linux = mkPackages "x86_64-linux";
 
       templates = {
         default = androidTemplate;

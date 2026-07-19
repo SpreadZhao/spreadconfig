@@ -30,7 +30,7 @@ usage() {
 	cat <<'EOF'
 Usage: nix_update [switch|boot] [OPTIONS]
 
-Update spreadconfig flake inputs and local packages, then run sns_until.
+Update spreadconfig flake inputs, then run sns_until.
 
 Options:
   -e, --exclude INPUT[,INPUT...]  Exclude one or more flake inputs for this run
@@ -202,7 +202,6 @@ done
 
 command -v nix >/dev/null || die "nix is required"
 command -v jq >/dev/null || die "jq is required"
-command -v update_local_packages >/dev/null || die "update_local_packages is required"
 command -v sns_until >/dev/null || die "sns_until is required"
 
 if ((list_inputs == 0)); then
@@ -299,5 +298,4 @@ else
 	done
 fi
 
-update_local_packages
 sns_until "$action"
