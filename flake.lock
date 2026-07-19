@@ -500,6 +500,26 @@
         "url": "https://github.com/openai/skills.git"
       }
     },
+    "personal-packages": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1784451919,
+        "narHash": "sha256-dCM7b3QDorhx12yvsaeWMgiV/l1bMkDlsWHYnPiuURA=",
+        "owner": "SpreadZhao",
+        "repo": "nix-packages",
+        "rev": "3833da8ee1ab0fd9073871d9da0aacaa799f81db",
+        "type": "github"
+      },
+      "original": {
+        "owner": "SpreadZhao",
+        "repo": "nix-packages",
+        "type": "github"
+      }
+    },
     "pyproject-build-systems": {
       "inputs": {
         "nixpkgs": [
@@ -568,6 +588,7 @@
         "nixvim": "nixvim",
         "obsidian-skills": "obsidian-skills",
         "openai-skills": "openai-skills",
+        "personal-packages": "personal-packages",
         "sops-nix": "sops-nix",
         "textbridge": "textbridge",
         "web-artifacts-builder-skill": "web-artifacts-builder-skill",

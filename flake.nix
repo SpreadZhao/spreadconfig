@@ -53,6 +53,10 @@
       url = "git+https://github.com/kepano/obsidian-skills.git?ref=main";
       flake = false;
     };
+    personal-packages = {
+      url = "github:SpreadZhao/nix-packages";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     openai-skills = {
       url = "git+https://github.com/openai/skills.git?ref=main";
       flake = false;
