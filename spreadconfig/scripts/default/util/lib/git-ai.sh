@@ -13,7 +13,11 @@ source "$GIT_AI_LIB_DIR/../config/git-ai.sh"
 git_ai_backend_description() {
     case "$GIT_AI_AGENT" in
     codex)
-        printf 'Codex (%s, %s)' "$GIT_AI_CODEX_MODEL" "$GIT_AI_CODEX_REASONING_EFFORT"
+        if [[ -n "$GIT_AI_CODEX_MODEL" ]]; then
+            printf 'Codex (%s, %s)' "$GIT_AI_CODEX_MODEL" "$GIT_AI_CODEX_REASONING_EFFORT"
+        else
+            printf 'Codex (configured default, %s)' "$GIT_AI_CODEX_REASONING_EFFORT"
+        fi
         ;;
     claude)
         printf 'Claude Code (%s, %s)' "$GIT_AI_CLAUDE_MODEL" "$GIT_AI_CLAUDE_EFFORT"
@@ -34,10 +38,13 @@ git_ai_run() {
     codex)
         local -a args=(
             exec
-            --model "$GIT_AI_CODEX_MODEL"
             --config "model_reasoning_effort=\"$GIT_AI_CODEX_REASONING_EFFORT\""
             --sandbox "$GIT_AI_CODEX_SANDBOX"
         )
+
+        if [[ -n "$GIT_AI_CODEX_MODEL" ]]; then
+            args+=(--model "$GIT_AI_CODEX_MODEL")
+        fi
 
         if [[ "$GIT_AI_CODEX_EPHEMERAL" == "1" || "$GIT_AI_CODEX_EPHEMERAL" == "true" ]]; then
             args+=(--ephemeral)
