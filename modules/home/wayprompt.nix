@@ -1,4 +1,6 @@
 {
+  inputs,
+  pkgs,
   theme_background,
   theme_bright_dark,
   theme_white,
@@ -25,10 +27,12 @@ let
   accent = theme_cyan;
   warning = theme_yellow;
   danger = theme_bright_red;
+  package = inputs.wayprompt-nixpkgs.legacyPackages.${pkgs.stdenv.hostPlatform.system}.wayprompt;
 in
 {
   programs.wayprompt = {
     enable = true;
+    inherit package;
     settings = {
       general = {
         font-regular = "${fontFamilies.sans}:size=${toString fontSizes.wayprompt}";

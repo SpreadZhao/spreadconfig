@@ -3,7 +3,7 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    nixpkgs-old-a6c3b1b.url = "github:nixos/nixpkgs/a6c3b1bbaa0d39d37e8472438c81c7bd7989e453";
+    wayprompt-nixpkgs.url = "github:nixos/nixpkgs/a6c3b1bbaa0d39d37e8472438c81c7bd7989e453";
     antigravity-nix = {
       url = "github:jacopone/antigravity-nix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -20,7 +20,7 @@
       url = "github:sadjow/claude-code-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    hermes-agent.url = "github:NousResearch/hermes-agent";
+    # hermes-agent.url = "github:NousResearch/hermes-agent";
     home-manager = {
       url = "github:nix-community/home-manager/master";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -98,20 +98,6 @@
         description = "Android development environment with project-local agent skills";
       };
 
-      mkPinnedPkgs =
-        system:
-        nixpkgs.lib.mapAttrs' (
-          name: input:
-          nixpkgs.lib.nameValuePair
-            (nixpkgs.lib.strings.replaceStrings [ "-" ] [ "_" ] (nixpkgs.lib.removePrefix "nixpkgs-" name))
-            (
-              import input {
-                inherit system;
-                config.allowUnfree = true;
-              }
-            )
-        ) (nixpkgs.lib.filterAttrs (name: _: nixpkgs.lib.hasPrefix "nixpkgs-old-" name) inputs);
-
       mkHostContext =
         {
           name,
@@ -121,7 +107,6 @@
           hostName = name;
           hostDir = ./hosts + "/${hostName}";
           repoRoot = ./.;
-          pkgsPinned = mkPinnedPkgs system;
           hostProfile = {
             nixos = import (hostDir + "/nixos/profile.nix");
             home = import (hostDir + "/home/profile.nix");
@@ -133,7 +118,6 @@
             hostName
             hostDir
             repoRoot
-            pkgsPinned
             hostProfile
             ;
         };
@@ -147,7 +131,6 @@
             hostName
             hostDir
             repoRoot
-            pkgsPinned
             hostProfile
             ;
         in
@@ -156,7 +139,6 @@
           specialArgs = {
             inherit
               inputs
-              pkgsPinned
               hostName
               repoRoot
               hostProfile
@@ -173,7 +155,6 @@
               home-manager.extraSpecialArgs = {
                 inherit
                   inputs
-                  pkgsPinned
                   hostName
                   repoRoot
                   hostProfile

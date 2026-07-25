@@ -103,6 +103,7 @@
     font-increase=Control+plus Control+equal Control+KP_Add
     font-decrease=Control+minus Control+KP_Subtract
     font-reset=Control+0 Control+KP_0
+    pipe-scrollback=[sh -c "f=$(mktemp); cat > \"$f\"; footclient -T terminal-scrollback nvim -R \"$f\"; rm -f \"$f\""] Control+Shift+h
 
     [search-bindings]
     find-prev=Control+Shift+p

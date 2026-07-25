@@ -101,6 +101,7 @@ in
               };
             };
           };
+          unicode.globalSection.DirectUnicodeMode = "";
           classicui.globalSection = {
             "Vertical Candidate List" = false;
             WheelForPaging = true;

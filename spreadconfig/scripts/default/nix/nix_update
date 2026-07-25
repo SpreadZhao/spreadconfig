@@ -16,6 +16,7 @@ flake_url="path://$repo_dir"
 action="boot"
 action_set=0
 list_inputs=0
+non_core_only=0
 use_exclude_file=1
 exclude_file="$script_dir/nix_update.exclude"
 exclude_file_explicit=0
@@ -25,6 +26,11 @@ flake_update_retry_patterns='Failed to fetch git repository|could not update loc
 
 declare -a cli_excludes=()
 declare -a file_excludes=()
+declare -ar core_inputs=(
+	nixpkgs
+	home-manager
+	nixos-hardware
+)
 
 usage() {
 	cat <<'EOF'
@@ -34,6 +40,7 @@ Update spreadconfig flake inputs, then run sns_until.
 
 Options:
   -e, --exclude INPUT[,INPUT...]  Exclude one or more flake inputs for this run
+      --non-core                  Exclude nixpkgs, home-manager, and nixos-hardware
       --exclude-file PATH        Read excluded inputs from PATH
       --no-exclude-file          Ignore the default exclude file
       --list-inputs              List current flake inputs and exit
@@ -186,6 +193,10 @@ while (($# > 0)); do
 		use_exclude_file=0
 		shift
 		;;
+	--non-core)
+		non_core_only=1
+		shift
+		;;
 	--list-inputs)
 		list_inputs=1
 		shift
@@ -236,6 +247,12 @@ done
 for input in "${file_excludes[@]}" "${cli_excludes[@]}"; do
 	excluded["$input"]=1
 done
+
+if ((non_core_only)); then
+	for input in "${core_inputs[@]}"; do
+		excluded["$input"]=1
+	done
+fi
 
 for input in "${!excluded[@]}"; do
 	if [[ -z "${known_inputs[$input]+x}" ]]; then
