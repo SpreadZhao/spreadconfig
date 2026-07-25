@@ -1,4 +1,4 @@
 interface:
   display_name: "SecondBrain Conversation Diary"
   short_description: "Turn free-form conversations into SecondBrain diary entries"
-  default_prompt: "Use $secondbrain-conversation-diary to discuss with external research, source links, and related SecondBrain notes when useful, then optionally save this conversation as a diary note with the full visible transcript, summary, related notes, and references preserved."
+  default_prompt: "Use $secondbrain-conversation-diary to discuss a topic with relevant research and prior notes, then save a complete Obsidian-ready diary with the visible transcript, summary, rendered math, useful explanatory images, related notes, and references."

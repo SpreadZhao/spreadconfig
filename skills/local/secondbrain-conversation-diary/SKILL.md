@@ -22,6 +22,7 @@ Do not reimplement repository layout, filename rules, frontmatter rules, resourc
 - Use this skill to guide the conversation, identify diary-worthy material, and build a Diary Packet.
 - Use `secondbrain-diary` to inspect the SecondBrain repository, choose create versus update, write the note, handle resources, and run quality checks.
 - When available, use Obsidian skills such as `obsidian-cli` for vault search and note lookup, and `obsidian-markdown` for Obsidian wikilinks and note syntax.
+- For technical learning diaries, load and follow `imagegen` when explanatory images would materially improve the note.
 - If the user explicitly names `secondbrain-diary`, still treat this skill as the conversational umbrella when the task begins from a free-form chat.
 
 ## Conversation Mode
@@ -96,6 +97,24 @@ When saving a conversation diary, preserve the complete visible conversation fir
 - Do not save hidden chain-of-thought, internal reasoning traces, raw tool logs, or content that was not shown to the user. Summarize reasoning instead.
 - If the complete conversation is not available in the current context, ask the user for the missing transcript or ask whether a clearly labeled partial record is acceptable. Do not present a partial transcript as complete.
 
+## Obsidian Rendering And Visual Explanations
+
+- Produce Obsidian-renderable math. Use `$...$` for inline LaTeX and put display equations between standalone `$$` delimiters:
+
+```markdown
+$$
+\theta^*=\arg\min_\theta L(\theta)
+$$
+```
+
+- Do not use `\(...\)` or `\[...\]`; Obsidian may not render those delimiters consistently.
+- Before saving a technical learning diary, identify a small number of high-value summary or explanation sections where a process, architecture, comparison, hierarchy, or multi-stage relationship would be materially clearer as an image.
+- When such a section exists, load and follow `imagegen`; generate an explanatory image rather than decorative artwork. Keep the visual accurate, scan-friendly, stylistically consistent, and light on in-image text. Do not generate an image when prose, a short table, or a formula is clearer.
+- Save every project-bound generated image through `secondbrain-diary` under the matching `StudyLogNew/diary/<year>/resources/` directory. Embed it with a vault-relative Obsidian embed such as `![[StudyLogNew/diary/<year>/resources/example.png|900]]`.
+- Put each generated image near the beginning of the summary or explanation section it supports. Do not interrupt the preserved transcript with newly generated illustrations unless the image itself was part of the visible conversation.
+- Keep formulas and essential facts in the Markdown body even when an image repeats them; never make the generated image the only source of important technical content.
+- Validate that math delimiters are paired and that Obsidian resolves every generated-resource embed. If image generation is unavailable or fails, finish the diary without a placeholder and report the limitation.
+
 ## External Context Research
 
 Use external research as part of the conversation whenever it can improve factual grounding, surface similar discussions, or add useful context for the future diary.
@@ -154,8 +173,9 @@ When the user asks to save:
 5. Search existing diary entries by date and topic.
 6. Decide whether to create or update.
 7. Write the note using `secondbrain-diary` rules, preserving the complete visible transcript, then adding the summary, related-note section, and any external-reference section.
-8. Run the checks required by `secondbrain-diary`.
-9. Report the changed file path and whether it was created or updated.
+8. Apply the Obsidian math and visual-explanation rules above.
+9. Run the checks required by `secondbrain-diary`, including formula-delimiter and generated-resource validation when applicable.
+10. Report the changed file path and whether it was created or updated.
 
 ## Update Style
 
