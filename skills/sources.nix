@@ -49,6 +49,16 @@ let
     };
   };
 
+  ytDlpDownloaderSkill = {
+    yt-dlp-downloader = {
+      source = pkgs.runCommand "yt-dlp-downloader-skill" { } ''
+        mkdir -p "$out"
+        cp ${inputs."yt-dlp-downloader-skill"}/SKILL.md "$out/SKILL.md"
+      '';
+      targets = agentTargets;
+    };
+  };
+
   wechatArticleFetcherSkill = {
     wechat-article-fetcher = {
       source = localSkillSource "wechat-article-fetcher";
@@ -215,6 +225,7 @@ rec {
       wechatArticleFetcherSkill
       wechatDiarySkill
       xiaohongshuSummarizerSkill
+      ytDlpDownloaderSkill
       ;
   };
 
@@ -260,5 +271,6 @@ rec {
   # codex -> ~/.codex/skills.
   globalSkills = [
     drawioSkill
+    ytDlpDownloaderSkill
   ];
 }

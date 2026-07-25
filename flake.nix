@@ -69,6 +69,10 @@
       url = "git+https://github.com/piekill/xiaohongshu-summarizer-skill.git?ref=main";
       flake = false;
     };
+    yt-dlp-downloader-skill = {
+      url = "git+https://github.com/MapleShaw/yt-dlp-downloader-skill.git?ref=master";
+      flake = false;
+    };
     textbridge.url = "github:SpreadZhao/textbridge";
   };
 

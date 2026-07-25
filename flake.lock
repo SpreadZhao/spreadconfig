@@ -424,7 +424,8 @@
         "wayprompt-nixpkgs": "wayprompt-nixpkgs",
         "web-artifacts-builder-skill": "web-artifacts-builder-skill",
         "web-interface-guidelines": "web-interface-guidelines",
-        "xiaohongshu-summarizer-skill": "xiaohongshu-summarizer-skill"
+        "xiaohongshu-summarizer-skill": "xiaohongshu-summarizer-skill",
+        "yt-dlp-downloader-skill": "yt-dlp-downloader-skill"
       }
     },
     "sops-nix": {
@@ -606,6 +607,23 @@
         "ref": "main",
         "type": "git",
         "url": "https://github.com/piekill/xiaohongshu-summarizer-skill.git"
+      }
+    },
+    "yt-dlp-downloader-skill": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1769266584,
+        "narHash": "sha256-8XIdbJT4zj7ikbZuW2r9evRR1vKoOlFThgEDaqgDKIg=",
+        "ref": "master",
+        "rev": "8da2e2ec3c38c6bb79d6a1718984be7b80aef38f",
+        "revCount": 2,
+        "type": "git",
+        "url": "https://github.com/MapleShaw/yt-dlp-downloader-skill.git"
+      },
+      "original": {
+        "ref": "master",
+        "type": "git",
+        "url": "https://github.com/MapleShaw/yt-dlp-downloader-skill.git"
       }
     }
   },
