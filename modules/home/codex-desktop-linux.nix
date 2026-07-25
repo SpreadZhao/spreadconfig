@@ -12,4 +12,6 @@ in
     enable = true;
     cliPackage = codexPackage;
   };
+
+  dconf.settings."org/gnome/desktop/interface".toolkit-accessibility = true;
 }

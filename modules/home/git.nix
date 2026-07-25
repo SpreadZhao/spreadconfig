@@ -6,6 +6,8 @@
         name = "SpreadZhao";
         email = "spreadzhao@outlook.com";
       };
+      pull.rebase = true;
+      rebase.autoStash = true;
       credential = {
         "https://github.com".helper = [
           ""

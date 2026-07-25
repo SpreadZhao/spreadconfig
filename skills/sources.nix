@@ -41,14 +41,6 @@ let
     else
       { };
 
-  niriComputerUseSkill = {
-    niri-computer-use = {
-      source = "${inputs.niri-computer-use}/overlay/skills/local/niri-computer-use";
-      targets = agentTargets;
-      force = true;
-    };
-  };
-
   # draw.io diagramming skill; shared across the agents and Claude targets.
   drawioSkill = {
     drawio-skill = {
@@ -213,7 +205,6 @@ rec {
       externalUserSkills
       leetcodeCoachSkill
       nixosBestPracticesSkill
-      niriComputerUseSkill
       obsidianSkills
       paperReaderSkill
       secondbrainConversationDiarySkill
@@ -268,7 +259,6 @@ rec {
   # `targets` field: agents -> ~/.agents/skills, claude -> ~/.claude/skills,
   # codex -> ~/.codex/skills.
   globalSkills = [
-    niriComputerUseSkill
     drawioSkill
   ];
 }
