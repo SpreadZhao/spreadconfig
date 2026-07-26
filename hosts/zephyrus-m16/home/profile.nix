@@ -7,7 +7,6 @@
     kitty = 12;
     fuzzel = 14;
     swaylock = 26;
-    wayprompt = 22;
     fnott = {
       title = 16;
       summary = 15;

@@ -1,3 +1,5 @@
+{ pkgs, ... }:
+
 {
   programs.git = {
     enable = true;
@@ -17,6 +19,10 @@
           ""
           "!gh auth git-credential"
         ];
+      };
+      diff.gpg = {
+        textconv = "${pkgs.gnupg}/bin/gpg --quiet --no-tty --decrypt";
+        cachetextconv = false;
       };
     };
   };

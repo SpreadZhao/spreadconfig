@@ -421,7 +421,6 @@
         "personal-packages": "personal-packages",
         "sops-nix": "sops-nix",
         "textbridge": "textbridge",
-        "wayprompt-nixpkgs": "wayprompt-nixpkgs",
         "web-artifacts-builder-skill": "web-artifacts-builder-skill",
         "web-interface-guidelines": "web-interface-guidelines",
         "xiaohongshu-summarizer-skill": "xiaohongshu-summarizer-skill",
@@ -539,22 +538,6 @@
       "original": {
         "owner": "SpreadZhao",
         "repo": "textbridge",
-        "type": "github"
-      }
-    },
-    "wayprompt-nixpkgs": {
-      "locked": {
-        "lastModified": 1775258401,
-        "narHash": "sha256-EJhEaasgzEtshf47HHX8VCLB63zll5e6hZR1b0Tjofo=",
-        "owner": "nixos",
-        "repo": "nixpkgs",
-        "rev": "a6c3b1bbaa0d39d37e8472438c81c7bd7989e453",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nixos",
-        "repo": "nixpkgs",
-        "rev": "a6c3b1bbaa0d39d37e8472438c81c7bd7989e453",
         "type": "github"
       }
     },
