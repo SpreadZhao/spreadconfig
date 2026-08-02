@@ -362,7 +362,7 @@ config_foot() {
     # Set Foot window title to current command (preexec hook: runs before command execution)
     # See: https://codeberg.org/dnkl/foot/issues/242
     function preexec {
-        print -Pn "\e]0;${(q)1}(foot)\e\\"
+        printf '\e]0;%s(foot)\e\\' "${(q)1}"
     }
 
     # OSC 133 sequence support (command start/end markers for Foot)
@@ -404,7 +404,7 @@ config_kitty() {
 
     # Set Kitty window title to current command (preexec hook: runs before command execution)
     function preexec {
-        print -Pn "\e]0;${(q)1}(kitty)\e\\"
+        printf '\e]0;%s(kitty)\e\\' "${(q)1}"
     }
 }
 
