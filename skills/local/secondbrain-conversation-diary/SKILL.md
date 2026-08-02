@@ -112,8 +112,20 @@ $$
 - When such a section exists, load and follow `imagegen`; generate an explanatory image rather than decorative artwork. Keep the visual accurate, scan-friendly, stylistically consistent, and light on in-image text. Do not generate an image when prose, a short table, or a formula is clearer.
 - Save every project-bound generated image through `secondbrain-diary` under the matching `StudyLogNew/diary/<year>/resources/` directory. Embed it with a vault-relative Obsidian embed such as `![[StudyLogNew/diary/<year>/resources/example.png|900]]`.
 - Put each generated image near the beginning of the summary or explanation section it supports. Do not interrupt the preserved transcript with newly generated illustrations unless the image itself was part of the visible conversation.
+- Treat placement as part of the requirement: an image buried after a long explanation, or present only deep inside the preserved transcript, does not satisfy the visual requirement for the summary. Put the overview image immediately after the summary heading and section-specific images immediately after their section headings whenever those visuals are warranted.
+- Before finishing, inspect both the number and line positions of image embeds. Confirm that each intended key section has its own nearby embed and that every embedded file exists.
 - Keep formulas and essential facts in the Markdown body even when an image repeats them; never make the generated image the only source of important technical content.
 - Validate that math delimiters are paired and that Obsidian resolves every generated-resource embed. If image generation is unavailable or fails, finish the diary without a placeholder and report the limitation.
+
+## Course Homework Placement
+
+When a technical learning diary follows a scheduled course:
+
+- Verify the official schedule and the homework's actual topic before attaching an assignment to a lecture note.
+- Add homework only when it is explicitly assigned for that lecture or its required knowledge is substantially covered by that lecture.
+- If the current lecture has no new homework, omit the homework section. Do not fill the gap with the next unrecorded assignment.
+- Defer a later assignment to the next lecture that actually introduces the required material, even when its repository and solution are already available.
+- State clearly when an assignment spans several lectures; place it with the first note where the learner has enough knowledge to understand and attempt it.
 
 ## External Context Research
 

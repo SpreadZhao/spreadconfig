@@ -183,6 +183,13 @@ let
     };
   };
 
+  lectureNoteCompanionSkill = {
+    lecture-note-companion = {
+      source = localSkillSource "lecture-note-companion";
+      targets = agentTargets;
+    };
+  };
+
   wechatDiarySkill = {
     wechat-diary = {
       source = localSkillSource "wechat-diary";
@@ -213,6 +220,7 @@ rec {
       codexAgentSkills
       drawioSkill
       externalUserSkills
+      lectureNoteCompanionSkill
       leetcodeCoachSkill
       nixosBestPracticesSkill
       obsidianSkills
@@ -241,6 +249,7 @@ rec {
 
     notes = [
       obsidianSkills
+      lectureNoteCompanionSkill
       paperReaderSkill
       secondbrainDiarySkill
       secondbrainConversationDiarySkill
