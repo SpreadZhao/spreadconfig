@@ -1,6 +1,6 @@
 ---
 name: lecture-note-companion
-description: Companion workflow for learning from a class or lecture one chunk at a time and later producing a durable classroom note. Use when the user paraphrases or pastes a substantial teacher explanation, shares a slide or code example, asks a focused side question while following a course, starts the next lecture, or asks to turn the whole discussion into an illustrated Obsidian or SecondBrain note. Distinguish mainline lecture chunks from sideways questions, explain in plain structured language without losing important details, and generate a new explanatory image for every mainline summary chunk.
+description: Companion workflow for learning from a class or lecture one chunk at a time and later producing a structured classroom note plus a separate cleaned full-transcript resource. Use when the user paraphrases or pastes a substantial teacher explanation, shares a slide or code example, asks a focused side question while following a course, starts the next lecture, or asks to turn the whole discussion into illustrated Obsidian or SecondBrain notes. Distinguish mainline lecture chunks from sideways questions, explain in plain structured language without losing important details, and generate a new explanatory image for every mainline summary chunk.
 ---
 
 # Lecture Note Companion
@@ -149,16 +149,52 @@ Do not collect all diagrams at the bottom of the note. An image buried only in t
 
 Write or update the final note only after an explicit request such as “可以写笔记了” or “把这堂课整理成日记”. Until then, continue the live learning conversation.
 
-Follow the loaded SecondBrain and Obsidian skills, then apply these lecture-specific rules:
+Follow the loaded SecondBrain and Obsidian skills. By default, produce two separate, bidirectionally linked notes rather than mixing the transcript into the primary note:
+
+1. **Structured classroom note**: the durable primary note organized by the lecture's conceptual sequence.
+2. **Cleaned full-transcript resource**: a secondary note preserving every visible user question and assistant answer in chronological order.
+
+Use sibling filenames such as `YYYY-MM-DD-topic.md` and `YYYY-MM-DD-topic-transcript.md`. Link the transcript near the beginning of the structured note, and link back to the structured note near the beginning of the transcript.
+
+### Structured classroom note
+
+Use this default shape unless the surrounding vault has a stronger convention:
+
+1. frontmatter and one H1;
+2. a one-paragraph or callout summary;
+3. the lecture overview image;
+4. the lecture's position, question, or learning goals;
+5. numbered mainline sections in teaching order;
+6. sideways questions nested under the section they clarify, preferably as short question callouts;
+7. code, worked examples, limitations, and transitions where they belong;
+8. a compact review or key-question table;
+9. related-note links and external sources.
+
+Keep the structured note self-contained. Do not paste the raw chat into its body. Do not add internal QA prose such as formula-validation results to the note itself.
+
+### Cleaned full-transcript resource
+
+Preserve every visible in-scope user message and assistant answer, including formulas, code, links, corrections, and consecutive user follow-ups. Clean only presentation metadata that is not part of the conversation:
+
+- remove `Files mentioned by the user`, `My request for Codex`, attachment IDs, temporary filesystem paths, response-annotation wrappers, and skill invocation links;
+- preserve quoted context selected by a response annotation as a readable quote when it is needed to understand the follow-up;
+- never turn attachment names or temporary paths into headings;
+- embed a real vault image when an attachment is genuinely needed and has been archived; otherwise omit the attachment wrapper rather than printing its path;
+- organize turns under simple chronological headings such as `对话 01`, with `用户` and `AI` labels;
+- demote headings inside individual replies so they do not pollute the resource note's top-level structure;
+- do not summarize, rewrite, or silently drop substantive conversational content.
+
+Then apply these lecture-specific rules to both outputs:
 
 1. Identify the precise lecture boundary in the conversation.
-2. Preserve the complete visible lecture exchange as required by the diary workflow.
-3. Build the structured summary in mainline order rather than chat order alone.
+2. Create the cleaned transcript resource before finalizing the structured note, so the original exchange can never be lost during restructuring.
+3. Build the structured note in mainline order rather than chat order alone.
 4. Nest sideways questions under the mainline section they clarify, or collect genuinely cross-cutting questions in a short “横向追问” section.
 5. Preserve exact formulas, dimensions, code, teacher examples, user misunderstandings, and final corrections.
 6. Embed the reviewed images beside the corresponding concepts.
 7. Add sources and related-note links where useful without replacing the self-contained explanation.
-8. Validate frontmatter, Obsidian math, code fences, wikilinks, image embeds, and resource paths.
+8. Build an internal coverage checklist mapping every substantive user question to a section in the structured note. Add or expand a section when a key question is missing; leave minor repetitions only in the transcript resource.
+9. Validate frontmatter, Obsidian math, code fences, wikilinks, image embeds, resource paths, chronological transcript completeness, and the bidirectional note links.
 
 Handle homework conservatively:
 
@@ -182,6 +218,10 @@ Avoid these mistakes:
 - relying on an image containing malformed formulas or labels;
 - calling logits, similarities, or raw inner products probabilities;
 - separating a diagram from the section it explains;
+- placing raw attachment metadata, temporary paths, or chat-export headings in either note;
+- using the full transcript as the primary note and thereby destroying the lecture's conceptual structure;
+- overwriting or deleting the only complete transcript while restructuring the primary note;
+- claiming that key questions were covered without checking them against the transcript;
 - writing the final note before the user asks;
 - attaching homework to the wrong lecture.
 

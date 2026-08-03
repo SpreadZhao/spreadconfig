@@ -1,6 +1,6 @@
 interface:
   display_name: "Lecture Note Companion"
-  short_description: "Follow lectures with structured explanations and diagrams"
-  default_prompt: "Use $lecture-note-companion to follow this lecture step by step, distinguish mainline lecture chunks from side questions, and build a faithful illustrated classroom note."
+  short_description: "Build illustrated lecture notes with a separate full transcript"
+  default_prompt: "Use $lecture-note-companion to follow this lecture step by step, distinguish mainline chunks from side questions, and finish with a structured illustrated note plus a separate cleaned full-transcript resource."
 policy:
   allow_implicit_invocation: true
