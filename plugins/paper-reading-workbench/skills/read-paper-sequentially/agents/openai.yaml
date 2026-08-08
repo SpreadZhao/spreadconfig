@@ -1,0 +1,4 @@
+interface:
+  display_name: "Read Paper Sequentially"
+  short_description: "Read one chunk at a time with continuous questions"
+  default_prompt: "Use $read-paper-sequentially to continue the Reader session from the next chunk."

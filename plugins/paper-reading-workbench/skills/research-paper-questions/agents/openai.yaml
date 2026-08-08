@@ -1,0 +1,4 @@
+interface:
+  display_name: "Research Paper Questions"
+  short_description: "Answer linked paper questions with traceable evidence"
+  default_prompt: "Use $research-paper-questions to answer the active paper questions with sourced evidence."

@@ -162,13 +162,6 @@ let
     };
   };
 
-  paperReaderSkill = {
-    paper-reader = {
-      source = localSkillSource "paper-reader";
-      targets = agentTargets;
-    };
-  };
-
   secondbrainDiarySkill = {
     secondbrain-diary = {
       source = localSkillSource "secondbrain-diary";
@@ -224,7 +217,6 @@ rec {
       leetcodeCoachSkill
       nixosBestPracticesSkill
       obsidianSkills
-      paperReaderSkill
       secondbrainConversationDiarySkill
       secondbrainDiarySkill
       smartmontoolsDiskHealthSkill
@@ -250,7 +242,6 @@ rec {
     notes = [
       obsidianSkills
       lectureNoteCompanionSkill
-      paperReaderSkill
       secondbrainDiarySkill
       secondbrainConversationDiarySkill
       wechatArticleFetcherSkill

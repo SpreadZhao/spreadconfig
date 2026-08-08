@@ -1,0 +1,4 @@
+interface:
+  display_name: "Write Obsidian Paper"
+  short_description: "Build the bilingual annotated Obsidian publication"
+  default_prompt: "Use $write-obsidian-paper to update the bilingual paper with all resolved insights."

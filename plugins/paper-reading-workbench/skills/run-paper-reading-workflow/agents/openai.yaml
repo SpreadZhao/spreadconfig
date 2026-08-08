@@ -1,0 +1,4 @@
+interface:
+  display_name: "Paper Reading Workflow"
+  short_description: "Orchestrate a traceable deep paper reading workspace"
+  default_prompt: "Use $run-paper-reading-workflow to read this paper into a bilingual Obsidian workspace."

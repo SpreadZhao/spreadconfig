@@ -1,0 +1,22 @@
+{
+  "name": "paper-reading-workbench",
+  "version": "0.1.0+codex.20260808101402",
+  "description": "Read one academic paper as a traceable, sequential, question-driven Obsidian workspace.",
+  "author": {
+    "name": "SpreadZhao"
+  },
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Paper Reading Workbench",
+    "shortDescription": "Deep paper reading into a bilingual Obsidian workspace.",
+    "longDescription": "Preserve and segment a paper, read it chunk by chunk through a continuous Reader and Answerer loop, and publish a complete bilingual annotated edition with traceable questions, evidence, figures, tables, formulas, and resumable state.",
+    "developerName": "SpreadZhao",
+    "category": "Productivity",
+    "capabilities": [
+      "Read",
+      "Write",
+      "Research"
+    ],
+    "defaultPrompt": "Read this paper deeply and create a complete bilingual Obsidian workspace in the requested folder."
+  }
+}

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Ingest Paper"
+  short_description: "Normalize papers into complete Markdown and local assets"
+  default_prompt: "Use $ingest-paper to preserve and normalize this paper into the active workspace."

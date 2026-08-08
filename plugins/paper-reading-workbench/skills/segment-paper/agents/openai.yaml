@@ -1,0 +1,4 @@
+interface:
+  display_name: "Segment Paper"
+  short_description: "Split a paper into ordered semantic reading chunks"
+  default_prompt: "Use $segment-paper to partition the normalized paper without losing source coverage."
