@@ -395,7 +395,7 @@ binds {
     Mod+Ctrl+Shift+A { spawn-sh "$SCRIPT_HOME/niri/screenshot.sh -o";  }
     Mod+Shift+S { spawn-sh "$SCRIPT_HOME/niri/screenrecord.sh";  }
 
-    Mod+Shift+V { spawn-sh "cliphist list | fm --dmenu | cliphist decode | wl-copy"; }
+    Mod+Shift+V { spawn-sh "$SCRIPT_HOME/niri/clipboard_history.sh"; }
 
     Mod+Z { spawn-sh "wooz --output $($SCRIPT_HOME/niri/niri_focused_output_name.sh)"; }
     Mod+S { spawn-sh "slurp -b '#000000aa' -c '#ffffff' >/dev/null"; }
