@@ -1,7 +1,7 @@
 git:
   autoFetch: false
-  pagers:
-  - pager: diff-so-fancy
+  diffRenderers:
+    - command: diff-so-fancy
 gui:
   authorColors:
     '*': '#b4befe'
@@ -28,12 +28,10 @@ gui:
       - '#47CCB1'
 os:
   editPreset: "nvim-remote"
-
 keybinding:
   files:
     commitChanges: <disabled>
     commitChangesWithEditor: c
-
 customCommands:
   - key: "C"
     context: "files"
