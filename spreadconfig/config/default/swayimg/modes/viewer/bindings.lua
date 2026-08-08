@@ -1,17 +1,12 @@
-local antialiasing = true
 local chessboard = false
+local touchpad_pan_step = 60
 
 local function toggle_animation()
-  if swayimg.viewer.get_animation() then
-    swayimg.viewer.animation_stop()
-  else
-    swayimg.viewer.animation_resume()
-  end
+  swayimg.viewer.animation = not swayimg.viewer.animation
 end
 
 local function toggle_antialiasing()
-  antialiasing = not antialiasing
-  swayimg.enable_antialiasing(antialiasing)
+  swayimg.antialiasing = not swayimg.antialiasing
 end
 
 local function toggle_chessboard()
@@ -24,11 +19,7 @@ local function toggle_chessboard()
 end
 
 local function toggle_text()
-  if swayimg.text.visible() then
-    swayimg.text.hide()
-  else
-    swayimg.text.show()
-  end
+  swayimg.text.visible = not swayimg.text.visible
 end
 
 local function move_horizontal(direction)
@@ -50,7 +41,17 @@ local function move_vertical(direction)
 end
 
 local function scale_by(factor)
-  swayimg.viewer.set_abs_scale(swayimg.viewer.get_scale() * factor)
+  swayimg.viewer.set_abs_scale(swayimg.viewer.scale * factor)
+end
+
+local function pan_horizontal(distance)
+  local position = swayimg.viewer.get_position()
+  swayimg.viewer.set_abs_position(position.x + distance, position.y)
+end
+
+local function pan_vertical(distance)
+  local position = swayimg.viewer.get_position()
+  swayimg.viewer.set_abs_position(position.x, position.y + distance)
 end
 
 swayimg.viewer.on_key("q", function()
@@ -60,26 +61,26 @@ swayimg.viewer.on_key("Escape", function()
   swayimg.exit(0)
 end)
 swayimg.viewer.on_key("Ctrl+n", function()
-  swayimg.viewer.switch_image("next_dir")
+  swayimg.viewer.open("next_dir")
 end)
 swayimg.viewer.on_key("Ctrl+p", function()
-  swayimg.viewer.switch_image("prev_dir")
+  swayimg.viewer.open("prev_dir")
 end)
 swayimg.viewer.on_key("Return", function()
-  swayimg.set_mode("gallery")
+  swayimg.mode = "gallery"
 end)
 swayimg.viewer.on_key("s", function()
-  swayimg.set_mode("slideshow")
+  swayimg.mode = "slideshow"
 end)
 swayimg.viewer.on_key("m", toggle_text)
 swayimg.viewer.on_key("f", function()
-  swayimg.toggle_fullscreen()
+  swayimg.fullscreen = not swayimg.fullscreen
 end)
 swayimg.viewer.on_key("g", function()
-  swayimg.viewer.switch_image("first")
+  swayimg.viewer.open("first")
 end)
 swayimg.viewer.on_key("Shift+g", function()
-  swayimg.viewer.switch_image("last")
+  swayimg.viewer.open("last")
 end)
 swayimg.viewer.on_key("h", function()
   move_horizontal(1)
@@ -112,19 +113,22 @@ swayimg.viewer.on_key("o", function()
   scale_by(0.9)
 end)
 swayimg.viewer.on_key("n", function()
-  swayimg.viewer.switch_image("next")
+  swayimg.viewer.open("next")
 end)
 swayimg.viewer.on_key("p", function()
-  swayimg.viewer.switch_image("prev")
+  swayimg.viewer.open("prev")
 end)
 swayimg.viewer.on_key("z", function()
   swayimg.viewer.reset()
 end)
 swayimg.viewer.on_key("comma", function()
-  swayimg.viewer.prev_frame()
+  local frame = swayimg.viewer.frame
+  if frame > 0 then
+    swayimg.viewer.frame = frame - 1
+  end
 end)
 swayimg.viewer.on_key("period", function()
-  swayimg.viewer.next_frame()
+  swayimg.viewer.frame = swayimg.viewer.frame + 1
 end)
 swayimg.viewer.on_key("space", toggle_animation)
 swayimg.viewer.on_key("Ctrl+r", function()
@@ -154,3 +158,16 @@ swayimg.viewer.on_key("Shift+f", function()
   swayimg.viewer.set_fix_scale("fill")
 end)
 swayimg.viewer.on_key("t", swayimg.viewer.mark_image)
+
+swayimg.viewer.on_mouse("ScrollUp", function()
+  pan_vertical(touchpad_pan_step)
+end)
+swayimg.viewer.on_mouse("ScrollDown", function()
+  pan_vertical(-touchpad_pan_step)
+end)
+swayimg.viewer.on_mouse("ScrollLeft", function()
+  pan_horizontal(touchpad_pan_step)
+end)
+swayimg.viewer.on_mouse("ScrollRight", function()
+  pan_horizontal(-touchpad_pan_step)
+end)
