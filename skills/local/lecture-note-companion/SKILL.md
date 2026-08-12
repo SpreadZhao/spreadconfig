@@ -1,6 +1,6 @@
 ---
 name: lecture-note-companion
-description: Companion workflow for learning from a class or lecture one chunk at a time and later producing a structured classroom note plus a separate cleaned full-transcript resource. Use when the user paraphrases or pastes a substantial teacher explanation, shares a slide or code example, asks a focused side question while following a course, starts the next lecture, or asks to turn the whole discussion into illustrated Obsidian or SecondBrain notes. Distinguish mainline lecture chunks from sideways questions, explain in plain structured language without losing important details, and generate a new explanatory image for every mainline summary chunk.
+description: Companion workflow for learning from a class or lecture one chunk at a time and later producing a structured classroom note plus a separate cleaned full-transcript resource. Use when the user paraphrases or pastes a substantial teacher explanation, shares a slide or code example, asks a focused side question while following a course, starts the next lecture, or asks to turn the whole discussion into illustrated Obsidian or SecondBrain notes. Distinguish mainline lecture chunks from sideways questions, explain in plain structured language without losing important details, and plan one or more focused explanatory images for each mainline chunk according to its independent visual teaching units.
 ---
 
 # Lecture Note Companion
@@ -13,7 +13,7 @@ Do not treat the conversation as a stream of unrelated questions. Maintain a men
 
 ## Load Supporting Skills
 
-- Load and use `imagegen` for every mainline lecture chunk. This is mandatory even when the prose explanation would be sufficient by itself.
+- Load and use `imagegen` for every mainline lecture chunk after planning its visual coverage. This is mandatory even when the prose explanation would be sufficient by itself. Generate one or more focused images according to the number of independent visual teaching units; do not default to exactly one image.
 - When the user explicitly asks to save or write the final note, load and follow `secondbrain-conversation-diary`, `secondbrain-diary`, and `obsidian-markdown`. Use `obsidian-cli` when vault discovery or note management is required.
 - Use a more specialized skill when the material itself requires one, such as a PDF or paper-reading skill.
 - Browse primary or official sources when the user requests references, when a specific external resource has not been supplied, or when a technical claim is current or uncertain. Clearly separate sourced facts from interpretation.
@@ -56,26 +56,12 @@ For every mainline chunk, perform all of the following:
 3. Evaluate the user's interpretation explicitly: identify what is correct, what needs refinement, and why.
 4. Preserve essential definitions, notation, dimensions, assumptions, examples, limitations, and causal links from the source material.
 5. Connect the chunk to the previous mainline point and explain what role it plays in the lecture.
-6. Generate at least one new explanatory image in the same turn by using `imagegen`.
-7. Inspect the generated image before presenting or archiving it. Regenerate it if labels, relationships, or directionality are materially wrong.
+6. Decompose the explanation into independent visual teaching units before generating images.
+7. Decide the image count from those units instead of defaulting to one image for the entire turn.
+8. Generate one focused image for each unit that materially benefits from a visual by using `imagegen`.
+9. Inspect every generated image separately before presenting or archiving it. Regenerate any image whose labels, relationships, or directionality are materially wrong.
 
-Never omit step 6 because the concept appears simple. A text response, an old image, a screenshot supplied by the user, or Mermaid alone does not satisfy the image requirement.
-
-Choose the visual form from the concept:
-
-| Concept structure | Preferred visual |
-| --- | --- |
-| ordered stages or data transformation | flowchart or pipeline |
-| components and their relationships | architecture diagram |
-| two methods or interpretations | side-by-side comparison |
-| matrix shapes or batch computation | annotated computation diagram |
-| code operating on data | code-to-data transformation diagram |
-| hierarchy or abstraction levels | layered map |
-| change across steps or time | state or timeline diagram |
-
-Keep the picture instructional rather than decorative. Use a clean layout, limited text, accurate arrows, consistent colors, and labels that match the prose. Do not place indispensable information only in the image.
-
-For formulas, code, or matrix dimensions, prioritize correctness over artistic detail. If the generated image cannot reliably preserve a long formula, show the exact formula in the prose and use the image for the surrounding structure.
+Never omit the image-generation steps because the concept appears simple. A text response, an old image, a screenshot supplied by the user, or Mermaid alone does not satisfy the image requirement. Follow the visual-coverage rules below.
 
 ### B. Sideways question
 
@@ -94,13 +80,63 @@ For a sideways question:
 4. Say whether it changes the earlier conclusion or merely adds detail.
 5. Do not pretend the lecture has advanced unless the user introduces new lecture material.
 
-An image is optional for a purely sideways question. Generate one only when it materially improves understanding or the user explicitly requests one.
+An image is optional for a purely sideways question. Generate visuals only when they materially improve understanding or the user explicitly requests them. If the question needs visuals, apply the same decomposition rules: a complex sideways question may need multiple focused images.
 
 ### C. Mixed turn
 
-If a turn contains both a side question and new lecture content, answer the side question first, then organize the new mainline chunk. Because the turn contains mainline progress, generate a new image.
+If a turn contains both a side question and new lecture content, answer the side question first, then organize the new mainline chunk. Because the turn contains mainline progress, plan and generate one or more focused images.
 
 If classification is ambiguous, infer whether the user has introduced a new teacher explanation or stage. Avoid stopping for clarification when the distinction can be made reasonably from context.
+
+## Plan Visual Coverage
+
+Before calling `imagegen`, identify the independent visual teaching units in the explanation. A visual teaching unit is one of:
+
+- one mechanism or causal relationship;
+- one ordered transformation or computation;
+- one architecture or component relationship;
+- one direct comparison;
+- one worked example;
+- one limitation, failure mode, or counterexample that needs a different visual structure.
+
+Choose the image count from the content structure:
+
+| Content structure | Typical image count |
+| --- | ---: |
+| one definition, relationship, or short process | 1 |
+| mechanism plus a concrete example | 2 |
+| two independent mechanisms or comparisons | 2 |
+| architecture, computation flow, and resulting behavior | 3 |
+| several independent subquestions | one image per subquestion that materially benefits from a visual |
+
+These counts are heuristics, not quotas. Do not impose a fixed maximum merely to reduce tool calls. If there are many visual units, divide the prose into matching subsections and place a focused image beside each one. Never merge independent topics solely to avoid generating another image. An overview image does not replace focused images needed for individual mechanisms.
+
+### One Image, One Teaching Goal
+
+Give every image one primary teaching goal:
+
+- keep the number of visual elements small;
+- prefer 3–6 short labels over sentences or paragraphs;
+- keep exact formulas, derivations, caveats, and detailed explanations in the prose;
+- do not combine independent mechanisms merely because they appeared in the same user message;
+- use a multi-panel image only when the relationship between panels is itself the lesson, such as before versus after, method A versus method B, or consecutive stages of one process;
+- if removing one panel would not affect the meaning of the others, split the panels into separate images;
+- never use a large omnibus infographic as a substitute for several simpler teaching images.
+
+Choose the visual form separately for every visual teaching unit:
+
+| Visual teaching unit | Preferred form |
+| --- | --- |
+| ordered transformation | focused pipeline |
+| architecture | component diagram |
+| direct comparison | two-column comparison |
+| matrix or tensor operation | annotated shape diagram |
+| code behavior | code-to-data diagram |
+| one worked example | numbered calculation diagram |
+| failure mode | correct-versus-failure comparison |
+| change across iterations | short state sequence |
+
+Keep each image instructional rather than decorative. Use a clean layout, minimal text, accurate arrows, consistent colors, and labels that match the prose. Do not place indispensable information only in an image. For formulas, code, or matrix dimensions, prioritize correctness over artistic detail; show long or fragile formulas in the prose and use the image for the surrounding structure.
 
 ## Explain Without Losing Information
 
@@ -129,7 +165,7 @@ When writing formulas into an Obsidian note, use `$...$` for inline math and `$$
 
 ## Generate and Preserve Visuals
 
-Associate every generated image with the exact mainline chunk it explains. Prefer descriptive filenames when the image is saved, for example:
+Associate every generated image with the exact visual teaching unit it explains. Prefer descriptive filenames when the image is saved, for example:
 
 `YYYY-MM-DD-topic-concept.png`
 
@@ -138,7 +174,7 @@ When a target SecondBrain note or resource directory is already known, save the 
 In the final note:
 
 - place the lecture overview image immediately after the summary heading;
-- place each section image immediately after that section's heading or opening sentence;
+- place each focused image immediately beside the subsection or explanation it supports;
 - reuse correct images generated during the live discussion;
 - create an additional overview image if the existing section images do not explain the complete lecture structure;
 - verify every embedded file exists and renders.
@@ -214,6 +250,9 @@ Avoid these mistakes:
 - agreeing with an interpretation without checking it;
 - overcompressing a transcript until caveats and reasoning disappear;
 - answering a mainline chunk without creating a new explanatory image;
+- defaulting to exactly one image regardless of the number of independent visual teaching units;
+- putting several unrelated mechanisms into one large omnibus infographic;
+- filling images with paragraph-length text that belongs in the prose;
 - generating a decorative image that does not encode the explanation;
 - relying on an image containing malformed formulas or labels;
 - calling logits, similarities, or raw inner products probabilities;
@@ -232,7 +271,7 @@ For a mainline chunk, use this conceptual order without mechanically repeating t
 1. conclusion and assessment of the user's understanding;
 2. teacher's reasoning in plain language;
 3. exact technical details and a small example;
-4. a newly generated explanatory image;
+4. the planned set of newly generated focused images, placed beside the concepts they explain;
 5. connection to the lecture mainline.
 
 For a sideways question, use this conceptual order:
