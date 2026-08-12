@@ -203,6 +203,12 @@ cmd open-with-gui &"$@" $fx
 cmd open-with-tui $"$@" $fx
 cmd open-with-cli %"$@" $fx
 
+cmd copy-path ${{
+    printf '%s' "$fx" | wl-copy --type 'text/plain;charset=utf-8'
+}}
+
+cmd copy-file $copy-file $fx
+
 # cmd paste &{{
 #     set -- $(command cat ~/.local/share/lf/files)
 #     mode="$1"
@@ -253,6 +259,10 @@ map o push :open-with-tui<space>
 map <c-o> push :open-with-cli<space>
 map Q %lf -remote "send $id :cd \"$OLDPWD\"; quit"
 map zi zi
+map y
+map yy copy
+map yf copy-file
+map yp copy-path
 map t
 map tp toggle-preview
 map tt tag-toggle

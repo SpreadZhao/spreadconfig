@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+if (($# == 0)); then
+    echo "Usage: copy-file FILE..." >&2
+    exit 2
+fi
+
+for path in "$@"; do
+    if [[ ! -e "$path" ]]; then
+        echo "copy-file: path does not exist: $path" >&2
+        exit 1
+    fi
+done
+
+{
+    for path in "$@"; do
+        absolute_path="$(realpath -e -- "$path")"
+        jq -nr --arg path "$absolute_path" \
+            '$path | @uri | gsub("%2F"; "/") | "file://" + .'
+    done
+} | wl-copy --type text/uri-list
