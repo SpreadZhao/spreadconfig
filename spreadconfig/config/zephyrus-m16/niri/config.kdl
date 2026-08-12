@@ -25,6 +25,10 @@ input {
         scroll-factor 0.5
     }
 
+    tablet {
+        map-to-output "DP-1"
+    }
+
 }
 
 layout {

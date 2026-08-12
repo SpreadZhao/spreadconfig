@@ -1,4 +1,7 @@
 org.gnome.Nautilus=files
+codex-desktop=codex
+com.github.xournalpp.xournalpp=xournal
+md.Obsidian=obsidian
 org.gnome.DiskUtility=disks
 org.gnome.SoundRecorder=recorder
 org.gnome.FileRoller=FileRoller
