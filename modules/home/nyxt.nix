@@ -1,4 +1,5 @@
 {
+  hostConfigSource,
   inputs,
   pkgs,
   ...
@@ -21,4 +22,6 @@ let
 in
 {
   home.packages = [ nyxt4 ];
+
+  xdg.configFile."nyxt/config.lisp".source = hostConfigSource "nyxt/config.lisp";
 }

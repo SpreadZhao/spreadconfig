@@ -56,7 +56,7 @@ in
             OverrideXkbOption = false;
             CustomXkbOption = "";
             EnabledAddons = "";
-            DisabledAddons = "";
+            DisabledAddons = "clipboard";
             PreloadInputMethod = true;
             AllowInputMethodForPassword = false;
             ShowPreeditForPassword = false;
@@ -80,6 +80,7 @@ in
           GroupOrder."0" = "Default";
         };
         addons = {
+          clipboard.sections.TriggerKey = { };
           keyboard = {
             globalSection = {
               PageSize = 9;
