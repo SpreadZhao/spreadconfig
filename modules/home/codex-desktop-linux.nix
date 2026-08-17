@@ -1,16 +1,15 @@
-{
-  inputs,
-  pkgs,
-  ...
-}:
+{ pkgs, ... }:
 
-let
-  codexPackage = inputs.codex-cli-nix.packages.${pkgs.stdenv.hostPlatform.system}.default;
-in
 {
   programs.codexDesktopLinux = {
     enable = true;
-    cliPackage = codexPackage;
+    cliPackage = pkgs.codex;
+    linuxFeatures = [
+      "frameless-titlebar"
+      "remote-control-ui"
+      "remote-mobile-control"
+      "shared-app-server-socket"
+    ];
   };
 
   dconf.settings."org/gnome/desktop/interface".toolkit-accessibility = true;

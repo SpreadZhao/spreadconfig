@@ -18,6 +18,22 @@ urlencode() {
     jq -rn --arg value "$1" '$value | @uri'
 }
 
+resolve_codex_bin() {
+    local desktop_bin desktop_prefix bundled_codex
+
+    desktop_bin="$(command -v codex-desktop || true)"
+    if [ -n "$desktop_bin" ]; then
+        desktop_prefix="$(dirname "$(dirname "$(readlink -f "$desktop_bin")")")"
+        bundled_codex="$desktop_prefix/opt/codex-desktop/resources/codex"
+        if [ -x "$bundled_codex" ]; then
+            printf '%s\n' "$bundled_codex"
+            return 0
+        fi
+    fi
+
+    command -v codex
+}
+
 usage() {
     cat <<'EOF'
 Usage: translate [--provider google|codex] [-s LANG] [-t LANG] [--text]
@@ -102,6 +118,11 @@ case "$provider" in
         ;;
 
     codex)
+        if ! codex_bin="$(resolve_codex_bin)"; then
+            qute_error "translate: Codex Desktop bundled CLI was not found"
+            exit 1
+        fi
+
         tmpdir="$(mktemp -d "${TMPDIR:-/tmp}/qute-translate.XXXXXX")"
         context_file="$tmpdir/context.txt"
         result_file="$tmpdir/result.txt"
@@ -142,7 +163,7 @@ case "$provider" in
 
         codex_args+=("$codex_prompt")
 
-        if ! CODEX_HOME="$codex_home" codex "${codex_args[@]}" < "$context_file" > "$log_file" 2>&1; then
+        if ! CODEX_HOME="$codex_home" "$codex_bin" "${codex_args[@]}" < "$context_file" > "$log_file" 2>&1; then
             log_message="$(tail -n 3 "$log_file" 2> /dev/null | tr '\n' ' ' || true)"
             cleanup_on_error
             qute_error "translate: Codex request failed${log_message:+: ${log_message}}"
