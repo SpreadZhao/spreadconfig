@@ -183,6 +183,13 @@ let
     };
   };
 
+  videoDocumentRecoverySkill = {
+    video-document-recovery = {
+      source = localSkillSource "video-document-recovery";
+      targets = agentTargets;
+    };
+  };
+
   wechatDiarySkill = {
     wechat-diary = {
       source = localSkillSource "wechat-diary";
@@ -222,6 +229,7 @@ rec {
       smartmontoolsDiskHealthSkill
       spreadconfigSkillAuthoringSkill
       spreadconfigNixSkill
+      videoDocumentRecoverySkill
       wechatArticleFetcherSkill
       wechatDiarySkill
       xiaohongshuSummarizerSkill
@@ -244,6 +252,7 @@ rec {
       lectureNoteCompanionSkill
       secondbrainDiarySkill
       secondbrainConversationDiarySkill
+      videoDocumentRecoverySkill
       wechatArticleFetcherSkill
       wechatDiarySkill
       xiaohongshuSummarizerSkill

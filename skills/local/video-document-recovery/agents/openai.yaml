@@ -1,0 +1,4 @@
+interface:
+  display_name: "视频文档还原"
+  short_description: "从滚动录屏完整还原文档、评论、表格、代码与图像"
+  default_prompt: "使用 $video-document-recovery 从这段文档录屏中完整还原大纲、正文、评论和图片，并写入 Obsidian。"
