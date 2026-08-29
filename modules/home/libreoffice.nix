@@ -1,5 +1,5 @@
 { pkgs, ... }:
 
 {
-  home.packages = [ pkgs.libreoffice-still ];
+  home.packages = [ pkgs.libreoffice-stable ];
 }

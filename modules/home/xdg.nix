@@ -270,7 +270,7 @@ in
       defaultApplicationPackages = with pkgs; [
         swayimg
         mpv
-        libreoffice-still
+        libreoffice-stable
         drawio
         rnote
         xournalpp

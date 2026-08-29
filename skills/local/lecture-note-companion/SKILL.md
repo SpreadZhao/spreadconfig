@@ -202,7 +202,7 @@ Use this default shape unless the surrounding vault has a stronger convention:
 4. the lecture's position, question, or learning goals;
 5. numbered mainline sections in teaching order;
 6. sideways questions nested under the section they clarify, preferably as short question callouts;
-7. code, worked examples, limitations, and transitions where they belong;
+7. code, worked examples, limitations, and narrative bridges where they belong;
 8. a compact review or key-question table;
 9. related-note links and external sources.
 
@@ -230,7 +230,56 @@ Then apply these lecture-specific rules to both outputs:
 6. Embed the reviewed images beside the corresponding concepts.
 7. Add sources and related-note links where useful without replacing the self-contained explanation.
 8. Build an internal coverage checklist mapping every substantive user question to a section in the structured note. Add or expand a section when a key question is missing; leave minor repetitions only in the transcript resource.
-9. Validate frontmatter, Obsidian math, code fences, wikilinks, image embeds, resource paths, chronological transcript completeness, and the bidirectional note links.
+9. Run the final narrative bridge pass below after the structured content and images are in place.
+10. Validate frontmatter, Obsidian math, code fences, wikilinks, image embeds, resource paths, chronological transcript completeness, and the bidirectional note links.
+
+### Final narrative bridge pass
+
+Run this as the last content-editing pass after completing the structured note and coverage checklist, but before formatting and link validation. The goal is to make the note teach the lecture again from beginning to end, rather than read like a dictionary of isolated definitions.
+
+Use these materials, in priority order:
+
+1. the teacher's outline, slides, examples, derivations, code, and pasted original wording;
+2. the cleaned transcript, especially the order in which questions, failed attempts, limitations, and conclusions appeared;
+3. the user's interpretations, remembered confusion, corrections, and follow-up questions;
+4. the assistant's visible explanations and corrections from the live conversation;
+5. prerequisite notes or official sources only when they are needed to explain an explicit connection.
+
+Do not invent a motivation and attribute it to the teacher when the source does not establish it. When a bridge is a reasonable synthesis rather than a stated lecture claim, phrase it neutrally as the note's reasoning, such as “这留下了一个问题” or “下一步自然要问”.
+
+Audit every adjacent pair of mainline H2 and H3 sections. Utility tails such as quick-reference tables, related notes, and external references are exempt. For each pair, build an internal row with:
+
+| Previous section established | Remaining question or limitation | Why the next section follows | What the next section will resolve | Evidence source | Bridge location |
+| --- | --- | --- | --- | --- | --- |
+
+Then write the bridge into the note. Usually place the unresolved question at the end of the previous section and the purpose of the next topic at the beginning of the next section. Use one to four sentences unless a technical correction needs more space.
+
+Make each bridge answer most of these questions:
+
+1. What did the previous section actually establish?
+2. What remains unexplained, impossible, inefficient, or easy to misunderstand?
+3. Why is the next concept the natural response rather than an unrelated definition?
+4. What exact role will the next section play in the lecture's argument?
+
+Vary the connective form according to the material:
+
+- **problem → proposed solution** for introducing a new method;
+- **attempt → failure → missing ingredient** for derivations such as stacked linear layers leading to nonlinearity;
+- **definition → unresolved choice** before enumerating variants such as activation functions;
+- **capability → cost or limitation** before introducing a more efficient architecture;
+- **concrete example → general principle** or the reverse when moving between intuition and formalism;
+- **new notation → why it is needed later** before terminology or implementation sections.
+
+Do not repeat the same mechanical phrases before every heading. Prefer a coherent argument over formulaic “上一节……下一节……” sentences. Preserve exact symbols, dimensions, assumptions, and corrections in the bridge; never repeat a user's earlier misconception as if it were the conclusion. For example, introduce activation choices by explaining that $\sigma$ is the still-unspecified nonlinearity needed to prevent linear-layer collapse, not by claiming that every activation maps values into $0\sim1$.
+
+Give definition-heavy or list-heavy sections a short purpose statement before the first formula, table, or item. A reader should know what question the list answers and why those entries are being compared before encountering them.
+
+Finish with two read-through checks:
+
+1. Read only the mainline headings plus the first and last paragraph of each section. Confirm that the lecture's causal chain can still be reconstructed.
+2. Read the full structured note in order. Flag any heading that arrives without a reason, any definition that appears before its problem is stated, and any section whose result does not create or close a question.
+
+If either check fails, revise the bridges before final validation. Do not add a decorative image solely to compensate for missing prose; generate another image only when the transition itself contains a genuinely new visual teaching unit.
 
 Handle homework conservatively:
 
@@ -261,6 +310,8 @@ Avoid these mistakes:
 - using the full transcript as the primary note and thereby destroying the lecture's conceptual structure;
 - overwriting or deleting the only complete transcript while restructuring the primary note;
 - claiming that key questions were covered without checking them against the transcript;
+- producing a dictionary-like note whose headings, formulas, or lists appear without explaining why the lecture moved to them;
+- adding generic transition filler that does not name the previous result, remaining problem, or purpose of the next section;
 - writing the final note before the user asks;
 - attaching homework to the wrong lecture.
 

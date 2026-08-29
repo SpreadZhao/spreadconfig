@@ -1,6 +1,5 @@
 {
   fontScalePercent = 100;
-  videoDecodeDevice = "/dev/dri/by-path/pci-0000:00:02.0-render";
   fontSizes = {
     gtk = 12;
     qt = 12;
