@@ -59,7 +59,6 @@ cmd on-load &{{
 }}
 
 cmd on-select &{{
-    lf -remote "send $id set statfmt \"$(eza -ld --color=always "$f" | sed 's/\\/\\\\/g;s/"/\\"/g')\""
     set user_preview_offset 1
 }}
 
