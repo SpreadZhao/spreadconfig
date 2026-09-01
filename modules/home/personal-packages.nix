@@ -8,6 +8,6 @@ in
     personalPackages.bili23-downloader
     personalPackages.cc-connect
     personalPackages.docsify-cli
-    personalPackages.zcode
+    # personalPackages.zcode
   ];
 }

@@ -46,7 +46,7 @@ let
     wemeet = "wemeetapp.desktop";
     xournal = "com.github.xournalpp.xournalpp.desktop";
     zathura = "org.pwmt.zathura.desktop";
-    zcode = "zcode.desktop";
+    # zcode = "zcode.desktop";
   };
 
   defaultsFor = application: mimeTypes: lib.genAttrs mimeTypes (_: application);
@@ -183,10 +183,10 @@ let
     ]
     // defaultsFor desktopApps.wemeet [
       "x-scheme-handler/wemeet"
-    ]
-    // defaultsFor desktopApps.zcode [
-      "x-scheme-handler/zcode"
     ];
+    # // defaultsFor desktopApps.zcode [
+    #   "x-scheme-handler/zcode"
+    # ];
 in
 {
   home.packages = [ drawioMimePackage ];
