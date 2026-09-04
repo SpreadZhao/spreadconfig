@@ -7,7 +7,7 @@ PROMPT_OUTPUT="Select Output: "
 # ===============================
 #       User config
 # ===============================
-ENABLE_FREEZE=false
+ENABLE_FREEZE=true
 HIDE_CURSOR=true
 
 # ===============================
