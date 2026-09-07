@@ -35,6 +35,6 @@ keybinding:
 customCommands:
   - key: "C"
     context: "files"
-    description: "Generate commit message with Codex"
+    description: "Generate commit message with AI"
     command: "git-ai-commit"
     output: terminal
