@@ -71,6 +71,12 @@ My personal NixOS configuration, built with [flakes](https://wiki.nixos.org/wiki
 
 ## Hosts
 
+### amd-desktop
+
+Planned Ryzen 9 9950X3D / Radeon RX 9070 XT desktop. Reuses all shared system and Home Manager modules, with AMD hardware policy and LACT only. The hardware placeholder intentionally blocks installation until replaced with the new machine's generated configuration.
+
+See [the host setup guide](hosts/amd-desktop/README.md) for disk configuration, SOPS enrollment, display setup, and installation.
+
 ### thinkbook
 
 My primary laptop — AMD CPU/GPU with a Wayland-native desktop stack.
