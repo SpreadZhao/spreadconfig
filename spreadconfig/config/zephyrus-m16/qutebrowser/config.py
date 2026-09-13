@@ -51,10 +51,15 @@ c.content.pdfjs = True
 c.downloads.location.suggestion = 'both'
 
 # Keep QtWebEngine on the GPU path for video overlays such as live danmaku.
+# Software video decode: QtWebEngine 6.11's SurfaceFactoryQt imports decoded
+# video dmabufs via a GBM device on the NVIDIA node, which cannot import Intel
+# VA-API frames (qFatal "dma_buf acquisition failure"). Compositing still runs
+# on the iGPU.
 c.qt.args = [
     'ignore-gpu-blocklist',
     'enable-gpu-rasterization',
     'enable-zero-copy',
+    'disable-accelerated-video-decode',
 ]
 c.qt.workarounds.disable_accelerated_2d_canvas = 'never'
 c.content.webgl = True

@@ -22,19 +22,23 @@ let
       }
   );
 
+  # zephyrus-m16: run on the Intel iGPU. QtWebEngine defaults to a Vulkan
+  # compositing backend and its adapter selection prefers the discrete GPU,
+  # landing on the NVIDIA 595 driver whose vkQueueSubmit segfaults on
+  # livestream video (disabling Vulkan instead renders black pages on
+  # NVIDIA). Hide every other Vulkan ICD so only the Intel device exists.
+  intelVkIcd = "${pkgs.mesa.driverLink}/share/vulkan/icd.d/intel_icd.x86_64.json";
   qutebrowserPackage =
     if hostName == "zephyrus-m16" then
       pkgs.symlinkJoin {
-        name = "qutebrowser-nvidia";
+        name = "qutebrowser-zephyrus";
         paths = [ qutebrowserBasePackage ];
         buildInputs = [ pkgs.makeWrapper ];
         postBuild = ''
           wrapProgram $out/bin/qutebrowser \
             --set QT_SCALE_FACTOR 1.5 \
-            --set __NV_PRIME_RENDER_OFFLOAD 1 \
-            --set __NV_PRIME_RENDER_OFFLOAD_PROVIDER NVIDIA-G0 \
-            --set __GLX_VENDOR_LIBRARY_NAME nvidia \
-            --set __VK_LAYER_NV_optimus NVIDIA_only
+            --set VK_ICD_FILENAMES ${lib.escapeShellArg intelVkIcd} \
+            --set VK_LOADER_ICD_FILENAMES ${lib.escapeShellArg intelVkIcd}
         '';
       }
     else
