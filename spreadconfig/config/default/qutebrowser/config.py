@@ -68,10 +68,16 @@ c.fileselect.multiple_files.command = fileChooser
 c.fileselect.single_file.command = fileChooser
 
 
-# c.content.headers.user_agent = {
-#     'https://accounts.google.com/*':
-#         'Mozilla/5.0 ({os_info}; rv:135.0) Gecko/20100101 Firefox/135'
-# }
+# Google blocks sign-in from browsers whose UA carries an unknown token
+# (qutebrowser/QtWebEngine). Spoof a current Chrome UA for the login flow
+# only; keep the real UA elsewhere so Cloudflare sees no version mismatch.
+# Recheck the Chrome major version if Google starts rejecting it again.
+# https://github.com/qutebrowser/qutebrowser/issues/7427
+config.set(
+    'content.headers.user_agent',
+    'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36',
+    'https://accounts.google.com/*',
+)
 
 c.fonts.completion.category = 'bold default_size default_family'
 c.fonts.completion.entry = 'default_size default_family'
