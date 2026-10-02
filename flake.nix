@@ -194,6 +194,7 @@
 
       nixosConfigurations = {
         amd-desktop = mkHost { name = "amd-desktop"; };
+        desktop1 = mkHost { name = "desktop1"; };
         thinkbook = mkHost { name = "thinkbook"; };
         zephyrus-m16 = mkHost { name = "zephyrus-m16"; };
       };

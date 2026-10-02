@@ -10,6 +10,7 @@ My personal NixOS configuration, built with [flakes](https://wiki.nixos.org/wiki
 .
 ├── flake.nix                          # Flake entry point
 ├── hosts/
+│   ├── desktop1/                      # Intel/NVIDIA desktop migrated from nixos_desktop1
 │   ├── thinkbook/                     # AMD laptop host config
 │   │   ├── configuration.nix          # Imports generated hardware and host-only system modules
 │   │   ├── hardware-configuration.nix # nixos-generate-config hardware facts
@@ -70,6 +71,12 @@ My personal NixOS configuration, built with [flakes](https://wiki.nixos.org/wiki
 | `nixvim` | Declarative Neovim configuration |
 
 ## Hosts
+
+### desktop1
+
+Intel/NVIDIA desktop migrated from the `nixos_desktop1` branch. Uses the shared configuration on `nixos`, preserving its original disk UUIDs and direct NVIDIA graphics setup. No ASUS laptop services or PRIME offload are enabled.
+
+**Before the first rebuild:** authorize this machine’s SSH host key to decrypt the shared `secrets/secrets.yaml`. Adding its public key to `.sops.yaml` also requires running `sops updatekeys` with an existing authorized identity. See [the setup guide](hosts/desktop1/README.md) for authorization and rebuild commands.
 
 ### amd-desktop
 
@@ -242,6 +249,7 @@ Input method framework is enabled but UI/theme configuration must be done manual
 
 ```bash
 # Full rebuild & switch
+sudo nixos-rebuild switch --flake ~/workspaces/spreadconfig#desktop1
 sudo nixos-rebuild switch --flake ~/workspaces/spreadconfig#thinkbook
 sudo nixos-rebuild switch --flake ~/workspaces/spreadconfig#zephyrus-m16
 

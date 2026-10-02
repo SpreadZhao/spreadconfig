@@ -5,6 +5,11 @@
 }:
 
 let
+  isNvidiaHost = builtins.elem hostName [
+    "desktop1"
+    "zephyrus-m16"
+  ];
+
   baseSettings = {
     theme_background = false;
     truecolor = true;
@@ -12,6 +17,8 @@ let
   };
 
   gpuSettingsByHost = {
+    desktop1 = gpuSettingsByHost.zephyrus-m16;
+
     thinkbook = {
       shown_gpus = "amd";
     };
@@ -38,7 +45,7 @@ in
 {
   programs.btop = {
     enable = true;
-    package = if hostName == "zephyrus-m16" then nvidiaBtop else pkgs.btop;
+    package = if isNvidiaHost then nvidiaBtop else pkgs.btop;
     settings = baseSettings // hostGpuSettings;
   };
 }
