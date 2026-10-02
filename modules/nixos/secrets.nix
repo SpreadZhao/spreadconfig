@@ -1,11 +1,32 @@
-{ repoRoot, ... }:
+{ config, repoRoot, ... }:
 
 {
   sops = {
     defaultSopsFile = repoRoot + "/secrets/secrets.yaml";
     defaultSopsFormat = "yaml";
 
-    age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
+    # Provision once with scripts/sops-key init (before installation/rebuild).
+    age = {
+      keyFile = "/var/lib/sops-nix/key.txt";
+      generateKey = false;
+      sshKeyPaths = [ ];
+    };
+    gnupg.sshKeyPaths = [ ];
+
+    templates."gh-hosts.yml" = {
+      owner = "spreadzhao";
+      group = "users";
+      mode = "0400";
+      # JSON is valid YAML; only placeholders enter the Nix store.
+      content = builtins.toJSON {
+        "github.com" = {
+          user = "SpreadZhao";
+          git_protocol = "https";
+          oauth_token = config.sops.placeholder."github-token";
+          users.SpreadZhao.oauth_token = config.sops.placeholder."github-token";
+        };
+      };
+    };
 
     secrets = {
       github-token = {

@@ -22,38 +22,15 @@
 其中包含 GitHub token、用户密码哈希和 TextBridge token，不再生成独立凭据。
 已有账户的登录密码不会被重置；修改当前账户密码使用 `passwd`。
 
-本机通过 `/etc/ssh/ssh_host_ed25519_key` 解密。确认其公钥对应根目录 `.sops.yaml` 的 `host_desktop1`：
+### 首次初始化
+
+先按 [SOPS 初始化说明](../../docs/sops.md) 同步完整仓库，包括 `.sops.yaml`、`secrets/secrets.yaml` 和 `secrets/shared-age-key.age`。然后在本机仓库根目录执行：
 
 ```bash
-ssh-to-age < /etc/ssh/ssh_host_ed25519_key.pub
+./scripts/sops-key init
 ```
 
-### 首次授权
-
-只在 `.sops.yaml` 添加公钥还不够，必须使用已有授权身份重新封装共享文件的数据密钥。
-在持有管理员 age 私钥的电脑上，从包含最新 `.sops.yaml` 的仓库根目录执行（替换私钥路径）：
-
-```bash
-SOPS_AGE_KEY_FILE=/path/to/admin-keys.txt sops updatekeys secrets/secrets.yaml
-```
-
-如果使用已授权旧机器的 SSH host key，可在那台机器上执行：
-
-```bash
-sudo env SOPS_AGE_SSH_PRIVATE_KEY_FILE=/etc/ssh/ssh_host_ed25519_key sops updatekeys secrets/secrets.yaml
-```
-
-检查变更并同步根目录 `.sops.yaml` 和更新后的 `secrets/secrets.yaml` 到 desktop1。
-`updatekeys` 保留原有凭据值，并按规则保留其他机器的解密授权。
-不要用 desktop1 的新凭据覆盖共享文件；desktop1 自己的密钥无法为尚未授权给它的旧密文添加权限。
-
-### 重建前验证
-
-在 desktop1 仓库根目录执行，确认解密成功（不输出明文）：
-
-```bash
-sudo env SOPS_AGE_SSH_PRIVATE_KEY_FILE=/etc/ssh/ssh_host_ed25519_key sops decrypt secrets/secrets.yaml > /dev/null
-```
+输入共享私钥备份的口令。脚本验证解密成功后，将私钥安装到 `/var/lib/sops-nix/key.txt`（root:root、0600）；之后启动和 rebuild 不再询问口令。已有有效私钥时重复执行不会要求口令，也不会覆盖它。
 
 验证成功后再重建：
 
@@ -68,4 +45,4 @@ sudo nixos-rebuild boot --flake .#desktop1
 `boot` 成功后重启，检查 `nvidia-smi`、`niri msg outputs`、网络和登录。
 
 后续日常更新使用 `~/scripts/nix/sns_until switch`，内核等启动变更使用 `~/scripts/nix/sns_until boot`。
-请备份本机 SSH 私钥，且不要将其提交到仓库。
+共享私钥的加密备份保存在仓库；请保管好解锁口令，不要提交本地明文私钥。

@@ -45,7 +45,7 @@ RX 9070 XT 的 ROCm 架构是 `gfx1201`，见 [AMD 兼容性说明](https://rocm
 
    检查生成文件的根分区、EFI 分区、文件系统类型、swap 和所需模块。CPU/GPU 的人工策略继续放在 `nixos/hardware.nix`。
 
-4. 配置下面的 SOPS 新机身份，确保最新的 `.sops.yaml` 和重加密后的 `secrets/secrets.yaml` 都已同步到安装用仓库。
+4. 按下面的步骤初始化 SOPS 共享身份，确保仓库包含 `secrets/shared-age-key.age` 加密私钥文件。
 5. 在安装用仓库里验证并安装：
 
    ```bash
@@ -61,30 +61,15 @@ RX 9070 XT 的 ROCm 架构是 `gfx1201`，见 [AMD 兼容性说明](https://rocm
 
 ## SOPS 新机身份
 
-共享配置通过 `/etc/ssh/ssh_host_ed25519_key` 解密用户密码哈希和令牌。
-新机需要自己的密钥，现有两台机器的公钥不能替代它。
+所有机器共用同一个 age 身份，不再添加 host 公钥。按 [初始化说明](../../docs/sops.md) 同步 `.sops.yaml`、`secrets/secrets.yaml` 和 `secrets/shared-age-key.age`。
 
-在安装环境生成目标系统的 SSH host key；若该路径已有密钥，保留原密钥：
-
-```bash
-sudo install -d -m 0700 /mnt/etc/ssh
-sudo test -f /mnt/etc/ssh/ssh_host_ed25519_key || \
-  sudo ssh-keygen -t ed25519 -N '' -f /mnt/etc/ssh/ssh_host_ed25519_key
-```
-
-把 `.pub` 公钥传到能解密现有 SOPS 文件的旧电脑，然后：
+在安装环境、仓库根目录执行：
 
 ```bash
-nix shell nixpkgs#ssh-to-age -c ssh-to-age -i /path/to/new-host-key.pub
+nix shell nixpkgs#age nixpkgs#sops -c bash ./scripts/sops-key init --root /mnt
 ```
 
-将输出的 age 公钥加入 `.sops.yaml` 的 `keys`，例如命名为 `host_amd_desktop`，并加入对应 `creation_rules.key_groups.age`。在旧电脑仓库内使用已有管理员身份执行：
-
-```bash
-sops updatekeys secrets/secrets.yaml
-```
-
-只同步公钥配置和加密文件；SSH 私钥保留在新机目标磁盘。不能只改 `.sops.yaml` 而遗漏 `sops updatekeys`。
+输入备份口令后，脚本验证解密并将私钥写入 `/mnt/var/lib/sops-nix/key.txt`（root:root、0600）。必须在 `nixos-install` 前完成，因为创建用户时就需要解密密码哈希。首次启动和后续 rebuild 不再需要该口令。
 
 ## 到机后验证
 

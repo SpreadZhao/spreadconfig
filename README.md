@@ -76,13 +76,13 @@ My personal NixOS configuration, built with [flakes](https://wiki.nixos.org/wiki
 
 Intel/NVIDIA desktop migrated from the `nixos_desktop1` branch. Uses the shared configuration on `nixos`, preserving its original disk UUIDs and direct NVIDIA graphics setup. No ASUS laptop services or PRIME offload are enabled.
 
-**Before the first rebuild:** authorize this machine’s SSH host key to decrypt the shared `secrets/secrets.yaml`. Adding its public key to `.sops.yaml` also requires running `sops updatekeys` with an existing authorized identity. See [the setup guide](hosts/desktop1/README.md) for authorization and rebuild commands.
+**Before the first rebuild:** initialize the shared age identity with `./scripts/sops-key init`. Enter the shared identity passphrase once; subsequent boots and rebuilds use the root-only local key. Sync the encrypted identity file together with the configuration. See [SOPS setup](docs/sops.md).
 
 ### amd-desktop
 
 Planned Ryzen 9 9950X3D / Radeon RX 9070 XT desktop. Reuses all shared system and Home Manager modules, with AMD hardware policy and LACT only. The hardware placeholder intentionally blocks installation until replaced with the new machine's generated configuration.
 
-See [the host setup guide](hosts/amd-desktop/README.md) for disk configuration, SOPS enrollment, display setup, and installation.
+See [the host setup guide](hosts/amd-desktop/README.md) for disk configuration, SOPS initialization, display setup, and installation.
 
 ### thinkbook
 
@@ -244,6 +244,65 @@ sudo ln -s /path/to/spreadconfig /etc/nixos
 ### fcitx5
 
 Input method framework is enabled but UI/theme configuration must be done manually through fcitx5's own settings after first login.
+
+## Shared GitHub authentication
+
+All hosts use the same `github-token` in `secrets/secrets.yaml`. SOPS renders a protected
+`/run/secrets-rendered/gh-hosts.yml` at activation time; Home Manager links
+`~/.config/gh/hosts.yml` to it. The standard `programs.gh` package and its HTTPS Git
+credential helper read this file. No wrapper or shell token export is needed.
+SSH Git remotes still use SSH keys. Only placeholders, not tokens, enter the Nix store.
+The rendered file is owned by `spreadzhao:users`, mode `0400`.
+
+### First switch from the previous setup
+
+If `~/.config/gh/hosts.yml` is still a regular file, remove that old local copy before
+switching (the shared SOPS token remains intact). Home Manager will create the link:
+
+```bash
+if [ -f ~/.config/gh/hosts.yml ] && [ ! -L ~/.config/gh/hosts.yml ]; then
+  rm ~/.config/gh/hosts.yml
+fi
+unset GH_TOKEN GITHUB_TOKEN GH_CONFIG_DIR
+sudo nixos-rebuild switch --flake .#desktop1
+gh auth status
+```
+
+Use the corresponding host name on other machines. Remove any persistent token exports
+from shell/session configuration too: environment tokens override the generated file.
+A nonempty token in this file takes precedence over old keyring credentials. Keep
+`github-token` valid and nonempty; an empty value can fall back to an old keyring login.
+
+### Replace the shared token
+
+Edit the existing `github-token` value; do not create one token per machine:
+
+```bash
+sudo env SOPS_AGE_KEY_FILE=/var/lib/sops-nix/key.txt sops edit secrets/secrets.yaml
+```
+
+Sync the updated ciphertext and rebuild each host, then run `gh auth status`.
+No `gh auth login` is needed for normal use. The managed `hosts.yml` is read-only:
+do not use `gh auth login`, `logout`, `switch`, or `refresh` to change this managed login.
+
+If obtaining a new token via browser login, use a separate, temporary config directory
+and the standard CLI so the managed file is not modified (run in one terminal):
+
+```bash
+gh_setup_dir=$(mktemp -d)
+nix shell --inputs-from . nixpkgs#gh -c env -u GH_TOKEN -u GITHUB_TOKEN GH_CONFIG_DIR="$gh_setup_dir" gh auth login --hostname github.com --git-protocol https --web --insecure-storage
+nix shell --inputs-from . nixpkgs#gh -c env -u GH_TOKEN -u GITHUB_TOKEN GH_CONFIG_DIR="$gh_setup_dir" gh auth token --hostname github.com
+```
+
+The token is stored temporarily in that private directory and displayed locally. Paste it
+into SOPS, not into chat or Git. After saving it successfully, delete the temporary directory
+with `rm -rf -- "$gh_setup_dir"` and `unset gh_setup_dir`. Perform browser authorization only
+once and distribute that token through SOPS. Revoking old tokens interrupts their access
+until the replacement is deployed.
+
+A new machine needs shared-key initialization (`./scripts/sops-key init`) before rebuilding.
+For a private configuration repository, bootstrap by securely copying the checkout or
+temporarily using the same token.
 
 ## Rebuilding
 

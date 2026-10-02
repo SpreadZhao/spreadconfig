@@ -7,3 +7,6 @@
 /.codex/
 __pycache__/
 *.py[cod]
+# Local identities must never be committed; the .age backup is intentionally tracked.
+/secrets/key.txt
+/secrets/keys.txt

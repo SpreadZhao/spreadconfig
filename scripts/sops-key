@@ -1,0 +1,62 @@
+#!/usr/bin/env bash
+# Passwords are read by age from the terminal, never by this script.
+set -euo pipefail
+umask 077
+
+die() { echo "sops-key: $*" >&2; exit 1; }
+usage() {
+  echo 'Usage: scripts/sops-key init [--root /mnt]'
+  echo 'init: unlock the encrypted repository identity and install it on this machine.'
+}
+
+mode=${1:-}
+if [[ $mode == --help || $mode == -h ]]; then usage; exit 0; fi
+[[ $mode == init ]] || { usage; exit 1; }
+shift
+target_root=/
+if [[ $# == 2 && $1 == --root ]]; then
+  target_root=$2
+  shift 2
+fi
+[[ $# == 0 && $target_root == /* && -d $target_root ]] || die 'Invalid arguments or target root.'
+repo=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)
+cd "$repo"
+for tool in age age-keygen sops sudo; do
+  command -v "$tool" >/dev/null || die "Missing command: $tool"
+done
+encrypted_key="$repo/secrets/shared-age-key.age"
+dest="${target_root%/}/var/lib/sops-nix/key.txt"
+# Plaintext identity is created outside the repository, in a private tmpfs directory.
+private=$(mktemp -d /dev/shm/spreadconfig-sops.XXXXXXXX)
+trap 'rm -rf -- "$private"' EXIT
+trap 'exit 130' INT
+trap 'exit 143' TERM
+
+verify() {
+  # No fallback to a host/admin identity: prove this key alone decrypts the file.
+  env -i PATH="$PATH" HOME="$private" SOPS_AGE_KEY_FILE="$1" \
+    sops decrypt "$2" >/dev/null
+}
+install_key() {
+  sudo install -d -o root -g root -m 0700 "$(dirname -- "$dest")"
+  sudo install -o root -g root -m 0600 "$private/key.txt" "$dest"
+}
+
+[[ -f $encrypted_key ]] || die 'Missing secrets/shared-age-key.age; sync the complete repository first.'
+sudo -v
+if sudo test -e "$dest"; then
+  # The destination is intentionally owned by the invoking user, in private tmpfs.
+  # shellcheck disable=SC2024
+  sudo cat "$dest" > "$private/existing.txt"
+  verify "$private/existing.txt" "$repo/secrets/secrets.yaml" || die 'Existing key cannot decrypt secrets; refusing to overwrite it.'
+  sudo chown root:root "$dest"
+  sudo chmod 0600 "$dest"
+  echo "Already initialized: $dest"
+  exit 0
+fi
+age --decrypt -o "$private/key.txt" "$encrypted_key"
+age-keygen -y "$private/key.txt" >/dev/null
+verify "$private/key.txt" "$repo/secrets/secrets.yaml"
+install_key
+echo "Initialized: $dest (root:root, 0600). No passphrase is needed at boot."
+exit 0
