@@ -164,6 +164,17 @@
         assert passed;
         pkgs.runCommand "host-context-check" { } "touch $out";
 
+      checks.x86_64-linux.mutable-files =
+        let
+          pkgs = mkPkgs "x86_64-linux";
+          passed = import ./tests/mutable-files.nix {
+            inherit (nixpkgs) lib;
+            inherit repoRoot;
+          };
+        in
+        assert passed;
+        pkgs.runCommand "mutable-files-check" { } "touch $out";
+
       devShells.x86_64-linux.default =
         let
           system = "x86_64-linux";

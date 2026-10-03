@@ -20,102 +20,15 @@ let
   projDir = "${config.xdg.userDirs.extraConfig.WORKSPACE}/spreadconfig";
   scriptsDir = "${config.home.homeDirectory}/scripts";
   secretsDir = "${projDir}/secrets";
-  spreadconfigDir = "${projDir}/spreadconfig";
-  defaultConfigDir = "${spreadconfigDir}/config/default";
-  defaultScriptsDir = "${spreadconfigDir}/scripts/default";
-  hostConfigDir = "${spreadconfigDir}/config/${host.name}";
-  hostScriptsDir = "${spreadconfigDir}/scripts/${host.name}";
-  defaultConfigRoot = repoRoot + "/spreadconfig/config/default";
-  defaultScriptsRoot = repoRoot + "/spreadconfig/scripts/default";
-  hostConfigRoot = repoRoot + "/spreadconfig/config/${host.name}";
-  hostScriptsRoot = repoRoot + "/spreadconfig/scripts/${host.name}";
-  joinRuntimePath = root: rel: if rel == "" then root else "${root}/${rel}";
-  joinCheckPath = root: rel: if rel == "" then root else root + "/${rel}";
-  sourceName =
-    kind: rel:
-    "spreadconfig-${host.name}-${kind}-${
-      if rel == "" then "root" else lib.replaceStrings [ "/" "." ] [ "-" "-" ] rel
-    }";
-  linkTreeCommands =
-    checkRoot: runtimeRoot:
-    if builtins.pathExists checkRoot then
-      ''
-        check_root=${checkRoot}
-        runtime_root=${lib.escapeShellArg runtimeRoot}
-
-        while IFS= read -r -d "" dir; do
-          mkdir -p "$out/$dir"
-        done < <(cd "$check_root" && find . -type d -printf '%P\0')
-
-        while IFS= read -r -d "" file; do
-          target="$out/$file"
-          mkdir -p "$(dirname "$target")"
-          rm -rf "$target"
-          ln -s "$runtime_root/$file" "$target"
-        done < <(cd "$check_root" && find . \( -type f -o -type l \) -printf '%P\0')
-      ''
-    else
-      "";
-  mergedSource =
-    kind: rel: defaultCheck: hostCheck: defaultRuntime: hostRuntime:
-    pkgs.runCommandLocal (sourceName kind rel) { } ''
-      mkdir -p "$out"
-      ${linkTreeCommands defaultCheck defaultRuntime}
-      ${linkTreeCommands hostCheck hostRuntime}
-    '';
-  fallbackPath =
-    kind: defaultCheckRoot: hostCheckRoot: defaultRuntimeRoot: hostRuntimeRoot: rel:
-    let
-      defaultCheckPath = joinCheckPath defaultCheckRoot rel;
-      hostCheckPath = joinCheckPath hostCheckRoot rel;
-      defaultRuntimePath = joinRuntimePath defaultRuntimeRoot rel;
-      hostRuntimePath = joinRuntimePath hostRuntimeRoot rel;
-      defaultExists = builtins.pathExists defaultCheckPath;
-      hostExists = builtins.pathExists hostCheckPath;
-    in
-    if hostExists then
-      hostRuntimePath
-    else if defaultExists then
-      defaultRuntimePath
-    else
-      throw "Missing ${kind} for ${host.name}: ${hostRuntimePath} (fallback: ${defaultRuntimePath})";
-  fallbackSource =
-    kind: defaultCheckRoot: hostCheckRoot: defaultRuntimeRoot: hostRuntimeRoot: rel:
-    let
-      defaultCheckPath = joinCheckPath defaultCheckRoot rel;
-      hostCheckPath = joinCheckPath hostCheckRoot rel;
-      defaultRuntimePath = joinRuntimePath defaultRuntimeRoot rel;
-      hostRuntimePath = joinRuntimePath hostRuntimeRoot rel;
-      defaultExists = builtins.pathExists defaultCheckPath;
-      hostExists = builtins.pathExists hostCheckPath;
-      defaultIsDir = defaultExists && lib.pathIsDirectory defaultCheckPath;
-      hostIsDir = hostExists && lib.pathIsDirectory hostCheckPath;
-      defaultIsFile = defaultExists && lib.pathIsRegularFile defaultCheckPath;
-      hostIsFile = hostExists && lib.pathIsRegularFile hostCheckPath;
-    in
-    if defaultIsDir || hostIsDir then
-      if (defaultIsFile || hostIsFile) then
-        throw "Mismatched ${kind} path types for ${host.name}: ${hostRuntimePath} and ${defaultRuntimePath}"
-      else
-        mergedSource kind rel defaultCheckPath hostCheckPath defaultRuntimePath hostRuntimePath
-    else if hostExists then
-      config.lib.file.mkOutOfStoreSymlink hostRuntimePath
-    else if defaultExists then
-      config.lib.file.mkOutOfStoreSymlink defaultRuntimePath
-    else
-      throw "Missing ${kind} for ${host.name}: ${hostRuntimePath} (fallback: ${defaultRuntimePath})";
-  hostConfigPath =
-    fallbackPath "config" defaultConfigRoot hostConfigRoot defaultConfigDir
-      hostConfigDir;
-  hostScriptPath =
-    fallbackPath "script" defaultScriptsRoot hostScriptsRoot defaultScriptsDir
-      hostScriptsDir;
-  hostConfigSource =
-    fallbackSource "config" defaultConfigRoot hostConfigRoot defaultConfigDir
-      hostConfigDir;
-  hostScriptSource =
-    fallbackSource "script" defaultScriptsRoot hostScriptsRoot defaultScriptsDir
-      hostScriptsDir;
+  mutableFiles = import ../../lib/mutable-files.nix {
+    inherit
+      lib
+      pkgs
+      repoRoot
+      projDir
+      ;
+    inherit (config.lib.file) mkOutOfStoreSymlink;
+  };
   mochaBg = "0e1117";
   theme_tranparent = "00000000";
   theme_background = "000000";
@@ -194,20 +107,13 @@ let
   fontSizes = lib.recursiveUpdate (scaleFontSizes baseFontSizes) (hostHomeProfile.fontSizes or { });
 in
 {
-  _module.args = {
+  _module.args = mutableFiles // {
     inherit
       installedJDKs
       defaultJDK
       projDir
       scriptsDir
       secretsDir
-      spreadconfigDir
-      hostConfigDir
-      hostScriptsDir
-      hostConfigPath
-      hostScriptPath
-      hostConfigSource
-      hostScriptSource
       mochaBg
       theme_tranparent
       theme_background

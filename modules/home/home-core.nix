@@ -1,7 +1,5 @@
 {
   config,
-  hostConfigSource,
-  hostScriptSource,
   pkgs,
   installedJDKs,
   scriptsDir,
@@ -32,18 +30,14 @@
       "$HOME/.local/bin"
       "${config.xdg.userDirs.extraConfig.LIB}/jdks/bin"
     ];
-    file = {
-      "${scriptsDir}".source = hostScriptSource "";
-      ".ideavimrc".source = hostConfigSource "Jetbrains/.ideavimrc";
-    }
-    // (builtins.listToAttrs (
+    file = builtins.listToAttrs (
       map (jdk: {
         name = "${config.xdg.userDirs.extraConfig.LIB}/jdks/${jdk.version}";
         value = {
           source = jdk;
         };
       }) installedJDKs
-    ));
+    );
     pointerCursor = {
       enable = true;
       name = "Adwaita";

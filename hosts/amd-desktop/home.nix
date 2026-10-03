@@ -1,5 +1,3 @@
-{ ... }:
-
 {
-  programs.btop.settings.shown_gpus = "amd";
+  spreadconfig.apps.niri.hostConfig = "hosts/amd-desktop/home/niri/host.kdl";
 }

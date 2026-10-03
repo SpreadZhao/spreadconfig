@@ -1,0 +1,38 @@
+{
+  "description": "Pre-refactor behavior fixtures; deduplicated across hosts and never deployed.",
+  "configs": {
+    "niri": {
+      "config.kdl": {
+        "default": "niri/default.kdl",
+        "zephyrus-m16": "niri/zephyrus-m16.kdl"
+      }
+    },
+    "qutebrowser": {
+      "config.py": {
+        "default": "qutebrowser/default.py",
+        "zephyrus-m16": "qutebrowser/zephyrus-m16.py"
+      }
+    },
+    "waybar": {
+      "config.jsonc": {
+        "default": "waybar/default.jsonc",
+        "thinkbook": "waybar/thinkbook.jsonc",
+        "zephyrus-m16": "waybar/zephyrus-m16.jsonc"
+      },
+      "style.css": {
+        "default": "waybar/default.css",
+        "zephyrus-m16": "waybar/zephyrus-m16.css"
+      }
+    }
+  },
+  "assets": {
+    "qutebrowser": {
+      "themes/__init__.py": "660b9fd59590b743768121c7a929b764032b4b2d32f7b6515555fef2a9836186",
+      "themes/setup.py": "4a17534b62442115e46f530c7723b1229a69dfdc3b98644946e27ed16bf2846a"
+    },
+    "waybar": {
+      "spreadzhao.css": "d3dbd553f486187fe9fe4331526bfd6e85a018be34ff1b6cee89bf2149dccb23",
+      "mocha.css": "a6e30597ccc828e898844eb0cea9df7d73879ff5672a6a550f3acc24c93edd17"
+    }
+  }
+}

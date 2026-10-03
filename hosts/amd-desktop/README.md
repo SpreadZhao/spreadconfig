@@ -5,17 +5,18 @@
 
 ## 配置复用
 
-- `flake.nix` 的 `mkHost` 自动导入全部 `modules/nixos`、`modules/home`，以及现有 Home Manager、SOPS 和应用输入。
+- `host.nix` 声明 CPU、GPU 和硬件能力，导入 profile 并列出本机模块。`flake.nix` 将统一 `host` 传给全部共享 NixOS/Home Manager 模块以及本机模块。
 - 本机复用 nixos-hardware 的 `common-cpu-amd` 和 `common-gpu-amd`，提供 AMD 微码、AMDGPU 提前加载和 Mesa 64/32 位图形支持；本地只补充固件、KVM、OpenCL 和 LACT。
-- 沿用共享内核、ROCm/Ollama、桌面、开发工具和应用；不需要复制 thinkbook 或 zephyrus-m16 的系统配置。
+- 本机 profile 明确启用 ROCm，硬件模块保留 OpenCL 支持；内核、桌面、开发工具和应用复用公共模块。不需要复制 thinkbook 或 zephyrus-m16 的系统配置。
 - 不导入笔记本的 TLP、ASUS 服务、Intel/NVIDIA PRIME 和电池策略。
 - 保留共享的 NixOS/Home Manager `stateVersion = "25.11"`。这控制兼容性默认值，不限制软件版本；无需随更新改动。
 - 外部配置和脚本按 `spreadconfig/{config,scripts}/default` → `<host>` 合并。共享 Waybar 默认不显示电池和未确认的温度传感器。
+- 未确认的蓝牙能力保留为 `null`，到机后按真实设备更新；功能启用策略仍保留现状。共用 `sns`、`sns_until`，不需要本机专用构建脚本。
 
-准备时锁定的版本是 Linux 6.18.49、Mesa 26.2.2、ROCm 7.2.3、Ollama 0.33.1；实际版本以安装时的 `flake.lock` 为准。
+准备时锁定的版本是 Linux 6.18.49、Mesa 26.2.2、ROCm 7.2.3；实际版本以安装时的 `flake.lock` 为准。
 AMD 图形配置依据 [NixOS AMD GPU 文档](https://wiki.nixos.org/wiki/AMD_GPU)。
 RX 9070 XT 的 ROCm 架构是 `gfx1201`，见 [AMD 兼容性说明](https://rocm.docs.amd.com/projects/install-on-linux/en/docs-7.0.1/reference/system-requirements.html)。
-保留现有 Ollama ROCm 配置，是否实际使用独显需要到机后验证；不要预设 `HSA_OVERRIDE_GFX_VERSION` 或 GPU 序号。
+ROCm/OpenCL 的设备识别需要到机后验证；不要预设 `HSA_OVERRIDE_GFX_VERSION` 或 GPU 序号。
 
 ## nixos-hardware 复用范围
 
@@ -55,7 +56,7 @@ RX 9070 XT 的 ROCm 架构是 `gfx1201`，见 [AMD 兼容性说明](https://rocm
    sudo nixos-install --flake .#amd-desktop
    ```
 
-6. 首次启动后确认仓库由 `spreadzhao` 所有；恢复需要的个人数据、密码库和应用登录状态。配置复用不会复制浏览器资料、Ollama 模型或密码库。
+6. 首次启动后确认仓库由 `spreadzhao` 所有；恢复需要的个人数据、密码库和应用登录状态。配置复用不会复制浏览器资料或密码库。
 
 日后在新机上使用 `~/scripts/nix/sns_until switch`；内核等启动相关变更使用 `~/scripts/nix/sns_until boot`。
 
@@ -74,12 +75,12 @@ nix shell nixpkgs#age nixpkgs#sops -c bash ./scripts/sops-key init --root /mnt
 ## 到机后验证
 
 - `lspci -nnk`：检查显卡使用 `amdgpu`，并核对网卡型号和驱动。
-- `clinfo`、`lact`：检查 GPU/OpenCL 识别。运行已有本地模型时用 `ollama ps` 检查 GPU 使用情况，并查看 `journalctl --user -u ollama`。
-- `niri msg outputs`：确认实际接口、分辨率、刷新率和缩放。当前继承的 `spreadconfig/config/default/niri/config.kdl` 仍含原桌面的 `eDP-1`、`HDMI-A-1`、`DP-2` 布局；正式使用前按新显示器在 `spreadconfig/config/amd-desktop/niri/` 中覆盖。不要改共享文件来适配新机。
-- 如需温度栏，确认 `sensors`/hwmon 对应关系后，在 `spreadconfig/config/amd-desktop/waybar/` 增加配置，不套用旧机传感器路径。
+- `clinfo`、`lact`：检查 GPU/OpenCL 识别。
+- `niri msg outputs`：确认实际接口、分辨率、刷新率和缩放。`hosts/amd-desktop/home/niri/host.kdl` 保留了迁移前的布局，正式使用前按新显示器修改该文件。不要改共享文件来适配新机。
+- 如需温度栏，确认 `sensors`/hwmon 对应关系后，在 `home/profile.nix` 设置 `waybar.temperaturePath`，不套用旧机传感器路径。
 - 9950X3D 先使用内核默认调度；主板 BIOS/CPPC、游戏缓存 CCD 偏好和性能调优留到真实负载测试后决定。参考 [内核 AMD P-State 文档](https://docs.kernel.org/admin-guide/pm/amd-pstate.html)。
 
-这台机器尚未实机验证启动、显卡输出、网络、休眠或 GPU 推理。
+这台机器尚未实机验证启动、显卡输出、网络、休眠或 GPU 计算。
 
 ## 已完成的配置检查（2026-09-08）
 

@@ -1,0 +1,17 @@
+{
+    "temperature": {
+        "interval": 10,
+        "input-filename": "temp1_input",
+        "tooltip": false,
+        "warning-threshold": 60,
+        "critical-threshold": 80,
+        "format": "{temperatureC}{icon}",
+        "format-icons": [
+            "",
+            "",
+            "",
+            "",
+            ""
+        ]
+    }
+}

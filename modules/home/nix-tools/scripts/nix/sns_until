@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+action="${1:-switch}"
+max_attempts="${NIX_RETRY_ATTEMPTS:-3}"
+retry_delay="${NIX_RETRY_DELAY:-1}"
+
+if [[ "$action" != "switch" && "$action" != "boot" ]]; then
+	echo "Usage: sns_until [switch|boot]" >&2
+	exit 1
+fi
+if [[ ! "$max_attempts" =~ ^[1-9][0-9]*$ ]] || [[ ! "$retry_delay" =~ ^[0-9]+([.][0-9]+)?$ ]]; then
+	echo "sns_until: NIX_RETRY_ATTEMPTS must be a positive integer and NIX_RETRY_DELAY a non-negative number" >&2
+	exit 1
+fi
+
+# Resolve the source checkout through installed symlinks.
+spreadconfig_source_root=$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")
+while [[ ! -f "$spreadconfig_source_root/flake.nix" || ! -d "$spreadconfig_source_root/hosts" ]]; do
+    if [[ "$spreadconfig_source_root" == / ]]; then
+        printf 'spreadconfig: could not find source checkout\n' >&2
+        exit 1
+    fi
+    spreadconfig_source_root=$(dirname "$spreadconfig_source_root")
+done
+# shellcheck source=modules/home/script-tools/scripts/config/host_context.sh
+source "$spreadconfig_source_root/modules/home/script-tools/scripts/config/host_context.sh"
+unset spreadconfig_source_root
+spreadconfig_resolve_host
+
+attempt=1
+while true; do
+	echo "sns_until: running nh os $action for $SPREADCONFIG_TARGET_HOST (attempt $attempt/$max_attempts)"
+	if nh os "$action" -d always -t "path://$SPREADCONFIG_TARGET_REPO#$SPREADCONFIG_TARGET_HOST"; then
+		break
+	fi
+	if ((attempt >= max_attempts)); then
+		echo "sns_until: nh os $action failed after $max_attempts attempts" >&2
+		exit 1
+	fi
+	attempt=$((attempt + 1))
+	echo "sns_until: retrying nh os $action in $retry_delay seconds" >&2
+	sleep "$retry_delay"
+done

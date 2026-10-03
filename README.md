@@ -8,55 +8,38 @@ My personal NixOS configuration, built with [flakes](https://wiki.nixos.org/wiki
 
 ```
 .
-├── flake.nix                          # Flake entry point
+├── flake.nix                       # Flake entry point
+├── lib/mutable-files.nix           # Checked workspace links and explicit file trees
+├── skills/                         # Skill definitions and local sources
 ├── hosts/
-│   ├── desktop1/                      # Intel/NVIDIA desktop migrated from nixos_desktop1
-│   ├── thinkbook/                     # AMD laptop host config
-│   │   ├── configuration.nix          # Imports generated hardware and host-only system modules
-│   │   ├── hardware-configuration.nix # nixos-generate-config hardware facts
-│   │   ├── home.nix                   # Host-only Home Manager module entry
-│   │   ├── home/profile.nix           # Host Home Manager profile values
-│   │   └── nixos/                     # Host-only NixOS modules
-│   │       ├── identity.nix           # Hostname and identity
-│   │       ├── hardware.nix           # CPU/GPU/hardware policy
-│   │       ├── profile.nix            # Host NixOS profile values
-│   │       └── services.nix           # Host-only services such as LACT/TLP
-│   └── zephyrus-m16/                  # ASUS ROG host config
-│       ├── configuration.nix
+│   ├── lib/default.nix             # Shared host facts and profile defaults
+│   └── <host>/
+│       ├── host.nix                # Hardware declaration and module lists
+│       ├── configuration.nix       # Host NixOS entry point
 │       ├── hardware-configuration.nix
-│       ├── home.nix
-│       ├── home/profile.nix
-│       └── nixos/
-│           ├── identity.nix
-│           ├── hardware.nix           # nixos-hardware, Intel/NVIDIA PRIME
-│           ├── profile.nix
-│           ├── services.nix           # ROG service entry point
-│           └── services/asusd.nix     # asusd/supergfxd declarative config
+│       ├── home.nix                # Host Home Manager entry point
+│       ├── home/
+│       │   ├── profile.nix         # Fonts, Waybar and other host parameters
+│       │   ├── niri/               # Display/input/GPU configuration
+│       │   └── qutebrowser/        # Optional host Python settings
+│       └── nixos/                  # Host hardware, identity and services
 ├── modules/
-│   ├── nixos/                         # Shared system-level NixOS modules
-│   │   ├── boot.nix
-│   │   ├── greetd.nix
-│   │   ├── pipewire.nix
-│   │   └── zsh.nix
-│   └── home/                          # Shared Home Manager modules
-│       ├── vars.nix                   # Centralized theme colors, fonts, paths, host helpers
-│       ├── home-core.nix              # Home session variables
-│       ├── nixvim.nix                 # Neovim via nixvim
-│       ├── niri.nix                   # Shared program module with host-specific external config
-│       ├── waybar.nix
-│       ├── fnott.nix
-│       └── zsh.nix
-├── spreadconfig/
-│   ├── config/<host>/                 # Host-specific application config files
-│   └── scripts/<host>/                # Host-specific shell scripts
-│       ├── niri/                      # Niri WM scripts (screenshots, audio, etc.)
-│       ├── sway/                      # Legacy Sway scripts
-│       ├── nix/                       # Nix maintenance scripts
-│       ├── util/                      # Utility scripts (audio, lf wrappers, git-ai-commit)
-│       ├── config/                    # Zsh config, aliases, color output
-│       ├── legacy/                    # Retired scripts
-│       └── test/                      # Test scripts
-└── secrets/                           # Secret files (pass-managed, not in git)
+│   ├── nixos/                      # Shared system modules
+│   └── home/
+│       ├── default.nix             # Imports .nix modules and app/default.nix
+│       ├── vars.nix                # Theme, fonts, runtime paths and link helpers
+│       ├── home-core.nix           # Home identity and session settings
+│       ├── script-files.nix        # Assembles the existing ~/scripts interface
+│       ├── <app>/
+│       │   ├── default.nix         # Application configuration
+│       │   ├── files/              # Handwritten application assets
+│       │   ├── scripts.nix         # Optional script installation declarations
+│       │   └── scripts/            # Scripts under their installation paths
+│       ├── nix-tools/              # Shared Nix maintenance commands
+│       └── script-tools/           # Common script libraries and retained tools
+├── scripts/sops-key                # Secret bootstrap helper
+├── tests/                          # Host, script and asset checks
+└── secrets/                        # Encrypted secrets and ignored local identities
 ```
 
 ## Flake Inputs
@@ -64,8 +47,7 @@ My personal NixOS configuration, built with [flakes](https://wiki.nixos.org/wiki
 | Input | Purpose |
 |-------|---------|
 | `nixpkgs` | NixOS unstable (primary package set) |
-| `nixpkgs-old-dd9b079` | Pinned nixpkgs for compatibility |
-| `nixpkgs-old-a6c3b1b` | Pinned nixpkgs for compatibility |
+| `nixpkgs-desktop1-graphics` | desktop1's known working kernel/NVIDIA/niri/Mesa package set |
 | `home-manager` | User environment management |
 | `nixos-hardware` | Hardware presets for supported laptops |
 | `nixvim` | Declarative Neovim configuration |
@@ -101,6 +83,42 @@ ASUS ROG laptop — Intel CPU with NVIDIA hybrid graphics.
 - **GPU**: Intel/NVIDIA PRIME offload with Dynamic Boost
 - **ASUS controls**: asusd and supergfxd
 - **Power**: Host-specific TLP charging policy
+
+### Host declarations and shared modules
+
+Each `hosts/<name>/host.nix` declares `system`, `formFactor`, CPU and GPU facts,
+hardware capabilities, profile imports, and NixOS/Home Manager module lists.
+`hosts/lib/default.nix` builds a single `host` value before either module system
+is evaluated. Both receive this value through their special arguments.
+
+Shared modules use normal Nix expressions such as `lib.mkIf host.gpu.hasNvidia`
+and read policy from `host.profile.nixos` or `host.profile.home`. The tool layer
+provides `host.name`, `host.is "desktop1"`, CPU vendor predicates, independent GPU
+vendor predicates, and `host.isLaptop`/`host.isDesktop`. A hybrid GPU declaration
+can set multiple GPU predicates. Unknown CPU families and hardware capabilities
+are `null`; an Intel CPU alone does not establish that the machine has an Intel GPU.
+
+The AMD hosts retain ROCm/OpenCL support; the NVIDIA hosts disable global ROCm
+support. GPU package choices follow the declared hardware and application needs.
+Qutebrowser rendering and scale, OBS plugins, camera/device paths, and optional
+services are profile values. The existing Zephyrus Intel Vulkan workaround
+requires an actual Intel GPU. Concrete PCI addresses, driver pins, fan curves,
+and other machine-specific fixes remain in host leaf modules. Niri display
+layouts and input settings stay in `hosts/<host>/home/niri/host.kdl`.
+
+To add a host, create its declaration and profile files, list its host-only
+modules, supply the machine's generated `hardware-configuration.nix`, and create
+its niri Home Manager module and native fragment. Host directories are discovered
+by the presence of `host.nix`.
+Do not copy `sns` or `sns_until`: the shared scripts read
+`~/.config/spreadconfig/host.sh`, generated by Home Manager from the declaration.
+Use `SPREADCONFIG_HOST=<name>` when explicitly targeting another host.
+
+Run `nix build --no-link .#checks.x86_64-linux.host-context` for host semantic
+checks, then evaluate the affected system and Home Manager outputs. The
+`amd-desktop` disk placeholder intentionally blocks its complete system until
+real disk information is supplied; its host context and Home Manager can be checked
+independently.
 
 ## Desktop Environment
 
@@ -164,7 +182,12 @@ Zsh with:
 
 ## Custom Scripts
 
-Located in `spreadconfig/scripts/<host>/`:
+Sources live beside their owning application in `modules/home/<app>/scripts/`.
+Each application contributes to `spreadconfig.scriptFiles`; Home Manager assembles
+one link tree at `~/scripts`, preserving the runtime directories below.
+Hardware-aware helpers read the generated `~/.config/spreadconfig/host.sh` for the
+configured host and device paths. Nix maintenance commands live in
+`modules/home/nix-tools/scripts/nix/` and are shared by all hosts:
 
 | Directory | Contents |
 |-----------|----------|
@@ -172,8 +195,11 @@ Located in `spreadconfig/scripts/<host>/`:
 | `nix/` | System update (`nix_full_update`), garbage collection (`nix_clean`), generation management |
 | `util/` | Battery/brightness info, audio switching, lf wrappers, git-ai-commit |
 | `config/` | Zsh config, aliases, colored output, fzf preview |
-| `sway/` | Legacy Sway scripts (retained for reference) |
-| `legacy/` | Retired scripts (moved, not deleted) |
+| `sway/` | Sway helpers |
+| `legacy/` | Additional shell utilities |
+
+See [application layout](docs/application-layout.md) for source ownership,
+editable links, host fragments, and validation commands.
 
 ## Theme System
 

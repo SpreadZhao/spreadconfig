@@ -1,0 +1,32 @@
+{
+    "group/power": {
+        "orientation": "horizontal",
+        "drawer": {
+            "transition-duration": 0,
+            "click-to-reveal": true
+        },
+        "modules": [
+            "custom/battery",
+            "upower"
+        ]
+    },
+    "custom/brightness": {
+        "exec": "/home/spreadzhao/scripts/util/get_brightness.sh",
+        "interval": "once"
+    },
+    "custom/battery": {
+        "exec": "/home/spreadzhao/scripts/util/get_battery.sh",
+        "interval": 10
+    },
+    "upower": {
+        "native-path": "hid-3c:34:64:0a:eb:7c-battery",
+        "show-icon": false,
+        "format": "{percentage}"
+    },
+    "backlight": {
+        "format": "{percent}% {icon}",
+        "format-icons": [
+            ""
+        ]
+    }
+}

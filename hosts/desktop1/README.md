@@ -11,8 +11,11 @@
   - 没有配置 swap。
 - 保留原 NVIDIA 直连方案：开放内核模块、稳定版驱动、modesetting；启用 64/32 位图形支持。
 - 不导入 Zephyrus 的 ASUS 硬件模块、PRIME 总线地址、Dynamic Boost、细粒度省电或电池服务。
-- 系统和 Home Manager 使用当前全部公共模块，Niri、Waybar、字体和应用配置回退到 `spreadconfig/{config,scripts}/default`。
-- btop 使用已有 NVIDIA 包装和监控设置。`sns`、`sns_until` 指向 `#desktop1`。
+- `host.nix` 声明 Intel CPU、NVIDIA 独显和无蓝牙能力，并装配本机模块。系统和 Home Manager 读取同一个 `host`，公共模块根据其硬件能力和 profile 选择配置。
+- 关闭 ROCm 构建支持；btop 使用 NVIDIA 包装和监控设置。蓝牙及 TextBridge 蓝牙服务关闭，TextBridge 网络服务继续启用。
+- Niri 布局在 `hosts/desktop1/home/niri/host.kdl` 独立维护；公共配置和脚本由各应用模块维护，本机差异通过 profile 或显式配置片段提供。字体缩放保留在 `home/profile.nix`。
+- 共用 `sns`、`sns_until`，通过 Home Manager 生成的主机上下文选择 `#desktop1`。
+- 图形栈继续使用 Generation 47 的固定 nixpkgs revision；内核、NVIDIA、niri 和 Mesa 回退由本机硬件模块管理。
 - 沿用原机与公共配置一致的 `system.stateVersion`、`home.stateVersion = "25.11"`，不随软件升级修改。
 - `flake.lock` 沿用当前 `nixos`，不从旧分支复制软件、旧主题或依赖版本。
 

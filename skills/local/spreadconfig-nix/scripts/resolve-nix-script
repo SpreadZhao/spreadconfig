@@ -9,33 +9,39 @@ Print the repo-local nix helper script for HOST.
 Defaults:
   SCRIPT_NAME       sns_until
   HOST             $SPREADCONFIG_HOST, then hostname -s
+  REPO_ROOT        $SPREADCONFIG_REPO, then local checkout discovery
 
-Lookup order:
-  spreadconfig/scripts/HOST/nix/SCRIPT_NAME
-  spreadconfig/scripts/default/nix/SCRIPT_NAME
+Script location:
+  modules/home/nix-tools/scripts/nix/SCRIPT_NAME
+HOST is validated against hosts/HOST/host.nix.
 EOF
 }
 
 find_repo_root() {
-  if git_root="$(git rev-parse --show-toplevel 2>/dev/null)"; then
+  local git_root dir start
+  if git_root="$(git rev-parse --show-toplevel 2>/dev/null)" &&
+    [[ -f "$git_root/flake.nix" && -d "$git_root/hosts" ]]; then
     printf '%s\n' "$git_root"
     return
   fi
 
-  local dir="$PWD"
-  while [[ "$dir" != "/" ]]; do
-    if [[ -f "$dir/flake.nix" && -d "$dir/spreadconfig/scripts" && -d "$dir/hosts" ]]; then
-      printf '%s\n' "$dir"
-      return
-    fi
-    dir="$(dirname "$dir")"
+  for start in "$PWD" "$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"; do
+    dir="$start"
+    while true; do
+      if [[ -f "$dir/flake.nix" && -d "$dir/hosts" ]]; then
+        printf '%s\n' "$dir"
+        return
+      fi
+      [[ "$dir" != / ]] || break
+      dir="$(dirname "$dir")"
+    done
   done
 
   echo "resolve-nix-script: could not find spreadconfig repo root" >&2
   exit 1
 }
 
-repo_root=""
+repo_root="${SPREADCONFIG_REPO:-}"
 host="${SPREADCONFIG_HOST:-}"
 script_name="sns_until"
 
@@ -80,21 +86,28 @@ if [[ -z "$host" ]]; then
   host="${host%%.*}"
 fi
 
-if [[ -z "$host" || ! -d "$repo_root/hosts/$host" ]]; then
+if [[ ! "$host" =~ ^[a-zA-Z0-9][a-zA-Z0-9._-]*$ ]] ||
+  [[ ! -f "$repo_root/hosts/$host/host.nix" ]]; then
   echo "resolve-nix-script: unknown host '$host'" >&2
   echo "Available hosts:" >&2
-  find "$repo_root/hosts" -mindepth 1 -maxdepth 1 -type d -printf '  %f\n' | sort >&2
+  for declaration in "$repo_root"/hosts/*/host.nix; do
+    [[ -f "$declaration" ]] || continue
+    host_dir="${declaration%/host.nix}"
+    printf '  %s\n' "${host_dir##*/}"
+  done | sort >&2
   exit 1
 fi
 
-host_script="$repo_root/spreadconfig/scripts/$host/nix/$script_name"
-default_script="$repo_root/spreadconfig/scripts/default/nix/$script_name"
+if [[ ! "$script_name" =~ ^[a-zA-Z0-9][a-zA-Z0-9._-]*$ ]]; then
+  echo "resolve-nix-script: invalid script name '$script_name'" >&2
+  exit 1
+fi
 
-if [[ -f "$host_script" ]]; then
-  printf '%s\n' "$host_script"
-elif [[ -f "$default_script" ]]; then
-  printf '%s\n' "$default_script"
+script="$repo_root/modules/home/nix-tools/scripts/nix/$script_name"
+
+if [[ -f "$script" ]]; then
+  printf '%s\n' "$script"
 else
-  echo "resolve-nix-script: script '$script_name' not found for host '$host' or default" >&2
+  echo "resolve-nix-script: script '$script_name' not found for host '$host'" >&2
   exit 1
 fi
