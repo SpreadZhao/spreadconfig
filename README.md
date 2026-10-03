@@ -145,7 +145,7 @@ Zsh with:
 
 - **Git**: gh (GitHub CLI), diff-so-fancy, custom git-ai-commit script
 - **Reverse Engineering**: jadx, ghidra
-- **AI**: Claude Code, Ollama (local LLM)
+- **AI**: Claude Code
 - **Java**: HMCL (Minecraft launcher)
 - **IDE**: JetBrains Toolbox
 
