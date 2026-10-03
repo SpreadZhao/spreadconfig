@@ -1,5 +1,6 @@
 {
   config,
+  host,
   inputs,
   lib,
   ...
@@ -11,8 +12,6 @@
   ];
 
   hardware = {
-    cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
-
     graphics = {
       enable = true;
       enable32Bit = true;
@@ -41,4 +40,10 @@
       };
     };
   };
+  assertions = [
+    {
+      assertion = host.isLaptop && host.gpu.hasIntel && host.gpu.hasNvidia;
+      message = "Zephyrus PRIME policy requires the declared Intel/NVIDIA hybrid laptop.";
+    }
+  ];
 }

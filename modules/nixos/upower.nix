@@ -1,5 +1,5 @@
-{ ... }:
+{ host, ... }:
 
 {
-  services.upower.enable = true;
+  services.upower.enable = host.profile.nixos.upower.enable;
 }

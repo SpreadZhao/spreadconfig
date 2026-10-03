@@ -1,1 +1,3 @@
-{ }
+{
+  fontScalePercent = 90;
+}

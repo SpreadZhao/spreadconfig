@@ -1,5 +1,5 @@
-{ ... }:
+{ host, ... }:
 
 {
-  networking.hostName = "zephyrus-m16";
+  networking.hostName = host.name;
 }

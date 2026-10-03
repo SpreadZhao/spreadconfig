@@ -1,4 +1,9 @@
-{ config, inputs, ... }:
+{
+  config,
+  host,
+  inputs,
+  ...
+}:
 
 {
   imports = [
@@ -14,7 +19,12 @@
   };
 
   services.textbridge.bluetooth = {
-    enable = true;
+    # The TextBridge module itself enables hardware.bluetooth. Reading that
+    # option here would make the two enable flags depend on each other.
+    enable =
+      host.profile.nixos.bluetooth.enable
+      && host.capabilities.bluetooth != false
+      && host.profile.nixos.textbridge.bluetooth.enable;
     channel = 22;
   };
 }

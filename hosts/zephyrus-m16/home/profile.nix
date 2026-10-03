@@ -1,4 +1,10 @@
 {
+  waybar = {
+    height = 25;
+    fontSize = 16;
+    temperaturePath = "/sys/devices/platform/coretemp.0/hwmon";
+  };
+  qutebrowser.renderer = "intel-vulkan";
   fontScalePercent = 100;
   fontSizes = {
     gtk = 12;

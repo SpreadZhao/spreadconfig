@@ -1,5 +1,5 @@
-{ ... }:
+{ host, ... }:
 
 {
-  networking.hostName = "thinkbook";
+  networking.hostName = host.name;
 }

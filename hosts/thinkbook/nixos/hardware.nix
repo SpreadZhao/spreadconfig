@@ -1,9 +1,7 @@
-{ config, lib, ... }:
+{ host, ... }:
 
 {
   hardware = {
-    cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
-
     amdgpu = {
       opencl.enable = true;
       initrd.enable = false;
@@ -14,4 +12,10 @@
       enable32Bit = true;
     };
   };
+  assertions = [
+    {
+      assertion = host.cpu.isAmd && host.gpu.hasAmd && host.isLaptop;
+      message = "thinkbook hardware policy requires its declared AMD laptop hardware.";
+    }
+  ];
 }

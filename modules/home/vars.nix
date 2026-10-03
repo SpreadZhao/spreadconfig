@@ -1,7 +1,6 @@
 {
   config,
-  hostName,
-  hostProfile,
+  host,
   lib,
   pkgs,
   repoRoot,
@@ -9,7 +8,7 @@
 }:
 
 let
-  hostHomeProfile = hostProfile.home or { };
+  hostHomeProfile = host.profile.home;
   installedJDKs = with pkgs; [
     jdk25
     jdk21
@@ -24,17 +23,17 @@ let
   spreadconfigDir = "${projDir}/spreadconfig";
   defaultConfigDir = "${spreadconfigDir}/config/default";
   defaultScriptsDir = "${spreadconfigDir}/scripts/default";
-  hostConfigDir = "${spreadconfigDir}/config/${hostName}";
-  hostScriptsDir = "${spreadconfigDir}/scripts/${hostName}";
+  hostConfigDir = "${spreadconfigDir}/config/${host.name}";
+  hostScriptsDir = "${spreadconfigDir}/scripts/${host.name}";
   defaultConfigRoot = repoRoot + "/spreadconfig/config/default";
   defaultScriptsRoot = repoRoot + "/spreadconfig/scripts/default";
-  hostConfigRoot = repoRoot + "/spreadconfig/config/${hostName}";
-  hostScriptsRoot = repoRoot + "/spreadconfig/scripts/${hostName}";
+  hostConfigRoot = repoRoot + "/spreadconfig/config/${host.name}";
+  hostScriptsRoot = repoRoot + "/spreadconfig/scripts/${host.name}";
   joinRuntimePath = root: rel: if rel == "" then root else "${root}/${rel}";
   joinCheckPath = root: rel: if rel == "" then root else root + "/${rel}";
   sourceName =
     kind: rel:
-    "spreadconfig-${hostName}-${kind}-${
+    "spreadconfig-${host.name}-${kind}-${
       if rel == "" then "root" else lib.replaceStrings [ "/" "." ] [ "-" "-" ] rel
     }";
   linkTreeCommands =
@@ -79,7 +78,7 @@ let
     else if defaultExists then
       defaultRuntimePath
     else
-      throw "Missing ${kind} for ${hostName}: ${hostRuntimePath} (fallback: ${defaultRuntimePath})";
+      throw "Missing ${kind} for ${host.name}: ${hostRuntimePath} (fallback: ${defaultRuntimePath})";
   fallbackSource =
     kind: defaultCheckRoot: hostCheckRoot: defaultRuntimeRoot: hostRuntimeRoot: rel:
     let
@@ -96,7 +95,7 @@ let
     in
     if defaultIsDir || hostIsDir then
       if (defaultIsFile || hostIsFile) then
-        throw "Mismatched ${kind} path types for ${hostName}: ${hostRuntimePath} and ${defaultRuntimePath}"
+        throw "Mismatched ${kind} path types for ${host.name}: ${hostRuntimePath} and ${defaultRuntimePath}"
       else
         mergedSource kind rel defaultCheckPath hostCheckPath defaultRuntimePath hostRuntimePath
     else if hostExists then
@@ -104,7 +103,7 @@ let
     else if defaultExists then
       config.lib.file.mkOutOfStoreSymlink defaultRuntimePath
     else
-      throw "Missing ${kind} for ${hostName}: ${hostRuntimePath} (fallback: ${defaultRuntimePath})";
+      throw "Missing ${kind} for ${host.name}: ${hostRuntimePath} (fallback: ${defaultRuntimePath})";
   hostConfigPath =
     fallbackPath "config" defaultConfigRoot hostConfigRoot defaultConfigDir
       hostConfigDir;

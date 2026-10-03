@@ -1,8 +1,8 @@
-{ ... }:
+{ host, ... }:
 
 {
   nixpkgs.config = {
     allowUnfree = true;
-    rocmSupport = true;
+    rocmSupport = host.profile.nixos.rocmSupport;
   };
 }

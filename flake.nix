@@ -86,7 +86,6 @@
           inherit system;
           config = {
             allowUnfree = true;
-            rocmSupport = true;
           };
         };
 
@@ -94,82 +93,77 @@
         path = ./templates/android;
         description = "Android development environment with project-local agent skills";
       };
-
-      mkHostContext =
-        {
-          name,
-          system ? "x86_64-linux",
-        }:
-        let
-          hostName = name;
-          hostDir = ./hosts + "/${hostName}";
-          repoRoot = ./.;
-          hostProfile = {
-            nixos = import (hostDir + "/nixos/profile.nix");
-            home = import (hostDir + "/home/profile.nix");
-          };
-        in
-        {
-          inherit
-            system
-            hostName
-            hostDir
-            repoRoot
-            hostProfile
-            ;
-        };
+      mkHostContext = import ./hosts/lib { inherit (nixpkgs) lib; };
+      hostNames = nixpkgs.lib.filter (name: builtins.pathExists (./hosts + "/${name}/host.nix")) (
+        builtins.attrNames (builtins.readDir ./hosts)
+      );
+      hosts = nixpkgs.lib.genAttrs hostNames (
+        name:
+        mkHostContext {
+          inherit name;
+          declaration = import (./hosts + "/${name}/host.nix");
+        }
+      );
+      repoRoot = ./.;
 
       mkHost =
-        args:
-        let
-          hostContext = mkHostContext args;
-          inherit (hostContext)
-            system
-            hostName
-            hostDir
-            repoRoot
-            hostProfile
-            ;
-        in
+        host:
         nixpkgs.lib.nixosSystem {
-          inherit system;
+          inherit (host) system;
           specialArgs = {
             inherit
               inputs
-              hostName
+              host
               repoRoot
-              hostProfile
               ;
           };
           modules = [
             ./modules/nixos
-            (hostDir + "/configuration.nix")
             inputs.sops-nix.nixosModules.sops
             home-manager.nixosModules.home-manager
             {
-              home-manager.useGlobalPkgs = true;
-              home-manager.useUserPackages = true;
-              home-manager.extraSpecialArgs = {
-                inherit
-                  inputs
-                  hostName
-                  repoRoot
-                  hostProfile
-                  ;
-              };
-              home-manager.users.spreadzhao = {
-                imports = [
-                  inputs.codex-desktop-linux.homeManagerModules.default
-                  inputs.nixvim.homeModules.nixvim
-                  ./modules/home
-                  (hostDir + "/home.nix")
-                ];
+              home-manager = {
+                useGlobalPkgs = true;
+                useUserPackages = true;
+                extraSpecialArgs = {
+                  inherit
+                    inputs
+                    host
+                    repoRoot
+                    ;
+                };
+                users.spreadzhao = {
+                  imports = [
+                    inputs.codex-desktop-linux.homeManagerModules.default
+                    inputs.nixvim.homeModules.nixvim
+                    ./modules/home
+                  ]
+                  ++ host.modules.home;
+                };
               };
             }
-          ];
+          ]
+          ++ host.modules.nixos;
         };
     in
     {
+      lib = {
+        inherit hosts;
+        mkHost = mkHostContext;
+      };
+
+      checks.x86_64-linux.host-context =
+        let
+          pkgs = mkPkgs "x86_64-linux";
+          passed = import ./tests/host-context.nix {
+            inherit (nixpkgs) lib;
+            mkHost = mkHostContext;
+            inherit hosts;
+          };
+        in
+        assert passed;
+        pkgs.runCommand "host-context-check" { } "touch $out";
+
       devShells.x86_64-linux.default =
         let
           system = "x86_64-linux";
@@ -194,11 +188,6 @@
         android = androidTemplate;
       };
 
-      nixosConfigurations = {
-        amd-desktop = mkHost { name = "amd-desktop"; };
-        desktop1 = mkHost { name = "desktop1"; };
-        thinkbook = mkHost { name = "thinkbook"; };
-        zephyrus-m16 = mkHost { name = "zephyrus-m16"; };
-      };
+      nixosConfigurations = nixpkgs.lib.mapAttrs (_: mkHost) hosts;
     };
 }

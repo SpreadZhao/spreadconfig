@@ -1,34 +1,29 @@
 {
-  hostName,
+  host,
   pkgs,
   ...
 }:
 
 let
-  isNvidiaHost = builtins.elem hostName [
-    "desktop1"
-    "zephyrus-m16"
-  ];
-
   baseSettings = {
     theme_background = false;
     truecolor = true;
     vim_keys = true;
   };
 
-  gpuSettingsByHost = {
-    desktop1 = gpuSettingsByHost.zephyrus-m16;
-
-    thinkbook = {
-      shown_gpus = "amd";
-    };
-
-    zephyrus-m16 = {
-      shown_boxes = "cpu mem net proc gpu0";
-      shown_gpus = "nvidia";
-      show_gpu_info = "On";
-    };
-  };
+  gpuSettings =
+    if host.gpu.hasNvidia then
+      {
+        shown_boxes = "cpu mem net proc gpu0";
+        shown_gpus = "nvidia";
+        show_gpu_info = "On";
+      }
+    else if host.gpu.hasAmd then
+      {
+        shown_gpus = "amd";
+      }
+    else
+      { };
 
   nvidiaBtop = pkgs.symlinkJoin {
     name = "btop-nvidia";
@@ -39,13 +34,11 @@ let
         --prefix LD_LIBRARY_PATH : /run/opengl-driver/lib
     '';
   };
-
-  hostGpuSettings = gpuSettingsByHost.${hostName} or { };
 in
 {
   programs.btop = {
     enable = true;
-    package = if isNvidiaHost then nvidiaBtop else pkgs.btop;
-    settings = baseSettings // hostGpuSettings;
+    package = if host.gpu.hasNvidia then nvidiaBtop else pkgs.btop;
+    settings = baseSettings // gpuSettings;
   };
 }

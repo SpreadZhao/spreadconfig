@@ -1,1 +1,3 @@
-{ }
+{
+  rocmSupport = false;
+}

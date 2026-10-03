@@ -1,5 +1,6 @@
 {
   config,
+  host,
   lib,
   inputs,
   pkgs,
@@ -14,7 +15,7 @@ let
     system = pkgs.stdenv.hostPlatform.system;
     config = {
       allowUnfree = true;
-      rocmSupport = true;
+      rocmSupport = host.profile.nixos.rocmSupport;
     };
   };
   # Use the pinned NixOS module to keep NVIDIA's EGL platform JSON files and
@@ -43,11 +44,9 @@ in
 {
   boot.kernelPackages = lib.mkForce baseline.boot.kernelPackages;
   # All existing Home Manager niri references also resolve to this package.
-  nixpkgs.overlays = [ (_final: _prev: { niri = graphicsPkgs.niri; }) ];
+  nixpkgs.overlays = [ (_final: _prev: { inherit (graphicsPkgs) niri; }) ];
 
   hardware = {
-    cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
-
     graphics = {
       enable = true;
       enable32Bit = true;
@@ -72,4 +71,11 @@ in
   };
 
   services.xserver.videoDrivers = [ "nvidia" ];
+
+  assertions = [
+    {
+      assertion = host.cpu.isIntel && host.gpu.hasNvidia;
+      message = "desktop1 graphics fallback requires its declared Intel/NVIDIA hardware.";
+    }
+  ];
 }
