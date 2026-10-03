@@ -93,6 +93,11 @@
         path = ./templates/android;
         description = "Android development environment with project-local agent skills";
       };
+      workspaceTemplate = {
+        path = ./templates/workspace;
+        description = "Independent workspace with centrally maintained agent skills";
+      };
+
       mkHostContext = import ./hosts/lib { inherit (nixpkgs) lib; };
       hostNames = nixpkgs.lib.filter (name: builtins.pathExists (./hosts + "/${name}/host.nix")) (
         builtins.attrNames (builtins.readDir ./hosts)
@@ -150,6 +155,7 @@
       lib = {
         inherit hosts;
         mkHost = mkHostContext;
+        mkWorkspace = import ./lib/workspace { inherit inputs repoRoot; };
       };
 
       checks.x86_64-linux.host-context =
@@ -175,6 +181,28 @@
         assert passed;
         pkgs.runCommand "mutable-files-check" { } "touch $out";
 
+      checks.x86_64-linux.workspace =
+        let
+          pkgs = mkPkgs "x86_64-linux";
+        in
+        pkgs.runCommand "workspace-regression-check"
+          {
+            nativeBuildInputs = [
+              pkgs.python3
+              pkgs.bash
+              pkgs.jq
+            ];
+          }
+          ''
+            cp -R ${repoRoot} source
+            chmod -R u+w source
+            patchShebangs source
+            cd source
+            python3 tests/workspace-activation.py
+            python3 tests/skill-paths.py
+            touch "$out"
+          '';
+
       devShells.x86_64-linux.default =
         let
           system = "x86_64-linux";
@@ -195,7 +223,8 @@
         };
 
       templates = {
-        default = androidTemplate;
+        default = workspaceTemplate;
+        workspace = workspaceTemplate;
         android = androidTemplate;
       };
 

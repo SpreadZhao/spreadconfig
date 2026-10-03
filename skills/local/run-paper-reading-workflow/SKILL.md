@@ -15,6 +15,11 @@ Create exactly one folder per paper and treat that folder as both the durable pr
 4. Run `scripts/validate_workspace.py <folder>` after every phase boundary.
 5. Inspect `.paper-reading/workflow.json` and continue from the first incomplete phase. Files, not chat memory or Agent IDs, are the source of truth.
 
+If the user asks to place the paper in a notes repository, use the repository
+identified by the request or current project context. Resolve an ambiguous
+destination before writing. An explicit output path takes priority; without a
+requested vault destination, keep the current-directory default above.
+
 ## Execute the Pipeline
 
 Run these skills in order:
@@ -47,4 +52,3 @@ Do not finish merely because every chunk was opened. Finish only when:
 - all links and assets validate after treating the paper folder as movable.
 
 Do not require the Reader to exhaust every conceivable question. Require a stable explanation of the paper and an honest classification of open research questions.
-

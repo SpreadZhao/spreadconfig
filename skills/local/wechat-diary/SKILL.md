@@ -13,7 +13,7 @@ The output note is an article archive with commentary, not a summary-only note. 
 
 ## Workspace Scope
 
-- Final diary edits belong in `/home/spreadzhao/workspaces/SecondBrain`.
+- Final diary edits belong in the notes repository identified by the user's request or current project context. Resolve an ambiguous destination before writing.
 - Fetch raw article Markdown into a temporary path first; copy only selected images and final diary content into the SecondBrain diary tree.
 - Do not create raw article archives or resource folders under the spreadconfig skill source directory.
 

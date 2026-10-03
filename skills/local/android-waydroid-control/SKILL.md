@@ -10,7 +10,7 @@ Use this skill to make Android UI debugging agent-controllable. Prefer the user'
 ## Workspace Scope
 
 - This skill controls local Android or Waydroid state; it does not own a repository or write repo-local runtime state.
-- It may be installed globally or exposed by a workspace profile. Resolve bundled helpers from the directory containing this `SKILL.md`, not from `~/.codex`, the current working directory, or a project `.agents/skills` path.
+- It may be installed globally or selected by a workspace flake. Resolve bundled helpers from the directory containing this `SKILL.md`, not from `~/.codex`, the current working directory, or a project `.agents/skills` path.
 - When debugging an app inside a specific repository, run build commands from that repository root, then return to this skill's helper only for adb and Waydroid control.
 
 ## Tooling

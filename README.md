@@ -10,7 +10,9 @@ My personal NixOS configuration, built with [flakes](https://wiki.nixos.org/wiki
 .
 ├── flake.nix                       # Flake entry point
 ├── lib/mutable-files.nix           # Checked workspace links and explicit file trees
-├── skills/                         # Skill definitions and local sources
+├── lib/workspace/                  # mkWorkspace and internal shell activation
+├── templates/                      # Independent workspace and Android skeletons
+├── skills/                         # Skill catalog and local sources
 ├── hosts/
 │   ├── lib/default.nix             # Shared host facts and profile defaults
 │   └── <host>/
@@ -38,7 +40,7 @@ My personal NixOS configuration, built with [flakes](https://wiki.nixos.org/wiki
 │       ├── nix-tools/              # Shared Nix maintenance commands
 │       └── script-tools/           # Common script libraries and retained tools
 ├── scripts/sops-key                # Secret bootstrap helper
-├── tests/                          # Host, script and asset checks
+├── tests/                          # Host, script, asset and workspace checks
 └── secrets/                        # Encrypted secrets and ignored local identities
 ```
 
@@ -146,6 +148,18 @@ A fully Wayland-native desktop built around [niri](https://github.com/niri-wm/ni
 This repository's default devShell is for maintaining the NixOS configuration. It is loaded by the root `.envrc` through direnv/nix-direnv and includes Nix maintenance tools such as `nixfmt`, `statix`, `deadnix`, `shellcheck`, `shfmt`, `jq`, `git`, and `ripgrep`.
 
 Language runtimes and project-specific build tools are intentionally not installed globally here. Put them in each project's own `flake.nix`/`devShell` and load that environment with direnv.
+
+### Independent agent workspaces
+
+Create any directory from `templates.workspace` (also the default template), then
+select skills and tools in its own flake. `nix develop`
+prepares `.agents/skills` and shared instructions; optional Claude support uses the
+same sources. Each skill uses its declared source; local catalog skills link the
+central checkout named by `SPREADCONFIG_SOURCE_ROOT`.
+
+See [workspace setup](docs/workspaces.md) for commands, examples, ownership rules
+and checks. Home Manager provides the machine default source path and global
+skills; each workspace selects its own skills in its flake.
 
 ### Editor
 

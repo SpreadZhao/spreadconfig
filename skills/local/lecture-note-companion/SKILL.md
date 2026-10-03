@@ -185,6 +185,8 @@ Do not collect all diagrams at the bottom of the note. An image buried only in t
 
 Write or update the final note only after an explicit request such as “可以写笔记了” or “把这堂课整理成日记”. Until then, continue the live learning conversation.
 
+Honor an explicit output path or vault. Otherwise use the notes repository identified by the current project context. Resolve an ambiguous destination before writing; the skill's source directory is not a vault.
+
 Follow the loaded SecondBrain and Obsidian skills. By default, produce two separate, bidirectionally linked notes rather than mixing the transcript into the primary note:
 
 1. **Structured classroom note**: the durable primary note organized by the lecture's conceptual sequence.

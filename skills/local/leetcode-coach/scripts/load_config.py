@@ -14,7 +14,6 @@ from typing import Any
 
 STATE_DIR_NAME = ".leetcode-coach"
 CONFIG_NAME = "config.yaml"
-LEETCODE_ROOT = Path("SpreadStudy/Leetcode")
 CONFIG_ENV = "LEETCODE_COACH_CONFIG"
 STATE_DIR_ENV = "LEETCODE_COACH_STATE_DIR"
 
@@ -202,16 +201,6 @@ def default_state_dir() -> Path:
     if configured:
         return Path(configured)
 
-    candidates = [
-        Path(STATE_DIR_NAME),
-        LEETCODE_ROOT / STATE_DIR_NAME,
-    ]
-    for candidate in candidates:
-        if (candidate / CONFIG_NAME).exists():
-            return candidate
-
-    if LEETCODE_ROOT.exists():
-        return LEETCODE_ROOT / STATE_DIR_NAME
     return Path(STATE_DIR_NAME)
 
 
@@ -224,9 +213,9 @@ def default_config_path() -> Path:
 
 def load_config(path: Path | str | None = None) -> dict[str, Any]:
     config_path = Path(path) if path is not None else default_config_path()
-    if not config_path.exists():
-        raise ConfigError(f"Missing config file: {config_path}")
-    return parse_yaml_subset(config_path.read_text(encoding="utf-8"))
+    if config_path.exists():
+        return parse_yaml_subset(config_path.read_text(encoding="utf-8"))
+    raise ConfigError(f"Missing config file: {config_path}")
 
 
 def get_field(data: dict[str, Any], dotted: str) -> Any:
@@ -306,14 +295,13 @@ def main() -> int:
     parser.add_argument("--pretty", action="store_true")
     args = parser.parse_args()
 
-    config_path = default_config_path()
     try:
-        config = load_config(config_path)
+        config = load_config()
         missing = require_fields(config, args.require)
         if missing:
             fields = ", ".join(missing)
             raise ConfigError(
-                f"Missing required config field(s): {fields}. Fill them in {config_path}."
+                f"Missing required config field(s): {fields}. Fill them in {default_config_path()}."
             )
     except ConfigError as exc:
         print(str(exc), file=sys.stderr)

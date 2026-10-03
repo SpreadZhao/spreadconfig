@@ -7,7 +7,7 @@ description: Manage diary notes in the SecondBrain repository. Use when Codex ne
 
 ## Core Rules
 
-- Work from `/home/spreadzhao/workspaces/SecondBrain`.
+- Work from the notes repository identified by the user's request or current project context. If the destination is ambiguous, resolve it before writing; do not guess a home-directory checkout.
 - When invoked from a cross-repository workspace session, change into the SecondBrain repo before running git, search, or edit commands.
 - This skill owns SecondBrain diary content only; do not write diary runtime files into the spreadconfig skill source directory.
 - Check `git status --short` before editing. Preserve unrelated user changes.

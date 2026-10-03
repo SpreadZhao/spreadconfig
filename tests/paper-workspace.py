@@ -3,19 +3,21 @@
 from __future__ import annotations
 
 import json
+import importlib.util
 import shutil
 import subprocess
 import sys
 import tempfile
 import threading
 import unittest
+from unittest.mock import patch
 from functools import partial
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
-PLUGIN_ROOT = Path(__file__).resolve().parents[1]
-WORKFLOW_SCRIPTS = PLUGIN_ROOT / "skills/run-paper-reading-workflow/scripts"
-INGEST_SCRIPT = PLUGIN_ROOT / "skills/ingest-paper/scripts/ingest_paper.py"
+REPO_ROOT = Path(__file__).resolve().parents[1]
+WORKFLOW_SCRIPTS = REPO_ROOT / "skills/local/run-paper-reading-workflow/scripts"
+INGEST_SCRIPT = REPO_ROOT / "skills/local/ingest-paper/scripts/ingest_paper.py"
 INIT_SCRIPT = WORKFLOW_SCRIPTS / "init_paper_workspace.py"
 VALIDATE_SCRIPT = WORKFLOW_SCRIPTS / "validate_workspace.py"
 
@@ -324,6 +326,40 @@ class WorkspaceTests(unittest.TestCase):
             (workspace / "00 Source/extraction-report.md").read_text(encoding="utf-8"),
         )
         run(str(VALIDATE_SCRIPT), str(workspace))
+
+    def test_failed_ocrmypdf_falls_back_to_tesseract(self) -> None:
+        spec = importlib.util.spec_from_file_location("ingest_paper", INGEST_SCRIPT)
+        assert spec is not None and spec.loader is not None
+        ingest = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(ingest)
+        workspace = self.root / "fallback"
+        (workspace / "assets/page-images").mkdir(parents=True)
+        (workspace / "assets/figures").mkdir()
+        (workspace / "00 Source").mkdir()
+        commands = []
+
+        def execute(command, **kwargs):
+            commands.append(command[0])
+            if command[0] == "pdfinfo":
+                return "Pages: 1\n"
+            if command[0] == "pdftoppm":
+                (workspace / "assets/page-images/test-page-1.png").write_bytes(b"")
+            if command[0] == "ocrmypdf":
+                raise subprocess.CalledProcessError(7, command)
+            if command[0] == "tesseract":
+                return "Recovered source paragraph."
+            return ""
+
+        with patch.object(ingest, "available", return_value=True), patch.object(
+            ingest, "run_command", side_effect=execute
+        ):
+            blocks, _, metadata, notes = ingest.extract_pdf(
+                self.root / "scan.pdf", workspace, "test", 72
+            )
+        self.assertTrue(metadata["used_ocr"])
+        self.assertEqual(blocks[0]["text"], "Recovered source paragraph.")
+        self.assertLess(commands.index("ocrmypdf"), commands.index("tesseract"))
+        self.assertIn("OCRmyPDF failed: exit 7", notes)
 
     def test_final_coverage_and_duplicate_detection(self) -> None:
         source = self.root / "source.md"

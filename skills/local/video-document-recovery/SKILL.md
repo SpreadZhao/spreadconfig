@@ -50,6 +50,7 @@ The primary agent independently checks boundaries, high-risk characters, tables,
 
 ## Visual and Obsidian Routing
 
+- Honor an explicit output path or vault. Otherwise use the notes repository identified by the current project context. Resolve an ambiguous destination before writing; do not use the skill source as the recovery or notes directory.
 - For Obsidian output, use the available Obsidian Markdown and CLI skills and verify the parsed outline, outgoing links, backlinks, and unresolved links.
 - Extract a clear original image when possible.
 - Use the available Draw.io skill for structured diagrams, preserving editable `.drawio` plus a white-background PNG.

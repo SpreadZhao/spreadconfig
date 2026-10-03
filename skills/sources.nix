@@ -3,12 +3,10 @@
   pkgs,
   inputs ? { },
   localSkillSource ? (name: ./local + "/${name}"),
-  workspaceRoot ? "/home/spreadzhao/workspaces",
   ...
 }:
 
 let
-  workspaceSkillSource = rel: "${workspaceRoot}/${rel}";
   agentTargets = [
     "agents"
     "claude"
@@ -62,6 +60,7 @@ let
   wechatArticleFetcherSkill = {
     wechat-article-fetcher = {
       source = localSkillSource "wechat-article-fetcher";
+      relativePath = "skills/local/wechat-article-fetcher";
       targets = agentTargets;
     };
   };
@@ -69,6 +68,7 @@ let
   smartmontoolsDiskHealthSkill = {
     smartmontools-disk-health = {
       source = localSkillSource "smartmontools-disk-health";
+      relativePath = "skills/local/smartmontools-disk-health";
       targets = agentTargets;
     };
   };
@@ -143,6 +143,7 @@ let
   codexAgentSkills = {
     android-waydroid-control = {
       source = localSkillSource "android-waydroid-control";
+      relativePath = "skills/local/android-waydroid-control";
       targets = [ "agents" ];
     };
   };
@@ -150,6 +151,7 @@ let
   spreadconfigNixSkill = {
     spreadconfig-nix = {
       source = localSkillSource "spreadconfig-nix";
+      relativePath = "skills/local/spreadconfig-nix";
       targets = agentTargets;
       force = true;
     };
@@ -158,6 +160,7 @@ let
   spreadconfigSkillAuthoringSkill = {
     spreadconfig-skill-authoring = {
       source = localSkillSource "spreadconfig-skill-authoring";
+      relativePath = "skills/local/spreadconfig-skill-authoring";
       targets = agentTargets;
     };
   };
@@ -165,6 +168,7 @@ let
   secondbrainDiarySkill = {
     secondbrain-diary = {
       source = localSkillSource "secondbrain-diary";
+      relativePath = "skills/local/secondbrain-diary";
       targets = agentTargets;
     };
   };
@@ -172,6 +176,7 @@ let
   secondbrainConversationDiarySkill = {
     secondbrain-conversation-diary = {
       source = localSkillSource "secondbrain-conversation-diary";
+      relativePath = "skills/local/secondbrain-conversation-diary";
       targets = agentTargets;
     };
   };
@@ -179,6 +184,7 @@ let
   lectureNoteCompanionSkill = {
     lecture-note-companion = {
       source = localSkillSource "lecture-note-companion";
+      relativePath = "skills/local/lecture-note-companion";
       targets = agentTargets;
     };
   };
@@ -186,6 +192,7 @@ let
   videoDocumentRecoverySkill = {
     video-document-recovery = {
       source = localSkillSource "video-document-recovery";
+      relativePath = "skills/local/video-document-recovery";
       targets = agentTargets;
     };
   };
@@ -193,6 +200,7 @@ let
   wechatDiarySkill = {
     wechat-diary = {
       source = localSkillSource "wechat-diary";
+      relativePath = "skills/local/wechat-diary";
       targets = agentTargets;
     };
   };
@@ -200,16 +208,34 @@ let
   leetcodeCoachSkill = {
     leetcode-coach = {
       source = localSkillSource "leetcode-coach";
+      relativePath = "skills/local/leetcode-coach";
       targets = agentTargets;
     };
   };
 
   androidDevSkill = {
     android-dev = {
-      source = workspaceSkillSource "rime-android-remote/skills/local/android-dev";
+      source = localSkillSource "android-dev";
+      relativePath = "skills/local/android-dev";
       targets = [ "agents" ];
     };
   };
+
+  paperSkills =
+    lib.genAttrs
+      [
+        "run-paper-reading-workflow"
+        "ingest-paper"
+        "segment-paper"
+        "read-paper-sequentially"
+        "research-paper-questions"
+        "write-obsidian-paper"
+      ]
+      (name: {
+        source = localSkillSource name;
+        relativePath = "skills/local/${name}";
+        targets = agentTargets;
+      });
 
 in
 
@@ -224,6 +250,7 @@ rec {
       leetcodeCoachSkill
       nixosBestPracticesSkill
       obsidianSkills
+      paperSkills
       secondbrainConversationDiarySkill
       secondbrainDiarySkill
       smartmontoolsDiskHealthSkill
@@ -237,43 +264,17 @@ rec {
       ;
   };
 
-  # Dynamic workspace profiles are not linked by Home Manager directly.
-  # They are exposed through a manifest consumed by the agent-skills script,
-  # so switching a profile does not require a rebuild.
-  workspaceProfiles = {
-    leetcode = [
-      leetcodeCoachSkill
-      secondbrainDiarySkill
-      secondbrainConversationDiarySkill
-    ];
-
-    notes = [
-      obsidianSkills
-      lectureNoteCompanionSkill
-      secondbrainDiarySkill
-      secondbrainConversationDiarySkill
-      videoDocumentRecoverySkill
-      wechatArticleFetcherSkill
-      wechatDiarySkill
-      xiaohongshuSummarizerSkill
-    ];
-
-    nixos = [
-      spreadconfigNixSkill
-      spreadconfigSkillAuthoringSkill
-      smartmontoolsDiskHealthSkill
-      nixosBestPracticesSkill
-    ];
-
-    android = [
-      androidDevSkill
-      codexAgentSkills
-    ];
-
-    frontend = [
-      externalUserSkills
-    ];
-  };
+  # Every catalog name has one owner.
+  catalog = lib.foldl' (
+    acc: set:
+    let
+      duplicates = lib.intersectLists (builtins.attrNames acc) (builtins.attrNames set);
+    in
+    if duplicates != [ ] then
+      throw "Duplicate central skill names: ${lib.concatStringsSep ", " duplicates}"
+    else
+      acc // set
+  ) { } (builtins.attrValues skillSets);
 
   # Home-global skills. Each skill declares its own target directories with the
   # `targets` field: agents -> ~/.agents/skills, claude -> ~/.claude/skills,

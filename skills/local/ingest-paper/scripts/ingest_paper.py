@@ -206,7 +206,7 @@ def extract_pdf(
                     used_ocr = True
                 except subprocess.CalledProcessError as error:
                     notes.append(f"OCRmyPDF failed: exit {error.returncode}")
-        elif available("tesseract") and page_images:
+        if not used_ocr and available("tesseract") and page_images:
             page_texts: list[str] = []
             for image in page_images:
                 try:
@@ -220,9 +220,9 @@ def extract_pdf(
                     page_texts.append("")
             raw_text = "\f".join(page_texts)
             used_ocr = True
-        else:
+        elif not used_ocr:
             notes.append(
-                "No OCR tool was available; page images require visual recovery."
+                "No OCR tool succeeded; page images require visual recovery."
             )
 
     (root / "00 Source/extracted.txt").write_text(raw_text, encoding="utf-8")

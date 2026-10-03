@@ -1,78 +1,22 @@
-# Skill Registry
+# Skill catalog
 
-This directory is the declarative source registry for agent skills.
+`local/<name>/` contains the skills maintained here. `sources.nix` exposes a
+`catalog` mapping selectable names to their sources. A workspace selects names
+with `skills = [ "leetcode-coach" "obsidian-markdown" ];` through `mkWorkspace`.
+See [workspace setup](../docs/workspaces.md).
 
-- Put local skill sources under `skills/local/<name>/`.
-- Register global skills in `skills/sources.nix` under `globalSkills`.
-- Register dynamic workspace profiles in `skills/sources.nix` under
-  `workspaceProfiles`.
-- Each skill declares its own `targets`; valid targets are `agents`, `claude`,
-  and `codex`.
+Each catalog entry fixes its source. Local entries carry a `relativePath`,
+resolved under `SPREADCONFIG_SOURCE_ROOT`; their Nix `source` is also checked at
+build time. Upstream entries use their declared source. `extraSkills` accepts
+additional name/source mappings in the workspace's flake.
 
-Local skills live in `skills/local/<name>/`. Home Manager installs these as
-direct symlinks to the working tree path under `$HOME/workspaces/spreadconfig`,
-so editing a local skill changes the installed skill immediately after the
-initial symlink has been created. Prefer flake inputs or fixed-output fetchers
-for skills with a clear upstream so the skill source does not need to be
-vendored into this repository.
+Register new catalog sets under `skillSets`. `globalSkills` remains the small
+Home Manager selection, with `targets` choosing home-level agents/Claude entries.
+Workspace skills use `.agents/skills` and optionally Claude.
 
-Missing-directory policies:
+The six paper skills are ordinary local skills. Their regression test is
+`tests/paper-workspace.py`. `android-dev` lives here and is selected by the Android
+template. Business paths use each skill's own configuration or the current task.
 
-- `create`: create the target directory as part of Home Manager file linking.
-- `fail`: fail activation if the target directory does not already exist.
-- `skip`: skip installing that directory's skills if the target directory does
-  not already exist.
-
-Skill targets fail on existing files by default. Set `force = true` on a
-specific skill only when overwriting an existing target is intentional.
-
-Dynamic workspace profiles:
-
-- Home Manager writes the generated manifest to
-  `~/.config/spreadconfig/agent-skill-profiles.tsv`.
-- Use `agent-skills use <profile...>` to replace the active symlink set under
-  `~/workspaces` without rebuilding.
-- Use multiple profiles together, such as `agent-skills use leetcode notes` or
-  `agent-skills use android frontend`.
-- Use `agent-skills add <profile...>` and `agent-skills remove <profile...>`
-  for incremental changes.
-- Use `agent-skills refresh` after a Home Manager switch to reapply the current
-  active profiles from the regenerated manifest.
-- Editing a local skill's content usually takes effect immediately because the
-  workspace link points at the source directory. Editing `workspaceProfiles`
-  requires a Home Manager switch first, then `agent-skills refresh`.
-- The dynamic switcher only removes symlinks it previously managed. Existing
-  non-symlink skill directories are left alone unless `agent-skills --force`
-  is used.
-- Workspace profile targets are expanded from each skill's `targets` field:
-  `agents` -> `~/workspaces/.agents/skills`,
-  `claude` -> `~/workspaces/.claude/skills`,
-  `codex` -> `~/workspaces/.codex/skills`.
-- Keep always-available global skills in `globalSkills`. Put
-  project/domain-specific skills in workspace profiles instead of installing
-  them into each project directory.
-
-Example:
-
-```nix
-let
-  mySkill = {
-    my-skill = {
-      source = localSkillSource "my-skill";
-      targets = [
-        "agents"
-        "claude"
-      ];
-    };
-  };
-in
-{
-  globalSkills = [
-    mySkill
-  ];
-
-  workspaceProfiles.notes = [
-    mySkill
-  ];
-};
-```
+Validate changed metadata with skill-creator's `quick_validate.py`.
+`~/scripts/util/check-skills.sh` is also available to inspect skill directories.

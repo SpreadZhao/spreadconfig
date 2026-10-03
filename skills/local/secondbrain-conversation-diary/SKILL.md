@@ -14,7 +14,7 @@ Do not reimplement repository layout, filename rules, frontmatter rules, resourc
 ## Workspace Scope
 
 - During conversation, do not assume the current working directory is the target notes repo.
-- When saving, delegate repository writes to `secondbrain-diary`, whose target repo is `/home/spreadzhao/workspaces/SecondBrain`.
+- When saving, delegate repository writes to `secondbrain-diary`. Use the notes repository identified by the user's request or current project context. Resolve an ambiguous destination before writing.
 - Keep temporary reasoning in the conversation only; do not create runtime state under the spreadconfig skill source.
 
 ## Dependent Skills

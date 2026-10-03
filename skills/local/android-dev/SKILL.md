@@ -1,19 +1,21 @@
 ---
 name: android-dev
-description: Use in Android projects created from the spreadconfig Android flake template when working on Gradle builds, Android SDK setup, adb devices, emulator or physical-device debugging, logs, APK inspection, or app packaging.
+description: Work on Gradle builds, Android SDK setup, adb devices, emulator or physical-device debugging, logs, APK inspection, or app packaging in Android projects using a spreadconfig workspace development environment.
 ---
 
 # Android Dev
 
-Use this skill for Android app development inside a project created from the
-spreadconfig Android template.
+Use this skill for Android app development. The spreadconfig Android template
+provides the development tools and selects this centrally maintained skill.
 
 ## Environment
 
 - Enter the project environment with `nix develop` or `direnv allow`.
 - Prefer the project Gradle wrapper `./gradlew` when it exists. Use the shell's
   `gradle` package only when the project has no wrapper.
-- `android-cli` is installed by the dev shell as the `android` command.
+- Where the platform is supported by its package, `android-cli` is installed by
+  the dev shell as the `android` command. Check availability before using it;
+  adb and Gradle remain usable without it.
 - `ANDROID_HOME` and `ANDROID_SDK_ROOT` default to
   `${XDG_LIB_HOME:-$HOME/Lib}/Android/Sdk`.
 - The shell adds `$ANDROID_HOME/platform-tools` and
@@ -21,7 +23,7 @@ spreadconfig Android template.
 
 ## Checks
 
-Run `scripts/android-doctor` when Android tooling behaves unexpectedly. It
+Run the project's `scripts/android-doctor`, when present, if Android tooling behaves unexpectedly. It
 prints the SDK path, verifies `adb`, checks `android --version`, lists devices,
 and checks Gradle.
 
@@ -41,16 +43,13 @@ adb logcat
 
 ## Skills
 
-Entering the dev shell runs `install-android-skills`, which scans the pinned
-official Android skills input and installs project skill symlinks under
-`.agents/skills`. Run this manually after flake input updates:
+The project's flake selects skills through `mkWorkspace`.
+Entering `nix develop` prepares `.agents/skills` and, when enabled,
+`.claude/skills`. Change the flake selection and re-enter the environment to
+update these links. Do not edit generated state under `.agent-workspace`.
 
-```bash
-nix run .#install-android-skills
-```
-
-Official Android skills are tracked in `.agents/skills/.android-skills-managed`.
-Do not edit that manifest by hand unless you are repairing stale symlinks.
+This skill is maintained in the central spreadconfig checkout. Source edits
+are visible immediately to workspaces that select it.
 
 ## Debugging
 

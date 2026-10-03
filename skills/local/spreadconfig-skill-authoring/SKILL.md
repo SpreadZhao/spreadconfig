@@ -1,90 +1,65 @@
 ---
 name: spreadconfig-skill-authoring
-description: Create or update Nix-managed skills in the spreadconfig repository. Use when the user asks to add, modify, register, expose, profile, or switch a skill that lives under spreadconfig/skills/local or is installed through skills/sources.nix, especially when they mention NixOS, Home Manager, agent-skills, workspace profiles, or avoiding direct edits to installed skill symlinks.
+description: Create or update skills in the spreadconfig catalog. Use when the user asks to author, register, expose, or select skills under skills/local or skills/sources.nix, configure a workspace flake's skills, or maintain Home Manager global skill links.
 ---
 
 # Spreadconfig Skill Authoring
 
-## Overview
+Use this skill with `$skill-creator` for skill design and validation. This skill
+covers the central catalog and project-local declarative selection.
 
-Use this skill to author skills whose source of truth is the `spreadconfig` repository. Pair it with `$skill-creator` for general skill design quality; this skill covers the spreadconfig-specific Nix, Home Manager, and `agent-skills` wiring.
+## Source and Workspace
 
-## Source of Truth
+Use the central source repository identified by the user's request or current
+project context. When this skill is linked from that checkout, discover it from
+the actual skill source's ancestors and verify `skills/sources.nix` exists.
+The consuming workspace can live anywhere; selecting skills does not configure
+notes, code repositories, or other business destinations.
 
-Edit declarative sources, not installed copies:
+- Edit local content at `<source-repository>/skills/local/<skill-name>/`.
+- Register sources in `<source-repository>/skills/sources.nix`.
+- `catalog` exports names mapped to skill source records. Each record determines its own source: central local skills use the fixed central checkout; upstream or custom skills use their declared Nix input or path.
+- A workspace's own `flake.nix` selects names with `skills = [ "skill-name" ];` through `spreadconfig.lib.mkWorkspace`.
+- `extraSkills` adds explicitly declared custom sources for that workspace.
+- `globalSkills` remains the separate Home Manager selection for home-level links.
 
-- Local skill content lives in `/home/spreadzhao/workspaces/spreadconfig/skills/local/<skill-name>/`.
-- Skill registration and exposure live in `/home/spreadzhao/workspaces/spreadconfig/skills/sources.nix`.
-- Home-global installs are produced from `globalSkills`.
-- Workspace profile installs are produced from `workspaceProfiles` and linked by `agent-skills`.
+## Creating or Updating a Skill
 
-Do not directly edit installed skill locations such as `~/.agents/skills`, `~/.claude/skills`, `~/.codex/skills`, `~/workspaces/.agents/skills`, `~/workspaces/.claude/skills`, or `~/workspaces/.codex/skills`. If a symlink points somewhere unexpected, inspect it and fix the declarative source or profile entry instead.
+1. Read the existing catalog and nearby skill structure. Choose a lowercase hyphenated name of at most 64 characters.
+2. For a new skill, use the loaded `$skill-creator` initializer when available:
 
-## Workflow Decision
+   ```bash
+   CREATOR_DIR="<loaded skill-creator directory>"
+   SOURCE_ROOT="<central source repository>"
+   python3 "$CREATOR_DIR/scripts/init_skill.py" <skill-name> --path "$SOURCE_ROOT/skills/local"
+   ```
 
-- New local skill: create `skills/local/<skill-name>/`, then register it in `skills/sources.nix`.
-- Existing local skill content change: edit `skills/local/<skill-name>/`; no switch is needed if the existing installed path is already a symlink to this source.
-- Profile or global exposure change: edit `skills/sources.nix`; tell the user a Home Manager switch is required before relying on regenerated manifests or global symlinks.
-- External/upstream skill: prefer adding or reusing a flake input plus a `skills/sources.nix` source entry instead of vendoring files, unless the user explicitly wants a local fork.
-- Workspace activation: after a switch updates the manifest, use `agent-skills refresh` to reapply the currently active profiles, or `agent-skills use <profile>` / `agent-skills add <profile>` when changing the active profile set.
+3. Keep `SKILL.md` concise, preserve an existing skill's behavior unless requested otherwise, and add scripts or references only when needed. Keep `agents/openai.yaml` aligned with its name and trigger; the default prompt should mention `$<skill-name>`.
+4. Register the skill in `skills/sources.nix`, following an adjacent catalog entry. Local skills use `localSkillSource "<skill-name>"` and their repository-relative source path; upstream skills use an explicit flake input. Include any new set in `skillSets`, whose entries form the catalog. `globalSkills` selects skills exposed at home level.
+5. Select project skills in that workspace's flake, for example:
 
-## Creating a Local Skill
+   ```nix
+   outputs = { spreadconfig, ... }: spreadconfig.lib.mkWorkspace {
+     systems = [ "x86_64-linux" ];
+     skills = [ "my-skill" "spreadconfig-nix" ];
+   };
+   ```
 
-1. Choose a lowercase hyphen-case name, 64 characters or fewer.
-2. When available, run the `$skill-creator` initializer from the spreadconfig tree:
+   The supported workspace options are `systems`, `skills`, `extraSkills`, `packages`, `claude`, `instructions`, and `shellHook`. Source selection belongs to each skill's catalog or custom-source declaration.
+6. When renaming or moving a skill, update the directory, frontmatter name, interface metadata, catalog source, and affected selectors together.
 
-```bash
-nix shell nixpkgs#python3 --command python3 /home/spreadzhao/.codex/skills/.system/skill-creator/scripts/init_skill.py <skill-name> --path /home/spreadzhao/workspaces/spreadconfig/skills/local
-```
+## Applying and Validating
 
-3. Replace the generated `SKILL.md` TODOs with concise, task-focused instructions.
-4. Keep `agents/openai.yaml` aligned with the skill name and trigger. Its `interface.default_prompt` should explicitly mention `$<skill-name>`.
-5. Create `scripts/`, `references/`, or `assets/` only when the skill actually needs progressive-disclosure resources.
-6. Register the skill in `skills/sources.nix` using the local source helper:
+- Existing local links reflect source-content edits immediately. For changed selections, re-enter the workspace with `nix develop` or reload its direnv environment. To update an upstream skill, update its declared input when requested.
+- Workspace selections do not require a Home Manager or NixOS switch. Changes to `globalSkills` still require the user's Home Manager application step. Do not apply a system or global configuration unless the user requests it.
+- Validate each changed skill with the loaded creator's `scripts/quick_validate.py`, and test any changed helper behavior with temporary fixtures.
 
-```nix
-mySkill = {
-  my-skill = {
-    source = localSkillSource "my-skill";
-    targets = agentTargets;
-  };
-};
-```
+   ```bash
+   python3 "$CREATOR_DIR/scripts/quick_validate.py" "$SOURCE_ROOT/skills/local/<skill-name>"
+   nixfmt "$SOURCE_ROOT/skills/sources.nix"
+   git -C "$SOURCE_ROOT" diff --check
+   ```
 
-7. Add the new set to `skillSets = { inherit ...; };`.
-8. Add it to the appropriate `workspaceProfiles.<profile>` list for dynamic workspace usage, or to `globalSkills` only when it should always be available from the user's home skill directories.
-
-Use `agentTargets` for the common `agents` plus `claude` install shape. Use an explicit target list such as `[ "agents" ]` or `[ "codex" ]` only when the skill is intentionally scoped to one surface.
-
-## Updating an Existing Skill
-
-1. Inspect `skills/sources.nix` to find the skill set, target list, and profile/global exposure.
-2. Edit the source under `skills/local/<skill-name>/` when it is a local skill.
-3. Update frontmatter `description` when trigger conditions change.
-4. Update `agents/openai.yaml` when the display name, short description, default prompt, or invocation behavior changes.
-5. If renaming or moving a skill, update the skill directory, `SKILL.md` frontmatter `name`, `agents/openai.yaml`, `skills/sources.nix`, and any affected profile entries together.
-
-## Applying Changes
-
-- Content-only edits to an already linked local skill usually take effect immediately because Home Manager links to the working tree source.
-- Changes to `globalSkills` require a Home Manager switch to create or update home-level symlinks.
-- Changes to `workspaceProfiles` require a Home Manager switch to regenerate `~/.config/spreadconfig/agent-skill-profiles.tsv`; after that, run `agent-skills refresh` from `/home/spreadzhao/workspaces` to sync the current active profiles, or `agent-skills use` / `agent-skills add` when changing which profiles are active.
-- Do not run Home Manager, NixOS, `sns_until switch`, or any equivalent switch command for this skill. Report that a switch is required and leave the actual switch to the user.
-- When useful, mention the host-specific spreadconfig switch script chosen by `$spreadconfig-nix`, but present it as the command for the user to run.
-
-## Validation
-
-Run the skill validator after creating or materially changing a skill:
-
-```bash
-nix shell nixpkgs#python3 --command python3 /home/spreadzhao/.codex/skills/.system/skill-creator/scripts/quick_validate.py /home/spreadzhao/workspaces/spreadconfig/skills/local/<skill-name>
-```
-
-If `skills/sources.nix` changed, format it and check the diff:
-
-```bash
-nixfmt /home/spreadzhao/workspaces/spreadconfig/skills/sources.nix
-git -C /home/spreadzhao/workspaces/spreadconfig diff --check
-```
-
-For Git-backed flake evaluations, remember that newly created files may be invisible to Nix until they are added to the Git index. If an eval or switch must see new skill files, stage only the relevant new skill files and registry changes; do not stage unrelated dirty work.
+For work in progress, use a `path:` flake reference and `--no-write-lock-file`
+when evaluating untracked files. Preserve the user's index; do not stage files
+merely to make them visible to a Git-backed flake.

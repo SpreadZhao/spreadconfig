@@ -4,12 +4,13 @@
   pkgs,
   inputs,
   repoRoot,
+  projDir,
+  repoEntries,
   ...
 }:
 
 let
-  localSkillSource =
-    name: "${config.xdg.userDirs.extraConfig.WORKSPACE}/spreadconfig/skills/local/${name}";
+  localSkillSource = name: "${projDir}/skills/local/${name}";
 
   registry = import (repoRoot + "/skills/sources.nix") {
     inherit
@@ -27,24 +28,12 @@ let
   };
   validSkillTargets = builtins.attrNames skillTargets;
 
-  normalizeSkill =
-    name: value:
-    if lib.isAttrs value && value ? source then
-      {
-        source = value.source;
-        target = value.target or name;
-        targets = value.targets or [ "agents" ];
-        recursive = value.recursive or false;
-        force = value.force or false;
-      }
-    else
-      {
-        source = value;
-        target = name;
-        targets = [ "agents" ];
-        recursive = false;
-        force = false;
-      };
+  normalizeSkill = name: value: {
+    source = value.source;
+    target = value.target or name;
+    targets = value.targets or [ "agents" ];
+    force = value.force or false;
+  };
 
   mergeSkillSets =
     value:
@@ -70,7 +59,6 @@ let
       emptyTargetSkillDirs = lib.mapAttrs' (
         _: root:
         lib.nameValuePair root {
-          onMissing = "skip";
           skills = { };
         }
       ) skillTargets;
@@ -99,85 +87,12 @@ let
     in
     lib.filterAttrs (_: dir: dir.skills != { }) targetSkillDirs;
 
-  homeDir = config.home.homeDirectory;
-  validMissingPolicies = [
-    "create"
-    "fail"
-    "skip"
-  ];
-
-  toHomeTargetRoot =
-    root:
-    if lib.hasPrefix "/" root then
-      if lib.hasPrefix "${homeDir}/" root then
-        lib.removePrefix "${homeDir}/" root
-      else
-        throw "skillDirs key '${root}' must be relative to $HOME or inside ${homeDir}"
-    else
-      root;
-
-  toAbsoluteRoot = root: if lib.hasPrefix "/" root then root else "${homeDir}/${root}";
-
-  homeFileSource =
-    source:
-    if lib.isString source && lib.hasPrefix "/" source then
-      config.lib.file.mkOutOfStoreSymlink source
-    else
-      source;
-
-  normalizeDir =
-    root: value:
-    let
-      dir =
-        if lib.isAttrs value && (value ? skills || value ? onMissing) then value else { skills = value; };
-
-      onMissing = dir.onMissing or "create";
-    in
-    if !(lib.elem onMissing validMissingPolicies) then
-      throw "Invalid skillDirs onMissing value '${onMissing}' for '${root}'. Expected one of: ${lib.concatStringsSep ", " validMissingPolicies}"
-    else
-      {
-        homeTargetRoot = toHomeTargetRoot root;
-        absoluteRoot = toAbsoluteRoot root;
-        inherit onMissing;
-        skills = mergeSkillSets (dir.skills or { });
-      };
-
-  skillFiles =
-    dir:
-    lib.mapAttrs' (
-      name: value:
-      let
-        skill = normalizeSkill name value;
-      in
-      lib.nameValuePair "${dir.homeTargetRoot}/${skill.target}" {
-        source = homeFileSource skill.source;
-        inherit (skill) recursive force;
-      }
-    ) dir.skills;
-
-  legacySkillDirs =
-    (lib.optionalAttrs (registry ? user) { ".agents/skills" = registry.user; })
-    // (lib.optionalAttrs (registry ? codex) { ".codex/skills" = registry.codex; })
-    // (lib.optionalAttrs (registry ? claude) { ".claude/skills" = registry.claude; });
-
-  skillDirs =
-    if registry ? globalSkills then
-      globalSkillsToSkillDirs registry.globalSkills
-    else
-      registry.skillDirs or legacySkillDirs;
-  dirEntries = lib.mapAttrsToList normalizeDir skillDirs;
-  homeFileDirs = lib.filter (dir: dir.onMissing != "skip") dirEntries;
-  failDirs = lib.filter (dir: dir.onMissing == "fail") dirEntries;
-  skipDirs = lib.filter (dir: dir.onMissing == "skip") dirEntries;
+  skillDirs = globalSkillsToSkillDirs registry.globalSkills;
+  skipDirs = lib.mapAttrsToList (root: dir: {
+    absoluteRoot = "${config.home.homeDirectory}/${root}";
+    inherit (dir) skills;
+  }) skillDirs;
   indexedSkipDirs = lib.imap0 (skipIndex: dir: dir // { inherit skipIndex; }) skipDirs;
-
-  checkMissingDirsScript = lib.concatMapStringsSep "\n" (dir: ''
-    if [ ! -d ${lib.escapeShellArg dir.absoluteRoot} ]; then
-      echo "Skill directory does not exist: ${dir.absoluteRoot}" >&2
-      exit 1
-    fi
-  '') failDirs;
 
   captureSkippedDirsScript = lib.concatMapStringsSep "\n" (
     dir:
@@ -276,13 +191,11 @@ let
     '';
 in
 {
-  home.file = lib.foldl' (files: dir: files // skillFiles dir) { } homeFileDirs;
+  home.sessionVariables.SPREADCONFIG_SOURCE_ROOT = lib.mkDefault projDir;
+  spreadconfig.scriptFiles = repoEntries "modules/home/agent-skills/scripts";
 
   home.activation =
-    (lib.optionalAttrs (checkMissingDirsScript != "") {
-      checkSkillDirectories = lib.hm.dag.entryBefore [ "writeBoundary" ] checkMissingDirsScript;
-    })
-    // (lib.optionalAttrs (captureSkippedDirsScript != "") {
+    (lib.optionalAttrs (captureSkippedDirsScript != "") {
       captureSkippedSkillDirectories = lib.hm.dag.entryBefore [
         "writeBoundary"
       ] captureSkippedDirsScript;

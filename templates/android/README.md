@@ -1,49 +1,56 @@
-# Android Development Template
+# Android Development Workspace
 
-This template provides a Nix dev shell for Android projects, `android-cli`, and
-project-local agent skills under `.agents/skills`.
-
-Enter the environment with:
+Initialize an empty project directory from this template:
 
 ```bash
-direnv allow
+nix flake init --template github:SpreadZhao/spreadconfig#android
 ```
 
-or:
+Edit `flake.nix` to select skills, packages and Claude support, then run
+`nix develop`. If using direnv, review `.envrc`
+and enable it with `direnv allow`.
 
-```bash
-nix develop
-```
+The template uses the common `spreadconfig.lib.mkWorkspace` implementation. It
+selects the centrally maintained `android-dev` skill and the official Android
+skills from the pinned `android-skills` input. Official skill names come from
+`SKILL.md` frontmatter; duplicate names or conflicts with the central catalog fail
+before any project links change. Remove or filter `extraSkills` if you do not
+want the full official collection.
 
-The shell expects the Android SDK to be managed outside Nix, usually by Android
-Studio. By default it uses:
+The local `android-dev` skill uses the central checkout named by
+`SPREADCONFIG_SOURCE_ROOT`, which Home Manager supplies by default. Editing that
+skill updates all its workspace links immediately. Official Android skills use
+their pinned input through `extraSkills`.
 
-```text
-$XDG_LIB_HOME/Android/Sdk
-```
+Entering the environment prepares `.agents/skills`, `AGENTS.md` and management
+state under `.agent-workspace/`. Set `claude = true` for `.claude/skills` and a shared
+`CLAUDE.md` entry. Re-enter `nix develop` after changing selections or inputs.
+Generated state and its store GC root are ignored by Git; keep `flake.lock` in
+version control. Existing user files and unrelated links are not replaced. There
+is no separate skill installation command.
 
-falling back to:
+Start agent sessions from this workspace directory. An independently opened
+nested Git repository may have a different skill-discovery root.
 
-```text
-$HOME/Lib/Android/Sdk
-```
+## Android tooling
 
-Override it with `ANDROID_HOME` or `ANDROID_SDK_ROOT` when needed.
+The shell provides `android-cli`, Android tools, Gradle, Java 17, Kotlin, JADX,
+ktlint, protobuf, ripgrep and scrcpy. Prefer a project's `./gradlew` when present.
+Run `scripts/android-doctor` from the project directory to check SDK and device
+availability.
 
-The official Android skills repository is pinned as a flake input. Entering the
-dev shell scans that input for every `SKILL.md`, reads each skill's frontmatter
-`name:`, and installs symlinks into:
+Both x86_64 Linux and aarch64 Linux are supported. `android-cli` is included only
+where its pinned Nix package is available (currently x86_64 Linux); SDK, adb and
+Gradle tooling remain available on aarch64 Linux.
 
-```text
-.agents/skills
-```
+The Android SDK stays outside Nix, typically managed by Android Studio. Its path
+uses the first available value:
 
-You can refresh those links manually with:
+1. `ANDROID_HOME`
+2. `ANDROID_SDK_ROOT`
+3. `$XDG_LIB_HOME/Android/Sdk`
+4. `$HOME/Lib/Android/Sdk`
 
-```bash
-nix run .#install-android-skills
-```
-
-The installer tracks official Android skills in
-`.agents/skills/.android-skills-managed`, so skills removed from the upstream
-input are pruned on the next install without deleting unmanaged local files.
+Both Android variables are set to the selected path, and the SDK's
+`platform-tools` and `cmdline-tools/latest/bin` are added to `PATH`. The shell does
+not download or modify SDK components.

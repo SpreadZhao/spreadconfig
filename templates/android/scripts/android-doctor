@@ -18,7 +18,11 @@ fi
 
 "$adb_bin" version
 "$adb_bin" devices
-android --version
+if command -v android >/dev/null 2>&1; then
+  android --version
+else
+  echo "android-cli is not available in this environment; SDK and Gradle checks continue." >&2
+fi
 
 if [[ -x ./gradlew ]]; then
   ./gradlew --version

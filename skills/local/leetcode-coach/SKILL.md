@@ -18,18 +18,18 @@ The workflow is centered on two existing repositories:
 - Code reference: `https://github.com/SpreadZhao/SpreadStudy`
 - Notes reference: `https://github.com/SpreadZhao/SecondBrain`
 
-The skill source can be exposed by a workspace agent profile, but runtime state
-lives under `SpreadStudy/Leetcode/.leetcode-coach/` relative to the workspace
-root. It is not owned by NixOS, Home Manager, or spreadconfig activation. Real
-local repository paths must come from the runtime `config.yaml`; never guess
-paths, scan the home directory, or ask the user for configuration during a
-skill action.
+Select this skill in the workspace flake. Runtime state belongs to the code
+repository, usually at `Leetcode/.leetcode-coach/`; workspace initialization
+does not create it. Resolve paths from the skill's runtime `config.yaml`.
+Never guess paths, scan the home
+directory, or ask for configuration during a skill action; report a missing
+required field and stop that action.
 
 ## Workspace Scope
 
-- Work with code in the configured SpreadStudy checkout, normally `/home/spreadzhao/workspaces/SpreadStudy`.
-- Work with notes in the configured SecondBrain checkout, normally `/home/spreadzhao/workspaces/SecondBrain`.
-- Read and write LeetCode coach runtime state only under `/home/spreadzhao/workspaces/SpreadStudy/Leetcode/.leetcode-coach`.
+- Use an explicitly supplied config path first, then `LEETCODE_COACH_CONFIG`, then a config under `LEETCODE_COACH_STATE_DIR`, then the existing local runtime config. See `references/repositories.md` for local discovery rules.
+- Read code and notes paths from `repos.code.local_path` and `repos.notes.local_path` in that config.
+- Read and write runtime state only under the configured state directory. Loading config only reads existing files; it does not create runtime state, code, or notes.
 - Do not treat the spreadconfig skill source directory as the LeetCode project root.
 
 ## Required First Steps
@@ -65,10 +65,9 @@ skill action.
 
 ## Helper Scripts
 
-Run helpers from the workspace root or from `SpreadStudy/Leetcode`; do not run
-them from the spreadconfig repository root because default runtime config
-discovery is relative to the current working directory. Treat helpers as
-internal skill tools, not a user-facing CLI product.
+Run helpers from the directory containing `.leetcode-coach/config.yaml`, or set
+`LEETCODE_COACH_CONFIG` / `LEETCODE_COACH_STATE_DIR` when running elsewhere.
+Treat helpers as internal skill tools, not a user-facing CLI product.
 
 Resolve helper scripts from the active skill directory:
 

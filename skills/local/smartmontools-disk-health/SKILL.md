@@ -12,7 +12,7 @@ Use this skill to inspect disk health with `smartctl`, configure continuous moni
 ## Workspace Scope
 
 - Device inspection is machine-scoped and does not require a repository working directory.
-- Persistent NixOS configuration changes belong in `/home/spreadzhao/workspaces/spreadconfig`; when editing configuration, load and follow `spreadconfig-nix`.
+- For persistent NixOS configuration, load and follow `spreadconfig-nix`. Use an explicit repository override or the target checkout identified by the task; do not assume a personal checkout location.
 - Do not store health-check runtime output under the spreadconfig skill source unless the user explicitly asks for a reusable skill resource.
 
 ## Privileges
