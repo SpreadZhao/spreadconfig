@@ -1,14 +1,8 @@
-{ pkgs, ... }:
+{ lib, pkgs, ... }:
 
 let
   quickmarksPath = "/home/spreadzhao/.password-store/qutebrowser/qutebrowser_quickmarks";
   policyPath = "/etc/chromium/policies/managed/qutebrowser-bookmarks.json";
-  syncBookmarks = pkgs.writeShellApplication {
-    name = "sync-qutebrowser-chromium-bookmarks";
-    text = ''
-      exec ${pkgs.python3}/bin/python3 ${./chromium-bookmarks.py} "$@"
-    '';
-  };
 in
 {
   programs.chromium = {
@@ -17,25 +11,18 @@ in
     initialPrefs.vertical_tabs.enabled = true;
   };
 
-  systemd.services.chromium-qutebrowser-bookmarks = {
-    description = "Synchronize qutebrowser quickmarks to Chromium";
-    wantedBy = [ "multi-user.target" ];
-    unitConfig.ConditionPathExists = quickmarksPath;
-    serviceConfig = {
-      Type = "oneshot";
-      User = "root";
-      UMask = "0022";
-      ExecStart = "${syncBookmarks}/bin/sync-qutebrowser-chromium-bookmarks ${quickmarksPath} ${policyPath}";
-    };
-  };
-
-  systemd.paths.chromium-qutebrowser-bookmarks = {
-    description = "Watch qutebrowser quickmarks for Chromium synchronization";
-    wantedBy = [ "multi-user.target" ];
-    pathConfig = {
-      PathChanged = quickmarksPath;
-      PathModified = quickmarksPath;
-      Unit = "chromium-qutebrowser-bookmarks.service";
-    };
+  # Read personal bookmarks only at activation, never during evaluation/build.
+  # A new host can activate gh credentials before cloning the private repository.
+  # The converter writes atomically, preserving the last policy on failure.
+  system.activationScripts.chromiumBookmarks = {
+    deps = [ "etc" ];
+    text = ''
+      if [ -f ${lib.escapeShellArg quickmarksPath} ]; then
+        if ! ${pkgs.python3}/bin/python3 ${./chromium-bookmarks.py} \
+          ${lib.escapeShellArg quickmarksPath} ${lib.escapeShellArg policyPath}; then
+          echo "Warning: Chromium bookmark refresh failed; keeping the previous policy." >&2
+        fi
+      fi
+    '';
   };
 }

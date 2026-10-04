@@ -13,12 +13,6 @@ def parse_quickmarks(source: Path) -> dict[str, list[dict[str, object]]]:
     folder_children: dict[tuple[str, ...], list[dict[str, object]]] = {}
 
     descriptor = os.open(source, os.O_RDONLY | os.O_NOFOLLOW)
-    try:
-        os.fchmod(descriptor, 0o600)
-    except BaseException:
-        os.close(descriptor)
-        raise
-
     with io.open(descriptor, encoding="utf-8") as quickmarks:
         for line_number, raw_line in enumerate(quickmarks, start=1):
             line = raw_line.strip()
@@ -77,7 +71,7 @@ def write_policy(policy: dict[str, object], output: Path) -> None:
 
 def main() -> None:
     parser = argparse.ArgumentParser(
-        description="Synchronize qutebrowser quickmarks to Chromium managed bookmarks"
+        description="Generate Chromium managed bookmarks from qutebrowser quickmarks"
     )
     parser.add_argument("source", type=Path)
     parser.add_argument("output", type=Path)

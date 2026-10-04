@@ -344,6 +344,39 @@ A new machine needs shared-key initialization (`./scripts/sops-key init`) before
 For a private configuration repository, bootstrap by securely copying the checkout or
 temporarily using the same token.
 
+## Chromium bookmarks
+
+Qutebrowser and Chromium share the existing quickmarks source at
+`~/.password-store/qutebrowser/qutebrowser_quickmarks`, outside this repository.
+Qutebrowser reads and writes it directly through the existing symlink; the `m`
+and `M` bindings continue to save quickmarks. NixOS activation (including
+`nixos-rebuild switch` and boot) converts it once into Chromium's managed bookmark
+policy at `/etc/chromium/policies/managed/qutebrowser-bookmarks.json`.
+
+Only the conversion code and file paths are managed by Nix. Evaluation and builds
+do not read the bookmark data, so new build outputs contain no bookmark contents.
+There is no synchronization service, watcher, timer, or custom wrapper package.
+Chromium receives changes at the next activation; `nixos-rebuild build` alone
+does not refresh bookmarks. If the source is missing, activation succeeds without
+creating the source file or its parent directories. If conversion fails, activation
+warns and retains the previous policy. An existing empty source clears Chromium's
+managed bookmarks. The converter never changes the source contents or permissions.
+
+For a new machine, bootstrap in this order:
+
+1. Initialize SOPS with `./scripts/sops-key init` (or `--root /mnt` during
+   installation), using the encrypted identity in this configuration repository.
+2. Apply NixOS to provision the gh credentials. Chromium bookmark generation is
+   skipped while the private quickmarks file is absent.
+3. Clone your private repository into `~/.password-store`.
+4. Run `switch` again to generate Chromium's managed bookmarks.
+
+After saving a quickmark in qutebrowser, let it save normally, or run
+`:save quickmark-manager` before switching to include the latest changes.
+Chromium's managed bookmarks are read-only; edit the shared collection in
+qutebrowser. Use the private repository's normal push/pull workflow between
+machines. Activation does not clone or synchronize the repository.
+
 ## Claude Code with GLM
 
 Claude Code uses the [GLM Coding Plan Anthropic endpoint](https://docs.bigmodel.cn/cn/coding-plan/tool/claude).
