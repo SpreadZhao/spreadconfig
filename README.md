@@ -344,6 +344,30 @@ A new machine needs shared-key initialization (`./scripts/sops-key init`) before
 For a private configuration repository, bootstrap by securely copying the checkout or
 temporarily using the same token.
 
+## Claude Code with GLM
+
+Claude Code uses the [GLM Coding Plan Anthropic endpoint](https://docs.bigmodel.cn/cn/coding-plan/tool/claude).
+The default model and the Opus, Sonnet, and Haiku aliases all select `glm-5.3`.
+The configuration disables 1M context and does not use the `[1m]` suffix.
+
+The shared `glm-api-key` is encrypted in `secrets/secrets.yaml`, alongside the
+GitHub and TextBridge tokens. To replace it:
+
+```bash
+sudo env SOPS_AGE_KEY_FILE=/var/lib/sops-nix/key.txt sops edit secrets/secrets.yaml
+```
+
+Model and endpoint settings live in the `claude-settings.json` SOPS template in
+`modules/nixos/secrets.nix`. Only the API key is encrypted; the template uses a
+placeholder, like `gh-hosts.yml`. SOPS fills it at runtime, and Home Manager links
+`~/.claude/settings.json` to the rendered file, owned by `spreadzhao:users` with
+mode `0400`. The key never enters the Nix store in plaintext.
+
+Rebuild the target host after changing the key or template. The generated settings
+are read-only; make persistent changes in Nix or SOPS. Claude Code manages its own
+onboarding and mutable state in `~/.claude.json`; activation does not modify it.
+Restart Claude Code after activation and use `/status` to check the active model.
+
 ## Rebuilding
 
 ```bash

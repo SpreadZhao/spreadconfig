@@ -1,5 +1,7 @@
 {
+  config,
   inputs,
+  osConfig,
   pkgs,
   ...
 }:
@@ -9,4 +11,10 @@ let
 in
 {
   home.packages = [ claudeCodePackage ];
+
+  home.file.".claude/settings.json" = {
+    source = config.lib.file.mkOutOfStoreSymlink osConfig.sops.templates."claude-settings.json".path;
+    # Replace the writable file from the previous GLM configuration.
+    force = true;
+  };
 }
