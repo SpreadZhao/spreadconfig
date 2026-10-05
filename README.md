@@ -147,6 +147,14 @@ A fully Wayland-native desktop built around [niri](https://github.com/niri-wm/ni
 
 This repository's default devShell is for maintaining the NixOS configuration. It is loaded by the root `.envrc` through direnv/nix-direnv and includes Nix maintenance tools such as `nixfmt`, `statix`, `deadnix`, `shellcheck`, `shfmt`, `jq`, `git`, and `ripgrep`.
 
+Run `nix develop` from the repository root to also prepare the `spreadconfig-nix`
+and `nixos-best-practices` skills for Codex and Claude Code. The root flake uses
+the same `mkWorkspace` implementation as the workspace template, with Claude
+support enabled. Local skills use the checkout named by `SPREADCONFIG_SOURCE_ROOT`,
+which Home Manager supplies. Start agent sessions from this repository root;
+change the `repoWorkspace.skills` selection in `flake.nix` and reenter the shell
+to refresh the links. Generated instructions and workspace state are ignored by Git.
+
 Language runtimes and project-specific build tools are intentionally not installed globally here. Put them in each project's own `flake.nix`/`devShell` and load that environment with direnv.
 
 ### Independent agent workspaces

@@ -123,6 +123,27 @@
         }
       );
       repoRoot = ./.;
+      mkWorkspace = import ./lib/workspace { inherit inputs repoRoot; };
+      repoWorkspace = mkWorkspace {
+        systems = [ "x86_64-linux" ];
+        skills = [
+          "spreadconfig-nix"
+          "nixos-best-practices"
+        ];
+        claude = true;
+        packages =
+          pkgs: with pkgs; [
+            deadnix
+            git
+            jq
+            nixfmt
+            nixfmt-tree
+            ripgrep
+            shellcheck
+            shfmt
+            statix
+          ];
+      };
 
       mkHost =
         host:
@@ -166,9 +187,8 @@
     in
     {
       lib = {
-        inherit hosts;
+        inherit hosts mkWorkspace;
         mkHost = mkHostContext;
-        mkWorkspace = import ./lib/workspace { inherit inputs repoRoot; };
       };
 
       checks.x86_64-linux.host-context =
@@ -216,24 +236,9 @@
             touch "$out"
           '';
 
-      devShells.x86_64-linux.default =
-        let
-          system = "x86_64-linux";
-          pkgs = mkPkgs system;
-        in
-        pkgs.mkShell {
-          packages = with pkgs; [
-            deadnix
-            git
-            jq
-            nixfmt
-            nixfmt-tree
-            ripgrep
-            shellcheck
-            shfmt
-            statix
-          ];
-        };
+      checks.x86_64-linux.workspace-skills = repoWorkspace.checks.x86_64-linux.workspace;
+
+      devShells = repoWorkspace.devShells;
 
       templates = {
         default = workspaceTemplate;
