@@ -46,6 +46,19 @@
       url = "git+https://github.com/kepano/obsidian-skills.git?ref=main";
       flake = false;
     };
+    fzf-popup = {
+      url = "github:SpreadZhao/fzf-popup/main";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    flake-input-watcher = {
+      url = "github:SpreadZhao/flake-input-watcher/main";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    notification-history = {
+      url = "github:SpreadZhao/notification-history/main";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.fzf-popup.follows = "fzf-popup";
+    };
     personal-packages = {
       url = "github:SpreadZhao/nix-packages";
       inputs.nixpkgs.follows = "nixpkgs";

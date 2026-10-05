@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+set -euo pipefail
+exec footclient --client-environment -a lick-foot -T "${FZF_POPUP_TITLE:-fzf popup}" -- "$@"

@@ -59,6 +59,27 @@
         "url": "https://github.com/Agents365-ai/drawio-skill.git"
       }
     },
+    "flake-input-watcher": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1791207321,
+        "narHash": "sha256-1QnvQ8iV9jGL/BCaGXPt7i5dTFBmQQisjpExKTwr+5M=",
+        "owner": "SpreadZhao",
+        "repo": "flake-input-watcher",
+        "rev": "54f623f30dd9ab1e4e96150ee19a934289ed1816",
+        "type": "github"
+      },
+      "original": {
+        "owner": "SpreadZhao",
+        "ref": "main",
+        "repo": "flake-input-watcher",
+        "type": "github"
+      }
+    },
     "flake-parts": {
       "inputs": {
         "nixpkgs-lib": [
@@ -113,6 +134,27 @@
         "ref": "main",
         "type": "git",
         "url": "https://github.com/Aston1690/frontend-design.git"
+      }
+    },
+    "fzf-popup": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1791207319,
+        "narHash": "sha256-5Skej5fQkAtY19Wkzt5oHcEAeRlM+QohdKHp5bK+fi0=",
+        "owner": "SpreadZhao",
+        "repo": "fzf-popup",
+        "rev": "83bb7e2ff7a6086d582737d0f5621fe0a44f741d",
+        "type": "github"
+      },
+      "original": {
+        "owner": "SpreadZhao",
+        "ref": "main",
+        "repo": "fzf-popup",
+        "type": "github"
       }
     },
     "home-manager": {
@@ -269,6 +311,30 @@
         "type": "github"
       }
     },
+    "notification-history": {
+      "inputs": {
+        "fzf-popup": [
+          "fzf-popup"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1791207378,
+        "narHash": "sha256-e01be9lEoPwxse0WnyAKlweTCNitNNYduB+SD6eYt20=",
+        "owner": "SpreadZhao",
+        "repo": "notification-history",
+        "rev": "47c0f805904b491a8278600c1074c9686a7296f4",
+        "type": "github"
+      },
+      "original": {
+        "owner": "SpreadZhao",
+        "ref": "main",
+        "repo": "notification-history",
+        "type": "github"
+      }
+    },
     "obsidian-skills": {
       "flake": false,
       "locked": {
@@ -328,13 +394,16 @@
         "claude-code-nix": "claude-code-nix",
         "codex-desktop-linux": "codex-desktop-linux",
         "drawio-skill": "drawio-skill",
+        "flake-input-watcher": "flake-input-watcher",
         "frontend-design-skill": "frontend-design-skill",
+        "fzf-popup": "fzf-popup",
         "home-manager": "home-manager",
         "nixos-best-practices-skill": "nixos-best-practices-skill",
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs_2",
         "nixpkgs-desktop1-graphics": "nixpkgs-desktop1-graphics",
         "nixvim": "nixvim",
+        "notification-history": "notification-history",
         "obsidian-skills": "obsidian-skills",
         "openai-skills": "openai-skills",
         "personal-packages": "personal-packages",

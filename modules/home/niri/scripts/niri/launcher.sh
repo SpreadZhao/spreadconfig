@@ -95,7 +95,7 @@ clean_exec() {
 }
 
 run() {
-    IFS="$DELIM" read -r name exec comment file terminal <<<"$1"
+    IFS="$DELIM" read -r name exec _comment _file terminal <<<"$1"
 
     exec=$(clean_exec "$exec")
 
@@ -112,22 +112,10 @@ run() {
 # MAIN
 ########################################
 
-TMPFILE=$(mktemp)
-
-footclient \
-    -a "lick-foot" \
-    -T "Launcher" \
-    -- sh -c "
-        DELIM=$'\034'
-        $(declare -f build_list get_desktop_dirs parse_desktop)
-        build_list | sort -u | \
-        fzf -d \"\$DELIM\" \
-            --with-nth=1 \
-            --preview 'cat {4}' \
-            > \"$TMPFILE\"
-    "
-
-CHOICE=$(cat "$TMPFILE")
-rm -f "$TMPFILE"
-
-[[ -n "$CHOICE" ]] && run "$CHOICE"
+if CHOICE=$(build_list | sort -u | fzf-popup --title 'Launcher' -- \
+    --delimiter="$DELIM" --with-nth=1 --preview 'cat -- {4}'); then
+    [[ -z "$CHOICE" ]] || run "$CHOICE"
+else
+    status=$?
+    [[ "$status" == 1 || "$status" == 130 ]] || exit "$status"
+fi

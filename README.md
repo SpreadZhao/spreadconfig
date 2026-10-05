@@ -215,6 +215,17 @@ configured host and device paths. Nix maintenance commands live in
 See [application layout](docs/application-layout.md) for source ownership,
 editable links, host fragments, and validation commands.
 
+The standalone `flake-input-watcher` checks direct flake inputs on every host,
+by default five minutes after graphical login and then every six hours. Its
+systemd user timer runs the Bash program, which sends combined fnott
+notifications and supports reusable per-input hooks. See
+[flake input watcher](docs/flake-input-watcher.md) for scheduling, input switches,
+hook bindings, and manual checks. It does not update the lock file or rebuild.
+
+The independent notification history and shared fzf selector follow the same
+external-package model. See [independent applications](docs/independent-apps.md)
+for repository ownership and terminal/window manager integration.
+
 ## Theme System
 
 All applications share a single dark color palette defined in `modules/home/vars.nix`. Colors are injected into every config via Nix module arguments — no duplicated hex values.
