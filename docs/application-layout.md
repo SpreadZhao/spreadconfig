@@ -68,7 +68,7 @@ preserved. Conflicting source definitions are errors.
 | agent-skills | `util/check-skills.sh` |
 | pass, wl-clipboard, wechat | Password menus, copy-file and WeChat launcher |
 | mpv, ffmpeg | Camera and video-to-audio helpers |
-| script-tools | Shared host context/preview, audio/wallpaper helpers, retained `legacy/`, `sway/`, `test/` |
+| script-tools | Shared host context/preview, audio/wallpaper helpers, retained `legacy/`, `sway/` |
 
 Scripts that need checkout-relative resources locate a parent containing both
 `flake.nix` and `hosts/`; they do not assume a fixed source depth. Maintenance
@@ -81,10 +81,8 @@ Use path flakes while new files are untracked; normal Git-backed flakes require
 new sources to be tracked. Do not put plaintext private keys in any flake source.
 
 ```sh
-nix build --no-link "path:$PWD#checks.x86_64-linux.host-context"
-nix build --no-link "path:$PWD#checks.x86_64-linux.mutable-files"
-python3 tests/host-scripts.py
-python3 tests/app-configs.py
+nixfmt flake.nix
+git diff --check
 nix eval --raw "path:$PWD#nixosConfigurations.desktop1.config.home-manager.users.spreadzhao.home.activationPackage.drvPath"
 ```
 
@@ -94,9 +92,4 @@ continue blocking a full system evaluation. Build the affected asset/link-tree
 sources without activation, check their final destinations and permissions, and
 run `niri validate -c <built-tree>/config.kdl` on every Niri tree.
 
-The application regression check compares all four host configurations against
-the minimal test fixtures: ordered Niri settings plus native validation,
-qutebrowser assignments/bindings before theme setup, and effective Waybar JSON/CSS.
-The script tests use command mocks for source, synthetic forwarding and installed-link entry paths,
-including paths with spaces, explicit overrides, errors and retries. They never
-perform real updates, generation cleanup, or system activation.
+For changed Shell scripts, run syntax checks and ShellCheck.

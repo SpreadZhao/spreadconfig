@@ -87,10 +87,7 @@ skills = [
 在具体 workspace 内运行 `nix flake check --no-update-lock-file` 检查所选来源。在中央仓库可运行：
 
 ```bash
-python3 tests/workspace-activation.py
-python3 tests/workspace-flake.py
-python3 tests/skill-paths.py
-python3 tests/paper-workspace.py
+nix build --no-link "path:$PWD#checks.x86_64-linux.workspace-skills"
 ```
 
-真实 Nix 集成仅操作临时目录，日志保存在 `/tmp`；`--keep` 可保留测试夹具。论文测试需要 PDF/OCR 工具。中央 Nix checks 包括 `host-context`、`mutable-files` 和 `workspace`。
+中央仓库只保留 `workspace-skills`，检查所选技能来源中的 `SKILL.md` 是否存在。

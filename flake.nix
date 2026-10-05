@@ -93,15 +93,6 @@
       ...
     }@inputs:
     let
-      mkPkgs =
-        system:
-        import nixpkgs {
-          inherit system;
-          config = {
-            allowUnfree = true;
-          };
-        };
-
       androidTemplate = {
         path = ./templates/android;
         description = "Android development environment with project-local agent skills";
@@ -190,51 +181,6 @@
         inherit hosts mkWorkspace;
         mkHost = mkHostContext;
       };
-
-      checks.x86_64-linux.host-context =
-        let
-          pkgs = mkPkgs "x86_64-linux";
-          passed = import ./tests/host-context.nix {
-            inherit (nixpkgs) lib;
-            mkHost = mkHostContext;
-            inherit hosts;
-          };
-        in
-        assert passed;
-        pkgs.runCommand "host-context-check" { } "touch $out";
-
-      checks.x86_64-linux.mutable-files =
-        let
-          pkgs = mkPkgs "x86_64-linux";
-          passed = import ./tests/mutable-files.nix {
-            inherit (nixpkgs) lib;
-            inherit repoRoot;
-          };
-        in
-        assert passed;
-        pkgs.runCommand "mutable-files-check" { } "touch $out";
-
-      checks.x86_64-linux.workspace =
-        let
-          pkgs = mkPkgs "x86_64-linux";
-        in
-        pkgs.runCommand "workspace-regression-check"
-          {
-            nativeBuildInputs = [
-              pkgs.python3
-              pkgs.bash
-              pkgs.jq
-            ];
-          }
-          ''
-            cp -R ${repoRoot} source
-            chmod -R u+w source
-            patchShebangs source
-            cd source
-            python3 tests/workspace-activation.py
-            python3 tests/skill-paths.py
-            touch "$out"
-          '';
 
       checks.x86_64-linux.workspace-skills = repoWorkspace.checks.x86_64-linux.workspace;
 

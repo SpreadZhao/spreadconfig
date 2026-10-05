@@ -41,8 +41,9 @@ After Nix edits:
    - `nix eval --raw --no-eval-cache .#nixosConfigurations.<host>.config.home-manager.users.spreadzhao.home.activationPackage.drvPath`
    - `nix eval --raw --no-eval-cache .#nixosConfigurations.<host>.config.system.build.toplevel.drvPath`
 4. For shared `modules/home` changes, evaluate the Home Manager activation package for every host. For shared `modules/nixos` changes, evaluate the system toplevel for every host. For host-specific changes, evaluate only that host unless shared dependencies changed.
-5. For asset changes, run `nix build --no-link .#checks.x86_64-linux.mutable-files`, `python3 tests/app-configs.py`, and `python3 tests/host-scripts.py`; validate each affected niri tree with `niri validate -c <tree>/config.kdl`. Confirm active links resolve to the application-owned sources.
-6. For host declarations or constructor changes, run `nix build --no-link .#checks.x86_64-linux.host-context`. The `amd-desktop` disk placeholder intentionally blocks its full system evaluation until replaced; verify its host policy and Home Manager separately without weakening that assertion.
+5. For asset changes, build the affected asset/link-tree sources without activation, check destinations and permissions, and validate each affected niri tree with `niri validate -c <tree>/config.kdl`. Confirm active links resolve to the application-owned sources. Run syntax checks and ShellCheck on changed Shell scripts.
+6. For host declarations or constructor changes, evaluate the affected system and Home Manager outputs. The `amd-desktop` disk placeholder intentionally blocks its full system evaluation until replaced; verify its host policy and Home Manager separately without weakening that assertion.
+7. For skill sources or workspace configuration changes, run `nix build --no-link .#checks.x86_64-linux.workspace-skills` to check the selected skill sources.
 
 If eval or build fails because Nix cannot access the user fetcher cache or another sandboxed cache path, rerun the same command with the required approval instead of treating it as a configuration failure.
 

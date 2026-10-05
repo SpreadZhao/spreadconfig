@@ -14,9 +14,9 @@ Register new catalog sets under `skillSets`. `globalSkills` remains the small
 Home Manager selection, with `targets` choosing home-level agents/Claude entries.
 Workspace skills use `.agents/skills` and optionally Claude.
 
-The six paper skills are ordinary local skills. Their regression test is
-`tests/paper-workspace.py`. `android-dev` lives here and is selected by the Android
-template. Business paths use each skill's own configuration or the current task.
+The six paper skills are ordinary local skills. `android-dev` lives here and is
+selected by the Android template. Business paths use each skill's own configuration
+or the current task.
 
 Validate changed metadata with skill-creator's `quick_validate.py`.
 `~/scripts/util/check-skills.sh` is also available to inspect skill directories.
