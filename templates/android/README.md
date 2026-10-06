@@ -17,10 +17,12 @@ skills from the pinned `android-skills` input. Official skill names come from
 before any project links change. Remove or filter `extraSkills` if you do not
 want the full official collection.
 
-The local `android-dev` skill uses the central checkout named by
-`SPREADCONFIG_SOURCE_ROOT`, which Home Manager supplies by default. Editing that
-skill updates all its workspace links immediately. Official Android skills use
-their pinned input through `extraSkills`.
+The personal `android-dev` skill uses spreadconfig's locked personal-skills input.
+Update that input after editing content. Official Android skills use their pinned
+input through extraSkills. Both sources use the independent agent-workspace engine.
+Changed source links require removing their specific old entry before installation.
+For current local use, override spreadconfig to
+path:/home/spreadzhao/workspaces/spreadconfig before entering.
 
 Entering the environment prepares `.agents/skills`, `AGENTS.md` and management
 state under `.agent-workspace/`. Set `claude = true` for `.claude/skills` and a shared

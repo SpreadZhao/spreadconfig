@@ -2,11 +2,12 @@
   lib,
   pkgs,
   inputs ? { },
-  localSkillSource ? (name: ./local + "/${name}"),
   ...
 }:
 
 let
+  personalSkillSource = name: "${inputs.personal-skills}/skills/${name}";
+
   agentTargets = [
     "agents"
     "claude"
@@ -59,16 +60,14 @@ let
 
   wechatArticleFetcherSkill = {
     wechat-article-fetcher = {
-      source = localSkillSource "wechat-article-fetcher";
-      relativePath = "skills/local/wechat-article-fetcher";
+      source = personalSkillSource "wechat-article-fetcher";
       targets = agentTargets;
     };
   };
 
   smartmontoolsDiskHealthSkill = {
     smartmontools-disk-health = {
-      source = localSkillSource "smartmontools-disk-health";
-      relativePath = "skills/local/smartmontools-disk-health";
+      source = personalSkillSource "smartmontools-disk-health";
       targets = agentTargets;
     };
   };
@@ -142,81 +141,70 @@ let
 
   codexAgentSkills = {
     android-waydroid-control = {
-      source = localSkillSource "android-waydroid-control";
-      relativePath = "skills/local/android-waydroid-control";
+      source = personalSkillSource "android-waydroid-control";
       targets = [ "agents" ];
     };
   };
 
   spreadconfigNixSkill = {
     spreadconfig-nix = {
-      source = localSkillSource "spreadconfig-nix";
-      relativePath = "skills/local/spreadconfig-nix";
+      source = personalSkillSource "spreadconfig-nix";
       targets = agentTargets;
-      force = true;
     };
   };
 
   spreadconfigSkillAuthoringSkill = {
     spreadconfig-skill-authoring = {
-      source = localSkillSource "spreadconfig-skill-authoring";
-      relativePath = "skills/local/spreadconfig-skill-authoring";
+      source = personalSkillSource "spreadconfig-skill-authoring";
       targets = agentTargets;
     };
   };
 
   secondbrainDiarySkill = {
     secondbrain-diary = {
-      source = localSkillSource "secondbrain-diary";
-      relativePath = "skills/local/secondbrain-diary";
+      source = personalSkillSource "secondbrain-diary";
       targets = agentTargets;
     };
   };
 
   secondbrainConversationDiarySkill = {
     secondbrain-conversation-diary = {
-      source = localSkillSource "secondbrain-conversation-diary";
-      relativePath = "skills/local/secondbrain-conversation-diary";
+      source = personalSkillSource "secondbrain-conversation-diary";
       targets = agentTargets;
     };
   };
 
   lectureNoteCompanionSkill = {
     lecture-note-companion = {
-      source = localSkillSource "lecture-note-companion";
-      relativePath = "skills/local/lecture-note-companion";
+      source = personalSkillSource "lecture-note-companion";
       targets = agentTargets;
     };
   };
 
   videoDocumentRecoverySkill = {
     video-document-recovery = {
-      source = localSkillSource "video-document-recovery";
-      relativePath = "skills/local/video-document-recovery";
+      source = personalSkillSource "video-document-recovery";
       targets = agentTargets;
     };
   };
 
   wechatDiarySkill = {
     wechat-diary = {
-      source = localSkillSource "wechat-diary";
-      relativePath = "skills/local/wechat-diary";
+      source = personalSkillSource "wechat-diary";
       targets = agentTargets;
     };
   };
 
   leetcodeCoachSkill = {
     leetcode-coach = {
-      source = localSkillSource "leetcode-coach";
-      relativePath = "skills/local/leetcode-coach";
+      source = personalSkillSource "leetcode-coach";
       targets = agentTargets;
     };
   };
 
   androidDevSkill = {
     android-dev = {
-      source = localSkillSource "android-dev";
-      relativePath = "skills/local/android-dev";
+      source = personalSkillSource "android-dev";
       targets = [ "agents" ];
     };
   };
@@ -232,8 +220,7 @@ let
         "write-obsidian-paper"
       ]
       (name: {
-        source = localSkillSource name;
-        relativePath = "skills/local/${name}";
+        source = personalSkillSource name;
         targets = agentTargets;
       });
 

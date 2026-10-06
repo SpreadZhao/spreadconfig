@@ -10,9 +10,9 @@ My personal NixOS configuration, built with [flakes](https://wiki.nixos.org/wiki
 .
 ├── flake.nix                       # Flake entry point
 ├── lib/mutable-files.nix           # Checked workspace links and explicit file trees
-├── lib/workspace/                  # mkWorkspace and internal shell activation
+├── lib/workspace/                  # compatibility wrapper around agent-workspace
 ├── templates/                      # Independent workspace and Android skeletons
-├── skills/                         # Skill catalog and local sources
+├── skills/                         # Skill catalog and upstream transformations
 ├── hosts/
 │   ├── lib/default.nix             # Shared host facts and profile defaults
 │   └── <host>/
@@ -50,6 +50,8 @@ My personal NixOS configuration, built with [flakes](https://wiki.nixos.org/wiki
 | `nixpkgs` | NixOS unstable (primary package set) |
 | `nixpkgs-desktop1-graphics` | desktop1's known working kernel/NVIDIA/niri/Mesa package set |
 | `home-manager` | User environment management |
+| `agent-workspace` | Independent skill installation and workspace manager (local input) |
+| `personal-skills` | Personal content repository, non-flake input (local input) |
 | `nixos-hardware` | Hardware presets for supported laptops |
 | `nixvim` | Declarative Neovim configuration |
 
@@ -148,8 +150,8 @@ This repository's default devShell is for maintaining the NixOS configuration. I
 Run `nix develop` from the repository root to also prepare the `spreadconfig-nix`
 and `nixos-best-practices` skills for Codex and Claude Code. The root flake uses
 the same `mkWorkspace` implementation as the workspace template, with Claude
-support enabled. Local skills use the checkout named by `SPREADCONFIG_SOURCE_ROOT`,
-which Home Manager supplies. Start agent sessions from this repository root;
+support enabled. The independent `agent-workspace` manager installs pinned
+content from `personal-skills` and third-party inputs. Start sessions from this repository root;
 change the `repoWorkspace.skills` selection in `flake.nix` and reenter the shell
 to refresh the links. Generated instructions and workspace state are ignored by Git.
 
@@ -160,12 +162,14 @@ Language runtimes and project-specific build tools are intentionally not install
 Create any directory from `templates.workspace` (also the default template), then
 select skills and tools in its own flake. `nix develop`
 prepares `.agents/skills` and shared instructions; optional Claude support uses the
-same sources. Each skill uses its declared source; local catalog skills link the
-central checkout named by `SPREADCONFIG_SOURCE_ROOT`.
+same sources. Each skill uses its locked input or declared path/derivation.
+The generic manager template can also be used without this repository.
 
 See [workspace setup](docs/workspaces.md) for commands, examples, ownership rules
-and checks. Home Manager provides the machine default source path and global
-skills; each workspace selects its own skills in its flake.
+and checks. Home Manager uses the same engine with `onConflict = "skip"`;
+workspace installation defaults to `"error"`. New local repositories are siblings
+`agent-workspace` and `personal-skills`; their current path inputs are machine-specific
+until published. Each workspace selects its own skills in its flake.
 
 ### Editor
 

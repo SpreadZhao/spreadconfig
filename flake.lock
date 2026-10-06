@@ -1,5 +1,22 @@
 {
   "nodes": {
+    "agent-workspace": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1791220143,
+        "narHash": "sha256-05mHBZFIb86O5jPGHhbpZjI6najaA8sMwfxfF6amAQE=",
+        "path": "/home/spreadzhao/workspaces/agent-workspace",
+        "type": "path"
+      },
+      "original": {
+        "path": "/home/spreadzhao/workspaces/agent-workspace",
+        "type": "path"
+      }
+    },
     "claude-code-nix": {
       "inputs": {
         "nixpkgs": [
@@ -389,8 +406,22 @@
         "type": "github"
       }
     },
+    "personal-skills": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1791219873,
+        "narHash": "sha256-m/RDuBFTCOakV6HU3opS7Rzd7B5Q2JZvZqXHMq+j5K4=",
+        "path": "/home/spreadzhao/workspaces/personal-skills",
+        "type": "path"
+      },
+      "original": {
+        "path": "/home/spreadzhao/workspaces/personal-skills",
+        "type": "path"
+      }
+    },
     "root": {
       "inputs": {
+        "agent-workspace": "agent-workspace",
         "claude-code-nix": "claude-code-nix",
         "codex-desktop-linux": "codex-desktop-linux",
         "drawio-skill": "drawio-skill",
@@ -407,6 +438,7 @@
         "obsidian-skills": "obsidian-skills",
         "openai-skills": "openai-skills",
         "personal-packages": "personal-packages",
+        "personal-skills": "personal-skills",
         "sops-nix": "sops-nix",
         "textbridge": "textbridge",
         "web-artifacts-builder-skill": "web-artifacts-builder-skill",

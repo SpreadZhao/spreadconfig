@@ -7,7 +7,7 @@ __pycache__/
 # Local identities must never be committed; the .age backup is intentionally tracked.
 /secrets/key.txt
 /secrets/keys.txt
-# >>> spreadconfig workspace (managed) >>>
+# >>> agent workspace (managed) >>>
 /.agent-workspace/
 /.agents/skills/nixos-best-practices
 /.agents/skills/spreadconfig-nix
@@ -15,4 +15,4 @@ __pycache__/
 /.claude/skills/spreadconfig-nix
 /AGENTS.md
 /CLAUDE.md
-# <<< spreadconfig workspace (managed) <<<
+# <<< agent workspace (managed) <<<

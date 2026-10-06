@@ -1,22 +1,29 @@
 # Skill catalog
 
-`local/<name>/` contains the skills maintained here. `sources.nix` exposes a
-`catalog` mapping selectable names to their sources. A workspace selects names
-with `skills = [ "leetcode-coach" "obsidian-markdown" ];` through `mkWorkspace`.
+Personal content now lives in the sibling `personal-skills/skills/<name>/`
+repository. `sources.nix` retains the catalog, upstream transformations and
+`globalSkills` selection. Personal and third-party sources are ordinary locked
+flake inputs; no checkout environment variable or `relativePath` is used.
 See [workspace setup](../docs/workspaces.md).
 
-Each catalog entry fixes its source. Local entries carry a `relativePath`,
-resolved under `SPREADCONFIG_SOURCE_ROOT`; their Nix `source` is also checked at
-build time. Upstream entries use their declared source. `extraSkills` accepts
-additional name/source mappings in the workspace's flake.
+Register source sets under `skillSets`; select project names with `skills` and
+additional sources with `extraSkills`. Each record has `source`, optional
+`subdir` and optional `targets`. Skills without target restrictions use every
+enabled target. The existing global selection remains drawio-skill and
+yt-dlp-downloader, with agents and Claude targets.
 
-Register new catalog sets under `skillSets`. `globalSkills` remains the small
-Home Manager selection, with `targets` choosing home-level agents/Claude entries.
-Workspace skills use `.agents/skills` and optionally Claude.
+Home Manager imports the independent agent-workspace module. Its default
+`onConflict = "skip"` installs each missing skill separately and creates missing
+parent directories. Existing directories, files and conflicting links (including
+dangling links) remain intact. Identical results are unchanged; external entries
+are never adopted. Global cleanup defaults to false.
 
-The six paper skills are ordinary local skills. `android-dev` lives here and is
-selected by the Android template. Business paths use each skill's own configuration
-or the current task.
+Workspace defaults are `onConflict = "error"` and `cleanup = true`.
+Both installations share one engine and the same configuration field.
+Update a source input to adopt content changes; remove only the specific old
+entry before installation if its source changed. No automatic replacement occurs.
 
-Validate changed metadata with skill-creator's `quick_validate.py`.
-`~/scripts/util/check-skills.sh` is also available to inspect skill directories.
+The six paper skills and android-dev are normal personal input sources.
+Business paths follow the skill's configuration or the current request.
+Validate changed metadata with skill-creator's quick_validate.py.
+`~/scripts/util/check-skills.sh` remains available to inspect skill directories.

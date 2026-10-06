@@ -23,54 +23,7 @@
         "x86_64-linux"
         "aarch64-linux"
       ];
-      findSkills =
-        directory:
-        let
-          entries = builtins.readDir directory;
-        in
-        lib.concatMap (
-          name:
-          let
-            path = directory + "/${name}";
-          in
-          if entries.${name} == "directory" then
-            findSkills path
-          else
-            lib.optional (name == "SKILL.md" && entries.${name} == "regular") path
-        ) (builtins.attrNames entries);
-      skillEntry =
-        file:
-        let
-          lines = lib.splitString "\n" (lib.replaceStrings [ "\r" ] [ "" ] (builtins.readFile file));
-          readHeader =
-            remaining:
-            if remaining == [ ] then
-              throw "Unterminated skill frontmatter in ${file}"
-            else if builtins.head remaining == "---" then
-              [ ]
-            else
-              [ (builtins.head remaining) ] ++ readHeader (builtins.tail remaining);
-          header = readHeader (builtins.tail lines);
-          names = lib.filter (value: value != null) (
-            map (
-              line: builtins.match "name:[[:space:]]*['\"]?([a-zA-Z0-9][a-zA-Z0-9._-]*)['\"]?[[:space:]]*" line
-            ) header
-          );
-        in
-        assert lib.assertMsg (
-          builtins.head lines == "---" && builtins.length names == 1
-        ) "Cannot read a safe skill name from ${file}";
-        {
-          name = builtins.head (builtins.head names);
-          value = builtins.dirOf file;
-        };
-      officialEntries = map skillEntry (findSkills android-skills.outPath);
-      officialSkills =
-        assert lib.assertMsg (
-          builtins.length officialEntries
-          == builtins.length (lib.unique (map (entry: entry.name) officialEntries))
-        ) "Duplicate names in the Android skills input";
-        builtins.listToAttrs officialEntries;
+      officialSkills = spreadconfig.lib.discoverSkills { source = android-skills; };
     in
     spreadconfig.lib.mkWorkspace {
       inherit systems;

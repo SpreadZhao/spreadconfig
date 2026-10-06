@@ -2,6 +2,14 @@
   description = "NixOS configuration";
 
   inputs = {
+    agent-workspace = {
+      url = "path:/home/spreadzhao/workspaces/agent-workspace";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    personal-skills = {
+      url = "path:/home/spreadzhao/workspaces/personal-skills";
+      flake = false;
+    };
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     # desktop1 graphics fallback: last working Generation 47 package set.
     nixpkgs-desktop1-graphics.url = "github:nixos/nixpkgs/e158d9ed9b51c98974c5e66e1ba1c9e0255fecaa";
@@ -179,6 +187,7 @@
     {
       lib = {
         inherit hosts mkWorkspace;
+        inherit (inputs.agent-workspace.lib) discoverSkills mkSkillInstaller;
         mkHost = mkHostContext;
       };
 
