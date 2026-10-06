@@ -46,4 +46,22 @@ sudo env SOPS_AGE_KEY_FILE=/var/lib/sops-nix/key.txt sops edit secrets/secrets.y
 
 解锁口令只保护仓库中的私钥副本，本地安装的私钥是明文。所有机器持有相同身份；一台机器的私钥泄露会影响全部共享凭据。初始化不会轮换 token 或账户密码。
 
-参考：[age 密码加密](https://github.com/FiloSottile/age#passphrase-encryption)、[sops-nix 密钥配置](https://github.com/Mic92/sops-nix)。
+## Nix GitHub 认证
+
+所有 host 的 Nix 和 GitHub CLI 共用 `github-token`。SOPS 在激活时生成
+`/run/secrets/rendered/nix-github-access-tokens.conf`，权限为 0400，供
+`spreadzhao` 和 root 读取；`/etc/nix/nix.conf` 使用 `!include` 引用它。
+仓库和 Nix store 中仅保存加密凭据、占位符和运行时路径，不写入明文 token。
+token 变更时自动重启 `nix-daemon.service`。
+
+首次接入时，先应用当前配置，再更新 inputs：
+
+```bash
+~/scripts/nix/sns_until switch
+~/scripts/nix/nix_update
+```
+
+`!include` 允许运行时文件尚未生成时构建初始配置。应用之后，直接运行
+`nix flake update` 或 `nix_update` 就会读取 token，无需设置临时环境变量。
+
+参考：[age 密码加密](https://github.com/FiloSottile/age#passphrase-encryption)、[sops-nix 密钥配置](https://github.com/Mic92/sops-nix)、[Nix 配置文件](https://nix.dev/manual/nix/stable/command-ref/conf-file.html)。

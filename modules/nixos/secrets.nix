@@ -1,6 +1,12 @@
 { config, repoRoot, ... }:
 
 {
+  # The store contains only this path; SOPS renders the token at activation.
+  # Allow the initial rebuild before the runtime file has been created.
+  nix.extraOptions = ''
+    !include ${config.sops.templates."nix-github-access-tokens.conf".path}
+  '';
+
   sops = {
     defaultSopsFile = repoRoot + "/secrets/secrets.yaml";
     defaultSopsFormat = "yaml";
@@ -14,6 +20,15 @@
     gnupg.sshKeyPaths = [ ];
 
     templates = {
+      "nix-github-access-tokens.conf" = {
+        owner = "spreadzhao";
+        group = "users";
+        mode = "0400";
+        content = ''
+          extra-access-tokens = github.com=${config.sops.placeholder."github-token"}
+        '';
+        restartUnits = [ "nix-daemon.service" ];
+      };
       "gh-hosts.yml" = {
         owner = "spreadzhao";
         group = "users";
