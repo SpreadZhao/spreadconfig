@@ -14,27 +14,19 @@ BDUS_METHOD="$1"
 shift 1 # skip BDUS_METHOD
 
 quote_string() {
-    local input="$1"
-    echo "'${input//\'/\'\\\'\'}'"
+	local input="$1"
+	echo "'${input//\'/\'\\\'\'}'"
 }
 
 cmd="lf"
 termcmd="footclient -a lf -T '$1'"
 case "$BDUS_METHOD" in
 # Since lf can only handle 1 file or folder.
-"ShowFolders" | "ShowItems")
-    for file in "$@"; do
-        decoded_arg=$(printf '%b' "${file//%/\\x}")
-        eval "$termcmd -- $cmd $(quote_string "$decoded_arg")" &
-        disown
-    done
-    ;;
-# Since lf can only handle 1 file or folder and doesn't have any spotter like yazi
-"ShowItemProperties")
-    for file in "$@"; do
-        decoded_arg=$(printf '%b' "${file//%/\\x}")
-        eval "$termcmd -- $cmd $(quote_string "$decoded_arg")" &
-        disown
-    done
-    ;;
+"ShowFolders" | "ShowItems" | "ShowItemProperties")
+	for file in "$@"; do
+		decoded_arg=$(printf '%b' "${file//%/\\x}")
+		eval "$termcmd -- $cmd $(quote_string "$decoded_arg")" &
+		disown
+	done
+	;;
 esac

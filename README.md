@@ -10,7 +10,6 @@ My personal NixOS configuration, built with [flakes](https://wiki.nixos.org/wiki
 .
 ├── flake.nix                       # Flake entry point
 ├── lib/mutable-files.nix           # Checked workspace links and explicit file trees
-├── lib/workspace/                  # compatibility wrapper around agent-workspace
 ├── templates/                      # Independent workspace and Android skeletons
 ├── skills/                         # Skill catalog and upstream transformations
 ├── hosts/
@@ -130,7 +129,7 @@ A fully Wayland-native desktop built around [niri](https://github.com/niri-wm/ni
 |-----------|------|
 | Window Manager | [niri](https://github.com/niri-wm/niri) |
 | Status Bar | [Waybar](https://github.com/Alexays/Waybar) |
-| Terminal | [foot](https://codeberg.org/dnkl/foot) (primary), [kitty](https://github.com/kovidgoyal/kitty) |
+| Terminal | [foot](https://codeberg.org/dnkl/foot) |
 | App Launcher | [fuzzel](https://codeberg.org/dnkl/fuzzel) |
 | Notifications | [fnott](https://codeberg.org/dnkl/fnott) |
 | Lock Screen | [swaylock](https://github.com/swaywm/swaylock) |
@@ -149,7 +148,7 @@ This repository's default devShell is for maintaining the NixOS configuration. I
 
 Run `nix develop` from the repository root to also prepare the `spreadconfig-nix`
 and `nixos-best-practices` skills for Codex and Claude Code. The root flake uses
-the same `mkWorkspace` implementation as the workspace template, with Claude
+the independent `agent-workspace.lib.mkWorkspace` API, as do the templates, with Claude
 support enabled. The independent `agent-workspace` manager installs pinned
 content from `personal-skills` and third-party inputs. Start sessions from this repository root;
 change the `repoWorkspace.skills` selection in `flake.nix` and reenter the shell
@@ -163,6 +162,7 @@ Create any directory from `templates.workspace` (also the default template), the
 select skills and tools in its own flake. `nix develop`
 prepares `.agents/skills` and shared instructions; optional Claude support uses the
 same sources. Each skill uses its locked input or declared path/derivation.
+The templates pass `spreadconfig.lib.skillCatalog` explicitly to the manager.
 The generic manager template can also be used without this repository.
 
 See [workspace setup](docs/workspaces.md) for commands, examples, ownership rules
@@ -218,9 +218,7 @@ configured host and device paths. Nix maintenance commands live in
 | `niri/` | Window management, screenshots, screen recording, dropdown terminals, audio control, app launching |
 | `nix/` | System update (`nix_full_update`), garbage collection (`nix_clean`), generation management |
 | `util/` | Battery/brightness info, audio switching, lf wrappers, git-ai-commit |
-| `config/` | Zsh config, aliases, colored output, fzf preview |
-| `sway/` | Sway helpers |
-| `legacy/` | Additional shell utilities |
+| `config/` | Zsh config, colored output, host context, fzf preview |
 
 See [application layout](docs/application-layout.md) for source ownership,
 editable links, host fragments, and validation commands.

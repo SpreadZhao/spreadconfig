@@ -10,17 +10,10 @@ trap nix_update_err ERR
 
 script_path="$(readlink -f "${BASH_SOURCE[0]}")"
 script_dir="$(cd -- "$(dirname -- "$script_path")" && pwd -P)"
-# Resolve the source checkout through installed symlinks.
-spreadconfig_source_root=$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")
-while [[ ! -f "$spreadconfig_source_root/flake.nix" || ! -d "$spreadconfig_source_root/hosts" ]]; do
-    if [[ "$spreadconfig_source_root" == / ]]; then
-        printf 'spreadconfig: could not find source checkout\n' >&2
-        exit 1
-    fi
-    spreadconfig_source_root=$(dirname "$spreadconfig_source_root")
-done
-repo_dir="${SPREADCONFIG_REPO:-$spreadconfig_source_root}"
-unset spreadconfig_source_root
+# Installed symlinks resolve to the application-owned source tree.
+# shellcheck source=modules/home/script-tools/scripts/config/host_context.sh
+source "${script_path%/modules/home/*}/modules/home/script-tools/scripts/config/host_context.sh" || exit 1
+repo_dir="${SPREADCONFIG_REPO:-$SPREADCONFIG_SOURCE_ROOT}"
 flake_url="path://$repo_dir"
 
 action="boot"

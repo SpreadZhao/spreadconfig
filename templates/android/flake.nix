@@ -3,6 +3,7 @@
 
   inputs = {
     spreadconfig.url = "github:SpreadZhao/spreadconfig";
+    agent-workspace.follows = "spreadconfig/agent-workspace";
     nixpkgs.follows = "spreadconfig/nixpkgs";
     android-skills = {
       url = "github:android/skills";
@@ -12,6 +13,7 @@
 
   outputs =
     {
+      agent-workspace,
       android-skills,
       nixpkgs,
       spreadconfig,
@@ -23,9 +25,10 @@
         "x86_64-linux"
         "aarch64-linux"
       ];
-      officialSkills = spreadconfig.lib.discoverSkills { source = android-skills; };
+      officialSkills = agent-workspace.lib.discoverSkills { source = android-skills; };
     in
-    spreadconfig.lib.mkWorkspace {
+    agent-workspace.lib.mkWorkspace {
+      catalog = spreadconfig.lib.skillCatalog;
       inherit systems;
       skills = [ "android-dev" ];
       extraSkills = officialSkills;

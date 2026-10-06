@@ -7,7 +7,7 @@ their flake packages and modules and owns desktop and host-specific policy.
 
 | Application | Repository | Integration here |
 | --- | --- | --- |
-| flake-input-watcher | [flake-input-watcher](https://github.com/SpreadZhao/flake-input-watcher) | Enabled service, checkout path, compatibility script |
+| flake-input-watcher | [flake-input-watcher](https://github.com/SpreadZhao/flake-input-watcher) | Enabled service and checkout path |
 | notification-history | [notification-history](https://github.com/SpreadZhao/notification-history) | fnott enable policy, configured popup and Neovim dependencies, shortcut |
 | fzf-popup | [fzf-popup](https://github.com/SpreadZhao/fzf-popup) | Foot adapter, Niri floating rule, callers |
 

@@ -38,21 +38,7 @@ is_svg_file() {
 	esac
 }
 
-preview_video() {
-	file="$1"
-	width="$2"
-	height="$3"
-
-	tmp_img="$(mktemp --suffix=.png)"
-
-	if ffmpegthumbnailer -i "$file" -o "$tmp_img" -s 0 2>/dev/null; then
-		show_by_chafa "$tmp_img" "$width" "$height"
-	fi
-
-	rm -f "$tmp_img"
-}
-
-preview_audio() {
+preview_thumbnail() {
 	file="$1"
 	width="$2"
 	height="$3"
@@ -73,7 +59,7 @@ preview_webp() {
 
 	tmp_img="$(mktemp --suffix=.png)"
 
-	if magick "$file[0]" "$tmp_img" 2>/dev/null; then
+	if magick "${file}[0]" "$tmp_img" 2>/dev/null; then
 		show_by_chafa "$tmp_img" "$width" "$height"
 	fi
 
@@ -97,7 +83,7 @@ preview_default() {
 	height="$3"
 
 	if file -b --extension "$file" | tr '/' '\n' | grep -qx ts; then
-		preview_video "$file" "$width" "$height"
+		preview_thumbnail "$file" "$width" "$height"
 		exit 0
 	fi
 
@@ -149,12 +135,8 @@ case "$mime_type" in
 	show_by_chafa "$file" "$width" "$height"
 	;;
 
-*video/*)
-	preview_video "$file" "$width" "$height"
-	;;
-
-*audio/*)
-	preview_audio "$file" "$width" "$height"
+*video/* | *audio/*)
+	preview_thumbnail "$file" "$width" "$height"
 	;;
 
 *application/xml* | *application/xhtml+xml*)

@@ -89,7 +89,6 @@ let
     gtk = 16;
     qt = 16;
     foot = 16;
-    kitty = 16;
     fuzzel = 18;
     swaylock = 30;
     wayprompt = 26;

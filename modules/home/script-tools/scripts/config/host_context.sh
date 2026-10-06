@@ -1,15 +1,6 @@
 #!/usr/bin/env bash
 
-# Shared by both the installed scripts tree and scripts run from a checkout.
-# Home Manager writes shell-escaped constants here; explicit build overrides
-# remain separate so the configured machine can also build another host.
-spreadconfig_context_file="${XDG_CONFIG_HOME:-$HOME/.config}/spreadconfig/host.sh"
-if [[ -r "$spreadconfig_context_file" ]]; then
-	# shellcheck source=/dev/null
-	source "$spreadconfig_context_file"
-fi
-unset spreadconfig_context_file
-
+# Shared initialization for installed symlinks and checkout scripts.
 spreadconfig_find_repo_root() {
 	local source_file checkout
 	source_file=$(readlink -f "${BASH_SOURCE[0]}") || return 1
@@ -24,10 +15,19 @@ spreadconfig_find_repo_root() {
 	printf '%s\n' "$checkout"
 }
 
+SPREADCONFIG_SOURCE_ROOT=$(spreadconfig_find_repo_root) || return 1
+
+# Home Manager writes shell-escaped constants here; explicit build overrides
+# remain separate so the configured machine can also build another host.
+spreadconfig_context_file="${XDG_CONFIG_HOME:-$HOME/.config}/spreadconfig/host.sh"
+if [[ -r "$spreadconfig_context_file" ]]; then
+	# shellcheck source=/dev/null
+	source "$spreadconfig_context_file" || return 1
+fi
+unset spreadconfig_context_file
+
 spreadconfig_resolve_host() {
-	local checkout
-	checkout=$(spreadconfig_find_repo_root) || return 1
-	SPREADCONFIG_TARGET_REPO="${SPREADCONFIG_REPO:-${SPREADCONFIG_CONFIGURED_REPO:-$checkout}}"
+	SPREADCONFIG_TARGET_REPO="${SPREADCONFIG_REPO:-${SPREADCONFIG_CONFIGURED_REPO:-$SPREADCONFIG_SOURCE_ROOT}}"
 	SPREADCONFIG_TARGET_HOST="${SPREADCONFIG_HOST:-${SPREADCONFIG_CONFIGURED_HOST:-}}"
 	if [[ -z "$SPREADCONFIG_TARGET_HOST" ]]; then
 		SPREADCONFIG_TARGET_HOST=$(hostname -s) || return 1

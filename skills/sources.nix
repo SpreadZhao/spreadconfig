@@ -1,7 +1,7 @@
 {
   lib,
   pkgs,
-  inputs ? { },
+  inputs,
   ...
 }:
 
@@ -13,32 +13,28 @@ let
     "claude"
   ];
 
-  obsidianSkills =
-    if inputs ? "obsidian-skills" then
-      {
-        defuddle = {
-          source = "${inputs."obsidian-skills"}/skills/defuddle";
-          targets = [ "agents" ];
-        };
-        json-canvas = {
-          source = "${inputs."obsidian-skills"}/skills/json-canvas";
-          targets = [ "agents" ];
-        };
-        obsidian-bases = {
-          source = "${inputs."obsidian-skills"}/skills/obsidian-bases";
-          targets = [ "agents" ];
-        };
-        obsidian-cli = {
-          source = "${inputs."obsidian-skills"}/skills/obsidian-cli";
-          targets = [ "agents" ];
-        };
-        obsidian-markdown = {
-          source = "${inputs."obsidian-skills"}/skills/obsidian-markdown";
-          targets = [ "agents" ];
-        };
-      }
-    else
-      { };
+  obsidianSkills = {
+    defuddle = {
+      source = "${inputs."obsidian-skills"}/skills/defuddle";
+      targets = [ "agents" ];
+    };
+    json-canvas = {
+      source = "${inputs."obsidian-skills"}/skills/json-canvas";
+      targets = [ "agents" ];
+    };
+    obsidian-bases = {
+      source = "${inputs."obsidian-skills"}/skills/obsidian-bases";
+      targets = [ "agents" ];
+    };
+    obsidian-cli = {
+      source = "${inputs."obsidian-skills"}/skills/obsidian-cli";
+      targets = [ "agents" ];
+    };
+    obsidian-markdown = {
+      source = "${inputs."obsidian-skills"}/skills/obsidian-markdown";
+      targets = [ "agents" ];
+    };
+  };
 
   # draw.io diagramming skill; shared across the agents and Claude targets.
   drawioSkill = {

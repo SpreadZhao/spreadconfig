@@ -63,17 +63,22 @@ preserved. Conflicting source definitions are errors.
 | nix-tools | `nix/`, shared maintenance commands and input exclusions |
 | zsh, fzf | Shell initialization and fzf preview entry under `config/` |
 | lf | `util/lf-wrapper*` |
-| waybar | Battery, brightness, recording/time and round-info helpers |
+| waybar | Battery, brightness and recording/time helpers |
 | git | Git AI commands and their `util/lib` / `util/config` dependencies |
 | agent-skills | `util/check-skills.sh` |
 | pass, wl-clipboard, wechat | Password menus, copy-file and WeChat launcher |
 | mpv, ffmpeg | Camera and video-to-audio helpers |
-| script-tools | Shared host context/preview, audio/wallpaper helpers, retained `legacy/`, `sway/` |
+| script-tools | Shared host context/preview and audio helper |
 
-Scripts that need checkout-relative resources locate a parent containing both
-`flake.nix` and `hosts/`; they do not assume a fixed source depth. Maintenance
-commands preserve explicit host/repository overrides and generated host context.
-The skill resolver validates the host, then returns the shared nix-tools source.
+Scripts that need checkout-relative resources resolve their own source through
+installed symlinks and use the `modules/home/<app>/scripts/` layout to load
+`script-tools/scripts/config/host_context.sh`. This shared initializer locates a
+parent containing both `flake.nix` and `hosts/` once, exposes it as
+`SPREADCONFIG_SOURCE_ROOT`, and loads the generated host context from
+`${XDG_CONFIG_HOME:-$HOME/.config}/spreadconfig/host.sh`. No fixed parent depth is
+assumed. Maintenance commands preserve their explicit host/repository overrides;
+`nix_update` defaults to the source checkout. The skill resolver validates the
+host, then returns the shared nix-tools source.
 
 ## Validation
 

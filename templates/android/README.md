@@ -10,11 +10,13 @@ Edit `flake.nix` to select skills, packages and Claude support, then run
 `nix develop`. If using direnv, review `.envrc`
 and enable it with `direnv allow`.
 
-The template uses the common `spreadconfig.lib.mkWorkspace` implementation. It
-selects the centrally maintained `android-dev` skill and the official Android
+The template calls `agent-workspace.lib.mkWorkspace` with
+`catalog = spreadconfig.lib.skillCatalog`; the manager input follows
+`spreadconfig/agent-workspace`. It selects the centrally maintained `android-dev`
+skill and the official Android
 skills from the pinned `android-skills` input. Official skill names come from
-`SKILL.md` frontmatter; duplicate names or conflicts with the central catalog fail
-before any project links change. Remove or filter `extraSkills` if you do not
+`SKILL.md` frontmatter via `agent-workspace.lib.discoverSkills`. Duplicate names or
+conflicts with the central catalog fail before any project links change. Remove or filter `extraSkills` if you do not
 want the full official collection.
 
 The personal `android-dev` skill uses spreadconfig's locked personal-skills input.
@@ -22,7 +24,7 @@ Update that input after editing content. Official Android skills use their pinne
 input through extraSkills. Both sources use the independent agent-workspace engine.
 Changed source links require removing their specific old entry before installation.
 For current local use, override spreadconfig to
-path:/home/spreadzhao/workspaces/spreadconfig before entering.
+git+file:///home/spreadzhao/workspaces/spreadconfig before entering.
 
 Entering the environment prepares `.agents/skills`, `AGENTS.md` and management
 state under `.agent-workspace/`. Set `claude = true` for `.claude/skills` and a shared

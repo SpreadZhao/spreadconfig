@@ -18,10 +18,9 @@ systemctl --user status flake-input-watcher.timer
 journalctl --user -u flake-input-watcher.service
 ```
 
-The existing `~/scripts/nix/flake-input-watcher` is a compatibility forwarding
-script. The actual executable is supplied by the external package. Existing
-XDG check lock remains compatible. Each check executes matching hooks for all
-pending updates, even if a previous check already reported them; legacy action
-history is ignored. The checker does not modify locks or rebuild the system.
+The executable is supplied by the external package and installed on PATH by its
+Home Manager module. Each check executes matching hooks for all pending updates,
+even if a previous check already reported them. The checker does not modify locks
+or rebuild the system.
 Applying the system configuration is separate from editing or building this
 repository.

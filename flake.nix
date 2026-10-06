@@ -13,10 +13,6 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     # desktop1 graphics fallback: last working Generation 47 package set.
     nixpkgs-desktop1-graphics.url = "github:nixos/nixpkgs/e158d9ed9b51c98974c5e66e1ba1c9e0255fecaa";
-    # antigravity-nix = {
-    #   url = "github:jacopone/antigravity-nix";
-    #   inputs.nixpkgs.follows = "nixpkgs";
-    # };
     codex-desktop-linux = {
       url = "github:ilysenko/codex-desktop-linux";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -25,7 +21,6 @@
       url = "github:sadjow/claude-code-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    # hermes-agent.url = "github:NousResearch/hermes-agent";
     home-manager = {
       url = "github:nix-community/home-manager/master";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -122,8 +117,14 @@
         }
       );
       repoRoot = ./.;
-      mkWorkspace = import ./lib/workspace { inherit inputs repoRoot; };
-      repoWorkspace = mkWorkspace {
+      skillCatalog =
+        pkgs:
+        (import ./skills/sources.nix {
+          inherit pkgs inputs;
+          inherit (pkgs) lib;
+        }).catalog;
+      repoWorkspace = inputs.agent-workspace.lib.mkWorkspace {
+        catalog = skillCatalog;
         systems = [ "x86_64-linux" ];
         skills = [
           "spreadconfig-nix"
@@ -186,8 +187,7 @@
     in
     {
       lib = {
-        inherit hosts mkWorkspace;
-        inherit (inputs.agent-workspace.lib) discoverSkills mkSkillInstaller;
+        inherit hosts skillCatalog;
         mkHost = mkHostContext;
       };
 

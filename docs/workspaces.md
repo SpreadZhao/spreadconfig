@@ -2,7 +2,8 @@
 
 通用安装引擎与模板位于本地独立仓库 `../agent-workspace`；个人技能内容位于
 `../personal-skills`。spreadconfig 保留目录、第三方来源加工、使用选择和 Android 模板。
-`spreadconfig.lib.mkWorkspace` 是兼容包装，向独立管理器传入本仓库的 catalog。
+`spreadconfig.lib.skillCatalog` 是 `pkgs → catalog` 的目录接口。
+开发环境和模板直接调用 `agent-workspace.lib.mkWorkspace`，显式传入这个目录。
 
 ## 本地初始化
 
@@ -12,8 +13,8 @@
 mkdir my-workspace
 cd my-workspace
 # 使用 spreadconfig 的技能目录：
-nix flake init -t path:/home/spreadzhao/workspaces/spreadconfig#workspace
-nix flake lock --override-input spreadconfig path:/home/spreadzhao/workspaces/spreadconfig
+nix flake init -t git+file:///home/spreadzhao/workspaces/spreadconfig#workspace
+nix flake lock --override-input spreadconfig git+file:///home/spreadzhao/workspaces/spreadconfig
 nix develop path:$PWD
 ```
 
@@ -27,8 +28,12 @@ agent-workspace input 覆盖为该本地路径。
 
 ```nix
 {
-  inputs.spreadconfig.url = "path:/home/spreadzhao/workspaces/spreadconfig";
-  outputs = { spreadconfig, ... }: spreadconfig.lib.mkWorkspace {
+  inputs = {
+    spreadconfig.url = "git+file:///home/spreadzhao/workspaces/spreadconfig";
+    agent-workspace.follows = "spreadconfig/agent-workspace";
+  };
+  outputs = { agent-workspace, spreadconfig, ... }: agent-workspace.lib.mkWorkspace {
+    catalog = spreadconfig.lib.skillCatalog;
     systems = [ "x86_64-linux" "aarch64-linux" ];
     skills = [ "leetcode-coach" "obsidian-markdown" ];
     packages = pkgs: [ pkgs.git pkgs.ripgrep ];
@@ -42,7 +47,7 @@ agent-workspace input 覆盖为该本地路径。
 
 | 参数 | 功能与默认值 |
 | --- | --- |
-| catalog | 包装器默认提供 spreadconfig 目录；也接受 pkgs: catalog |
+| catalog | 显式传入 spreadconfig.lib.skillCatalog；管理器默认空目录，也接受属性集 |
 | skills | 显式选择名称，默认空，重复选择去重 |
 | extraSkills | 额外名称到来源映射，自动选择；目录同名时报错 |
 | targets | enable/path；agents 默认开启，Claude/Codex 默认关闭；支持自定义目标 |
@@ -63,10 +68,9 @@ agent-workspace input 覆盖为该本地路径。
 subdir、targets 均可省略；未指定 targets 时使用所有开启目标。
 路径或 derivation 也可直接作为来源。个人技能和第三方输入均通过 flake.lock 固定。
 修改个人内容后更新 spreadconfig 的 personal-skills input，下游再更新 spreadconfig input。
-不再读取 SPREADCONFIG_SOURCE_ROOT 或 SPREADCONFIG_WORKSPACE_ROOT。
 技能所需业务路径仍由具体技能或任务指定。
 
-## 状态与迁移
+## 项目状态
 
 项目状态为 `.agent-workspace/state.json`，GC roots 位于 `.agent-workspace/roots/`。
 退出环境后 store 来源仍保留。安装使用并发目录锁和原子写入。
@@ -76,9 +80,10 @@ subdir、targets 均可省略；未指定 targets 时使用所有开启目标。
 `cleanup` 仅删除有记录且内容未修改的撤选入口。
 非管理器生成的 AGENTS.md 默认冲突，可关闭指令管理或选择 skip。
 
-支持旧 v2 状态与旧忽略块，但来源切换不会隐式覆盖旧链接。
-此次内容迁移后，旧 skills/local 来源及旧 Claude 间接链接可能冲突。
-按报错检查并移除指定旧入口，再进入开发环境；不要删除整个 skills 父目录。
+来源切换不会隐式覆盖已有链接。按报错检查并移除指定冲突入口，
+再进入开发环境；不要删除整个 skills 父目录。
+
+管理器的完整 API 与状态格式见 `../agent-workspace/README.md`。
 
 ## 检查
 

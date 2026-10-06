@@ -15,11 +15,6 @@ window#waybar {
     color: @theme_white;
 }
 
-/* spacer */
-#custom-spacer {
-    background: @theme_background;
-}
-
 /* niri workspaces and windows */
 #niri-workspace-window {
     background: @theme_background;

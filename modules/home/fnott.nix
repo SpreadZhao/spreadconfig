@@ -3,7 +3,6 @@
   theme_yellow,
   theme_bright_white,
   theme_white,
-  theme_bright_dark,
   theme_blue,
   theme_radius,
   theme_red,
