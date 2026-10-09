@@ -3,11 +3,11 @@
 
   inputs = {
     agent-workspace = {
-      url = "path:/home/spreadzhao/workspaces/agent-workspace";
+      url = "github:SpreadZhao/agent-workspace";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     personal-skills = {
-      url = "path:/home/spreadzhao/workspaces/personal-skills";
+      url = "github:SpreadZhao/personal-skills";
       flake = false;
     };
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";

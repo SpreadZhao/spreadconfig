@@ -1,13 +1,13 @@
 # 独立 workspace
 
-通用安装引擎与模板位于本地独立仓库 `../agent-workspace`；个人技能内容位于
-`../personal-skills`。spreadconfig 保留目录、第三方来源加工、使用选择和 Android 模板。
+通用安装引擎与模板位于独立仓库 [agent-workspace](https://github.com/SpreadZhao/agent-workspace)；个人技能内容位于
+[personal-skills](https://github.com/SpreadZhao/personal-skills)。spreadconfig 保留目录、第三方来源加工、使用选择和 Android 模板。
 `spreadconfig.lib.skillCatalog` 是 `pkgs → catalog` 的目录接口。
 开发环境和模板直接调用 `agent-workspace.lib.mkWorkspace`，显式传入这个目录。
 
 ## 本地初始化
 
-当前两个新仓库尚未发布远端，spreadconfig 的新 inputs 使用绝对本地路径。
+两个仓库均通过 GitHub input 引入，版本由 `flake.lock` 固定，无需事先克隆到本机。
 
 ```bash
 mkdir my-workspace
@@ -19,8 +19,7 @@ nix develop path:$PWD
 ```
 
 Android 改用 `#android`。完全独立、无个人预设的项目使用
-`path:/home/spreadzhao/workspaces/agent-workspace#workspace`，并将模板的
-agent-workspace input 覆盖为该本地路径。
+`github:SpreadZhao/agent-workspace#workspace`。
 只有模板与 nix develop 初始化方式。Git 仓库中需要跟踪 flake 文件，
 或使用 path: 引用读取未跟踪内容；不要为求值修改用户已有 index。
 
@@ -83,7 +82,7 @@ subdir、targets 均可省略；未指定 targets 时使用所有开启目标。
 来源切换不会隐式覆盖已有链接。按报错检查并移除指定冲突入口，
 再进入开发环境；不要删除整个 skills 父目录。
 
-管理器的完整 API 与状态格式见 `../agent-workspace/README.md`。
+管理器的完整 API 与状态格式见 [agent-workspace README](https://github.com/SpreadZhao/agent-workspace#readme)。
 
 ## 检查
 

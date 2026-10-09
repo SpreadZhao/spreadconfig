@@ -7,14 +7,17 @@
         ]
       },
       "locked": {
-        "lastModified": 1791220143,
-        "narHash": "sha256-05mHBZFIb86O5jPGHhbpZjI6najaA8sMwfxfF6amAQE=",
-        "path": "/home/spreadzhao/workspaces/agent-workspace",
-        "type": "path"
+        "lastModified": 1791278650,
+        "narHash": "sha256-VtdGnFCtfDXJ2HPAbXNlkfZzwZRYJYUazSEUsDfn7TE=",
+        "owner": "SpreadZhao",
+        "repo": "agent-workspace",
+        "rev": "6be1060260dc01f2ff249c00cd68657bed45e733",
+        "type": "github"
       },
       "original": {
-        "path": "/home/spreadzhao/workspaces/agent-workspace",
-        "type": "path"
+        "owner": "SpreadZhao",
+        "repo": "agent-workspace",
+        "type": "github"
       }
     },
     "claude-code-nix": {
@@ -409,14 +412,17 @@
     "personal-skills": {
       "flake": false,
       "locked": {
-        "lastModified": 1791219873,
-        "narHash": "sha256-m/RDuBFTCOakV6HU3opS7Rzd7B5Q2JZvZqXHMq+j5K4=",
-        "path": "/home/spreadzhao/workspaces/personal-skills",
-        "type": "path"
+        "lastModified": 1791278658,
+        "narHash": "sha256-uR6eUqqIVMq6Q2/LEEwZArcNh+LcZEJLjoqmpmZjPAA=",
+        "owner": "SpreadZhao",
+        "repo": "personal-skills",
+        "rev": "d0d640d68debdd5cd23b17ce71981b6b714af5f3",
+        "type": "github"
       },
       "original": {
-        "path": "/home/spreadzhao/workspaces/personal-skills",
-        "type": "path"
+        "owner": "SpreadZhao",
+        "repo": "personal-skills",
+        "type": "github"
       }
     },
     "root": {

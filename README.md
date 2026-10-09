@@ -49,8 +49,8 @@ My personal NixOS configuration, built with [flakes](https://wiki.nixos.org/wiki
 | `nixpkgs` | NixOS unstable (primary package set) |
 | `nixpkgs-desktop1-graphics` | desktop1's known working kernel/NVIDIA/niri/Mesa package set |
 | `home-manager` | User environment management |
-| `agent-workspace` | Independent skill installation and workspace manager (local input) |
-| `personal-skills` | Personal content repository, non-flake input (local input) |
+| `agent-workspace` | Independent skill installation and workspace manager (GitHub input) |
+| `personal-skills` | Personal content repository, non-flake input (GitHub input) |
 | `nixos-hardware` | Hardware presets for supported laptops |
 | `nixvim` | Declarative Neovim configuration |
 
@@ -167,9 +167,9 @@ The generic manager template can also be used without this repository.
 
 See [workspace setup](docs/workspaces.md) for commands, examples, ownership rules
 and checks. Home Manager uses the same engine with `onConflict = "skip"`;
-workspace installation defaults to `"error"`. New local repositories are siblings
-`agent-workspace` and `personal-skills`; their current path inputs are machine-specific
-until published. Each workspace selects its own skills in its flake.
+workspace installation defaults to `"error"`. `agent-workspace` and `personal-skills`
+are fetched from their GitHub repositories at the revisions pinned in `flake.lock`;
+local checkouts are optional. Each workspace selects its own skills in its flake.
 
 ### Editor
 
