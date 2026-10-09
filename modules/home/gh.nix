@@ -7,8 +7,13 @@
     gitCredentialHelper.enable = true;
   };
 
-  # Link the runtime-rendered file without copying secrets into the Nix store.
-  xdg.configFile."gh/hosts.yml".source = config.lib.file.mkOutOfStoreSymlink (
-    osConfig.sops.templates."gh-hosts.yml".path
-  );
+  xdg.configFile = {
+    # Adopt files previously written by gh and the old activation script.
+    "gh/config.yml".force = true;
+    "gh/hosts.yml" = {
+      force = true;
+      # Link runtime credentials without copying secrets into the Nix store.
+      source = config.lib.file.mkOutOfStoreSymlink (osConfig.sops.templates."gh-hosts.yml".path);
+    };
+  };
 }
