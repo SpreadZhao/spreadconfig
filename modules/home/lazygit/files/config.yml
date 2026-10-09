@@ -3,8 +3,6 @@ git:
   diffRenderers:
     - command: diff-so-fancy
 gui:
-  authorColors:
-    '*': '#b4befe'
   nerdFontsVersion: '3'
   theme:
     activeBorderColor:
@@ -26,6 +24,8 @@ gui:
       - '#262626'
     cherryPickedCommitFgColor:
       - '#47CCB1'
+    authorColors:
+      '*': '#b4befe'
 os:
   editPreset: "nvim-remote"
 keybinding:
