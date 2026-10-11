@@ -9,11 +9,12 @@ My personal NixOS configuration, built with [flakes](https://wiki.nixos.org/wiki
 ```
 .
 ├── flake.nix                       # Flake entry point
-├── lib/mutable-files.nix           # Checked workspace links and explicit file trees
+├── lib/                           # Shared repository functions
+│   ├── host-context.nix            # Shared host facts, validation and profile defaults
+│   └── mutable-files.nix           # Checked workspace links and explicit file trees
 ├── templates/                      # Independent workspace and Android skeletons
 ├── skills/                         # Skill catalog and upstream transformations
 ├── hosts/
-│   ├── lib/default.nix             # Shared host facts and profile defaults
 │   └── <host>/
 │       ├── host.nix                # Hardware declaration and module lists
 │       ├── configuration.nix       # Host NixOS entry point
@@ -90,8 +91,9 @@ ASUS ROG laptop — Intel CPU with NVIDIA hybrid graphics.
 
 Each `hosts/<name>/host.nix` declares `system`, `formFactor`, CPU and GPU facts,
 hardware capabilities, profile imports, and NixOS/Home Manager module lists.
-`hosts/lib/default.nix` builds a single `host` value before either module system
-is evaluated. Both receive this value through their special arguments.
+`lib/host-context.nix` builds and validates a single `host` value before either
+module system is evaluated. Both receive this value through their special
+arguments. The constructor remains available as `spreadconfig.lib.mkHost`.
 
 Shared modules use normal Nix expressions such as `lib.mkIf host.gpu.hasNvidia`
 and read policy from `host.profile.nixos` or `host.profile.home`. The tool layer

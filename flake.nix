@@ -105,7 +105,7 @@
         description = "Independent workspace with centrally maintained agent skills";
       };
 
-      mkHostContext = import ./hosts/lib { inherit (nixpkgs) lib; };
+      mkHostContext = import ./lib/host-context.nix { inherit (nixpkgs) lib; };
       hostNames = nixpkgs.lib.filter (name: builtins.pathExists (./hosts + "/${name}/host.nix")) (
         builtins.attrNames (builtins.readDir ./hosts)
       );

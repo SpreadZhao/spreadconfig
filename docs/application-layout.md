@@ -9,8 +9,10 @@ and direct child `default.nix` files, and rejects duplicate file/directory modul
 The arrangement follows the application-local assets and host-selected include
 pattern in [ryan4yin/nix-config](https://github.com/ryan4yin/nix-config/blob/01e93c2b65fa51f331f1d82a25fefab30c08490d/home/linux/gui/niri/default.nix)
 and the application folders in [dbeley/nixos-config](https://github.com/dbeley/nixos-config/blob/bd4cef2041d237277d1b8700d40852676af73461/apps/tmux/tmux.nix).
-The existing host constructor and profiles remain the source of hardware facts
-and policy; no new flake framework is required.
+`lib/host-context.nix` constructs and validates the shared host context before
+NixOS or Home Manager module evaluation. Host declarations and profiles supply
+hardware facts and policy; the constructor supplies shared defaults. It remains
+available as `spreadconfig.lib.mkHost`.
 
 ## Selecting host differences
 
