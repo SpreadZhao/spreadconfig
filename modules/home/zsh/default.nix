@@ -43,7 +43,7 @@
       q = "exit";
       ca = "${scriptsDir}/util/camera.sh";
       cdgvfs = "cd /run/user/$(id -u)/gvfs";
-      se = "sudo -E nvim";
+      se = "SUDO_EDITOR=${lib.getExe config.programs.nixvim.build.package} sudoedit";
       sf = "cd ~/workspaces/spreadconfig";
       mv = "mv -iv";
       cp = "cp -iv";
