@@ -19,6 +19,7 @@ let
   profile = lib.recursiveUpdate {
     nixos = {
       rocmSupport = false;
+      proxy.enable = true;
       bluetooth.enable = true;
       textbridge.bluetooth.enable = true;
       upower.enable = true;

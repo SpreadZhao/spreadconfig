@@ -1,2 +1,8 @@
+# Local development and agent workspace state, at any directory depth.
 .direnv/
-# Workspace activation adds a block for its own generated entries here.
+.agents/
+.claude/
+.codex/
+.agent-workspace/
+/AGENTS.md
+/CLAUDE.md

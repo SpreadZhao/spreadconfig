@@ -1,5 +1,6 @@
 {
   config,
+  host,
   lib,
   pkgs,
   scriptsDir,
@@ -153,9 +154,9 @@ let
     // defaultsFor desktopApps.chromium [
       "x-scheme-handler/chromium"
     ]
-    // defaultsFor desktopApps.clash [
-      "x-scheme-handler/clash"
-    ]
+    // lib.optionalAttrs host.profile.nixos.proxy.enable (
+      defaultsFor desktopApps.clash [ "x-scheme-handler/clash" ]
+    )
     // defaultsFor desktopApps.codex [
       "x-scheme-handler/codex"
       "x-scheme-handler/codex-browser-sidebar"

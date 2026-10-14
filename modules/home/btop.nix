@@ -20,7 +20,9 @@ let
       }
     else if host.gpu.hasAmd then
       {
+        shown_boxes = "cpu mem net proc gpu0";
         shown_gpus = "amd";
+        show_gpu_info = "On";
       }
     else
       { };

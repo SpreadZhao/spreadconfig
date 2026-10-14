@@ -5,6 +5,10 @@ The template calls agent-workspace.lib.mkWorkspace with
 catalog = spreadconfig.lib.skillCatalog. The manager input follows
 spreadconfig/agent-workspace. Personal and third-party content are locked inputs.
 
+The template sets `manageGitignore = false`. Static rules ignore all `.direnv`,
+`.agents`, `.claude`, `.codex`, and `.agent-workspace` directories, including hidden
+files and nested contents, plus the generated root AGENTS.md and CLAUDE.md.
+
 claude = true enables Claude targets and CLAUDE.md; instructions appends text to
 AGENTS.md. Existing instructions conflict by default; manageInstructions = false
 or onConflict = "skip" preserves them. Missing skill entries are installed

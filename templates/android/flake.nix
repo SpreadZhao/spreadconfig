@@ -33,6 +33,7 @@
       skills = [ "android-dev" ];
       extraSkills = officialSkills;
       claude = false;
+      manageGitignore = false;
       packages =
         pkgs:
         with pkgs;

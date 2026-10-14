@@ -33,6 +33,10 @@ Generated state and its store GC root are ignored by Git; keep `flake.lock` in
 version control. Existing user files and unrelated links are not replaced. There
 is no separate skill installation command.
 
+The template sets `manageGitignore = false`. Static rules ignore all `.direnv`,
+`.agents`, `.claude`, `.codex`, and `.agent-workspace` directories, including hidden
+files and nested contents, plus the generated root AGENTS.md and CLAUDE.md.
+
 Start agent sessions from this workspace directory. An independently opened
 nested Git repository may have a different skill-discovery root.
 

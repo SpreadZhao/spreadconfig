@@ -131,6 +131,8 @@
           "nixos-best-practices"
         ];
         claude = true;
+        # This repository tracks static ignore rules, independent of local state.
+        manageGitignore = false;
         packages =
           pkgs: with pkgs; [
             deadnix

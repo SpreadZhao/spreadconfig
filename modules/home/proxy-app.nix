@@ -1,6 +1,11 @@
-{ pkgs, ... }:
-
 {
+  host,
+  lib,
+  pkgs,
+  ...
+}:
+
+lib.mkIf host.profile.nixos.proxy.enable {
   home.packages = [
     pkgs.clash-verge-rev
     # pkgs.flclash

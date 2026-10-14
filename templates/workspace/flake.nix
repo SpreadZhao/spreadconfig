@@ -20,6 +20,7 @@
         pkgs.ripgrep
       ];
       claude = false;
+      manageGitignore = false;
 
       instructions = "";
     };

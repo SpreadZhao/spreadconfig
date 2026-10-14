@@ -9,6 +9,13 @@
 
 两个仓库均通过 GitHub input 引入，版本由 `flake.lock` 固定，无需事先克隆到本机。
 
+spreadconfig 自身的根 devShell 和本仓库的 workspace/Android 模板均设置
+`manageGitignore = false`，静态忽略任意层级的 `.direnv/`、`.agents/`、`.claude/`、
+`.codex/`、`.agent-workspace/` 整个目录，以及工作区根目录生成的 `AGENTS.md`、
+`CLAUDE.md`。运行时的受管理忽略块依赖本机
+`state.json`，不应将它提交后带到另一个 checkout；否则首次初始化会报告
+`unowned .gitignore block`。上游 agent-workspace 的独立模板保留管理器的默认行为。
+
 ```bash
 mkdir my-workspace
 cd my-workspace
@@ -78,6 +85,11 @@ subdir、targets 均可省略；未指定 targets 时使用所有开启目标。
 `skip` 保留冲突目标并安装其他缺失项，不接管跳过的外部入口。
 `cleanup` 仅删除有记录且内容未修改的撤选入口。
 非管理器生成的 AGENTS.md 默认冲突，可关闭指令管理或选择 skip。
+
+若旧 checkout 的状态仍记录 `gitignoreBlock`，但更新后该块已从 `.gitignore`
+移除，会报告 `managed .gitignore block was removed or edited`。保留状态和技能入口，
+将状态里记录的原始块临时恢复到 `.gitignore` 后再进入一次根 devShell；关闭
+`manageGitignore` 会让管理器移除它并清空该字段，其他静态忽略规则不受影响。
 
 来源切换不会隐式覆盖已有链接。按报错检查并移除指定冲突入口，
 再进入开发环境；不要删除整个 skills 父目录。

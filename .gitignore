@@ -1,18 +1,13 @@
-/.direnv/
-/.agents/*
-/.claude/
-/.codex/
+# Local development and agent workspace state, at any directory depth.
+.direnv/
+.agents/
+.claude/
+.codex/
+.agent-workspace/
+/AGENTS.md
+/CLAUDE.md
 __pycache__/
 *.py[cod]
 # Local identities must never be committed; the .age backup is intentionally tracked.
 /secrets/key.txt
 /secrets/keys.txt
-# >>> agent workspace (managed) >>>
-/.agent-workspace/
-/.agents/skills/nixos-best-practices
-/.agents/skills/spreadconfig-nix
-/.claude/skills/nixos-best-practices
-/.claude/skills/spreadconfig-nix
-/AGENTS.md
-/CLAUDE.md
-# <<< agent workspace (managed) <<<

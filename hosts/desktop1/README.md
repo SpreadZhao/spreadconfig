@@ -22,7 +22,7 @@
 ## 使用共享凭据
 
 `desktop1` 与其他机器共用 `secrets/secrets.yaml`，通过公共模块 `modules/nixos/secrets.nix` 加载。
-其中包含 GitHub token、用户密码哈希和 TextBridge token，不再生成独立凭据。
+其中包含 GitHub/GLM token 和用户密码哈希，不再生成独立凭据。
 已有账户的登录密码不会被重置；修改当前账户密码使用 `passwd`。
 
 ### 首次初始化

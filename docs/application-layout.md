@@ -93,9 +93,8 @@ git diff --check
 nix eval --raw "path:$PWD#nixosConfigurations.desktop1.config.home-manager.users.spreadzhao.home.activationPackage.drvPath"
 ```
 
-Evaluate the Home Manager activation package for all four hosts and the system
-for desktop1, thinkbook and zephyrus-m16. The amd-desktop disk placeholder must
-continue blocking a full system evaluation. Build the affected asset/link-tree
+Evaluate the Home Manager activation package and system for all three hosts,
+using each host’s existing disk configuration. Build the affected asset/link-tree
 sources without activation, check their final destinations and permissions, and
 run `niri validate -c <built-tree>/config.kdl` on every Niri tree.
 
