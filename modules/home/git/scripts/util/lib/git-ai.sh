@@ -12,11 +12,11 @@ source "$GIT_AI_LIB_DIR/../config/git-ai.sh"
 
 git_ai_backend_description() {
     case "$GIT_AI_AGENT" in
-    codex)
+    codex-spreadzhao | codex-supazodiac)
         if [[ -n "$GIT_AI_CODEX_MODEL" ]]; then
-            printf 'Codex (%s, %s)' "$GIT_AI_CODEX_MODEL" "$GIT_AI_CODEX_REASONING_EFFORT"
+            printf 'Codex %s (%s, %s)' "${GIT_AI_AGENT#codex-}" "$GIT_AI_CODEX_MODEL" "$GIT_AI_CODEX_REASONING_EFFORT"
         else
-            printf 'Codex (configured default, %s)' "$GIT_AI_CODEX_REASONING_EFFORT"
+            printf 'Codex %s (configured default, %s)' "${GIT_AI_AGENT#codex-}" "$GIT_AI_CODEX_REASONING_EFFORT"
         fi
         ;;
     claude)
@@ -35,7 +35,7 @@ git_ai_run() {
     local log_file="$4"
 
     case "$GIT_AI_AGENT" in
-    codex)
+    codex-spreadzhao | codex-supazodiac)
         local -a args=(
             exec
             --config "model_reasoning_effort=\"$GIT_AI_CODEX_REASONING_EFFORT\""
@@ -55,7 +55,7 @@ git_ai_run() {
             "$prompt"
         )
 
-        codex "${args[@]}" <"$context_file" >"$log_file" 2>&1
+        "$GIT_AI_AGENT" "${args[@]}" <"$context_file" >"$log_file" 2>&1
         ;;
     claude)
         local -a args=(
@@ -70,7 +70,7 @@ git_ai_run() {
         ;;
     *)
         echo "Unsupported git AI agent: $GIT_AI_AGENT" >&2
-        echo "Currently supported agents: codex, claude" >&2
+        echo "Currently supported agents: codex-spreadzhao, codex-supazodiac, claude" >&2
         return 2
         ;;
     esac

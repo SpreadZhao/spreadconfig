@@ -159,7 +159,10 @@ let
   desktopProfiles =
     pkgs.runCommand "codex-desktop-profiles-${desktopBase.version}"
       {
-        nativeBuildInputs = [ pkgs.makeWrapper ];
+        nativeBuildInputs = [
+          pkgs.makeWrapper
+          pkgs.installShellFiles
+        ];
         meta = desktopBase.meta // {
           mainProgram = "codex-desktop";
         };
@@ -244,6 +247,12 @@ let
               ${lib.optionalString hasProxy "--set CODEX_NODE_REPL_PATH '${browserNodeRepl}'"} \
               --append-flags '--password-store=basic'
 
+            cli_wrapper="$profile_package/opt/codex-desktop/.codex-linux/features/community-profile-isolation/codex-cli-wrapper.sh"
+            makeWrapper "$cli_wrapper" "$out/bin/codex-${name}" \
+              "''${profile_flags[@]}" \
+              --set CODEX_LINUX_APP_DIR "$profile_package/opt/codex-desktop" \
+              --set CODEX_CLI_PATH "$cli_wrapper"
+
             cp ${desktopItem name}/share/applications/*.desktop "$out/share/applications/"
             substituteInPlace "$out/share/applications/${
               if name == "spreadzhao" then "codex-desktop" else appId
@@ -253,6 +262,14 @@ let
         ) profileNames}
         ln -s codex-desktop-spreadzhao "$out/bin/codex-desktop"
 
+        # Reuse the bundled CLI's completion for both explicit profile names.
+        export CODEX_HOME="$TMPDIR/completion-home"
+        mkdir -p "$CODEX_HOME"
+        ${desktopBase}/opt/codex-desktop/resources/codex completion zsh > "$TMPDIR/_codex"
+        substituteInPlace "$TMPDIR/_codex" \
+          --replace-fail '#compdef codex' '#compdef codex-spreadzhao codex-supazodiac' \
+          --replace-fail 'compdef _codex codex' 'compdef _codex codex-spreadzhao codex-supazodiac'
+        installShellCompletion --zsh "$TMPDIR/_codex"
       '';
 in
 

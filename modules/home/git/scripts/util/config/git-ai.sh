@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Supported agents: codex, claude.
+# Supported agents: codex-spreadzhao, codex-supazodiac, claude.
 GIT_AI_AGENT="${GIT_AI_AGENT:-claude}"
 GIT_AI_CODEX_MODEL="${GIT_AI_CODEX_MODEL:-}"
 GIT_AI_CODEX_REASONING_EFFORT="${GIT_AI_CODEX_REASONING_EFFORT:-medium}"
