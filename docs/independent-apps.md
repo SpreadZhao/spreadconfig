@@ -39,9 +39,3 @@ The configured package is injected into notification-history through its Nix
 use the same installed program. Preview and action logic stays with each caller:
 cliphist decoding and images here, notification database, viewing and copying in the
 notification-history repository. `fm` and `fm --dmenu` retain their current roles.
-
-Ordinary terminal popup helpers and other application migrations are outside
-this extraction. Each independent repository keeps only the package build and the built-in
-Bash syntax/ShellCheck checks. Custom functional tests and their Python
-dependencies have been removed. spreadconfig retains the workspace skill-source
-check and direct configuration evaluation.
