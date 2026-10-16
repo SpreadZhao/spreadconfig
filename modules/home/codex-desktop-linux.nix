@@ -36,8 +36,9 @@ let
   browserNodeRepl = pkgs.writeShellScript "codex-browser-node-repl" ''
     set -euo pipefail
     : "''${NODE_REPL_NODE_PATH:?Codex did not provide its bundled Node path}"
-    runtime_bin="''${NODE_REPL_NODE_PATH%/*}"
-    runtime_executable="$runtime_bin/node_repl"
+    # Artifact Session supplies its own Node binary under the profile cache;
+    # node_repl itself remains in Desktop's bundled cua_node directory.
+    runtime_executable="${desktopBase}/opt/codex-desktop/resources/cua_node/bin/node_repl"
     if [[ ! -x "$runtime_executable" || "$runtime_executable" -ef "$0" ]]; then
       echo "Cannot locate the original Codex node_repl executable" >&2
       exit 1
@@ -48,13 +49,90 @@ let
     exec "$runtime_executable" "$@"
   '';
 
-  desktopBase =
+  desktopUpstream =
     inputs.codex-desktop-linux.packages.${pkgs.stdenv.hostPlatform.system}.codex-desktop.override
       {
         enableComputerUseUi = cfg.computerUseUi.enable;
         linuxFeatureIds =
           cfg.linuxFeatures ++ lib.optional cfg.remoteMobileControl.enable "remote-mobile-control";
       };
+  desktopProfileCompatibility = builtins.toFile "desktop-profile-compat.py" ''
+    """Minimal Linux bundle fixes until upstream honors XDG cache and WS proxy."""
+    import pathlib
+    import re
+    import sys
+
+    build = pathlib.Path(sys.argv[1])
+    identifier = r"[A-Za-z_$][\w$]*(?:\.default)?"
+    cache_call = re.compile(
+        rf"(?P<path>{identifier})\.join\("
+        rf"(?P<os>{identifier})\.homedir\(\),`\.cache`,`codex-runtimes`"
+    )
+
+    def cache_replacement(match):
+        path, os_module = match.group("path", "os")
+        return (
+            f"{path}.join(process.env.XDG_CACHE_HOME||"
+            f"{path}.join({os_module}.homedir(),`.cache`),`codex-runtimes`"
+        )
+
+    for pattern, expected in (
+        ("application-network-startup-*.js", 3),
+        ("main-*.js", 2),
+        ("worker.js", 1),
+    ):
+        matches = list(build.glob(pattern))
+        if len(matches) != 1:
+            raise SystemExit(f"Expected one bundle matching {pattern}: {matches}")
+        file = matches[0]
+        source, count = cache_call.subn(cache_replacement, file.read_text())
+        if count != expected:
+            raise SystemExit(f"{file.name}: expected {expected} cache paths, found {count}")
+        if pattern == "main-*.js":
+            # Keep the localhost bypass and the internal development proxy.
+            proxy_route = re.compile(
+                r"(?P<host>[A-Za-z_$][\w$]*)\.endsWith\(`\.internal\.api\.openai\.org`\)"
+                r"\?(?P<proxy>[A-Za-z_$][\w$]*):void 0"
+            )
+            source, count = proxy_route.subn(
+                r"\g<host>.endsWith(`.internal.api.openai.org`)?\g<proxy>:"
+                r"process.env.CODEX_DESKTOP_SOCKS_PROXY_URL",
+                source,
+            )
+            if count != 1:
+                raise SystemExit(f"Expected one external WebSocket proxy route, found {count}")
+        file.write_text(source)
+  '';
+  # The GUI hardcodes ~/.cache while its CLI validates XDG_CACHE_HOME. Reuse
+  # upstream's ASAR layout helper so native modules keep their unpacked layout.
+  desktopBase = desktopUpstream.overrideAttrs (previous: {
+    postInstall = (previous.postInstall or "") + ''
+      resources="$out/opt/codex-desktop/resources"
+      extracted="$TMPDIR/profile-compat-asar"
+      asar list --is-pack "$resources/app.asar" > "$TMPDIR/profile-compat-layout"
+      asar extract "$resources/app.asar" "$extracted"
+      cp -a "$resources/app.asar.unpacked/." "$extracted/"
+      chmod -R u+w "$extracted"
+      python3 ${desktopProfileCompatibility} "$extracted/.vite/build"
+      for bundle in "$extracted"/.vite/build/{application-network-startup-*,main-*,worker}.js; do
+        node --check "$bundle"
+      done
+      layout_helper="${inputs.codex-desktop-linux}/scripts/patches/lib/asar-layout.js"
+      node "$layout_helper" "$TMPDIR/profile-compat-layout" "$extracted" \
+        "$TMPDIR/profile-compat-ordering" "$TMPDIR/profile-compat-unpack"
+      asar pack "$extracted" "$TMPDIR/profile-compatible.asar" \
+        --ordering "$TMPDIR/profile-compat-ordering" \
+        --unpack '{*.node,*.so,*.dylib}' \
+        --unpack-dir "$(cat "$TMPDIR/profile-compat-unpack")"
+      asar list --is-pack "$TMPDIR/profile-compatible.asar" > "$TMPDIR/profile-compat-output-layout"
+      node "$layout_helper" verify "$TMPDIR/profile-compat-layout" "$TMPDIR/profile-compat-output-layout"
+      mv "$TMPDIR/profile-compatible.asar" "$resources/app.asar"
+    '';
+  });
+  # networking.nix uses Clash's mixed HTTP/SOCKS listener on the same port.
+  desktopSocksProxy =
+    lib.replaceStrings [ "http://" ] [ "socks5h://" ]
+      osConfig.networking.proxy.default;
   profileNames = [
     "spreadzhao"
     "supazodiac"
@@ -121,6 +199,13 @@ let
                 substitute "$original" "$target" \
                   --replace-fail '$HOME/.codex-community' '${root}/codex'
               fi
+              if [[ "$relative" == features/* ]]; then
+                # The REPL sandbox filters private launcher variables. Keep
+                # the CODEX_HOME guard and locate this package without them.
+                substituteInPlace "$target" \
+                  --replace-fail 'CODEX_LINUX_APP_DIR:?CODEX_LINUX_APP_DIR is required' \
+                  "CODEX_LINUX_APP_DIR:=$profile_package/opt/codex-desktop"
+              fi
               chmod --reference="$original" "$target"
             done
 
@@ -155,6 +240,7 @@ let
               --set BAMF_DESKTOP_FILE_HINT "$out/share/applications/${
                 if name == "spreadzhao" then "codex-desktop" else appId
               }.desktop" \
+              ${lib.optionalString hasProxy "--set CODEX_DESKTOP_SOCKS_PROXY_URL '${desktopSocksProxy}'"} \
               ${lib.optionalString hasProxy "--set CODEX_NODE_REPL_PATH '${browserNodeRepl}'"} \
               --append-flags '--password-store=basic'
 
