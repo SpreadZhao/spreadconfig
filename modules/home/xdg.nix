@@ -41,6 +41,7 @@ let
     rnote = "com.github.flxzt.rnote.desktop";
     swayimg = "swayimg.desktop";
     telegram = "org.telegram.desktop.desktop";
+    thunderbird = "thunderbird.desktop";
     waydroidInstaller = "waydroid.app.install.desktop";
     waydroidMarket = "waydroid.market.desktop";
     wemeet = "wemeetapp.desktop";
@@ -177,6 +178,10 @@ let
     // defaultsFor desktopApps.telegram [
       "x-scheme-handler/tg"
       "x-scheme-handler/tonsite"
+    ]
+    // defaultsFor desktopApps.thunderbird [
+      "message/rfc822"
+      "x-scheme-handler/mailto"
     ]
     // defaultsFor desktopApps.waydroidMarket [
       "x-scheme-handler/market"
