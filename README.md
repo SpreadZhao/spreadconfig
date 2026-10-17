@@ -12,8 +12,6 @@ My personal NixOS configuration, built with [flakes](https://wiki.nixos.org/wiki
 ├── lib/                           # Shared repository functions
 │   ├── host-context.nix            # Shared host facts, validation and profile defaults
 │   └── mutable-files.nix           # Checked workspace links and explicit file trees
-├── templates/                      # Independent workspace and Android skeletons
-├── skills/                         # Skill catalog and upstream transformations
 ├── hosts/
 │   └── <host>/
 │       ├── host.nix                # Hardware declaration and module lists
@@ -50,7 +48,7 @@ My personal NixOS configuration, built with [flakes](https://wiki.nixos.org/wiki
 | `nixpkgs` | NixOS unstable (primary package set) |
 | `nixpkgs-desktop1-graphics` | desktop1's known working kernel/NVIDIA/niri/Mesa package set |
 | `home-manager` | User environment management |
-| `agent-workspace` | Independent skill installation and workspace manager (GitHub input) |
+| `naw` | NAW: project workspaces and native Home Manager global skills (GitHub input) |
 | `personal-skills` | Personal content repository, non-flake input (GitHub input) |
 | `nixos-hardware` | Hardware presets for supported laptops |
 | `nixvim` | Declarative Neovim configuration |
@@ -141,30 +139,29 @@ A fully Wayland-native desktop built around [niri](https://github.com/niri-wm/ni
 
 This repository's default devShell is for maintaining the NixOS configuration. It is loaded by the root `.envrc` through direnv/nix-direnv and includes Nix maintenance tools such as `nixfmt`, `statix`, `deadnix`, `shellcheck`, `shfmt`, `jq`, `git`, and `ripgrep`.
 
-Run `nix develop` from the repository root to also prepare the `spreadconfig-nix`
-and `nixos-best-practices` skills for Codex and Claude Code. The root flake uses
-the independent `agent-workspace.lib.mkWorkspace` API, as do the templates, with Claude
-support enabled. The independent `agent-workspace` manager installs pinned
-content from `personal-skills` and third-party inputs. Start sessions from this repository root;
-change the `repoWorkspace.skills` selection in `flake.nix` and reenter the shell
-to refresh the links. Generated instructions and workspace state are ignored by Git.
+The root flake declares only the skills used to maintain this repository:
+`spreadconfig-nix` from the locked `personal-skills` input and `nixos-best-practices`
+from its upstream input. `naw.lib.mkWorkspace` installs read-only skill
+directories for agents and Claude when entering `nix develop`. Change their source paths
+in `repoWorkspace.skills` and edit skill content in its source repository;
+repository instructions live in
+`repoWorkspace.instructions`. Generated instructions and `.naw/` state are ignored by Git.
 
-Language runtimes and project-specific build tools are intentionally not installed globally here. Put them in each project's own `flake.nix`/`devShell` and load that environment with direnv.
+Home Manager declares the global `drawio-skill` in
+`modules/home/naw-global-skills.nix` through NAW's
+`homeManagerModules.globalSkills` module and `programs.naw.globalSkills`.
+It manages read-only skill directory links for agents and Claude separately
+from the project's development environment.
 
-### Independent agent workspaces
+This repository does not publish workspace templates or a shared skill catalog.
+For another project, use [NAW](https://github.com/SpreadZhao/NAW)
+directly and declare that project's skills, instructions and packages there.
+Personal skill content is maintained in
+[personal-skills](https://github.com/SpreadZhao/personal-skills), not in this repository.
 
-Create any directory from `templates.workspace` (also the default template), then
-select skills and tools in its own flake. `nix develop`
-prepares `.agents/skills` and shared instructions; optional Claude support uses the
-same sources. Each skill uses its locked input or declared path/derivation.
-The templates pass `spreadconfig.lib.skillCatalog` explicitly to the manager.
-The generic manager template can also be used without this repository.
-
-See [workspace setup](docs/workspaces.md) for commands, examples, ownership rules
-and checks. Home Manager uses the same engine with `onConflict = "skip"`;
-workspace installation defaults to `"error"`. `agent-workspace` and `personal-skills`
-are fetched from their GitHub repositories at the revisions pinned in `flake.lock`;
-local checkouts are optional. Each workspace selects its own skills in its flake.
+NAW remains pinned in `flake.lock` and does not manage Gitignore.
+Language runtimes and project-specific tools belong to each project's own
+development environment.
 
 ### Editor
 
@@ -275,9 +272,9 @@ foot, fuzzel, fnott, swaylock, waybar, niri, nixvim, qutebrowser, starship, btop
 
 Keep this checkout at `~/workspaces/spreadconfig` and clone the private password
 repository into `~/.password-store`. These are the only repositories that need
-local checkouts for the shared configuration. `agent-workspace`, `personal-skills`,
+local checkouts for the shared configuration. NAW, `personal-skills`,
 the application packages, and upstream skills are fetched through locked flake
-inputs. Android SDKs and application data are prepared separately when needed.
+inputs. Application data is prepared separately when needed.
 
 Initialize the shared SOPS age identity once using [SOPS setup](docs/sops.md).
 GitHub/GLM tokens and the login password hash come from encrypted

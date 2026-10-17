@@ -67,7 +67,6 @@ preserved. Conflicting source definitions are errors.
 | lf | `util/lf-wrapper*` |
 | waybar | Battery, brightness and recording/time helpers |
 | git | Git AI commands and their `util/lib` / `util/config` dependencies |
-| agent-skills | `util/check-skills.sh` |
 | pass, wl-clipboard, wechat | Password menus, copy-file and WeChat launcher |
 | mpv, ffmpeg | Camera and video-to-audio helpers |
 | script-tools | Shared host context/preview and audio helper |

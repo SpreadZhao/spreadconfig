@@ -1,25 +1,5 @@
 {
   "nodes": {
-    "agent-workspace": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1791278650,
-        "narHash": "sha256-VtdGnFCtfDXJ2HPAbXNlkfZzwZRYJYUazSEUsDfn7TE=",
-        "owner": "SpreadZhao",
-        "repo": "agent-workspace",
-        "rev": "6be1060260dc01f2ff249c00cd68657bed45e733",
-        "type": "github"
-      },
-      "original": {
-        "owner": "SpreadZhao",
-        "repo": "agent-workspace",
-        "type": "github"
-      }
-    },
     "claude-code-nix": {
       "inputs": {
         "nixpkgs": [
@@ -139,23 +119,6 @@
         "type": "github"
       }
     },
-    "frontend-design-skill": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1774840228,
-        "narHash": "sha256-dYanvbL7Dq2G0OxTuy/4nR5okjFuec/u85crxqlKO1g=",
-        "ref": "main",
-        "rev": "59c1ec751ba6f69ee65894be595aeae06f869281",
-        "revCount": 1,
-        "type": "git",
-        "url": "https://github.com/Aston1690/frontend-design.git"
-      },
-      "original": {
-        "ref": "main",
-        "type": "git",
-        "url": "https://github.com/Aston1690/frontend-design.git"
-      }
-    },
     "fzf-popup": {
       "inputs": {
         "nixpkgs": [
@@ -195,6 +158,26 @@
         "owner": "nix-community",
         "ref": "master",
         "repo": "home-manager",
+        "type": "github"
+      }
+    },
+    "naw": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1792233110,
+        "narHash": "sha256-GSfpx/JzJnIh5a0q3Ml6rzT8UBbBZ4I9rXvdAE8n0o4=",
+        "owner": "SpreadZhao",
+        "repo": "NAW",
+        "rev": "3355a7a3413262d860f55f482ef447ac3302f567",
+        "type": "github"
+      },
+      "original": {
+        "owner": "SpreadZhao",
+        "repo": "NAW",
         "type": "github"
       }
     },
@@ -355,40 +338,6 @@
         "type": "github"
       }
     },
-    "obsidian-skills": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1789483437,
-        "narHash": "sha256-kyH07EVmwIEC/q6i91Kz8mPE78j9ITga2NZUpU1+nHU=",
-        "ref": "main",
-        "rev": "3ccff5338ea700537839b21900aa5358a0402c98",
-        "revCount": 49,
-        "type": "git",
-        "url": "https://github.com/kepano/obsidian-skills.git"
-      },
-      "original": {
-        "ref": "main",
-        "type": "git",
-        "url": "https://github.com/kepano/obsidian-skills.git"
-      }
-    },
-    "openai-skills": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1782268572,
-        "narHash": "sha256-t4oGnFg0YpxJaQiFpgTiwYhaFoZK6wPDiqvHoG0bXiU=",
-        "ref": "main",
-        "rev": "49f948faa9258a0c61caceaf225e179651397431",
-        "revCount": 114,
-        "type": "git",
-        "url": "https://github.com/openai/skills.git"
-      },
-      "original": {
-        "ref": "main",
-        "type": "git",
-        "url": "https://github.com/openai/skills.git"
-      }
-    },
     "personal-packages": {
       "inputs": {
         "nixpkgs": [
@@ -427,30 +376,23 @@
     },
     "root": {
       "inputs": {
-        "agent-workspace": "agent-workspace",
         "claude-code-nix": "claude-code-nix",
         "codex-desktop-linux": "codex-desktop-linux",
         "drawio-skill": "drawio-skill",
         "flake-input-watcher": "flake-input-watcher",
-        "frontend-design-skill": "frontend-design-skill",
         "fzf-popup": "fzf-popup",
         "home-manager": "home-manager",
+        "naw": "naw",
         "nixos-best-practices-skill": "nixos-best-practices-skill",
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs_2",
         "nixpkgs-desktop1-graphics": "nixpkgs-desktop1-graphics",
         "nixvim": "nixvim",
         "notification-history": "notification-history",
-        "obsidian-skills": "obsidian-skills",
-        "openai-skills": "openai-skills",
         "personal-packages": "personal-packages",
         "personal-skills": "personal-skills",
         "sops-nix": "sops-nix",
-        "textbridge": "textbridge",
-        "web-artifacts-builder-skill": "web-artifacts-builder-skill",
-        "web-interface-guidelines": "web-interface-guidelines",
-        "xiaohongshu-summarizer-skill": "xiaohongshu-summarizer-skill",
-        "yt-dlp-downloader-skill": "yt-dlp-downloader-skill"
+        "textbridge": "textbridge"
       }
     },
     "sops-nix": {
@@ -536,74 +478,6 @@
         "owner": "SpreadZhao",
         "repo": "textbridge",
         "type": "github"
-      }
-    },
-    "web-artifacts-builder-skill": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1773519380,
-        "narHash": "sha256-6NwxxU2dXXK+PHhTW9TD4BtygmfRApms5igG4qPb8AE=",
-        "ref": "main",
-        "rev": "07c7ce3b3a5e0992837607ec1cfb1c0d325adde6",
-        "revCount": 1,
-        "type": "git",
-        "url": "https://github.com/CuriousAquarius/claude-skill-web-artifacts-builder.git"
-      },
-      "original": {
-        "ref": "main",
-        "type": "git",
-        "url": "https://github.com/CuriousAquarius/claude-skill-web-artifacts-builder.git"
-      }
-    },
-    "web-interface-guidelines": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1791233356,
-        "narHash": "sha256-vnACFqHv79NfT8T27ldftJqbqjEopulASaSHiMXx+LA=",
-        "ref": "main",
-        "rev": "434b7f91364665f2f733b310ec54809bf8f37937",
-        "revCount": 60,
-        "type": "git",
-        "url": "https://github.com/vercel-labs/web-interface-guidelines.git"
-      },
-      "original": {
-        "ref": "main",
-        "type": "git",
-        "url": "https://github.com/vercel-labs/web-interface-guidelines.git"
-      }
-    },
-    "xiaohongshu-summarizer-skill": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1773129138,
-        "narHash": "sha256-7OxWtYcI5omOYgt40q13AcQk6AZ3/BuPeO93iS06R7c=",
-        "ref": "main",
-        "rev": "9e644e6db82d7c1f5f1ba8ab10278c1229d1f7bc",
-        "revCount": 5,
-        "type": "git",
-        "url": "https://github.com/piekill/xiaohongshu-summarizer-skill.git"
-      },
-      "original": {
-        "ref": "main",
-        "type": "git",
-        "url": "https://github.com/piekill/xiaohongshu-summarizer-skill.git"
-      }
-    },
-    "yt-dlp-downloader-skill": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1769266584,
-        "narHash": "sha256-8XIdbJT4zj7ikbZuW2r9evRR1vKoOlFThgEDaqgDKIg=",
-        "ref": "master",
-        "rev": "8da2e2ec3c38c6bb79d6a1718984be7b80aef38f",
-        "revCount": 2,
-        "type": "git",
-        "url": "https://github.com/MapleShaw/yt-dlp-downloader-skill.git"
-      },
-      "original": {
-        "ref": "master",
-        "type": "git",
-        "url": "https://github.com/MapleShaw/yt-dlp-downloader-skill.git"
       }
     }
   },

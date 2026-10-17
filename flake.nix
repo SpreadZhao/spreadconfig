@@ -2,8 +2,8 @@
   description = "NixOS configuration";
 
   inputs = {
-    agent-workspace = {
-      url = "github:SpreadZhao/agent-workspace";
+    naw = {
+      url = "github:SpreadZhao/NAW";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     personal-skills = {
@@ -41,14 +41,6 @@
       url = "git+https://github.com/Agents365-ai/drawio-skill.git?ref=main";
       flake = false;
     };
-    frontend-design-skill = {
-      url = "git+https://github.com/Aston1690/frontend-design.git?ref=main";
-      flake = false;
-    };
-    obsidian-skills = {
-      url = "git+https://github.com/kepano/obsidian-skills.git?ref=main";
-      flake = false;
-    };
     fzf-popup = {
       url = "github:SpreadZhao/fzf-popup/main";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -66,26 +58,6 @@
       url = "github:SpreadZhao/nix-packages";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    openai-skills = {
-      url = "git+https://github.com/openai/skills.git?ref=main";
-      flake = false;
-    };
-    web-artifacts-builder-skill = {
-      url = "git+https://github.com/CuriousAquarius/claude-skill-web-artifacts-builder.git?ref=main";
-      flake = false;
-    };
-    web-interface-guidelines = {
-      url = "git+https://github.com/vercel-labs/web-interface-guidelines.git?ref=main";
-      flake = false;
-    };
-    xiaohongshu-summarizer-skill = {
-      url = "git+https://github.com/piekill/xiaohongshu-summarizer-skill.git?ref=main";
-      flake = false;
-    };
-    yt-dlp-downloader-skill = {
-      url = "git+https://github.com/MapleShaw/yt-dlp-downloader-skill.git?ref=master";
-      flake = false;
-    };
     textbridge.url = "github:SpreadZhao/textbridge";
   };
 
@@ -96,15 +68,6 @@
       ...
     }@inputs:
     let
-      androidTemplate = {
-        path = ./templates/android;
-        description = "Android development environment with project-local agent skills";
-      };
-      workspaceTemplate = {
-        path = ./templates/workspace;
-        description = "Independent workspace with centrally maintained agent skills";
-      };
-
       mkHostContext = import ./lib/host-context.nix { inherit (nixpkgs) lib; };
       hostNames = nixpkgs.lib.filter (name: builtins.pathExists (./hosts + "/${name}/host.nix")) (
         builtins.attrNames (builtins.readDir ./hosts)
@@ -117,22 +80,25 @@
         }
       );
       repoRoot = ./.;
-      skillCatalog =
-        pkgs:
-        (import ./skills/sources.nix {
-          inherit pkgs inputs;
-          inherit (pkgs) lib;
-        }).catalog;
-      repoWorkspace = inputs.agent-workspace.lib.mkWorkspace {
-        catalog = skillCatalog;
+      repoWorkspace = inputs.naw.lib.mkWorkspace {
         systems = [ "x86_64-linux" ];
-        skills = [
-          "spreadconfig-nix"
-          "nixos-best-practices"
+        skills = {
+          spreadconfig-nix = "${inputs.personal-skills}/skills/spreadconfig-nix";
+          nixos-best-practices = "${inputs.nixos-best-practices-skill}/skills/nixos-best-practices";
+        };
+        targets = [
+          "agents"
+          "claude"
         ];
-        claude = true;
-        # This repository tracks static ignore rules, independent of local state.
-        manageGitignore = false;
+        # Keep repository policy in the source configuration, not generated AGENTS.md.
+        instructions = ''
+          ## Nix Switch Policy
+
+          - For any Nix-related work in this repository, never execute `switch`; the user performs that step manually.
+          - This includes `nixos-rebuild switch`, `home-manager switch`, `nh os switch`, `nh home switch`, and any wrapper or update script that invokes `switch`, including through its default arguments.
+          - Evaluation, builds, formatting, and other checks that do not activate the configuration are allowed. When a switch is needed, provide the command for the user to run instead of executing it.
+          - Requests to change, update, fix, or rebuild Nix configuration do not authorize an automatic switch. This repository-wide rule takes precedence over any skill or workflow that recommends running `switch`.
+        '';
         packages =
           pkgs: with pkgs; [
             deadnix
@@ -189,19 +155,13 @@
     in
     {
       lib = {
-        inherit hosts skillCatalog;
+        inherit hosts;
         mkHost = mkHostContext;
       };
 
       checks.x86_64-linux.workspace-skills = repoWorkspace.checks.x86_64-linux.workspace;
 
       devShells = repoWorkspace.devShells;
-
-      templates = {
-        default = workspaceTemplate;
-        workspace = workspaceTemplate;
-        android = androidTemplate;
-      };
 
       nixosConfigurations = nixpkgs.lib.mapAttrs (_: mkHost) hosts;
     };

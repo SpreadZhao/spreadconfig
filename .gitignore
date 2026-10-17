@@ -3,7 +3,7 @@
 .agents/
 .claude/
 .codex/
-.agent-workspace/
+.naw/
 /AGENTS.md
 /CLAUDE.md
 __pycache__/
