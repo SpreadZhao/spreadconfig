@@ -4,6 +4,19 @@ My personal NixOS configuration, built with [flakes](https://wiki.nixos.org/wiki
 
 <img width="1920" height="1080" alt="Screenshot_DP-2_20260227_000645" src="https://github.com/user-attachments/assets/fddcf456-6f25-4798-89ab-ee930262a981" />
 
+## 新电脑安装
+
+从安装 U 盘开始的完整中文流程见 **[新电脑安装指南](docs/install.md)**：
+
+1. 配置 Live 环境代理与国内镜像，用 cfdisk 分区、格式化并挂载，再克隆配置仓库。
+2. 初始化 SOPS 身份，安装并启动 NixOS；此时不需要 Password Store。
+3. 登录后克隆 Password Store，导入 GPG 私钥并恢复信任。
+4. 启动 Secret Service，再构建并手动激活一次，补齐浏览器书签等集成。
+
+指南也包含首次启动后的代理设置、已有 NixOS 系统的接入方法、新增 host 示例，
+以及各阶段的检查命令。
+SOPS 和 GPG 是两套独立身份；私钥导入后 pass 即可使用，最后一次 rebuild 用于配置集成。
+
 ## Repository Structure
 
 ```
@@ -271,10 +284,13 @@ foot, fuzzel, fnott, swaylock, waybar, niri, nixvim, qutebrowser, starship, btop
 ### Local prerequisites and credentials
 
 Keep this checkout at `~/workspaces/spreadconfig` and clone the private password
-repository into `~/.password-store`. These are the only repositories that need
-local checkouts for the shared configuration. NAW, `personal-skills`,
-the application packages, and upstream skills are fetched through locked flake
-inputs. Application data is prepared separately when needed.
+repository into `~/.password-store` after the first NixOS installation and login.
+The first installation requires the SOPS identity but does not require Password Store.
+Follow the [installation guide](docs/install.md) for the complete order of operations.
+These are the only repositories that need local checkouts for the shared
+configuration. NAW, `personal-skills`, the application packages, and upstream
+skills are fetched through locked flake inputs. Application data is prepared
+separately when needed.
 
 Initialize the shared SOPS age identity once using [SOPS setup](docs/sops.md).
 GitHub/GLM tokens and the login password hash come from encrypted
@@ -290,12 +306,9 @@ The config references this repo at an absolute path. Clone to:
 ~/workspaces/spreadconfig
 ```
 
-An optional `/etc/nixos` symlink can point to that checkout; application links
-still require the checkout at the path above:
-
-```bash
-sudo ln -s ~/workspaces/spreadconfig /etc/nixos
-```
+Commands in the installation guide select this checkout explicitly with `--flake`,
+so an `/etc/nixos` symlink is unnecessary. Keep the checkout at the path above
+because application links resolve to its editable files.
 
 ### fcitx5
 
@@ -378,14 +391,9 @@ creating the source file or its parent directories. If conversion fails, activat
 warns and retains the previous policy. An existing empty source clears Chromium's
 managed bookmarks. The converter never changes the source contents or permissions.
 
-For a new machine, bootstrap in this order:
-
-1. Initialize SOPS with `./scripts/sops-key init` (or `--root /mnt` during
-   installation), using the encrypted identity in this configuration repository.
-2. Apply NixOS to provision the gh credentials. Chromium bookmark generation is
-   skipped while the private quickmarks file is absent.
-3. Clone your private repository into `~/.password-store`.
-4. Run `switch` again to generate Chromium's managed bookmarks.
+For a new machine, follow the [installation guide](docs/install.md): initialize
+SOPS, install NixOS, restore Password Store and its GPG identity, then manually
+activate the configuration again to generate Chromium's managed bookmarks.
 
 After saving a quickmark in qutebrowser, let it save normally, or run
 `:save quickmark-manager` before switching to include the latest changes.
@@ -419,12 +427,18 @@ Restart Claude Code after activation and use `/status` to check the active model
 
 ## Rebuilding
 
-```bash
-# Full rebuild & switch
-sudo nixos-rebuild switch --flake ~/workspaces/spreadconfig#desktop1
-sudo nixos-rebuild switch --flake ~/workspaces/spreadconfig#thinkbook
-sudo nixos-rebuild switch --flake ~/workspaces/spreadconfig#zephyrus-m16
+Run the commands for your target host manually. To check a configuration without
+activating it, use `build`; `switch` activates it immediately. New installations
+should follow the [installation guide](docs/install.md) first.
 
-# Or use the helper script
-~/scripts/nix/nix_full_update
+```bash
+cd ~/workspaces/spreadconfig
+target_host=$(hostname -s) # Or explicitly choose desktop1, thinkbook, zephyrus-m16.
+sudo nixos-rebuild build --flake "path:$PWD#$target_host"
+
+# Activate manually after reviewing the build.
+sudo nixos-rebuild switch --flake "path:$PWD#$target_host"
+
+# Optional later update: update inputs and prepare the next boot.
+~/scripts/nix/nix_update boot
 ```

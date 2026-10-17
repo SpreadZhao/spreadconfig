@@ -1,12 +1,27 @@
 # password-store 本机接入
 
-除 `~/workspaces/spreadconfig` 本身外，共享配置唯一需要预先克隆的项目是
-`~/.password-store`。GPG 和 SOPS age 是不同的身份：SOPS 解密系统凭据，
-GPG 解密 pass 条目。其他工具和 skills 由 flake 获取，不需要本地项目副本。
+从空白电脑开始请先按 [新电脑安装指南](install.md) 安装 NixOS。
+首次安装前需要初始化 SOPS，`~/.password-store` 可以在系统安装并登录后再克隆。
+除 `~/workspaces/spreadconfig` 本身外，这是共享配置唯一需要另行克隆的项目。
+GPG 和 SOPS age 是不同的身份：SOPS 解密系统凭据，GPG 解密 pass 条目。
+其他工具和 skills 由 flake 获取，不需要本地项目副本。
 
 ## 恢复 GPG 身份
 
-1. 将私有密码仓库克隆到 `~/.password-store`，保留原有 `.gpg-id`。
+以下操作在图形会话中以 `spreadzhao` 用户执行，不要使用 `sudo gpg` 或 `sudo pass`。
+完成首次系统激活后，Git 使用受管的 GitHub CLI 凭据访问私有仓库。
+
+1. 将私有密码仓库克隆到 `~/.password-store`，保留原有 `.gpg-id`：
+
+   ```sh
+   gh auth status
+   git clone https://github.com/SpreadZhao/password-store.git ~/.password-store
+   mkdir -p ~/.gnupg
+   chmod 700 ~/.gnupg
+   ```
+
+   如果目录已存在，先检查是否就是待恢复的仓库，不覆盖其中的数据。
+
 2. 检查备份中的公钥身份和指纹，确认匹配 `.gpg-id`：
 
    ```sh
@@ -14,6 +29,8 @@ GPG 解密 pass 条目。其他工具和 skills 由 flake 获取，不需要本�
    gpg --with-colons --show-keys ~/.password-store/backup/gpg_pub_backup.pgp
    gpg --with-colons --show-keys ~/.password-store/backup/gpg_bakcup.pgp
    ```
+
+   同时与原电脑或可信备份记录核对完整主钥指纹，不能只根据相同邮箱判断身份。
 
 3. 导入同一身份的公私钥备份；`gpg_bakcup.pgp` 是现有仓库中的文件名：
 
@@ -40,6 +57,7 @@ GPG 解密 pass 条目。其他工具和 skills 由 flake 获取，不需要本�
    ```
 
 私钥导入和信任恢复属于本机的一次性操作，不在 Nix 激活时自动执行。
+完成后 pass 就能解密，不需要先 rebuild；后续激活用于补齐浏览器等配置集成。
 密码条目、私钥和收藏内容都留在 Nix store 和配置仓库之外。
 
 ## 启动 secrets 服务
@@ -59,6 +77,8 @@ busctl --user status org.freedesktop.secrets
 
 密码菜单沿用 `~/scripts/util/bin/pmenu` 和 `pmenu_last`。仓库同步仍使用原有
 Git push/pull 流程；系统激活不克隆、同步或重新加密密码条目。
+如果 `secret_service/` 被 Git 忽略，clone 不会迁移旧电脑的应用凭据。
+需要这些凭据时，单独恢复该目录的加密备份，连同 `.properties` 元数据一起保留。
 
 ## 接入 qutebrowser quickmarks
 
@@ -69,6 +89,13 @@ Home Manager 将 `~/.config/qutebrowser/quickmarks` 链接到
 若首次启动 qutebrowser 后已有普通 quickmarks 文件，先退出浏览器，将该文件
 移动到带时间戳的备份，再由 Home Manager 接管链接。即使本机文件为空也保留备份，
 不覆盖私有仓库里的收藏。已有正确链接无需处理。
+
+```sh
+if [ -f ~/.config/qutebrowser/quickmarks ] && [ ! -L ~/.config/qutebrowser/quickmarks ]; then
+  mv ~/.config/qutebrowser/quickmarks \
+    ~/.config/qutebrowser/quickmarks.before-spreadconfig."$(date +%Y%m%d-%H%M%S)"
+fi
+```
 
 构建只包含路径和链接，不读取收藏数据。下一次 `switch` 或启动激活时，
 NixOS 会从私有文件生成 Chromium 的 managed bookmarks；单独构建不会刷新它。

@@ -1,5 +1,8 @@
 # SOPS 共享身份
 
+从新电脑安装到 Password Store 恢复的完整顺序见 [新电脑安装指南](install.md)。
+SOPS 初始化在首次安装前完成；GPG 私钥恢复是安装后的独立步骤。
+
 所有 host 使用同一个 age 公钥加密 `secrets/secrets.yaml`。密码加密的私钥文件为 `secrets/shared-age-key.age`，可以提交到仓库。每台机器只在初始化时输入一次解锁口令，随后通过 `/var/lib/sops-nix/key.txt` 自动解密；该文件在仓库和 Nix store 外，归 root 所有，权限为 0600。
 
 ## 初始化前准备
