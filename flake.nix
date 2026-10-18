@@ -58,6 +58,10 @@
       url = "github:SpreadZhao/nix-packages";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nix-jetbrains-plugins = {
+      url = "github:nix-community/nix-jetbrains-plugins";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     textbridge.url = "github:SpreadZhao/textbridge";
   };
 

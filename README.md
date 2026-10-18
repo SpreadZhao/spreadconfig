@@ -176,6 +176,13 @@ NAW remains pinned in `flake.lock` and does not manage Gitignore.
 Language runtimes and project-specific tools belong to each project's own
 development environment.
 
+Java and Android SDK commands are not installed in the ordinary user profile.
+The JetBrains IDEs keep private development tools: Android Studio has its Nix
+SDK, Android Studio and IDEA have JDK 21, and CLion has its C/C++ toolchain.
+These are scoped to the IDE launchers, including desktop entries. The SDK link
+at `~/Lib/Android/Sdk` remains for existing project compatibility. Terminal
+builds should declare their own tools and variables in the project's devShell.
+
 ### Editor
 
 [nixvim](https://github.com/nix-community/nixvim) (Neovim) with VSCode-inspired theme, full LSP integration, and custom color overrides matching the system palette.
