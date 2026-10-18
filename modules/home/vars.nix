@@ -11,7 +11,6 @@ let
   hostHomeProfile = host.profile.home;
   projDir = "${config.xdg.userDirs.extraConfig.WORKSPACE}/spreadconfig";
   scriptsDir = "${config.home.homeDirectory}/scripts";
-  secretsDir = "${projDir}/secrets";
   mutableFiles = import ../../lib/mutable-files.nix {
     hostName = host.name;
     inherit
@@ -22,7 +21,6 @@ let
       ;
     inherit (config.lib.file) mkOutOfStoreSymlink;
   };
-  mochaBg = "0e1117";
   theme_tranparent = "00000000";
   theme_background = "000000";
   theme_red = "bc3f3c";
@@ -102,8 +100,6 @@ in
     inherit
       projDir
       scriptsDir
-      secretsDir
-      mochaBg
       theme_tranparent
       theme_background
       theme_red

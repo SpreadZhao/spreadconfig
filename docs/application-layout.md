@@ -21,8 +21,7 @@ aliases in the shell module.
 
 Preserve ordering where it affects behavior. Script PATH groups use priorities
 100 for Niri, 200 for shared tools and 300 for Nix tools, followed by the default
-`.local/bin` entry. `xdg-drawio.nix` preserves Draw.io's MIME package position in
-`home.packages`, which also affects Fontconfig directory order.
+`.local/bin` entry.
 
 ## Host configuration
 

@@ -1,6 +1,5 @@
 {
   inputs,
-  lib,
   pkgs,
   ...
 }:
@@ -140,8 +139,7 @@ in
     force = true;
   };
 
-  # Preserve its position before the proxy application's autostart entry.
-  xdg.autostart.entries = lib.mkBefore [
+  xdg.autostart.entries = [
     "${disabledFcitxAutostart}/share/applications/org.fcitx.Fcitx5.desktop"
   ];
 }
