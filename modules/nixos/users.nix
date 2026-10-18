@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, ... }:
 
 {
   users = {
@@ -14,6 +14,5 @@
       # shell = pkgs.zsh;
       hashedPasswordFile = config.sops.secrets."spreadzhao-password-hash".path;
     };
-    defaultUserShell = pkgs.zsh;
   };
 }

@@ -72,4 +72,7 @@
       daemonIOSchedClass = lib.mkDefault "idle";
       daemonCPUSchedPolicy = lib.mkDefault "idle";
     };
+
+  environment.variables.NIX_REMOTE = "daemon";
+  systemd.services.nix-daemon.serviceConfig.Slice = "-.slice";
 }
