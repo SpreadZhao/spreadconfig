@@ -6,6 +6,43 @@ in `modules/home/<app>/files/`, next to `default.nix`; host fragments live in
 single `.nix` files. The Home Manager entry point imports only top-level modules
 and direct child `default.nix` files, and rejects duplicate file/directory modules.
 
+## Configuration ownership
+
+An application's module also owns its session variables, script PATH entries,
+MIME and protocol associations, desktop entries, autostart overrides, user
+services, and application-specific directories. Portal implementations own their
+backend registrations. Keep the existing variable names, installed paths and
+service dependencies when moving these declarations.
+
+`home-core.nix` contains user identity and general shell settings. `xdg.nix`
+contains XDG infrastructure, common directory conventions, the default portal
+policy, and the ordered desktop-wide MIME fallback package list. Its Antigravity
+association remains there because that application has no managed module.
+`vars.nix` remains the shared source of theme values, paths and link helpers;
+personal shell aliases remain in the shell module.
+
+Script PATH declarations use explicit ordering: niri (100), shared tools (200),
+Nix tools (300), then the general `.local/bin` entry at the default priority.
+These priorities preserve the existing executable lookup order independently of
+module import order.
+
+Draw.io's custom MIME package is defined in `drawio/mime.nix`. The small
+`xdg-drawio.nix` import adapter keeps that package in its original position in
+`home.packages`, preserving both the generated profile and Fontconfig directory
+order. Its MIME associations and application package remain in `drawio/default.nix`.
+
+When a feature needs both module systems, use matching names in `modules/home`
+and `modules/nixos`: for example, Polkit's user authentication agent belongs in
+Home Manager while its system authorization service belongs in NixOS. Keep
+host-specific service policies in separate host leaf modules, such as TLP,
+asusd, supergfxd and LACT, with explicit imports from the host entry point.
+
+Ownership refactors must preserve evaluated values and generated file contents
+across every affected host. Compare against the current working tree, including
+uncommitted application changes, rather than against Git HEAD. In particular,
+check ordered lists, package sets, MIME precedence and service dependencies;
+successful evaluation alone does not establish equivalence.
+
 The arrangement follows the application-local assets and host-selected include
 pattern in [ryan4yin/nix-config](https://github.com/ryan4yin/nix-config/blob/01e93c2b65fa51f331f1d82a25fefab30c08490d/home/linux/gui/niri/default.nix)
 and the application folders in [dbeley/nixos-config](https://github.com/dbeley/nixos-config/blob/bd4cef2041d237277d1b8700d40852676af73461/apps/tmux/tmux.nix).
