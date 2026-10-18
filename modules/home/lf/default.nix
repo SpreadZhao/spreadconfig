@@ -1,5 +1,5 @@
 {
-  repoEntries,
+  appEntries,
   repoTree,
   pkgs,
   lib,
@@ -11,7 +11,7 @@
 
   home.packages = [ pkgs.lf ];
 
-  xdg.configFile."lf".source = repoTree "lf" (repoEntries "modules/home/lf/files");
+  xdg.configFile."lf".source = repoTree "lf" (appEntries "lf" "files");
 
   xdg.mimeApps.defaultApplications = lib.genAttrs [
     "inode/directory"

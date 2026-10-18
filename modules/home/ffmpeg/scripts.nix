@@ -1,5 +1,5 @@
-{ repoEntries, ... }:
+{ appEntries, ... }:
 
 {
-  spreadconfig.scriptFiles = repoEntries "modules/home/ffmpeg/scripts";
+  spreadconfig.scriptFiles = appEntries "ffmpeg" "scripts";
 }

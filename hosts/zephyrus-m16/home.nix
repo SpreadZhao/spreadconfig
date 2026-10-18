@@ -1,9 +1,11 @@
-{ pkgs, ... }:
+args@{ pkgs, ... }:
 
-{
-  spreadconfig.apps.niri.hostConfig = "hosts/zephyrus-m16/home/niri/host.kdl";
-  spreadconfig.apps.qutebrowser.hostConfig = "hosts/zephyrus-m16/home/qutebrowser/host.py";
-  imports = [ ./home/gaomon-tablet.nix ];
-
-  home.packages = [ pkgs.nvtopPackages.full ];
+# Keep this definition here to preserve package ordering.
+(import ./home/nvtop.nix args)
+// {
+  imports = [
+    ./home/gaomon-tablet.nix
+    ./home/qutebrowser
+    ./home/waybar.nix
+  ];
 }

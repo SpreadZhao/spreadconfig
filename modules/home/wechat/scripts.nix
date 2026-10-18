@@ -1,5 +1,5 @@
-{ repoEntries, ... }:
+{ appEntries, ... }:
 
 {
-  spreadconfig.scriptFiles = repoEntries "modules/home/wechat/scripts";
+  spreadconfig.scriptFiles = appEntries "wechat" "scripts";
 }

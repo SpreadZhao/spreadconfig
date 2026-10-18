@@ -3,9 +3,11 @@ set -euo pipefail
 
 # Installed symlinks resolve to the application-owned source tree.
 spreadconfig_script_source=$(readlink -f "${BASH_SOURCE[0]}")
+spreadconfig_script_root=${spreadconfig_script_source%/modules/home/*}
+[[ "$spreadconfig_script_root" != "$spreadconfig_script_source" ]] || spreadconfig_script_root=${spreadconfig_script_source%/hosts/*}
 # shellcheck source=modules/home/script-tools/scripts/config/host_context.sh
-source "${spreadconfig_script_source%/modules/home/*}/modules/home/script-tools/scripts/config/host_context.sh" || exit 1
-unset spreadconfig_script_source
+source "${spreadconfig_script_root}/modules/home/script-tools/scripts/config/host_context.sh" || exit 1
+unset spreadconfig_script_source spreadconfig_script_root
 
 [[ "${SPREADCONFIG_HAS_BACKLIGHT:-unknown}" != false ]] || exit 0
 brightness_args=(-m)

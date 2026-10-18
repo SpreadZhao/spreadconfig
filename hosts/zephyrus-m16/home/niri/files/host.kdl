@@ -1,23 +1,29 @@
+debug {
+    render-drm-device "/dev/dri/by-path/pci-0000:01:00.0-render"
+}
+
 input {
     keyboard {
         numlock
     }
 
     touchpad {
-        tap
         dwt
         natural-scroll
         accel-speed 0.5
         scroll-factor 0.5
     }
 
+    tablet {
+        map-to-output "DP-1"
+    }
+
 }
 
 output "eDP-1" {
-    // off
+    off
     scale 2
-    position x=5360 y=500
-    // position x=3440 y=1439          // ensure monitor has left/right relationship
+    position x=4288 y=500
     layout {
         default-column-width { proportion 1.0; }
         preset-column-widths {
@@ -28,8 +34,9 @@ output "eDP-1" {
 }
 
 output "HDMI-A-1" {
-    scale 1
+    scale 1.25
     position x=0 y=0
+    mode "3440x1440@100.000"
     layout {
         default-column-width { proportion 0.5; }
         preset-column-widths {
@@ -39,9 +46,9 @@ output "HDMI-A-1" {
     }
 }
 
-output "DP-2" {
-    scale 1
-    position x=3440 y=180
+output "DP-1" {
+    scale 1.25
+    position x=2752 y=180
     focus-at-startup
     layout {
         default-column-width { proportion 1.0; }
@@ -50,4 +57,10 @@ output "DP-2" {
             proportion 1.0
         }
     }
+}
+
+window-rule {
+    match app-id="^waydroid"
+    open-on-output "HDMI-A-1"
+    open-focused false
 }

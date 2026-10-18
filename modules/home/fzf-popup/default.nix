@@ -1,7 +1,9 @@
 {
   inputs,
   pkgs,
-  repoEntries,
+  appEntries,
+  appSource,
+  repoRoot,
   ...
 }:
 let
@@ -9,7 +11,7 @@ let
   launcher = pkgs.writeShellApplication {
     name = "fzf-popup-foot";
     runtimeInputs = [ pkgs.foot ];
-    text = builtins.readFile ./scripts/bin/fzf-popup-foot;
+    text = builtins.readFile (repoRoot + "/${appSource "fzf-popup" "scripts/bin/fzf-popup-foot"}");
   };
   package = pkgs.symlinkJoin {
     name = "fzf-popup-foot-configured";
@@ -25,5 +27,5 @@ in
 {
   _module.args.fzfPopupPackage = package;
   home.packages = [ package ];
-  spreadconfig.scriptFiles = repoEntries "modules/home/fzf-popup/scripts";
+  spreadconfig.scriptFiles = appEntries "fzf-popup" "scripts";
 }

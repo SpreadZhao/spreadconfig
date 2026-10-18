@@ -1,8 +1,6 @@
-# Keep QtWebEngine on the GPU path for video overlays such as live danmaku.
-# Software video decode: QtWebEngine 6.11's SurfaceFactoryQt imports decoded
-# video dmabufs via a GBM device on the NVIDIA node, which cannot import Intel
-# VA-API frames (qFatal "dma_buf acquisition failure"). Compositing still runs
-# on the iGPU.
+# Keep GPU compositing for video overlays, but decode video in software.
+# QtWebEngine 6.11 imports Intel VA-API frames through NVIDIA and aborts with
+# "dma_buf acquisition failure". Compositing still runs on the Intel GPU.
 c.qt.args = [
     'ignore-gpu-blocklist',
     'enable-gpu-rasterization',

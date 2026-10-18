@@ -1,5 +1,5 @@
-{ repoEntries, ... }:
+{ appEntries, ... }:
 
 {
-  spreadconfig.scriptFiles = repoEntries "modules/home/mpv/scripts";
+  spreadconfig.scriptFiles = appEntries "mpv" "scripts";
 }

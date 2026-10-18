@@ -7,9 +7,11 @@ width="${FZF_PREVIEW_COLUMNS:-80}"
 height="${FZF_PREVIEW_LINES:-24}"
 # Installed symlinks resolve to the application-owned source tree.
 spreadconfig_script_source=$(readlink -f "${BASH_SOURCE[0]}")
+spreadconfig_script_root=${spreadconfig_script_source%/modules/home/*}
+[[ "$spreadconfig_script_root" != "$spreadconfig_script_source" ]] || spreadconfig_script_root=${spreadconfig_script_source%/hosts/*}
 # shellcheck source=modules/home/script-tools/scripts/config/host_context.sh
-source "${spreadconfig_script_source%/modules/home/*}/modules/home/script-tools/scripts/config/host_context.sh" || exit 1
-unset spreadconfig_script_source
+source "${spreadconfig_script_root}/modules/home/script-tools/scripts/config/host_context.sh" || exit 1
+unset spreadconfig_script_source spreadconfig_script_root
 preview_file="$SPREADCONFIG_SOURCE_ROOT/modules/home/script-tools/scripts/config/preview_file.sh"
 
 if [[ -z "$id" ]]; then

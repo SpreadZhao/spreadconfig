@@ -3,6 +3,7 @@
   pkgs,
   repoRoot,
   projDir,
+  hostName,
   mkOutOfStoreSymlink,
 }:
 
@@ -56,7 +57,7 @@ let
     else
       builtins.listToAttrs (walk source "");
 
-  repoTree =
+  checkedEntries =
     name: entries:
     let
       targets = builtins.attrNames entries;
@@ -68,8 +69,50 @@ let
     else if conflicts != [ ] then
       throw "Overlapping asset targets in ${name}: ${lib.concatStringsSep ", " conflicts}"
     else
-      pkgs.linkFarm name (lib.mapAttrsToList (name: path: { inherit name path; }) entries);
+      entries;
+
+  # Return the selected repository path, also usable when reading build inputs.
+  appSource =
+    app: relative:
+    let
+      shared = "modules/home/${app}/${relative}";
+      local = "hosts/${hostName}/home/${app}/${relative}";
+      sharedPath = checkedPath shared;
+      localPath = checkedPath local;
+    in
+    if !lib.pathIsRegularFile sharedPath then
+      throw "Missing shared application file: ${shared}"
+    else if builtins.pathExists localPath then
+      if lib.pathIsRegularFile localPath then
+        local
+      else
+        throw "Application override must be a file: ${local}"
+    else
+      shared;
+
+  appEntries =
+    app: relative:
+    let
+      shared = "modules/home/${app}/${relative}";
+      local = "hosts/${hostName}/home/${app}/${relative}";
+      localPath = checkedPath local;
+    in
+    checkedEntries "${app}/${relative}" (
+      repoEntries shared // lib.optionalAttrs (builtins.pathExists localPath) (repoEntries local)
+    );
+
+  repoTree =
+    name: entries:
+    pkgs.linkFarm name (
+      lib.mapAttrsToList (name: path: { inherit name path; }) (checkedEntries name entries)
+    );
 in
 {
-  inherit repoLink repoEntries repoTree;
+  inherit
+    repoLink
+    repoEntries
+    repoTree
+    appSource
+    appEntries
+    ;
 }

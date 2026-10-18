@@ -1,5 +1,5 @@
 {
-  repoEntries,
+  appEntries,
   repoTree,
   pkgs,
   lib,
@@ -12,7 +12,7 @@
     pkgs.swayimg
   ];
 
-  xdg.configFile."swayimg".source = repoTree "swayimg" (repoEntries "modules/home/swayimg/files");
+  xdg.configFile."swayimg".source = repoTree "swayimg" (appEntries "swayimg" "files");
 
   xdg.mimeApps.defaultApplications = lib.genAttrs [
     "image/avif"

@@ -14,10 +14,8 @@ input {
 }
 
 output "eDP-1" {
-    // off
     scale 2
     position x=5360 y=500
-    // position x=3440 y=1439          // ensure monitor has left/right relationship
     layout {
         default-column-width { proportion 1.0; }
         preset-column-widths {

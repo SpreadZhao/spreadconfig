@@ -1,5 +1,5 @@
-{ repoEntries, ... }:
+{ appEntries, ... }:
 
 {
-  spreadconfig.scriptFiles = repoEntries "modules/home/qutebrowser/scripts";
+  spreadconfig.scriptFiles = appEntries "qutebrowser" "scripts";
 }

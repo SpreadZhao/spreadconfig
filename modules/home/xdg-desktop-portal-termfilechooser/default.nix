@@ -1,5 +1,5 @@
 {
-  repoEntries,
+  appEntries,
   repoTree,
   pkgs,
   ...
@@ -10,7 +10,7 @@
 
   xdg.configFile."xdg-desktop-portal-termfilechooser".source =
     repoTree "xdg-desktop-portal-termfilechooser" (
-      repoEntries "modules/home/xdg-desktop-portal-termfilechooser/files"
+      appEntries "xdg-desktop-portal-termfilechooser" "files"
     );
 
   xdg.portal = {

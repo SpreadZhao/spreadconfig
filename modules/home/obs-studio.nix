@@ -1,5 +1,4 @@
 {
-  host,
   pkgs,
   ...
 }:
@@ -7,7 +6,11 @@
 {
   programs.obs-studio = {
     enable = true;
-    plugins = map (name: pkgs.obs-studio-plugins.${name}) host.profile.home.obs.plugins;
+    plugins = with pkgs.obs-studio-plugins; [
+      obs-backgroundremoval
+      obs-pipewire-audio-capture
+      obs-vaapi
+    ];
   };
 
 }

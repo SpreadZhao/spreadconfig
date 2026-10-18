@@ -1,5 +1,5 @@
-{ repoEntries, ... }:
+{ appEntries, ... }:
 
 {
-  spreadconfig.scriptFiles = repoEntries "modules/home/wl-clipboard/scripts";
+  spreadconfig.scriptFiles = appEntries "wl-clipboard" "scripts";
 }

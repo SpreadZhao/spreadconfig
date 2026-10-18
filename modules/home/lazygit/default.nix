@@ -1,5 +1,5 @@
 {
-  repoEntries,
+  appEntries,
   repoTree,
   pkgs,
   ...
@@ -8,5 +8,5 @@
 {
   home.packages = [ pkgs.lazygit ];
 
-  xdg.configFile."lazygit".source = repoTree "lazygit" (repoEntries "modules/home/lazygit/files");
+  xdg.configFile."lazygit".source = repoTree "lazygit" (appEntries "lazygit" "files");
 }

@@ -4,6 +4,7 @@
   lib,
   pkgs,
   repoLink,
+  appSource,
   ...
 }:
 
@@ -13,7 +14,7 @@ let
     if inputs.personal-packages ? lib.mkJetBrainsIde then
       inputs.personal-packages.lib.mkJetBrainsIde
     else
-      throw "Publish the nix-packages JetBrains helper and update personal-packages, or validate with --override-input personal-packages path:/home/spreadzhao/workspaces/nix-packages.";
+      throw "personal-packages lacks lib.mkJetBrainsIde; update that input or use --override-input personal-packages path:/path/to/nix-packages.";
   definitions = [
     {
       id = "android-studio";
@@ -96,7 +97,7 @@ in
   home.packages = packages;
   home.file = {
     "${sdk.path}".source = "${sdk.package}/libexec/android-sdk";
-    ".ideavimrc".source = repoLink "modules/home/jetbrains/files/.ideavimrc";
+    ".ideavimrc".source = repoLink (appSource "jetbrains" "files/.ideavimrc");
   };
   home.activation.jetbrainsSettings = lib.hm.dag.entryAfter [ "linkGeneration" ] ''
     run ${lib.getExe settings}

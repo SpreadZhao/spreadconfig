@@ -1,12 +1,12 @@
 {
-  repoEntries,
+  appEntries,
   config,
   lib,
   ...
 }:
 
 {
-  spreadconfig.scriptFiles = repoEntries "modules/home/niri/scripts";
+  spreadconfig.scriptFiles = appEntries "niri" "scripts";
 
   home.sessionPath = lib.mkOrder 100 [ "$SCRIPT_HOME/niri/bin" ];
 

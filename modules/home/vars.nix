@@ -13,6 +13,7 @@ let
   scriptsDir = "${config.home.homeDirectory}/scripts";
   secretsDir = "${projDir}/secrets";
   mutableFiles = import ../../lib/mutable-files.nix {
+    hostName = host.name;
     inherit
       lib
       pkgs

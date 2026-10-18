@@ -1,7 +1,7 @@
 { lib }:
 
-# This context is constructed before module evaluation. Keep it independent of
-# config and pkgs so it is safe to use in imports and package-set selection.
+# Keep host facts independent of config and pkgs: imports need them before
+# module evaluation.
 { name, declaration }:
 let
   cpu = {
@@ -29,20 +29,6 @@ let
       };
     };
     home = {
-      qutebrowser = {
-        scaleFactor = 1.5;
-        renderer = "default";
-      };
-      waybar = {
-        height = 30;
-        fontSize = 20;
-        temperaturePath = null;
-      };
-      obs.plugins = [
-        "obs-backgroundremoval"
-        "obs-pipewire-audio-capture"
-        "obs-vaapi"
-      ];
       devices = {
         camera = "/dev/video0";
         battery = "BAT0";
@@ -50,7 +36,6 @@ let
       };
     };
   } (declaration.profile or { });
-  renderer = profile.home.qutebrowser.renderer;
   require = condition: message: lib.asserts.assertMsg condition "host ${name}: ${message}";
 in
 assert require (builtins.isString name && name != "") "name must be nonempty";
@@ -86,13 +71,6 @@ assert require (lib.all (value: value == null || builtins.isBool value) (
 assert require (
   !profile.nixos.rocmSupport || hasGpu "amd"
 ) "global ROCm support requires an AMD GPU";
-assert require (builtins.elem renderer [
-  "default"
-  "intel-vulkan"
-]) "invalid qutebrowser renderer";
-assert require (
-  renderer != "intel-vulkan" || (hasGpu "intel" && hasGpu "nvidia")
-) "Intel Vulkan workaround requires Intel and NVIDIA GPUs";
 assert require (
   builtins.isAttrs declaration.modules
   && lib.all builtins.isPath (declaration.modules.nixos ++ declaration.modules.home)
