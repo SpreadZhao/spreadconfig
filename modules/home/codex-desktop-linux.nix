@@ -29,6 +29,23 @@ let
     // {
       NODE_USE_ENV_PROXY = "1";
     };
+  # Keep Codex's own profile isolated, but let shell tools use the user's
+  # existing configuration, credentials, data and caches.
+  shellEnvironmentArgs = lib.escapeShellArgs (
+    lib.concatLists (
+      lib.mapAttrsToList
+        (name: value: [
+          "-c"
+          "shell_environment_policy.set.${name}=${builtins.toJSON value}"
+        ])
+        {
+          XDG_CONFIG_HOME = config.xdg.configHome;
+          XDG_DATA_HOME = config.xdg.dataHome;
+          XDG_CACHE_HOME = config.xdg.cacheHome;
+          XDG_STATE_HOME = config.xdg.stateHome;
+        }
+    )
+  );
 
   # Desktop regenerates node_repl and cua_repl configuration on startup and
   # filters proxy variables from their environment. Set them at the final
@@ -207,7 +224,9 @@ let
                 # the CODEX_HOME guard and locate this package without them.
                 substituteInPlace "$target" \
                   --replace-fail 'CODEX_LINUX_APP_DIR:?CODEX_LINUX_APP_DIR is required' \
-                  "CODEX_LINUX_APP_DIR:=$profile_package/opt/codex-desktop"
+                  "CODEX_LINUX_APP_DIR:=$profile_package/opt/codex-desktop" \
+                  --replace-fail 'exec "$real_codex"' \
+                  ${lib.escapeShellArg "exec \"$real_codex\" ${shellEnvironmentArgs}"}
               fi
               chmod --reference="$original" "$target"
             done
