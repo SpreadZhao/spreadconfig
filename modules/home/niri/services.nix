@@ -2,24 +2,6 @@
 
 {
   systemd.user.services = {
-    # https://wiki.nixos.org/wiki/Polkit#Using_Home_Manager
-    polkit-gnome-authentication-agent-1 = {
-      Unit = {
-        Description = "polkit-gnome-authentication-agent-1";
-        Wants = [ "graphical-session.target" ];
-        After = [ "graphical-session.target" ];
-      };
-      Install = {
-        WantedBy = [ "graphical-session.target" ];
-      };
-      Service = {
-        Type = "simple";
-        ExecStart = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
-        Restart = "on-failure";
-        RestartSec = 1;
-        TimeoutStopSec = 10;
-      };
-    };
     niri = {
       Unit = {
         Description = "A scrollable-tilling Wayland compositor";

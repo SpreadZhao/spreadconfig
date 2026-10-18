@@ -82,4 +82,9 @@ in
       };
     }) enabledAccounts
   );
+
+  xdg.mimeApps.defaultApplications = lib.genAttrs [
+    "message/rfc822"
+    "x-scheme-handler/mailto"
+  ] (_: "thunderbird.desktop");
 }

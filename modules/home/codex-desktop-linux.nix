@@ -346,4 +346,9 @@ in
         });
 
   dconf.settings."org/gnome/desktop/interface".toolkit-accessibility = true;
+
+  xdg.mimeApps.defaultApplications = lib.genAttrs [
+    "x-scheme-handler/codex"
+    "x-scheme-handler/codex-browser-sidebar"
+  ] (_: "codex-desktop.desktop");
 }

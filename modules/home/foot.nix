@@ -109,4 +109,9 @@
     find-prev=Control+Shift+p
     find-next=Control+Shift+n
   '';
+
+  home.sessionVariables = {
+    TERMINAL = "foot";
+    TERM = "foot";
+  };
 }

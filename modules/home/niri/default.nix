@@ -9,7 +9,10 @@
 }:
 
 {
-  imports = [ ./scripts.nix ];
+  imports = [
+    ./scripts.nix
+    ./services.nix
+  ];
 
   options.spreadconfig.apps.niri.hostConfig = lib.mkOption {
     type = lib.types.str;

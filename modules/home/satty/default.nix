@@ -2,6 +2,7 @@
   repoEntries,
   repoTree,
   pkgs,
+  config,
   ...
 }:
 
@@ -11,4 +12,6 @@
   ];
 
   xdg.configFile."satty".source = repoTree "satty" (repoEntries "modules/home/satty/files");
+
+  xdg.userDirs.extraConfig.SATTY = "${config.xdg.userDirs.pictures}/satty";
 }

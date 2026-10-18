@@ -73,6 +73,16 @@ in
     ];
 
     xdg = {
+      mimeApps.defaultApplications = lib.genAttrs [
+        "application/xhtml+xml"
+        "text/html"
+        "x-scheme-handler/about"
+        "x-scheme-handler/http"
+        "x-scheme-handler/https"
+        "x-scheme-handler/qute"
+        "x-scheme-handler/unknown"
+      ] (_: "org.qutebrowser.qutebrowser.desktop");
+
       dataFile."qutebrowser/userscripts/translate".source =
         repoLink "modules/home/qutebrowser/scripts/qutebrowser/translate";
       configFile = {

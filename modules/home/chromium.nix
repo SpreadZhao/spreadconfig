@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 
 {
   programs.chromium = {
@@ -6,4 +6,8 @@
     package = pkgs.chromium;
     commandLineArgs = [ "--password-store=basic" ];
   };
+
+  xdg.mimeApps.defaultApplications = lib.genAttrs [
+    "x-scheme-handler/chromium"
+  ] (_: "chromium-browser.desktop");
 }

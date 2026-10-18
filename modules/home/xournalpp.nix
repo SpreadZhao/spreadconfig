@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 
 {
   home.packages = [ pkgs.xournalpp ];
@@ -31,4 +31,11 @@
       end
     '';
   };
+
+  xdg.mimeApps.defaultApplications = lib.genAttrs [
+    "application/x-xoj"
+    "application/x-xojpp"
+    "application/x-xopp"
+    "application/x-xopt"
+  ] (_: "com.github.xournalpp.xournalpp.desktop");
 }

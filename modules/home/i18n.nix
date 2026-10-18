@@ -1,11 +1,19 @@
 {
   inputs,
+  lib,
   pkgs,
   ...
 }:
 
 let
   system = pkgs.stdenv.hostPlatform.system;
+
+  disabledFcitxAutostart = pkgs.writeTextDir "share/applications/org.fcitx.Fcitx5.desktop" ''
+    [Desktop Entry]
+    Type=Application
+    Name=Fcitx 5
+    Hidden=true
+  '';
 in
 {
   i18n.inputMethod = {
@@ -131,4 +139,9 @@ in
     recursive = true;
     force = true;
   };
+
+  # Preserve its position before the proxy application's autostart entry.
+  xdg.autostart.entries = lib.mkBefore [
+    "${disabledFcitxAutostart}/share/applications/org.fcitx.Fcitx5.desktop"
+  ];
 }

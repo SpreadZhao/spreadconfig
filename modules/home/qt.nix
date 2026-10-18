@@ -27,4 +27,9 @@ in
     qt5ctSettings = qtctSettings;
     qt6ctSettings = qtctSettings;
   };
+
+  home.sessionVariables = {
+    QT_QPA_PLATFORM = "wayland";
+    QT_ENABLE_HIGHDPI_SCALING = "1";
+  };
 }
