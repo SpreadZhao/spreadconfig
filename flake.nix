@@ -111,6 +111,15 @@
           - Stop temporary processes and services, undo temporary environment or configuration changes, and remove temporary files created for this task, including those outside the repository. Preserve anything that is part of the requested result.
           - Limit cleanup to changes and resources introduced by this task. Preserve the user's existing tools, data, tests, and unrelated modifications. Do not delete shared Nix Store contents or run broad garbage collection as a cleanup shortcut.
           - Cleanup must respect the Nix Switch Policy. If removing a live dependency or other temporary state requires a prohibited action, prepare the configuration change, report exactly what remains, and provide the manual command; do not execute `switch` or claim cleanup is complete.
+
+          ## Final Writing Review
+
+          - Before completing a repository task, finish the main work and its checks, then launch a separate writing-review agent. Self-review alone does not satisfy this step.
+          - Ask the reviewer to read [anti-vibe-writing](https://github.com/weijt606/anti-vibe-writing), including its `SKILL.md`, English patterns reference, and final-pass checklist. Use its default clean style for technical writing.
+          - Review documentation, comments, help text, prompts, and other wording affected by the task. Keep repository prose in English and check it against the final implementation.
+          - Have the reviewer edit unclear or repetitive text, remove outdated claims and obsolete commented-out code, and merge duplicate explanations. Prefer concrete language, short sentences, and only the headings or lists readers need.
+          - Preserve technical meaning, behavior, identifiers, paths, commands, and license notices. Limit edits to the task and directly related documentation; report when no changes are needed.
+          - The reviewer must not launch another writing-review agent. The primary agent reviews its diff, reruns checks affected by the edits, and completes cleanup before the final response. Both agents follow the Nix Switch Policy and Clean Delivery Policy.
         '';
         packages =
           pkgs: with pkgs; [
