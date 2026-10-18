@@ -23,24 +23,18 @@ Emulator images, NDK and Android CMake are omitted.
 Android Studio and IDEA receive JDK 21 and `JAVA_HOME`; the IDE processes use
 their upstream JBR. CLion receives GCC, CMake, Ninja and GDB. These environments
 apply to both terminal launchers and desktop entries. Android Studio explicitly
-sets `ANDROID_HOME` and `ANDROID_SDK_ROOT`. Project Gradle JVM settings still
+sets `ANDROID_HOME` and `ANDROID_SDK_ROOT`. Project Gradle JVM settings
 apply, and terminal builds should use their project's devShell.
 
-## Settings and migration
+## Settings
 
 Configuration and caches are separated by IDE and major/minor version under
 `~/.config/jetbrains` and `~/.cache/jetbrains`. Activation restores True Black,
 the SpreadZhao editor scheme and the Nix CLion toolchain. Close IDEs before
 activation so they cannot overwrite those settings on exit.
 
-A one-time migration removes only the old managed JDK 21 `org.gradle.java.home`
-value, preserving other content and user-managed symlinks. Its marker is
-`$XDG_STATE_HOME/jetbrains/migrations/gradle-java-home-v1`. Old managed JDK links
-under `~/Lib/jdks` are retired; Gradle caches remain intact.
-
-The editable `.ideavimrc` keeps Quickscope disabled. Launchers set
-`QT_IM_MODULE=fcitx` and provide the Fcitx remote tool and `busctl` for
-IdeaVimExtension. Session-wide input-method settings are unchanged.
+IdeaVim reads the editable `.ideavimrc`. Launchers set `QT_IM_MODULE=fcitx` and
+provide the Fcitx remote tool and `busctl` for IdeaVimExtension.
 
 For changes spanning nix-packages and this repository, validate with
 `--override-input personal-packages path:/path/to/nix-packages --no-write-lock-file`.

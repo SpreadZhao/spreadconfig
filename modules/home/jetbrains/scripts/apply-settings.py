@@ -5,7 +5,6 @@ import argparse
 import json
 import os
 from pathlib import Path
-import re
 import xml.etree.ElementTree as ET
 
 
@@ -36,41 +35,14 @@ def replace_child(component, tag, attributes):
     ET.SubElement(component, tag, attributes)
 
 
-def migrate_gradle_java_home(home, state_directory, legacy_java_home):
-    marker = state_directory / "migrations/gradle-java-home-v1"
-    if marker.exists():
-        return
-
-    gradle = home / ".gradle/gradle.properties"
-    # The old activation created a regular file. Leave user-managed symlinks
-    # alone, and preserve unrelated bytes (including comments and line endings).
-    if gradle.is_file() and not gradle.is_symlink():
-        original = gradle.read_bytes()
-        legacy_line = re.compile(
-            rb"[ \t\f]*org\.gradle\.java\.home[ \t\f]*[:=][ \t\f]*"
-            + re.escape(legacy_java_home.encode())
-            + rb"[ \t\f]*(?:\r\n|\n|\r)?\Z"
-        )
-        migrated = b"".join(
-            line for line in original.splitlines(keepends=True)
-            if not legacy_line.fullmatch(line)
-        )
-        if migrated != original:
-            write_file(gradle, migrated, mode=gradle.stat().st_mode & 0o777)
-
-    write_file(marker, b"completed\n", mode=0o600)
-
-
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--config", required=True, type=Path)
     args = parser.parse_args()
     settings = json.loads(args.config.read_text())
-    home = Path(settings["homeDirectory"])
-
     for ide in settings["ides"]:
         directory = Path(ide["configDirectory"])
-        # Otherwise a fresh IDE migrates to the new UI and resets our theme.
+        # Prevent startup UI selection from resetting the configured theme.
         registry = directory / "early-access-registry.txt"
         lines = registry.read_text().splitlines() if registry.exists() else []
         if len(lines) % 2:
@@ -127,9 +99,6 @@ def main():
                 }))
 
             update_component(directory / "options/cpp.toolchains.xml", "CPPToolchains", update_toolchains)
-
-    state_directory = Path(settings["stateDirectory"])
-    migrate_gradle_java_home(home, state_directory, settings["legacyGradleJavaHome"])
 
 
 if __name__ == "__main__":

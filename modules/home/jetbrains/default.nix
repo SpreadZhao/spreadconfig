@@ -58,7 +58,6 @@ let
   settings = import ./settings.nix {
     sdkPath = sdk.path;
     inherit
-      config
       lib
       pkgs
       ides
