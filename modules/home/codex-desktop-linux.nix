@@ -253,8 +253,10 @@ let
               }"}
             )
 
+            # Use upstream's Wayland opt-in, including its native IME flags.
             makeWrapper "$launcher" "$out/bin/${appId}" \
               "''${profile_flags[@]}" \
+              --set NIXOS_OZONE_WL '1' \
               --set CODEX_LINUX_APP_ID '${appId}' \
               --set CODEX_LINUX_APP_DISPLAY_NAME 'Codex — ${name}' \
               --set CODEX_ELECTRON_USER_DATA_PATH '${root}/config/Codex-Community' \
@@ -304,8 +306,7 @@ in
     ];
   };
 
-  # Adopt the files used by the initial local repair, so they cannot shadow
-  # later declarative proxy or package changes after a Home Manager switch.
+  # Replace local launcher files so declarative proxy and package updates apply.
   home.file.".local/libexec/codex-browser-node-repl" = lib.mkIf hasProxy {
     source = browserNodeRepl;
     force = true;
