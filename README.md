@@ -187,6 +187,13 @@ builds should declare their own tools and variables in the project's devShell.
 
 [nixvim](https://github.com/nix-community/nixvim) (Neovim) with VSCode-inspired theme, full LSP integration, and custom color overrides matching the system palette.
 
+Go, Rust, C/C++, and Python language servers come from the project environment,
+not the Neovim package. Enter `nix develop` or the project's direnv environment
+before starting Neovim. When a server or its required Go/Cargo command is absent,
+that language server stays disabled. Nix, Shell, Lua, and YAML helpers remain
+bundled with the editor. Formatters also use the inherited project PATH; Neovim
+does not load devShells automatically.
+
 ### Shell
 
 Zsh with:
