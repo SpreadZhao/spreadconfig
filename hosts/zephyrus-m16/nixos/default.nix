@@ -6,7 +6,9 @@
     ./gaomon-tablet.nix
     ./identity.nix
     ./hardware.nix
-    ./services.nix
+    ./asusd.nix
+    ./supergfxd.nix
+    ./tlp.nix
     ./time.nix
   ];
 }

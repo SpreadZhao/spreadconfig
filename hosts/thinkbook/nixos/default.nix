@@ -4,6 +4,7 @@
   imports = [
     ./identity.nix
     ./hardware.nix
-    ./services.nix
+    ./lact.nix
+    ./tlp.nix
   ];
 }
