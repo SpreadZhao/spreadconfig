@@ -22,7 +22,7 @@ input {
 }
 
 output "eDP-1" {
-    // off
+    off
     scale 2
     position x=4288 y=500
     // position x=3440 y=1439          // ensure monitor has left/right relationship
