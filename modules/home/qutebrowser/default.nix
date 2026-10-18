@@ -9,6 +9,20 @@
   ...
 }:
 
+let
+  desktopEntry =
+    pkgs.runCommand "qutebrowser-desktop-entry"
+      {
+        nativeBuildInputs = [ pkgs.desktop-file-utils ];
+      }
+      ''
+        mkdir -p "$out/share/applications"
+        desktop="$out/share/applications/org.qutebrowser.qutebrowser.desktop"
+        substitute ${config.programs.qutebrowser.package}/share/applications/org.qutebrowser.qutebrowser.desktop "$desktop" \
+          --replace-fail 'Exec=qutebrowser' 'Exec=env QT_SCALE_FACTOR=1.5 qutebrowser'
+        desktop-file-validate "$desktop"
+      '';
+in
 {
   imports = [ ./scripts.nix ];
 
@@ -16,6 +30,7 @@
 
   home.packages = [
     config.programs.qutebrowser.package
+    (lib.hiPrio desktopEntry)
     pkgs.jq
   ];
 

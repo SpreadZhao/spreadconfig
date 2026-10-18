@@ -55,8 +55,9 @@ journalctl --user -u notification-history.service
 
 The database is at
 `${XDG_DATA_HOME:-$HOME/.local/share}/notification-history/history.sqlite3`.
-The package receives `programs.nixvim.build.package` and the configured
-`fzf-popup` through its Nix overrides. Program behavior and schema belong upstream.
+The package receives `programs.nixvim.build.package` through a Nix override and
+uses the same `fzf-popup` input as the root flake. Application behavior and the
+database schema are maintained upstream.
 
 ## fzf popups
 
@@ -65,9 +66,12 @@ returns the selected rows and fzf exit status. Its launcher receives an argument
 vector, runs it and waits for completion. `FZF_POPUP_TITLE` carries the title;
 without a launcher, the program uses the current terminal.
 
-`modules/home/fzf-popup` supplies `footclient --client-environment -a lick-foot`.
-Niri's `lick-foot` rule controls floating size. Override `FZF_POPUP_LAUNCHER`
-or pass `--launcher EXECUTABLE` for another terminal adapter.
+`modules/home/fzf-popup` installs the upstream package and sets
+`FZF_POPUP_LAUNCHER` in the login and user systemd environments. The launcher runs
+`footclient --client-environment -a lick-foot`. Niri's `lick-foot` rule controls
+floating size. Override `FZF_POPUP_LAUNCHER` for one command or pass
+`--launcher EXECUTABLE` for another terminal adapter. Log out and back in after
+changing the session default.
 
 ```sh
 printf '%s\n' first second | fzf-popup --title 'Choose' -- --prompt='Pick> '

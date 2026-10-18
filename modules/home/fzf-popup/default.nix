@@ -1,5 +1,7 @@
 {
+  config,
   inputs,
+  lib,
   pkgs,
   appEntries,
   appSource,
@@ -13,19 +15,10 @@ let
     runtimeInputs = [ pkgs.foot ];
     text = builtins.readFile (repoRoot + "/${appSource "fzf-popup" "scripts/bin/fzf-popup-foot"}");
   };
-  package = pkgs.symlinkJoin {
-    name = "fzf-popup-foot-configured";
-    paths = [ basePackage ];
-    nativeBuildInputs = [ pkgs.makeWrapper ];
-    passthru = { inherit launcher basePackage; };
-    postBuild = ''
-      wrapProgram "$out/bin/fzf-popup" \
-        --set-default FZF_POPUP_LAUNCHER "${launcher}/bin/fzf-popup-foot"
-    '';
-  };
 in
 {
-  _module.args.fzfPopupPackage = package;
-  home.packages = [ package ];
+  home.packages = [ basePackage ];
+  home.sessionVariables.FZF_POPUP_LAUNCHER = lib.getExe launcher;
+  systemd.user.sessionVariables.FZF_POPUP_LAUNCHER = config.home.sessionVariables.FZF_POPUP_LAUNCHER;
   spreadconfig.scriptFiles = appEntries "fzf-popup" "scripts";
 }

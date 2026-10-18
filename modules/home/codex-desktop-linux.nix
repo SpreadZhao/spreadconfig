@@ -30,7 +30,7 @@ let
       NODE_USE_ENV_PROXY = "1";
     };
   # Configure user XDG directories through shell_environment_policy.
-  # The gh wrapper sets its default configuration directory independently.
+  # The session environment sets GH_CONFIG_DIR independently for gh.
   shellEnvironmentArgs = lib.escapeShellArgs (
     lib.concatLists (
       lib.mapAttrsToList

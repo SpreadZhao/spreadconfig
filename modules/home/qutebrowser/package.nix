@@ -7,17 +7,9 @@
 
 let
   scale = builtins.toJSON scaleFactor;
-  qutebrowserDesktopExec = "Exec=env QT_SCALE_FACTOR=${scale} qutebrowser";
-  qutebrowserBasePackage =
-    (pkgs.qutebrowser.overrideAttrs (old: {
-      postInstall = (old.postInstall or "") + ''
-        substituteInPlace $out/share/applications/org.qutebrowser.qutebrowser.desktop \
-          --replace-fail "Exec=qutebrowser" ${lib.escapeShellArg qutebrowserDesktopExec}
-      '';
-    })).override
-      {
-        enableWideVine = true;
-      };
+  qutebrowserBasePackage = pkgs.qutebrowser.override {
+    enableWideVine = true;
+  };
 
   # Restrict Vulkan to Intel: QtWebEngine otherwise prefers the NVIDIA 595
   # device, where vkQueueSubmit crashes on livestreams. Disabling Vulkan

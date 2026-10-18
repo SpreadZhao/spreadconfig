@@ -52,13 +52,30 @@ Current examples:
   settings; the shared fallback is empty. Preserve rule and output order.
 - Qutebrowser loads `files/host.py` after shared settings and before the theme.
   Zephyrus also selects its Intel Vulkan package in its Home Manager module.
-- Psst uses `services.gpg-agent.pinentry.package`. Zephyrus wraps Pinentry and
-  the Polkit agent with `ZED_DEVICE_ID=46a6` to select its Intel GPU.
+- Psst uses `services.gpg-agent.pinentry.package`. Zephyrus sets
+  `ZED_DEVICE_ID=46a6` on the gpg-agent and Psst Polkit services to select Intel.
+  Directly running the Psst binaries does not force a GPU.
 - Waybar host modules call the shared JSON/CSS constructor with their dimensions
   and temperature path. Battery layout follows the declared capability.
 
 Keep qutebrowser's `autoconfig.yml` application-managed and its quickmarks linked
 to Password Store. Do not replace the entire configuration directory.
+
+## Package configuration
+
+Use application settings, desktop entries and service environments before
+adding package wrappers. QQ and scrcpy supply desktop entries with the upstream
+IDs. Qutebrowser installs a higher-priority desktop file in the user profile,
+preserving upstream translations and actions.
+
+Application-specific session variables belong in the owning module. Set user
+systemd variables when services also need them. Log out and back in after
+changing session variables.
+
+Keep generic graphics variables local to the application or service. Btop uses
+the package's `cudaSupport` option on NVIDIA hosts. Qutebrowser's Intel Vulkan
+wrapper, Codex's profile and compatibility fixes, and JetBrains' plugin and
+toolchain integration have separate runtime requirements and remain in place.
 
 ## Editable files and scripts
 

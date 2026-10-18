@@ -27,20 +27,11 @@ let
     else
       { };
 
-  nvidiaBtop = pkgs.symlinkJoin {
-    name = "btop-nvidia";
-    paths = [ pkgs.btop ];
-    buildInputs = [ pkgs.makeWrapper ];
-    postBuild = ''
-      wrapProgram $out/bin/btop \
-        --prefix LD_LIBRARY_PATH : /run/opengl-driver/lib
-    '';
-  };
 in
 {
   programs.btop = {
     enable = true;
-    package = if host.gpu.hasNvidia then nvidiaBtop else pkgs.btop;
+    package = if host.gpu.hasNvidia then pkgs.btop.override { cudaSupport = true; } else pkgs.btop;
     settings = baseSettings // gpuSettings;
   };
 }

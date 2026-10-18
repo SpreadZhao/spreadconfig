@@ -1,26 +1,12 @@
-{
-  config,
-  lib,
-  osConfig,
-  pkgs,
-  ...
-}:
+{ config, osConfig, ... }:
 
 {
+  # Cover login shells and applications started by the user systemd manager.
+  home.sessionVariables.GH_CONFIG_DIR = "${config.xdg.configHome}/gh";
+  systemd.user.sessionVariables.GH_CONFIG_DIR = config.home.sessionVariables.GH_CONFIG_DIR;
+
   programs.gh = {
     enable = true;
-    package = pkgs.symlinkJoin {
-      name = "gh-configured-${pkgs.gh.version}";
-      paths = [ pkgs.gh ];
-      nativeBuildInputs = [ pkgs.makeWrapper ];
-      # Codex profiles override XDG_CONFIG_HOME. Default to the managed login
-      # while allowing a nonempty GH_CONFIG_DIR override.
-      postBuild = ''
-        wrapProgram "$out/bin/gh" \
-          --set-default GH_CONFIG_DIR ${lib.escapeShellArg "${config.xdg.configHome}/gh"}
-      '';
-      meta = pkgs.gh.meta;
-    };
     settings.git_protocol = "https";
     gitCredentialHelper.enable = true;
   };

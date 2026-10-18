@@ -3,7 +3,6 @@
   inputs,
   lib,
   pkgs,
-  fzfPopupPackage,
   ...
 }:
 {
@@ -12,7 +11,6 @@
     enable = lib.mkDefault config.services.fnott.enable;
     package = lib.mkDefault (
       inputs.notification-history.packages.${pkgs.stdenv.hostPlatform.system}.default.override {
-        fzf-popup = fzfPopupPackage;
         neovim = config.programs.nixvim.build.package;
       }
     );
