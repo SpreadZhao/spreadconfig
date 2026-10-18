@@ -11,9 +11,8 @@ imports this directory once; do not add a sibling `modules/home/nixvim.nix`.
 | `lsp/` | Server configuration and shared attachment behavior |
 | `lua/` | Callbacks installed through the owning module's `extraFiles` |
 
-Keep callback timing when moving Lua code: Gitsigns runs on buffer attachment,
-Lualine on `VimEnter`, completion on insert/command-line events, and Markdown
-setup once per Markdown buffer.
+Gitsigns callbacks run on buffer attachment, Lualine on `VimEnter`, completion
+on insert/command-line events, and Markdown setup once per Markdown buffer.
 
 ## Language servers
 
@@ -31,7 +30,7 @@ use the inherited PATH.
 C/C++ and Python use ordered `root_markers`. Go evaluates the locked
 nvim-lspconfig `gopls.lua` root callback per query, without adding the plugin to
 runtimepath or importing its other defaults. Rust uses `lua/lsp/rust-root.lua`;
-it omits the upstream sysroot probing. Review root-detection changes separately.
+it omits the upstream sysroot probing.
 
 Ordinary attachment bindings use `lsp.keymaps`. Capability-dependent document
 highlights and inlay hints live in `lua/lsp/attach.lua`.

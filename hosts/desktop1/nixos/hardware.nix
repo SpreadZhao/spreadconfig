@@ -8,9 +8,8 @@
 }:
 
 let
-  # c59305b boots but niri fails to create an EGL device on this GTX 1650.
-  # Keep this compositor and driver stack pinned until a newer stack passes
-  # a boot test. Other hosts and packages use current nixpkgs.
+  # Pin the compositor, kernel, and driver stack for this GTX 1650.
+  # Other hosts and desktop1's non-graphics packages use the main nixpkgs input.
   graphicsPkgs = import inputs.nixpkgs-desktop1-graphics {
     system = pkgs.stdenv.hostPlatform.system;
     config = {
@@ -55,7 +54,7 @@ in
       extraPackages32 = lib.mkForce baseline.hardware.graphics.extraPackages32;
     };
 
-    # This desktop uses NVIDIA directly, without laptop PRIME or ASUS services.
+    # NVIDIA drives this desktop's display directly.
     nvidia = {
       modesetting.enable = true;
       nvidiaSettings = true;
@@ -74,7 +73,7 @@ in
   assertions = [
     {
       assertion = host.cpu.isIntel && host.gpu.hasNvidia;
-      message = "desktop1 graphics fallback requires its declared Intel/NVIDIA hardware.";
+      message = "desktop1's pinned graphics stack requires its declared Intel/NVIDIA hardware.";
     }
   ];
 }

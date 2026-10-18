@@ -80,9 +80,7 @@ proxy patch in `codex/patches/`. GitHub CLI reads the shared login through the
 normal XDG path.
 
 Keep generic graphics variables local to the application or service. Btop uses
-the package's `cudaSupport` option on NVIDIA hosts. Qutebrowser's Intel Vulkan
-wrapper, Codex's profile and compatibility fixes, and JetBrains' plugin and
-toolchain integration have separate runtime requirements and remain in place.
+the package's `cudaSupport` option on NVIDIA hosts.
 
 ## Editable files and scripts
 

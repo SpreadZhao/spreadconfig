@@ -1,8 +1,8 @@
 # Independent applications
 
 [SpreadZhao/nix-packages](https://github.com/SpreadZhao/nix-packages) maintains
-custom packaging for third-party applications. Applications developed here
-have their own repositories; spreadconfig consumes their locked packages and
+custom packaging for third-party applications. The applications listed below
+have their own repositories. Spreadconfig consumes their locked packages and
 modules and supplies desktop integration.
 
 | Input | Upstream | Local integration |
