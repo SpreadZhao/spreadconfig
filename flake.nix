@@ -112,11 +112,24 @@
           - Limit cleanup to changes and resources introduced by this task. Preserve the user's existing tools, data, tests, and unrelated modifications. Do not delete shared Nix Store contents or run broad garbage collection as a cleanup shortcut.
           - Cleanup must respect the Nix Switch Policy. If removing a live dependency or other temporary state requires a prohibited action, prepare the configuration change, report exactly what remains, and provide the manual command; do not execute `switch` or claim cleanup is complete.
 
+          ## Current-State Implementation
+
+          - When a requested change replaces or retires behavior, implement the intended final state directly. Update affected callers and remove superseded code, configuration, dependencies, and comments within the task's scope.
+          - Do not keep compatibility aliases, wrappers, duplicate paths, fallback branches, or legacy settings for behavior the user has retired unless the user explicitly requests that compatibility. Hypothetical old clients or installations are not a reason to preserve it.
+          - During implementation and code review, trace the affected callers and configuration. Check that the replacement is complete and remove obsolete compatibility logic instead of leaving it for later cleanup.
+
+          ## Current-State Documentation
+
+          - Write documentation, comments, help text, and repository guidance for a new reader using the current implementation. Readers should not need Git history to understand setup, behavior, or maintenance.
+          - After a change, rewrite or remove affected prose so it describes the final implementation. Do not append a change summary or a narrative of each task to the documentation.
+          - Remove descriptions of deleted settings, abandoned workarounds, superseded designs, and completed migrations. Do not document their absence or removal merely to record what changed. Keep history in Git or an explicitly requested changelog; retain background only when it explains a current requirement or an active migration.
+          - During review, check affected prose against the current code and configuration. Remove stale historical context and duplicate explanations. Keep only what helps a new reader use or maintain the repository as it stands.
+
           ## Final Writing Review
 
           - Before completing a repository task, finish the main work and its checks, then launch a separate writing-review agent. Self-review alone does not satisfy this step.
           - Ask the reviewer to read [anti-vibe-writing](https://github.com/weijt606/anti-vibe-writing), including its `SKILL.md`, English patterns reference, and final-pass checklist. Use its default clean style for technical writing.
-          - Review documentation, comments, help text, prompts, and other wording affected by the task. Keep repository prose in English and check it against the final implementation.
+          - Review documentation, comments, help text, prompts, and other wording affected by the task. Keep repository prose in English and apply the Current-State Documentation policy against the final implementation.
           - Have the reviewer edit unclear or repetitive text, remove outdated claims and obsolete commented-out code, and merge duplicate explanations. Prefer concrete language, short sentences, and only the headings or lists readers need.
           - Preserve technical meaning, behavior, identifiers, paths, commands, and license notices. Limit edits to the task and directly related documentation; report when no changes are needed.
           - The reviewer must not launch another writing-review agent. The primary agent reviews its diff, reruns checks affected by the edits, and completes cleanup before the final response. Both agents follow the Nix Switch Policy and Clean Delivery Policy.
