@@ -41,20 +41,14 @@
       separator-color = "${theme_tranparent}";
       layout-bg-color = "${theme_tranparent}";
       layout-border-color = "${theme_tranparent}";
-
-      # ===============================
       # Ring
-      # ===============================
 
-      ring-color = "${theme_bright_dark}"; # default: cool gray
-      ring-clear-color = "${theme_blue}"; # typing: blue
+      ring-color = "${theme_bright_dark}";
+      ring-clear-color = "${theme_blue}";
       ring-caps-lock-color = "${theme_bright_yellow}";
-      ring-ver-color = "${theme_cyan}"; # verifying: cyan
-      ring-wrong-color = "${theme_bright_red}"; # error: bright red
-
-      # ===============================
+      ring-ver-color = "${theme_cyan}";
+      ring-wrong-color = "${theme_bright_red}";
       # Text
-      # ===============================
 
       text-color = "${theme_white}";
       text-clear-color = "${theme_blue}";
@@ -63,10 +57,7 @@
       text-wrong-color = "${theme_bright_red}";
 
       layout-text-color = "${theme_white}";
-
-      # ===============================
       # Key feedback
-      # ===============================
 
       key-hl-color = "${theme_white}";
       caps-lock-key-hl-color = "${theme_bright_white}";

@@ -1,70 +1,89 @@
-# SOPS 共享身份
+# SOPS credentials
 
-从新电脑安装到 Password Store 恢复的完整顺序见 [新电脑安装指南](install.md)。
-SOPS 初始化在首次安装前完成；GPG 私钥恢复是安装后的独立步骤。
+All hosts use one age identity to decrypt `secrets/secrets.yaml`. Its encrypted
+backup, `secrets/shared-age-key.age`, is safe to track in Git. The local plaintext
+identity belongs at `/var/lib/sops-nix/key.txt`, owned by root with mode `0600`.
+Keep it outside the repository and Nix store; persist `/var/lib/sops-nix` if the
+root filesystem is temporary.
 
-所有 host 使用同一个 age 公钥加密 `secrets/secrets.yaml`。密码加密的私钥文件为 `secrets/shared-age-key.age`，可以提交到仓库。每台机器只在初始化时输入一次解锁口令，随后通过 `/var/lib/sops-nix/key.txt` 自动解密；该文件在仓库和 Nix store 外，归 root 所有，权限为 0600。
+SOPS handles system credentials. Password Store uses a separate
+[GPG identity](password-store.md). For the installation sequence, see
+[install](install.md).
 
-## 初始化前准备
+## Initialize a machine
 
-同步完整仓库，确保包含以下三个文件：
+Sync `.sops.yaml`, `secrets/secrets.yaml` and `secrets/shared-age-key.age`, then
+run from the checkout:
 
-- `.sops.yaml`
-- `secrets/secrets.yaml`
-- `secrets/shared-age-key.age`
-
-所有机器复用这份加密私钥和同一个解锁口令。初始化不会生成密钥、设置新口令或修改仓库中的凭据。
-
-## 初始化其他机器
-
-在已安装系统的仓库根目录执行：
-
-```bash
-./scripts/sops-key init
+```sh
+nix shell nixpkgs#age nixpkgs#sops -c bash ./scripts/sops-key init
 ```
 
-输入解锁口令，脚本验证私钥能解密当前 secrets 后再安装。重复运行时验证已存在的私钥，不重复要求口令；已有不匹配的私钥时停止，不覆盖。
+For a fresh installation mounted at `/mnt`, append `--root /mnt`. Enter the
+shared backup passphrase when prompted. The script verifies decryption before
+installing the key. Reruns verify the existing key; a mismatched key is never
+overwritten. This does not generate a new identity or rotate any credentials.
 
-全新安装、目标根分区已挂载到 `/mnt` 时，在 `nixos-install` 前执行：
+The backup passphrase protects only the encrypted copy. Each initialized host
+holds the same plaintext key, so a leaked key exposes all shared secrets.
 
-```bash
-nix shell nixpkgs#age nixpkgs#sops -c bash ./scripts/sops-key init --root /mnt
+## Edit credentials
+
+Verify decryption without printing secrets:
+
+```sh
+sudo env SOPS_AGE_KEY_FILE=/var/lib/sops-nix/key.txt \
+  sops decrypt secrets/secrets.yaml > /dev/null
 ```
 
-私钥会写到目标系统的 `/mnt/var/lib/sops-nix/key.txt`。以后正常启动和 rebuild 无需输入解锁口令。保留 `/var/lib/sops-nix`；若使用临时根文件系统，需要将此目录持久化。
+Edit with the same identity:
 
-## 编辑凭据
-
-在已初始化的机器上验证解密（不输出凭据）：
-
-```bash
-sudo env SOPS_AGE_KEY_FILE=/var/lib/sops-nix/key.txt sops decrypt secrets/secrets.yaml > /dev/null
-```
-
-编辑时使用同一个本地身份：
-
-```bash
+```sh
 sudo env SOPS_AGE_KEY_FILE=/var/lib/sops-nix/key.txt sops edit secrets/secrets.yaml
 ```
 
-解锁口令只保护仓库中的私钥副本，本地安装的私钥是明文。所有机器持有相同身份；一台机器的私钥泄露会影响全部共享凭据。初始化不会轮换 token 或账户密码。
+Commit and sync the ciphertext, then build and manually activate each host.
+Plaintext credentials are rendered at activation, never during evaluation.
 
-## Nix GitHub 认证
+## GitHub authentication
 
-所有 host 的 Nix 和 GitHub CLI 共用 `github-token`。SOPS 在激活时生成
-`/run/secrets/rendered/nix-github-access-tokens.conf`，权限为 0400，供
-`spreadzhao` 和 root 读取；`/etc/nix/nix.conf` 使用 `!include` 引用它。
-仓库和 Nix store 中仅保存加密凭据、占位符和运行时路径，不写入明文 token。
-token 变更时自动重启 `nix-daemon.service`。
+Nix and GitHub CLI share `github-token`. `modules/nixos/secrets.nix` renders
+files owned by `spreadzhao:users`, mode `0400`:
 
-首次接入时，先应用当前配置，再更新 inputs：
+| Template | Consumer |
+| --- | --- |
+| `nix-github-access-tokens.conf` | Nix reads it through `!include` in `nix.conf`; token changes restart `nix-daemon` |
+| `gh-hosts.yml` | Home Manager links it to `~/.config/gh/hosts.yml`; `gh` also supplies HTTPS Git credentials |
 
-```bash
-~/scripts/nix/sns_until switch
-~/scripts/nix/nix_update
+The optional include lets the first build succeed before the runtime file
+exists. Activate the initial configuration before updating private inputs.
+SSH remotes still use SSH keys.
+
+Check the managed login with `gh auth status`. Remove persistent `GH_TOKEN`,
+`GITHUB_TOKEN` or `GH_CONFIG_DIR` overrides if they select another login. Home Manager owns the linked credential file. Do not use `gh auth login`, `logout`, `switch` or `refresh` on the read-only file.
+
+To replace the token, edit `github-token` in SOPS and deploy it to every host.
+If browser authorization is needed, use a temporary GitHub CLI configuration:
+
+```sh
+gh_setup_dir=$(mktemp -d)
+env -u GH_TOKEN -u GITHUB_TOKEN GH_CONFIG_DIR="$gh_setup_dir" \
+  gh auth login --hostname github.com --git-protocol https --web --insecure-storage
+env -u GH_TOKEN -u GITHUB_TOKEN GH_CONFIG_DIR="$gh_setup_dir" \
+  gh auth token --hostname github.com
 ```
 
-`!include` 允许运行时文件尚未生成时构建初始配置。应用之后，直接运行
-`nix flake update` 或 `nix_update` 就会读取 token，无需设置临时环境变量。
+Copy the locally displayed token into SOPS, then remove the temporary directory
+with `rm -rf -- "$gh_setup_dir"` and `unset gh_setup_dir`. Keep the shared token
+nonempty and valid. Revoke the old token after deploying its replacement.
 
-参考：[age 密码加密](https://github.com/FiloSottile/age#passphrase-encryption)、[sops-nix 密钥配置](https://github.com/Mic92/sops-nix)、[Nix 配置文件](https://nix.dev/manual/nix/stable/command-ref/conf-file.html)。
+## Claude Code
+
+`claude-settings.json` in `modules/nixos/secrets.nix` sets the Anthropic-compatible
+GLM endpoint, model aliases and context limits. The current model is `glm-5.3`;
+`glm-api-key` supplies its encrypted credential. Home Manager links the rendered
+file to `~/.claude/settings.json`, owned by `spreadzhao:users`, mode `0400`.
+
+Change persistent settings in the template or SOPS, then build, manually activate
+and restart Claude Code. Check `/status` for the active model. Onboarding and
+other mutable state remain in `~/.claude.json`.

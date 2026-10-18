@@ -16,10 +16,6 @@ config.bind('dk', 'cmd-repeat 1 tab-close -p', mode = 'normal')
 config.bind('td', 'config-cycle colors.webpage.darkmode.enabled True False')
 config.bind('<Ctrl-Shift-J>', 'tab-move +', mode = 'normal')
 config.bind('<Ctrl-Shift-K>', 'tab-move -', mode = 'normal')
-# I found that qutebrowser already has these built-in...
-# config.unbind('yy', mode = 'normal')
-# config.bind('yyy', 'yank', mode = 'normal')
-# config.bind('yym', 'yank inline [{title}]({url:pretty})', mode = 'normal')
 config.bind('gk', 'tab-focus stack-prev', mode = 'normal')
 config.bind('gj', 'tab-focus stack-next', mode = 'normal')
 config.unbind('f', mode = 'normal')
@@ -68,11 +64,9 @@ c.fileselect.multiple_files.command = fileChooser
 c.fileselect.single_file.command = fileChooser
 
 
-# Google blocks sign-in from browsers whose UA carries an unknown token
-# (qutebrowser/QtWebEngine). Spoof a current Chrome UA for the login flow
-# only; keep the real UA elsewhere so Cloudflare sees no version mismatch.
-# Recheck the Chrome major version if Google starts rejecting it again.
-# https://github.com/qutebrowser/qutebrowser/issues/7427
+# Use a pinned Chrome user agent for Google sign-in, which rejects QtWebEngine.
+# Keep the real agent elsewhere to avoid browser-version mismatches.
+# Recheck this version if Google rejects it: https://github.com/qutebrowser/qutebrowser/issues/7427
 config.set(
     'content.headers.user_agent',
     'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36',
@@ -207,7 +201,6 @@ c.hints.padding = {
 }
 
 c.content.javascript.clipboard = "access-paste"
-# c.qt.force_software_rendering = "qt-quick"
 
 config.source("host.py")
 

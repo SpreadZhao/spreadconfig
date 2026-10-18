@@ -1,7 +1,7 @@
 { ... }:
 
 {
-  # Authorize this host to decrypt the shared secrets before rebuilding; see ./README.md.
+  # Initialize the shared age identity before installation; see docs/sops.md.
   imports = [
     ./hardware-configuration.nix
     ./nixos

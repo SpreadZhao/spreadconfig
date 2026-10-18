@@ -46,8 +46,6 @@
         use_custom_config_file_path = 0;
         use_neovim_remote = 1;
       };
-      # do not have in 25.11
-      # lazyLoad.enable = true;
     };
   };
 

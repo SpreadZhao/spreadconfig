@@ -2,12 +2,12 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-OPTION_CLIPBOARD="Copy to Clipboard"
+OPTION_CLIPBOARD="Copy to clipboard"
 OPTION_PIN="Pin"
 OPTION_SAVE="Save"
 OPTION_EDIT="Edit"
 OPTION_OCR="OCR"
-PROMPT_ACTION="Select Image Action: "
+PROMPT_ACTION="Image action: "
 
 IMAGE_PATH="${1:-}"
 SAVE_PREFIX="${2:-Image}"
@@ -36,13 +36,13 @@ image_extension() {
 }
 
 if [[ -z "$IMAGE_PATH" || ! -s "$IMAGE_PATH" ]]; then
-    notify "Image file is missing or empty ❌" "$IMAGE_PATH"
+    notify "Image file is missing or empty" "$IMAGE_PATH"
     exit 1
 fi
 
 mime_type=$(file -b --mime-type -- "$IMAGE_PATH" 2>/dev/null || true)
 if [[ "$mime_type" != image/* ]]; then
-    notify "Selected content is not an image ❌" "$mime_type"
+    notify "Selected content is not an image" "$mime_type"
     exit 1
 fi
 
@@ -63,23 +63,23 @@ fi
 case "$choice" in
 "$OPTION_CLIPBOARD")
     if wl-copy --type "$mime_type" <"$IMAGE_PATH"; then
-        notify "Image copied to clipboard 📋" ""
+        notify "Image copied to clipboard" ""
     else
-        notify "Failed to copy image ❌" ""
+        notify "Failed to copy image" ""
         exit 1
     fi
     ;;
 
 "$OPTION_EDIT")
     if ! satty -f "$IMAGE_PATH"; then
-        notify "Failed to open image editor ❌" ""
+        notify "Failed to open image editor" ""
         exit 1
     fi
     ;;
 
 "$OPTION_PIN")
     if ! swayimg --viewer --appid=swayimg-pin "$IMAGE_PATH"; then
-        notify "Failed to pin image ❌" ""
+        notify "Failed to pin image" ""
         exit 1
     fi
     ;;
@@ -92,9 +92,9 @@ case "$choice" in
     destination="$SAVE_PATH/${safe_prefix}_${timestamp}.${extension}"
 
     if cp -- "$IMAGE_PATH" "$destination"; then
-        notify "Saved to 📁" "$destination"
+        notify "Image saved" "$destination"
     else
-        notify "Failed to save image ❌" ""
+        notify "Failed to save image" ""
         exit 1
     fi
     ;;
@@ -103,28 +103,28 @@ case "$choice" in
     ocr_lang="chi_sim+eng"
 
     if ! command -v tesseract >/dev/null 2>&1; then
-        notify "tesseract not found ❌" ""
+        notify "tesseract not found" ""
         exit 1
     fi
 
     if ! ocr_text=$(tesseract "$IMAGE_PATH" stdout -l "$ocr_lang" -c preserve_interword_spaces=1 2>/dev/null); then
-        notify "OCR failed ❌" ""
+        notify "OCR failed" ""
         exit 1
     fi
 
     ocr_text_trimmed=$(printf "%s" "$ocr_text" | sed '/^[[:space:]]*$/d')
 
     if [[ -z "$ocr_text_trimmed" ]]; then
-        notify "OCR finished but no text found ⚠️" ""
+        notify "No text found" ""
         exit 0
     fi
 
     if printf "%s" "$ocr_text_trimmed" | wl-copy; then
         preview=${ocr_text_trimmed:0:30}
         preview=${preview//$'\n'/ }
-        notify "📋 OCR copied" "${preview}…"
+        notify "OCR text copied" "${preview}..."
     else
-        notify "Failed to copy OCR result ❌" ""
+        notify "Failed to copy OCR result" ""
         exit 1
     fi
     ;;

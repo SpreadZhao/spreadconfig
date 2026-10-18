@@ -10,7 +10,7 @@
   options.spreadconfig.scriptFiles = lib.mkOption {
     type = lib.types.attrsOf lib.types.path;
     default = { };
-    description = "Script installation paths mapped to explicit sources supplied by their owning modules.";
+    description = "Installed script paths mapped to application-owned sources.";
   };
 
   config.home.sessionVariables.SCRIPT_HOME = scriptsDir;

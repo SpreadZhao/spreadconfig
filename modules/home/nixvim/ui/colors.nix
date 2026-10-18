@@ -13,7 +13,7 @@ in
       enable = true;
       settings = {
         transparent = true;
-        italic_comments = false; # JetBrains 默认不斜体
+        italic_comments = false; # Match the JetBrains comment style.
         italic_inlayhints = true;
         underline_links = true;
         disable_nvimtree_bg = true;
@@ -28,28 +28,28 @@ in
         };
 
         group_overrides = {
-          # ===== 注释 =====
+          # Comments
           Comment = {
             fg = vscodeColors.comment;
             italic = false;
           };
 
-          # ===== 关键字 =====
+          # Keywords
           Keyword = {
             fg = vscodeColors.keyword;
           };
 
-          # ===== static =====
+          # Static members
           StorageClass = {
             fg = vscodeColors.static;
           };
 
-          # ===== 类 =====
+          # Types
           Type = {
             fg = vscodeColors.type;
           };
 
-          # ===== 类成员 =====
+          # Members
           Field = {
             fg = vscodeColors.type;
           };
@@ -58,23 +58,23 @@ in
             fg = vscodeColors.type;
           };
 
-          # ===== 函数 =====
+          # Functions
           Function = {
             fg = vscodeColors.function;
           };
 
-          # ===== 错误 =====
+          # Errors
           DiagnosticError = {
             fg = vscodeColors.error;
             bold = true;
           };
 
-          # ===== 字符串 =====
+          # Strings
           String = {
             fg = vscodeColors.string;
           };
 
-          # ===== 常量 =====
+          # Constants
           Constant = {
             fg = vscodeColors.static;
           };

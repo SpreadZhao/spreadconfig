@@ -33,9 +33,7 @@
     wrap = false;
     termguicolors = true;
     background = "dark";
-    # foldenable = false;
     foldlevelstart = 99;
-    # autocomplete = true;
   };
   autoGroups = {
     "highlight-yank" = {

@@ -21,7 +21,7 @@ echo "Input : $INPUT_DIR"
 echo "Output: $OUTPUT_DIR"
 echo
 
-# 支持常见视频格式
+# Convert common video formats.
 VIDEO_EXTENSIONS="mp4 mkv mov avi flv webm m4v"
 
 find "$INPUT_DIR" -type f | while read -r file; do
@@ -29,7 +29,7 @@ find "$INPUT_DIR" -type f | while read -r file; do
   ext_lower="$(echo "$ext" | tr '[:upper:]' '[:lower:]')"
 
   if [[ " $VIDEO_EXTENSIONS " == *" $ext_lower "* ]]; then
-    # 保持目录结构
+    # Preserve the input directory structure.
     relative_path="${file#$INPUT_DIR/}"
     output_file="$OUTPUT_DIR/${relative_path%.*}.mp3"
 

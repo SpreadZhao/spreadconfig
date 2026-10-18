@@ -12,7 +12,7 @@ entry=${lines[0]#__ENTRY__=}
 password=${lines[1]}
 meta_lines=("${lines[@]:2}")
 
-# -------- password 永远放第一位 --------
+# Keep the password before other fields.
 choices=("password")
 choices+=("${meta_lines[@]}")
 

@@ -1,458 +1,96 @@
-# My NixOS Config
+# spreadconfig
 
-My personal NixOS configuration, built with [flakes](https://wiki.nixos.org/wiki/Flakes) and [home-manager](https://github.com/nix-community/home-manager). Designed for a terminal-centric, Wayland-first developer workflow with a unified dark color scheme across every application.
+Personal NixOS and Home Manager configuration for three machines. The desktop
+uses niri, Waybar, Foot, fuzzel and fnott, with shared dark colors and Noto fonts.
 
-<img width="1920" height="1080" alt="Screenshot_DP-2_20260227_000645" src="https://github.com/user-attachments/assets/fddcf456-6f25-4798-89ab-ee930262a981" />
+<img width="1920" height="1080" alt="niri desktop with the shared dark theme" src="https://github.com/user-attachments/assets/fddcf456-6f25-4798-89ab-ee930262a981" />
 
-## 新电脑安装
+## Install
 
-从安装 U 盘开始的完整中文流程见 **[新电脑安装指南](docs/install.md)**：
+Follow the [installation guide](docs/install.md) for USB preparation, networking,
+disk setup and the first boot. Initialize SOPS before installing NixOS, then
+restore Password Store and its GPG identity after login.
 
-1. 配置 Live 环境代理与国内镜像，用 cfdisk 分区、格式化并挂载，再克隆配置仓库。
-2. 初始化 SOPS 身份，安装并启动 NixOS；此时不需要 Password Store。
-3. 登录后克隆 Password Store，导入 GPG 私钥并恢复信任。
-4. 启动 Secret Service，再构建并手动激活一次，补齐浏览器书签等集成。
+Keep this checkout at `~/workspaces/spreadconfig`: application configuration and
+scripts link to its editable files. Password Store lives at `~/.password-store`.
+Packages and skills are fetched through flake inputs; they need no local clones.
 
-指南也包含首次启动后的代理设置、已有 NixOS 系统的接入方法、新增 host 示例，
-以及各阶段的检查命令。
-SOPS 和 GPG 是两套独立身份；私钥导入后 pass 即可使用，最后一次 rebuild 用于配置集成。
+| Host | Hardware and host-specific configuration |
+| --- | --- |
+| `desktop1` | Intel i5-10400F, GTX 1650; pinned graphics stack |
+| `thinkbook` | AMD CPU and integrated GPU; LACT and TLP |
+| `zephyrus-m16` | ASUS GU603H, Intel/NVIDIA hybrid graphics; PRIME offload, asusd, supergfxd and TLP |
 
-## Repository Structure
+A different machine needs its own [host declaration](docs/application-layout.md#add-a-host)
+and generated disk configuration.
 
-```
-.
-├── flake.nix                       # Flake entry point
-├── lib/                           # Shared repository functions
-│   ├── host-context.nix            # Shared host facts, validation and profile defaults
-│   └── mutable-files.nix           # Checked workspace links and explicit file trees
-├── hosts/
-│   └── <host>/
-│       ├── host.nix                # Hardware declaration and module lists
-│       ├── configuration.nix       # Host NixOS entry point
-│       ├── hardware-configuration.nix
-│       ├── home.nix                # Host Home Manager entry point
-│       ├── home/
-│       │   ├── profile.nix         # Fonts, Waybar and other host parameters
-│       │   ├── niri/               # Display/input/GPU configuration
-│       │   └── qutebrowser/        # Optional host Python settings
-│       └── nixos/                  # Host hardware, identity and services
-├── modules/
-│   ├── nixos/                      # Shared system modules
-│   └── home/
-│       ├── default.nix             # Imports .nix modules and app/default.nix
-│       ├── vars.nix                # Theme, fonts, runtime paths and link helpers
-│       ├── home-core.nix           # Home identity and session settings
-│       ├── script-files.nix        # Assembles the existing ~/scripts interface
-│       ├── <app>/
-│       │   ├── default.nix         # Application configuration
-│       │   ├── files/              # Handwritten application assets
-│       │   ├── scripts.nix         # Optional script installation declarations
-│       │   └── scripts/            # Scripts under their installation paths
-│       ├── nix-tools/              # Shared Nix maintenance commands
-│       └── script-tools/           # Common script libraries and retained tools
-├── scripts/sops-key                # Secret bootstrap helper
-└── secrets/                        # Encrypted secrets and ignored local identities
-```
+## Build and apply
 
-## Flake Inputs
+Run from the checkout. Select the host explicitly if its name differs from the
+current hostname. `path:` includes new files before Git tracks them.
 
-| Input | Purpose |
-|-------|---------|
-| `nixpkgs` | NixOS unstable (primary package set) |
-| `nixpkgs-desktop1-graphics` | desktop1's known working kernel/NVIDIA/niri/Mesa package set |
-| `home-manager` | User environment management |
-| `naw` | NAW: project workspaces and native Home Manager global skills (GitHub input) |
-| `personal-skills` | Personal content repository, non-flake input (GitHub input) |
-| `nixos-hardware` | Hardware presets for supported laptops |
-| `nixvim` | Declarative Neovim configuration |
-
-## Hosts
-
-### desktop1
-
-Intel/NVIDIA desktop migrated from the `nixos_desktop1` branch. Uses the shared configuration on `nixos`, preserving its original disk UUIDs and direct NVIDIA graphics setup. No ASUS laptop services or PRIME offload are enabled.
-
-**Before the first rebuild:** initialize the shared age identity with `./scripts/sops-key init`. Enter the shared identity passphrase once; subsequent boots and rebuilds use the root-only local key. Sync the encrypted identity file together with the configuration. See [SOPS setup](docs/sops.md).
-
-
-### thinkbook
-
-My primary laptop — AMD CPU/GPU with a Wayland-native desktop stack.
-
-- **Boot**: systemd-boot with v4l2loopback (OBS virtual camera)
-- **Login**: greetd with agreety, auto-starts niri
-- **Audio**: PipeWire
-- **GPU**: AMD with OpenCL support, managed via LACT
-
-### zephyrus-m16
-
-ASUS ROG laptop — Intel CPU with NVIDIA hybrid graphics.
-
-- **Hardware preset**: nixos-hardware ASUS Zephyrus GU603H module
-- **GPU**: Intel/NVIDIA PRIME offload with Dynamic Boost
-- **ASUS controls**: asusd and supergfxd
-- **Power**: Host-specific TLP charging policy
-
-### Host declarations and shared modules
-
-Each `hosts/<name>/host.nix` declares `system`, `formFactor`, CPU and GPU facts,
-hardware capabilities, profile imports, and NixOS/Home Manager module lists.
-`lib/host-context.nix` builds and validates a single `host` value before either
-module system is evaluated. Both receive this value through their special
-arguments. The constructor remains available as `spreadconfig.lib.mkHost`.
-
-Shared modules use normal Nix expressions such as `lib.mkIf host.gpu.hasNvidia`
-and read policy from `host.profile.nixos` or `host.profile.home`. The tool layer
-provides `host.name`, `host.is "desktop1"`, CPU vendor predicates, independent GPU
-vendor predicates, and `host.isLaptop`/`host.isDesktop`. A hybrid GPU declaration
-can set multiple GPU predicates. Unknown CPU families and hardware capabilities
-are `null`; an Intel CPU alone does not establish that the machine has an Intel GPU.
-
-The AMD hosts retain ROCm/OpenCL support; the NVIDIA hosts disable global ROCm
-support. GPU package choices follow the declared hardware and application needs.
-Qutebrowser rendering and scale, OBS plugins, camera/device paths, and optional
-services are profile values. The existing Zephyrus Intel Vulkan workaround
-requires an actual Intel GPU. Concrete PCI addresses, driver pins, fan curves,
-and other machine-specific fixes remain in host leaf modules. Niri display
-layouts and input settings stay in `hosts/<host>/home/niri/host.kdl`.
-
-To add a host, create its declaration and profile files, list its host-only
-modules, supply the machine's generated `hardware-configuration.nix`, and create
-its niri Home Manager module and native fragment. Host directories are discovered
-by the presence of `host.nix`.
-Do not copy `sns` or `sns_until`: the shared scripts read
-`~/.config/spreadconfig/host.sh`, generated by Home Manager from the declaration.
-Use `SPREADCONFIG_HOST=<name>` when explicitly targeting another host.
-
-Evaluate the affected system and Home Manager outputs. All four hosts include
-their real disk configurations and support complete system evaluation.
-
-## Desktop Environment
-
-A fully Wayland-native desktop built around [niri](https://github.com/niri-wm/niri), a scrollable-tiling compositor.
-
-| Component | Tool |
-|-----------|------|
-| Window Manager | [niri](https://github.com/niri-wm/niri) |
-| Status Bar | [Waybar](https://github.com/Alexays/Waybar) |
-| Terminal | [foot](https://codeberg.org/dnkl/foot) |
-| App Launcher | [fuzzel](https://codeberg.org/dnkl/fuzzel) |
-| Notifications | [fnott](https://codeberg.org/dnkl/fnott) |
-| Lock Screen | [swaylock](https://github.com/swaywm/swaylock) |
-| Idle Manager | swayidle |
-| Screenshots | grim + slurp + satty + wayfreeze |
-| Screen Recording | wf-recorder, [OBS Studio](https://obsproject.com/) |
-| Clipboard | cliphist + wl-clipboard |
-| File Manager | [lf](https://github.com/gokcehan/lf) with D-Bus integration + [xdg-desktop-portal-termfilechooser](https://github.com/hunkyburrito/xdg-desktop-portal-termfilechooser) |
-| Browser | [qutebrowser](https://github.com/qutebrowser/qutebrowser) (keyboard-driven, vim-like) |
-
-## Development Setup
-
-### Development Environments
-
-This repository's default devShell is for maintaining the NixOS configuration. It is loaded by the root `.envrc` through direnv/nix-direnv and includes Nix maintenance tools such as `nixfmt`, `statix`, `deadnix`, `shellcheck`, `shfmt`, `jq`, `git`, and `ripgrep`.
-
-The root flake declares only the skills used to maintain this repository:
-`spreadconfig-nix` from the locked `personal-skills` input and `nixos-best-practices`
-from its upstream input. `naw.lib.mkWorkspace` installs read-only skill
-directories for agents and Claude when entering `nix develop`. Change their source paths
-in `repoWorkspace.skills` and edit skill content in its source repository;
-repository instructions live in
-`repoWorkspace.instructions`. Generated instructions and `.naw/` state are ignored by Git.
-
-Home Manager declares the global `drawio-skill` in
-`modules/home/naw-global-skills.nix` through NAW's
-`homeManagerModules.globalSkills` module and `programs.naw.globalSkills`.
-It manages read-only skill directory links for agents and Claude separately
-from the project's development environment.
-
-This repository does not publish workspace templates or a shared skill catalog.
-For another project, use [NAW](https://github.com/SpreadZhao/NAW)
-directly and declare that project's skills, instructions and packages there.
-Personal skill content is maintained in
-[personal-skills](https://github.com/SpreadZhao/personal-skills), not in this repository.
-
-NAW remains pinned in `flake.lock` and does not manage Gitignore.
-Language runtimes and project-specific tools belong to each project's own
-development environment.
-
-Java and Android SDK commands are not installed in the ordinary user profile.
-The JetBrains IDEs keep private development tools: Android Studio has its Nix
-SDK, Android Studio and IDEA have JDK 21, and CLion has its C/C++ toolchain.
-These are scoped to the IDE launchers, including desktop entries. The SDK link
-at `~/Lib/Android/Sdk` remains for existing project compatibility. Terminal
-builds should declare their own tools and variables in the project's devShell.
-
-### Editor
-
-[nixvim](https://github.com/nix-community/nixvim) (Neovim) with VSCode-inspired theme, full LSP integration, and custom color overrides matching the system palette.
-
-Go, Rust, C/C++, and Python language servers come from the project environment,
-not the Neovim package. Enter `nix develop` or the project's direnv environment
-before starting Neovim. When a server or its required Go/Cargo command is absent,
-that language server stays disabled. Nix, Shell, Lua, and YAML helpers remain
-bundled with the editor. Formatters also use the inherited project PATH; Neovim
-does not load devShells automatically.
-
-### Shell
-
-Zsh with:
-- [Starship](https://starship.rs/) prompt (custom theme-matched palette)
-- zsh-syntax-highlighting, zsh-autosuggestions, zsh-completions
-- fzf with fzf-tab integration
-- Custom aliases and colored output via bat
-
-### Other Dev Tools
-
-- **Git**: gh (GitHub CLI), diff-so-fancy, custom git-ai-commit script
-- **Reverse Engineering**: jadx, ghidra
-- **AI**: Claude Code
-- **Java**: HMCL (Minecraft launcher)
-- **IDE**: JetBrains Toolbox
-
-## Communication
-
-- WeChat
-- QQ (patched for Wayland IME)
-- Telegram Desktop + tdl
-- Element
-
-## Secrets Management
-
-- [pass](https://www.passwordstore.org/) — Standard Unix Password Manager
-- pass-secret-service — D-Bus secrets backend
-- GPG agent for signing/encryption
-
-## Custom Scripts
-
-Sources live beside their owning application in `modules/home/<app>/scripts/`.
-Each application contributes to `spreadconfig.scriptFiles`; Home Manager assembles
-one link tree at `~/scripts`, preserving the runtime directories below.
-Hardware-aware helpers read the generated `~/.config/spreadconfig/host.sh` for the
-configured host and device paths. Nix maintenance commands live in
-`modules/home/nix-tools/scripts/nix/` and are shared by all hosts:
-
-| Directory | Contents |
-|-----------|----------|
-| `niri/` | Window management, screenshots, screen recording, dropdown terminals, audio control, app launching |
-| `nix/` | System update (`nix_full_update`), garbage collection (`nix_clean`), generation management |
-| `util/` | Battery/brightness info, audio switching, lf wrappers, git-ai-commit |
-| `config/` | Zsh config, colored output, host context, fzf preview |
-
-See [application layout](docs/application-layout.md) for source ownership,
-editable links, host fragments, and validation commands.
-
-The standalone `flake-input-watcher` checks direct flake inputs on every host,
-by default five minutes after graphical login and then every six hours. Its
-systemd user timer runs the Bash program, which sends combined fnott
-notifications and supports reusable per-input hooks. See
-[flake input watcher](docs/flake-input-watcher.md) for scheduling, input switches,
-hook bindings, and manual checks. It does not update the lock file or rebuild.
-
-The independent notification history and shared fzf selector follow the same
-external-package model. See [independent applications](docs/independent-apps.md)
-for repository ownership and terminal/window manager integration.
-
-## Theme System
-
-All applications share a single dark color palette defined in `modules/home/vars.nix`. Colors are injected into every config via Nix module arguments — no duplicated hex values.
-
-### Color Palette
-
-| Name | Hex | Usage |
-|------|-----|-------|
-| Background | `#000000` | Base background |
-| Transparent | `#00000000` | Transparent overlays |
-| Mocha BG | `#0e1117` | Catppuccin-inspired secondary bg |
-| White | `#d4d4d4` | Default text |
-| Red | `#bc3f3c` | Errors, critical |
-| Green | `#6a9955` | Success, comments |
-| Yellow | `#e6e6aa` | Warnings, functions |
-| Blue | `#47a2ed` | Keywords, primary accent |
-| Purple | `#3181a7` | Secondary accent |
-| Cyan | `#47ccb1` | Classes, info |
-| Bright Dark | `#72737a` | Dimmed text |
-| Bright Red | `#ff0000` | Bright errors |
-| Bright Blue | `#8cd7ff` | Bright highlights |
-| Bright White | `#ffffff` | Emphasis text |
-| Bright Yellow | `#ffc66d` | Bright warnings |
-
-### Font Stack
-
-All Noto family with CJK fallback chain:
-
-- **Sans**: Noto Sans → Noto Sans CJK SC/HK/TC/JP/KR → Noto Color Emoji
-- **Mono**: Noto Sans Mono → Noto Sans Mono CJK SC/HK/TC/JP/KR → Symbols Nerd Font Mono → Emoji
-- **Serif**: Noto Serif → Noto Serif CJK SC/HK/TC/JP/KR → Emoji
-
-Font size is 16pt across the desktop (GTK, Qt, terminal), with larger sizes for lock screen (30pt) and launcher (18pt).
-
-### Themed Applications
-
-Every application below uses colors from the central palette:
-
-foot, fuzzel, fnott, swaylock, waybar, niri, nixvim, qutebrowser, starship, btop, bat, mpv, zathura, lazygit, zsh-syntax-highlighting, fcitx5, obsidian, wayprompt, gdu
-
-## Post-Install Setup
-
-### Local prerequisites and credentials
-
-Keep this checkout at `~/workspaces/spreadconfig` and clone the private password
-repository into `~/.password-store` after the first NixOS installation and login.
-The first installation requires the SOPS identity but does not require Password Store.
-Follow the [installation guide](docs/install.md) for the complete order of operations.
-These are the only repositories that need local checkouts for the shared
-configuration. NAW, `personal-skills`, the application packages, and upstream
-skills are fetched through locked flake inputs. Application data is prepared
-separately when needed.
-
-Initialize the shared SOPS age identity once using [SOPS setup](docs/sops.md).
-GitHub/GLM tokens and the login password hash come from encrypted
-`secrets/secrets.yaml`; their plaintext is rendered only at activation. Restore
-the GPG identity for pass using [password-store setup](docs/password-store.md).
-Qutebrowser quickmarks use the file already in the private password repository.
-
-### Repository Location
-
-The config references this repo at an absolute path. Clone to:
-
-```bash
-~/workspaces/spreadconfig
-```
-
-Commands in the installation guide select this checkout explicitly with `--flake`,
-so an `/etc/nixos` symlink is unnecessary. Keep the checkout at the path above
-because application links resolve to its editable files.
-
-### fcitx5
-
-Input method framework is enabled but UI/theme configuration must be done manually through fcitx5's own settings after first login.
-
-## Shared GitHub authentication
-
-All hosts use the same `github-token` in `secrets/secrets.yaml`. SOPS renders a protected
-`/run/secrets-rendered/gh-hosts.yml` at activation time; Home Manager links
-`~/.config/gh/hosts.yml` to it. The standard `programs.gh` package and its HTTPS Git
-credential helper read this file. No wrapper or shell token export is needed.
-SSH Git remotes still use SSH keys. Only placeholders, not tokens, enter the Nix store.
-The rendered file is owned by `spreadzhao:users`, mode `0400`.
-
-### First switch from the previous setup
-
-If `~/.config/gh/hosts.yml` is still a regular file, remove that old local copy before
-switching (the shared SOPS token remains intact). Home Manager will create the link:
-
-```bash
-if [ -f ~/.config/gh/hosts.yml ] && [ ! -L ~/.config/gh/hosts.yml ]; then
-  rm ~/.config/gh/hosts.yml
-fi
-unset GH_TOKEN GITHUB_TOKEN GH_CONFIG_DIR
-sudo nixos-rebuild switch --flake .#desktop1
-gh auth status
-```
-
-Use the corresponding host name on other machines. Remove any persistent token exports
-from shell/session configuration too: environment tokens override the generated file.
-A nonempty token in this file takes precedence over old keyring credentials. Keep
-`github-token` valid and nonempty; an empty value can fall back to an old keyring login.
-
-### Replace the shared token
-
-Edit the existing `github-token` value; do not create one token per machine:
-
-```bash
-sudo env SOPS_AGE_KEY_FILE=/var/lib/sops-nix/key.txt sops edit secrets/secrets.yaml
-```
-
-Sync the updated ciphertext and rebuild each host, then run `gh auth status`.
-No `gh auth login` is needed for normal use. The managed `hosts.yml` is read-only:
-do not use `gh auth login`, `logout`, `switch`, or `refresh` to change this managed login.
-
-If obtaining a new token via browser login, use a separate, temporary config directory
-and the standard CLI so the managed file is not modified (run in one terminal):
-
-```bash
-gh_setup_dir=$(mktemp -d)
-nix shell --inputs-from . nixpkgs#gh -c env -u GH_TOKEN -u GITHUB_TOKEN GH_CONFIG_DIR="$gh_setup_dir" gh auth login --hostname github.com --git-protocol https --web --insecure-storage
-nix shell --inputs-from . nixpkgs#gh -c env -u GH_TOKEN -u GITHUB_TOKEN GH_CONFIG_DIR="$gh_setup_dir" gh auth token --hostname github.com
-```
-
-The token is stored temporarily in that private directory and displayed locally. Paste it
-into SOPS, not into chat or Git. After saving it successfully, delete the temporary directory
-with `rm -rf -- "$gh_setup_dir"` and `unset gh_setup_dir`. Perform browser authorization only
-once and distribute that token through SOPS. Revoking old tokens interrupts their access
-until the replacement is deployed.
-
-A new machine needs shared-key initialization (`./scripts/sops-key init`) before rebuilding.
-For a private configuration repository, bootstrap by securely copying the checkout or
-temporarily using the same token.
-
-## Chromium bookmarks
-
-Qutebrowser and Chromium share the existing quickmarks source at
-`~/.password-store/qutebrowser/qutebrowser_quickmarks`, outside this repository.
-Qutebrowser reads and writes it directly through the existing symlink; the `m`
-and `M` bindings continue to save quickmarks. NixOS activation (including
-`nixos-rebuild switch` and boot) converts it once into Chromium's managed bookmark
-policy at `/etc/chromium/policies/managed/qutebrowser-bookmarks.json`.
-
-Only the conversion code and file paths are managed by Nix. Evaluation and builds
-do not read the bookmark data, so new build outputs contain no bookmark contents.
-There is no synchronization service, watcher, timer, or custom wrapper package.
-Chromium receives changes at the next activation; `nixos-rebuild build` alone
-does not refresh bookmarks. If the source is missing, activation succeeds without
-creating the source file or its parent directories. If conversion fails, activation
-warns and retains the previous policy. An existing empty source clears Chromium's
-managed bookmarks. The converter never changes the source contents or permissions.
-
-For a new machine, follow the [installation guide](docs/install.md): initialize
-SOPS, install NixOS, restore Password Store and its GPG identity, then manually
-activate the configuration again to generate Chromium's managed bookmarks.
-
-After saving a quickmark in qutebrowser, let it save normally, or run
-`:save quickmark-manager` before switching to include the latest changes.
-Chromium's managed bookmarks are read-only; edit the shared collection in
-qutebrowser. Use the private repository's normal push/pull workflow between
-machines. Activation does not clone or synchronize the repository.
-
-## Claude Code with GLM
-
-Claude Code uses the [GLM Coding Plan Anthropic endpoint](https://docs.bigmodel.cn/cn/coding-plan/tool/claude).
-The default model and the Opus, Sonnet, and Haiku aliases all select `glm-5.3`.
-The configuration disables 1M context and does not use the `[1m]` suffix.
-
-The shared `glm-api-key` is encrypted in `secrets/secrets.yaml`, alongside the
-GitHub token and login password hash. To replace it:
-
-```bash
-sudo env SOPS_AGE_KEY_FILE=/var/lib/sops-nix/key.txt sops edit secrets/secrets.yaml
-```
-
-Model and endpoint settings live in the `claude-settings.json` SOPS template in
-`modules/nixos/secrets.nix`. Only the API key is encrypted; the template uses a
-placeholder, like `gh-hosts.yml`. SOPS fills it at runtime, and Home Manager links
-`~/.claude/settings.json` to the rendered file, owned by `spreadzhao:users` with
-mode `0400`. The key never enters the Nix store in plaintext.
-
-Rebuild the target host after changing the key or template. The generated settings
-are read-only; make persistent changes in Nix or SOPS. Claude Code manages its own
-onboarding and mutable state in `~/.claude.json`; activation does not modify it.
-Restart Claude Code after activation and use `/status` to check the active model.
-
-## Rebuilding
-
-Run the commands for your target host manually. To check a configuration without
-activating it, use `build`; `switch` activates it immediately. New installations
-should follow the [installation guide](docs/install.md) first.
-
-```bash
+```sh
 cd ~/workspaces/spreadconfig
-target_host=$(hostname -s) # Or explicitly choose desktop1, thinkbook, zephyrus-m16.
+target_host=$(hostname -s)
+test -f "hosts/$target_host/host.nix"
 sudo nixos-rebuild build --flake "path:$PWD#$target_host"
+```
 
-# Activate manually after reviewing the build.
+After reviewing the build, run activation manually:
+
+```sh
 sudo nixos-rebuild switch --flake "path:$PWD#$target_host"
+```
 
-# Optional later update: update inputs and prepare the next boot.
+To update inputs and prepare the next boot:
+
+```sh
 ~/scripts/nix/nix_update boot
 ```
+
+`sns`, `sns_until` and `nix_clean` default to `switch`; `nix_update` and
+`nix_full_update` default to `boot`. Agents must never execute a switch, including
+through wrapper defaults. Use evaluation or `build` for checks; the user performs
+every switch.
+
+## Configuration layout
+
+| Path | Purpose |
+| --- | --- |
+| `flake.nix`, `flake.lock` | Inputs, host discovery and development shell |
+| `lib/host-context.nix` | Hardware facts and shared policy defaults |
+| `lib/mutable-files.nix` | Checked links to editable configuration files |
+| `hosts/<host>/host.nix` | Hardware declaration, profiles and module lists |
+| `hosts/<host>/{home,nixos}/` | Host-specific application settings and system services |
+| `modules/home/` | Shared user packages, application configuration and scripts |
+| `modules/nixos/` | Shared system configuration |
+| `scripts/sops-key`, `secrets/` | Identity bootstrap and encrypted credentials |
+
+[Application layout](docs/application-layout.md) describes file overrides,
+script ownership, host setup and validation. Edit shared colors and font defaults
+in `modules/home/vars.nix`; host profiles can scale or override font sizes.
+Native themes may also define application-specific colors.
+
+## Development tools
+
+`nix develop` loads the maintenance shell with nixfmt, Statix, deadnix, ShellCheck,
+shfmt, Git, jq and ripgrep. The root `.envrc` loads it through nix-direnv.
+
+NAW supplies the `spreadconfig-nix` and `nixos-best-practices` workspace skills
+and generates the ignored agent instructions from `repoWorkspace.instructions`
+in `flake.nix`. Edit skill content in its source repository. Home Manager manages
+the global Draw.io skill separately in `modules/home/naw-global-skills.nix`.
+
+Each software project supplies its own language toolchain through a devShell.
+[Nixvim](modules/home/nixvim/README.md) uses that environment for Go, Rust, C/C++
+and Python. [JetBrains IDEs](modules/home/jetbrains/README.md) have private JDK,
+Android SDK and C/C++ tools scoped to their launchers.
+
+## Credentials and integrations
+
+- [SOPS](docs/sops.md): shared age identity, GitHub authentication and Claude Code's GLM settings.
+- [Password Store](docs/password-store.md): GPG recovery, Secret Service and shared browser bookmarks.
+- [Independent applications](docs/independent-apps.md): flake update notifications, notification history and fzf popups.
+
+Fcitx5 preferences, proxy subscriptions and application logins are configured
+through their applications after the first boot.

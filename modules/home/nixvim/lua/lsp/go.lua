@@ -3,8 +3,7 @@ return function(source)
 		if not require("spreadconfig.lsp").available("gopls") then
 			return
 		end
-		-- Re-evaluate the upstream chunk on every query: the previous configuration
-		-- also scoped GOROOT/GOMODCACHE state to one root query.
+		-- Re-evaluate per query so GOROOT/GOMODCACHE state does not leak between roots.
 		return dofile(source).root_dir(bufnr, on_dir)
 	end
 end

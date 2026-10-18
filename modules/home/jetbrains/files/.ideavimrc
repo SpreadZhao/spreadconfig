@@ -1,6 +1,5 @@
 set scrolloff=5
 set relativenumber
-" Do incremental searching.
 set incsearch
 set ignorecase
 set smartcase
@@ -9,11 +8,9 @@ set clipboard+=unnamedplus
 " Don't use Ex mode, use Q for formatting.
 map Q gq
 
-" --- Enable IdeaVim plugins https://jb.gg/ideavim-plugins
+" Plugins: https://jb.gg/ideavim-plugins
 
-" Highlight copied text
 Plug 'machakann/vim-highlightedyank'
-" Commentary plugin
 Plug 'tpope/vim-commentary'
 Plug 'easymotion/vim-easymotion'
 Plug 'preservim/nerdtree'
@@ -23,15 +20,11 @@ set which-key
 set notimeout
 set easymotion
 set anyobject
-" set quickscope
 set peekaboo
 packadd matchit
 
 let mapleader = " "
 set keep-english-in-normal-and-restore-in-insert
-
-" let g:qs_primary_color   = '#ff0000'
-" let g:qs_secondary_color = '#00ff00'
 
 nmap <leader>si <Action>(SelectInProjectView)
 nmap <leader>ge <Action>(RecentFiles)
@@ -51,8 +44,6 @@ nmap <leader>; <leader><leader>s
 nmap <leader>lb <Action>(ToggleLineBreakpoint)
 nmap <leader>d <Action>(QuickJavaDoc)
 nmap <leader>e <Action>(ShowErrorDescription)
-" nmap / <Action>(Find)
-" xmap / <Action>(Find)
 
 " Remap multiple-cursors shortcuts to match terryma/vim-multiple-cursors
 nmap <C-n> <Plug>NextWholeOccurrence
@@ -62,9 +53,6 @@ xmap g<C-n> <Plug>NextOccurrence
 xmap <C-x> <Plug>SkipOccurrence
 xmap <C-p> <Plug>RemoveOccurrence
 
-" Note that the default <A-n> and g<A-n> shortcuts don't work on Mac due to dead keys.
-" <A-n> is used to enter accented text e.g. ñ
-" Feel free to pick your own mappings that are not affected. I like to use <leader>
 nmap <leader><C-n> <Plug>AllWholeOccurrences
 xmap <leader><C-n> <Plug>AllWholeOccurrences
 nmap <leader>g<C-n> <Plug>AllOccurrences

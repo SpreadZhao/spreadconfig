@@ -1,73 +1,49 @@
-# password-store 本机接入
+# Password Store
 
-从空白电脑开始请先按 [新电脑安装指南](install.md) 安装 NixOS。
-首次安装前需要初始化 SOPS，`~/.password-store` 可以在系统安装并登录后再克隆。
-除 `~/workspaces/spreadconfig` 本身外，这是共享配置唯一需要另行克隆的项目。
-GPG 和 SOPS age 是不同的身份：SOPS 解密系统凭据，GPG 解密 pass 条目。
-其他工具和 skills 由 flake 获取，不需要本地项目副本。
+Restore Password Store after installing NixOS and logging in as `spreadzhao`.
+Its GPG key is separate from the [SOPS age identity](sops.md). Run the commands
+below in the user's graphical session, without `sudo`.
 
-## 恢复 GPG 身份
+## Restore the GPG identity
 
-以下操作在图形会话中以 `spreadzhao` 用户执行，不要使用 `sudo gpg` 或 `sudo pass`。
-完成首次系统激活后，Git 使用受管的 GitHub CLI 凭据访问私有仓库。
+Check GitHub authentication, then clone the private store. If the destination
+already exists, inspect it before proceeding; keep its contents and `.gpg-id`.
 
-1. 将私有密码仓库克隆到 `~/.password-store`，保留原有 `.gpg-id`：
+```sh
+gh auth status
+git clone https://github.com/SpreadZhao/password-store.git ~/.password-store
+mkdir -p ~/.gnupg
+chmod 700 ~/.gnupg
+cat ~/.password-store/.gpg-id
+gpg --show-keys --with-fingerprint ~/.password-store/backup/gpg_pub_backup.pgp
+gpg --show-keys --with-fingerprint ~/.password-store/backup/gpg_bakcup.pgp
+```
 
-   ```sh
-   gh auth status
-   git clone https://github.com/SpreadZhao/password-store.git ~/.password-store
-   mkdir -p ~/.gnupg
-   chmod 700 ~/.gnupg
-   ```
+Match the full primary-key fingerprints against `.gpg-id` and a trusted record
+from the original machine. Matching email addresses alone are insufficient.
+`gpg_bakcup.pgp` is the backup's existing filename.
 
-   如果目录已存在，先检查是否就是待恢复的仓库，不覆盖其中的数据。
+```sh
+gpg --import ~/.password-store/backup/gpg_pub_backup.pgp
+gpg --import ~/.password-store/backup/gpg_bakcup.pgp
+gpg --list-secret-keys --keyid-format long
+printf '%s:6:\n' '<verified-primary-key-fingerprint>' | gpg --import-ownertrust
+pass ls
+pass show '<existing-entry-without-.gpg>' > /dev/null
+```
 
-2. 检查备份中的公钥身份和指纹，确认匹配 `.gpg-id`：
+Grant ultimate trust only to the verified identity you own. Psst prompts for the
+private-key passphrase locally. If the backup lacks a usable secret key, recover
+it from the original device; a new key or `pass init` cannot decrypt old entries.
 
-   ```sh
-   cat ~/.password-store/.gpg-id
-   gpg --with-colons --show-keys ~/.password-store/backup/gpg_pub_backup.pgp
-   gpg --with-colons --show-keys ~/.password-store/backup/gpg_bakcup.pgp
-   ```
+Pass works as soon as the key is restored. Activation does not import keys,
+clone or sync the store, or re-encrypt entries. Use the store's own Git workflow
+to sync it. Private keys, passwords and bookmark contents stay outside the Nix store.
 
-   同时与原电脑或可信备份记录核对完整主钥指纹，不能只根据相同邮箱判断身份。
+## Start Secret Service
 
-3. 导入同一身份的公私钥备份；`gpg_bakcup.pgp` 是现有仓库中的文件名：
-
-   ```sh
-   gpg --import ~/.password-store/backup/gpg_pub_backup.pgp
-   gpg --import ~/.password-store/backup/gpg_bakcup.pgp
-   gpg --list-secret-keys --keyid-format long
-   ```
-
-   GPG agent 使用 Home Manager 配置的 `pinentry-wayprompt`，需要口令时在本机
-   窗口输入。私钥保存在权限为 0700 的 `~/.gnupg` 中。若备份没有可用私钥，
-   从原机恢复正确备份，不为已有密码库生成新密钥或重新运行 `pass init`。
-
-4. 对自己持有的身份恢复 ultimate 信任；将下面的占位符替换为已核对的主钥指纹：
-
-   ```sh
-   printf '%s:6:\n' '<主钥完整指纹>' | gpg --import-ownertrust
-   ```
-
-5. 选一个已有条目验证解密，输出丢弃：
-
-   ```sh
-   pass show '<现有条目名>' > /dev/null
-   ```
-
-私钥导入和信任恢复属于本机的一次性操作，不在 Nix 激活时自动执行。
-完成后 pass 就能解密，不需要先 rebuild；后续激活用于补齐浏览器等配置集成。
-密码条目、私钥和收藏内容都留在 Nix store 和配置仓库之外。
-
-## 启动 secrets 服务
-
-共享配置已经安装 pass，并将 `PASSWORD_STORE_DIR`、pass-secret-service 的
-`storePath` 指向 `~/.password-store`。GPG agent 通过 socket 按需启动；
-仅服务显示 inactive 不代表故障。
-
-pass-secret-service 在 `.gpg-id` 尚不存在时跳过启动。克隆仓库并恢复密钥后，
-重新启动已安装的用户服务：
+`PASSWORD_STORE_DIR` and the service's `storePath` point to `~/.password-store`.
+The service skips startup while `.gpg-id` is missing. After restoring the store:
 
 ```sh
 systemctl --user restart pass-secret-service.service
@@ -75,20 +51,20 @@ systemctl --user is-active pass-secret-service.service
 busctl --user status org.freedesktop.secrets
 ```
 
-密码菜单沿用 `~/scripts/util/bin/pmenu` 和 `pmenu_last`。仓库同步仍使用原有
-Git push/pull 流程；系统激活不克隆、同步或重新加密密码条目。
-如果 `secret_service/` 被 Git 忽略，clone 不会迁移旧电脑的应用凭据。
-需要这些凭据时，单独恢复该目录的加密备份，连同 `.properties` 元数据一起保留。
+GPG agent starts on demand through its sockets; an inactive process alone does
+not indicate a fault. Password menus are available as `~/scripts/util/bin/pmenu`
+and `pmenu_last`.
 
-## 接入 qutebrowser quickmarks
+If Git ignores `secret_service/`, cloning will not restore application
+credentials stored there. Restore that directory's encrypted backup and its
+`.properties` metadata separately.
 
-各主机复用共享的 qutebrowser 配置、主题和快捷键，并通过主机配置调整字体及缩放。
-Home Manager 将 `~/.config/qutebrowser/quickmarks` 链接到
-`~/.password-store/qutebrowser/qutebrowser_quickmarks`。
+## Shared browser bookmarks
 
-若首次启动 qutebrowser 后已有普通 quickmarks 文件，先退出浏览器，将该文件
-移动到带时间戳的备份，再由 Home Manager 接管链接。即使本机文件为空也保留备份，
-不覆盖私有仓库里的收藏。已有正确链接无需处理。
+Home Manager links `~/.config/qutebrowser/quickmarks` to
+`~/.password-store/qutebrowser/qutebrowser_quickmarks`. Qutebrowser reads and
+writes this file directly. Before activation, quit qutebrowser and back up any
+regular file occupying the link path, even if it is empty:
 
 ```sh
 if [ -f ~/.config/qutebrowser/quickmarks ] && [ ! -L ~/.config/qutebrowser/quickmarks ]; then
@@ -97,5 +73,16 @@ if [ -f ~/.config/qutebrowser/quickmarks ] && [ ! -L ~/.config/qutebrowser/quick
 fi
 ```
 
-构建只包含路径和链接，不读取收藏数据。下一次 `switch` 或启动激活时，
-NixOS 会从私有文件生成 Chromium 的 managed bookmarks；单独构建不会刷新它。
+Do not overwrite the private store's bookmarks. A correct existing link needs
+no action. The `m` and `M` bindings save quickmarks; use `:save quickmark-manager`
+to flush edits before activating.
+
+System activation, including boot, converts quickmarks into Chromium's
+read-only policy at `/etc/chromium/policies/managed/qutebrowser-bookmarks.json`.
+Builds do not read bookmark contents or refresh that policy. A missing source is
+skipped, an empty source clears the managed bookmarks, and conversion failure
+keeps the previous policy. The converter leaves the source unchanged.
+
+Edit bookmarks in qutebrowser and sync the private repository normally. After
+restoring it on a new machine, [build and manually activate](../README.md#build-and-apply)
+once more to generate Chromium's policy.

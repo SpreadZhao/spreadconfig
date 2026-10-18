@@ -39,11 +39,11 @@ usage() {
 	cat <<'EOF'
 Usage: nix_update [switch|boot] [OPTIONS]
 
-Update spreadconfig flake inputs, then run sns_until.
+Update flake inputs and prepare the next boot (default), or switch if requested.
 
 Options:
   -e, --exclude INPUT[,INPUT...]  Exclude one or more flake inputs for this run
-      --non-core                  Exclude nixpkgs, home-manager, and nixos-hardware
+      --non-core                Exclude nixpkgs, home-manager, and nixos-hardware
       --exclude-file PATH        Read excluded inputs from PATH
       --no-exclude-file          Ignore the default exclude file
       --list-inputs              List current flake inputs and exit
@@ -53,7 +53,7 @@ The default exclude file is nix_update.exclude next to this script.
 It supports one input name per line, blank lines, and # comments.
 
 Environment:
-  NIX_RETRY_ATTEMPTS                 Outer flake update attempts, default 5
+  NIX_RETRY_ATTEMPTS                 Flake update attempts, default 5
   NIX_RETRY_DELAY                    Initial retry delay in seconds, default 2
 EOF
 }

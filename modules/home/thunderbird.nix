@@ -1,15 +1,15 @@
 { lib, ... }:
 
 let
-  # 填写 address 即启用账号；realName 留空时使用邮箱地址作为发件人名称。
-  # 列表中第一个已填写的账号是默认发信账号，可调整顺序。
-  # 密码、163 授权码和 OAuth 登录由 Thunderbird 管理，不写入 Nix 配置。
+  # Set address to enable an account; an empty realName uses the email address.
+  # The first configured account is the default sender.
+  # Thunderbird stores passwords, 163 app passwords and OAuth credentials.
   mailAccounts = [
     {
       name = "Outlook SpreadZhao";
       address = "spreadzhao@outlook.com";
       realName = "Spread Zhao";
-      # Outlook.com / Hotmail 个人邮箱；网页设置中需允许 IMAP 访问。
+      # Enable IMAP in the Outlook.com or Hotmail web settings.
       imap = {
         host = "outlook.office365.com";
         port = 993;
@@ -30,7 +30,7 @@ let
       name = "Gmail SpreadZhao";
       address = "spreadzhao@gmail.com";
       realName = "Spread Zhao";
-      # Home Manager 的 Gmail 预设配置 IMAP/SMTP、TLS 和 OAuth2。
+      # The Gmail preset configures IMAP, SMTP, TLS and OAuth2.
       flavor = "gmail.com";
     }
     {
@@ -43,7 +43,7 @@ let
       name = "163 SpreadZhao";
       address = "bvm17486607@163.com";
       realName = "Spread Zhao";
-      # 在网易网页邮箱开启 IMAP/SMTP；首次连接输入客户端授权码。
+      # Enable IMAP/SMTP in 163 webmail and sign in with an app password.
       imap = {
         host = "imap.163.com";
         port = 993;

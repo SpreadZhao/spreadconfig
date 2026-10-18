@@ -9,6 +9,5 @@ in
     personalPackages.cc-connect
     personalPackages.docsify-cli
     personalPackages.shmooz
-    # personalPackages.zcode
   ];
 }

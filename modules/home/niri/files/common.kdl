@@ -1,5 +1,4 @@
 animations {
-    // off
 }
 
 gestures {
@@ -7,8 +6,6 @@ gestures {
         off
     }
 }
-
-
 
 layout {
     gaps 4
@@ -26,13 +23,11 @@ layout {
     }
     default-column-width { proportion 0.5; }
     focus-ring {
-        // off
         width 2
         active-color "#ffffff"
         inactive-color "#72737a"
     }
     tab-indicator {
-        // hide-when-single-tab
         place-within-column
         gap 4
         width 4
@@ -52,11 +47,7 @@ layout {
     }
 }
 
-
 environment {
-    // GTK_IM_MODULE "fcitx"
-    // QT_QPA_PLATFORM "wayland"
-    // ELECTRON_OZONE_PLATFORM_HINT "auto"
 }
 
 recent-windows {
@@ -106,29 +97,8 @@ clipboard {
     disable-primary
 }
 
-// layer-rule {
-//     match namespace="^launcher$"
-//     shadow {
-//         on
-//         softness 15
-//         spread 1
-//         offset x=0 y=0
-//         draw-behind-window false
-//         color "#f2cdcd"
-//     }
-//     geometry-corner-radius 8
-// }
-
-// window-rule {
-//     geometry-corner-radius 8
-//     clip-to-geometry true
-//     draw-border-with-background false
-// }
-
+// Dropdown terminal geometry.
 window-rule {
-    // Match by "dropdown" app ID.
-    // You need to set this app ID when running your terminal, e.g.:
-    // spawn "alacritty" "--class" "dropdown"
     match app-id="dropdown-foot"
 
     open-floating true
@@ -141,18 +111,6 @@ window-rule {
     match is-floating=false
     tiled-state true
 }
-
-// window-rule {
-//     match is-focused=true
-//     shadow {
-//         on
-//         softness 15
-//         spread 1
-//         offset x=0 y=0
-//         draw-behind-window false
-//         color "#f2cdcd"
-//     }
-// }
 
 window-rule {
     match app-id="swayimg"
@@ -168,13 +126,13 @@ window-rule {
     open-fullscreen false
 }
 
-// wechat bug for some floating windows
+// Prevent auxiliary WeChat windows from taking focus.
 window-rule {
     match app-id="wechat" title="wechat"
     open-focused false
 }
 
-// Indicate screencasted windows with red colors.
+// Highlight the active screencast target.
 window-rule {
     match is-window-cast-target=true
 
@@ -185,7 +143,7 @@ window-rule {
     }
 }
 
-// floating terminal (foot)
+// Shared terminal for fzf popups.
 window-rule {
     match app-id="lick-foot"
     open-floating true
@@ -196,10 +154,9 @@ window-rule {
 binds {
     Mod+Shift+Slash { show-hotkey-overlay; }
 
-    Mod+Return hotkey-overlay-title="Open a Terminal" { spawn-sh "footclient"; }
+    Mod+Return hotkey-overlay-title="Open terminal" { spawn-sh "footclient"; }
     Mod+Shift+Return { spawn-sh "$SCRIPT_HOME/niri/drop_down_foot.sh"; }
-    Mod+space hotkey-overlay-title="Run an Application" { spawn "fuzzel"; }
-    // Super+Alt+L hotkey-overlay-title="Lock the Screen: swaylock" { spawn "swaylock"; }
+    Mod+space hotkey-overlay-title="Run application" { spawn "fuzzel"; }
 
     XF86AudioRaiseVolume allow-when-locked=true { spawn-sh "wpctl set-volume -l 1.5 @DEFAULT_SINK@ 5%+ && pkill -RTMIN+7 waybar"; }
     XF86AudioLowerVolume allow-when-locked=true { spawn-sh "wpctl set-volume @DEFAULT_SINK@ 5%- && pkill -RTMIN+7 waybar"; }
@@ -292,9 +249,6 @@ binds {
     Mod+Shift+8 { move-column-to-workspace 8; }
     Mod+Shift+9 { move-column-to-workspace 9; }
 
-    // Mod+Tab { focus-window-previous; }
-    // Mod+Shift+Tab { focus-workspace-previous; }
-
     Mod+Shift+Comma  { consume-or-expel-window-left; }
     Mod+Shift+Period { consume-or-expel-window-right; }
 
@@ -327,7 +281,7 @@ binds {
     Mod+Shift+S { spawn-sh "$SCRIPT_HOME/niri/screenrecord.sh";  }
 
     Mod+Shift+V { spawn-sh "$SCRIPT_HOME/niri/clipboard_history.sh"; }
-    Mod+Ctrl+Shift+N hotkey-overlay-title="Notification History" { spawn "notification-history" "browse"; }
+    Mod+Ctrl+Shift+N hotkey-overlay-title="Notification history" { spawn "notification-history" "browse"; }
 
     Mod+Z { spawn-sh "wooz --output $($SCRIPT_HOME/niri/niri_focused_output_name.sh)"; }
     Mod+S { spawn-sh "slurp -b '#000000aa' -c '#ffffff' >/dev/null"; }

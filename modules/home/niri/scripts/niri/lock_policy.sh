@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-restore_label="恢复自动锁屏（600 秒关屏，605 秒锁屏）"
-disable_label="禁止自动锁屏并保持屏幕开启"
+restore_label="Restore idle lock (screen off at 600s, lock at 605s)"
+disable_label="Disable idle lock and keep the screen on"
 unit_name="swayidle.service"
 systemd_user_dir="${XDG_CONFIG_HOME:-$HOME/.config}/systemd/user"
 override_dir="$systemd_user_dir/$unit_name.d"
@@ -25,7 +25,7 @@ write_disabled_override() {
 
 choice="$(
     printf '%s\n%s\n' "$restore_label" "$disable_label" |
-        fuzzel --dmenu --prompt "锁屏策略: "
+        fuzzel --dmenu --prompt "Idle lock: "
 )"
 
 case "$choice" in
@@ -34,20 +34,20 @@ case "$choice" in
         rmdir "$override_dir" 2>/dev/null || true
         systemctl --user daemon-reload
         systemctl --user restart "$unit_name"
-        notify-send --app-name "lock policy" "已恢复自动锁屏" "600 秒关屏，605 秒锁屏。"
+        notify-send --app-name "lock policy" "Idle lock restored" "Screen off after 600 seconds; lock after 605 seconds."
         ;;
     "$disable_label")
         write_disabled_override
         systemctl --user daemon-reload
         systemctl --user restart "$unit_name"
         niri msg action power-on-monitors >/dev/null 2>&1 || true
-        notify-send --app-name "lock policy" "已禁止自动锁屏" "swayidle 已临时替换为空闲进程；恢复前屏幕会保持开启。"
+        notify-send --app-name "lock policy" "Idle lock disabled" "The screen will stay on until idle lock is restored."
         ;;
     "")
         exit 0
         ;;
     *)
-        notify-send --app-name "lock policy" "未知选项" "$choice"
+        notify-send --app-name "lock policy" "Unknown option" "$choice"
         exit 1
         ;;
 esac

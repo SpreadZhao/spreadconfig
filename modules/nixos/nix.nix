@@ -42,12 +42,12 @@
       envVars = goEnvVars // proxyEnvVars;
 
       settings = {
-        # Enable flakes and new 'nix' command
+        # Enable flakes and the nix CLI.
         experimental-features = [
           "nix-command"
           "flakes"
         ];
-        # Opinionated: disable global registry
+        # Disable the global registry.
         flake-registry = "";
         # Keep the search path aligned with the flake registry.
         nix-path = lib.mapAttrsToList (n: _: "${n}=flake:${n}") flakeInputs;
@@ -63,10 +63,10 @@
         max-jobs = 2;
         cores = 4;
       };
-      # Opinionated: disable channels
+      # Disable channels.
       channel.enable = false;
 
-      # Opinionated: make flake registry match flake inputs
+      # Match the registry to the locked flake inputs.
       registry = lib.mapAttrs (_: flake: { inherit flake; }) flakeInputs;
 
       daemonIOSchedClass = lib.mkDefault "idle";

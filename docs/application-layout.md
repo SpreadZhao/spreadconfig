@@ -1,137 +1,165 @@
-# Application configuration and host differences
+# Configuration layout
 
-Application modules own their native files and scripts. Shared configuration lives
-in `modules/home/<app>/files/`, next to `default.nix`; host fragments live in
-`hosts/<host>/home/<app>/`. Pure Nix modules without external assets can remain
-single `.nix` files. The Home Manager entry point imports only top-level modules
-and direct child `default.nix` files, and rejects duplicate file/directory modules.
+Shared system modules live in `modules/nixos`; shared user modules live in
+`modules/home`. Home Manager imports top-level `.nix` files and direct child
+`default.nix` files. Keep package-only modules as single files, and use an
+application directory when it has native files or scripts. Do not create both
+`<app>.nix` and `<app>/default.nix`.
 
-## Configuration ownership
+## Ownership
 
-An application's module also owns its session variables, script PATH entries,
-MIME and protocol associations, desktop entries, autostart overrides, user
-services, and application-specific directories. Portal implementations own their
-backend registrations. Keep the existing variable names, installed paths and
-service dependencies when moving these declarations.
+Each application owns its configuration, packages, session variables, script
+PATH entries, MIME associations, desktop entries and user services. Portal
+implementations own their backend registrations. System services belong in
+NixOS; for example, `psst.nix` supplies the user Polkit agent while
+`modules/nixos/polkit.nix` enables authorization.
 
-`home-core.nix` contains user identity and general shell settings. `xdg.nix`
-contains XDG infrastructure, common directory conventions, the default portal
-policy, and the ordered desktop-wide MIME fallback package list. Its Antigravity
-association remains there because that application has no managed module.
-`vars.nix` remains the shared source of theme values, paths and link helpers;
-personal shell aliases remain in the shell module.
+`home-core.nix` holds user identity and session defaults. `xdg.nix` holds XDG
+infrastructure, directory conventions and desktop-wide MIME fallback order.
+`vars.nix` provides shared colors, fonts, paths and file helpers. Keep shell
+aliases in the shell module.
 
-Script PATH declarations use explicit ordering: niri (100), shared tools (200),
-Nix tools (300), then the general `.local/bin` entry at the default priority.
-These priorities preserve the existing executable lookup order independently of
-module import order.
+Preserve ordering where it affects behavior. Script PATH groups use priorities
+100 for Niri, 200 for shared tools and 300 for Nix tools, followed by the default
+`.local/bin` entry. `xdg-drawio.nix` preserves Draw.io's MIME package position in
+`home.packages`, which also affects Fontconfig directory order.
 
-Draw.io's custom MIME package is defined in `drawio/mime.nix`. The small
-`xdg-drawio.nix` import adapter keeps that package in its original position in
-`home.packages`, preserving both the generated profile and Fontconfig directory
-order. Its MIME associations and application package remain in `drawio/default.nix`.
+## Host configuration
 
-When a feature needs both module systems, use matching names in `modules/home`
-and `modules/nixos`: for example, Polkit's user authentication agent belongs in
-Home Manager while its system authorization service belongs in NixOS. Keep
-host-specific service policies in separate host leaf modules, such as TLP,
-asusd, supergfxd and LACT, with explicit imports from the host entry point.
+`hosts/<name>/host.nix` declares the system, form factor, CPU, GPUs, capabilities,
+profiles and module lists. `lib/host-context.nix` validates these before module
+evaluation and passes the same `host` value to NixOS and Home Manager. The
+constructor is exported as `lib.mkHost` in the flake outputs.
 
-Ownership refactors must preserve evaluated values and generated file contents
-across every affected host. Compare against the current working tree, including
-uncommitted application changes, rather than against Git HEAD. In particular,
-check ordered lists, package sets, MIME precedence and service dependencies;
-successful evaluation alone does not establish equivalence.
+Shared modules read `host.profile.nixos`, `host.profile.home` and predicates
+such as `host.gpu.hasNvidia`. CPU and GPU vendors are independent; hybrid systems
+can have several GPU predicates. Unknown capabilities are `null`.
 
-The arrangement follows the application-local assets and host-selected include
-pattern in [ryan4yin/nix-config](https://github.com/ryan4yin/nix-config/blob/01e93c2b65fa51f331f1d82a25fefab30c08490d/home/linux/gui/niri/default.nix)
-and the application folders in [dbeley/nixos-config](https://github.com/dbeley/nixos-config/blob/bd4cef2041d237277d1b8700d40852676af73461/apps/tmux/tmux.nix).
-`lib/host-context.nix` constructs and validates the shared host context before
-NixOS or Home Manager module evaluation. Host declarations and profiles supply
-hardware facts and policy; the constructor supplies shared defaults. It remains
-available as `spreadconfig.lib.mkHost`.
+Put application defaults in their own modules and overrides in host application
+modules, using standard NixOS or Home Manager options. Profiles hold shared
+policy such as font scaling and device paths. Host leaf modules hold drivers,
+PCI addresses, fan curves and hardware-specific services.
 
-## Selecting host differences
+Native defaults live at `modules/home/<app>/files/`; host replacements use the
+same relative path under `hosts/<host>/home/<app>/files/`. Scripts follow the
+same rule under `scripts/`. A host file takes precedence. Directory mappings
+keep other shared files and include host-only additions. Missing required shared
+files and conflicting file/directory paths are errors.
 
-- Niri: each host's Home Manager module sets
-  `spreadconfig.apps.niri.hostConfig` to its repository-relative `host.kdl`.
-  The shared entry includes the host fragment and common settings. Complete
-  input sections, outputs, GPU settings and the Zephyrus Waydroid rule remain
-  host-owned. Repeated window rules retain their order; outputs are not merged.
-- Qutebrowser: `spreadconfig.apps.qutebrowser.hostConfig` defaults to an empty
-  shared `host.py`. Zephyrus selects its native GPU/font/zoom overrides, sourced
-  after shared assignments and before theme setup. Package renderer and scale
-  still come from `host.profile.home.qutebrowser`.
-- Waybar: `host.profile.home.waybar` contains `height`, `fontSize`, and
-  `temperaturePath` (null disables the sensor layout). Battery layout follows
-  `host.capabilities.battery == true`. Small generated entry files select the
-  shared native JSONC/CSS and supply overrides. Waybar's including file has
-  priority over included values; CSS font overrides follow the shared import.
+Current examples:
 
-Qutebrowser's `autoconfig.yml` remains application-managed, and quickmarks keep
-their independent password-store link. Do not replace the whole qutebrowser
-configuration directory with a source directory.
+- Niri loads `files/host.kdl` before shared rules. Hosts supply input and display
+  settings; the shared fallback is empty. Preserve rule and output order.
+- Qutebrowser loads `files/host.py` after shared settings and before the theme.
+  Zephyrus also selects its Intel Vulkan package in its Home Manager module.
+- Psst uses `services.gpg-agent.pinentry.package`. Zephyrus wraps Pinentry and
+  the Polkit agent with `ZED_DEVICE_ID=46a6` to select its Intel GPU.
+- Waybar host modules call the shared JSON/CSS constructor with their dimensions
+  and temperature path. Battery layout follows the declared capability.
 
-## Editable links and script ownership
+Keep qutebrowser's `autoconfig.yml` application-managed and its quickmarks linked
+to Password Store. Do not replace the entire configuration directory.
 
-`lib/mutable-files.nix` exposes three module arguments:
+## Editable files and scripts
 
-- `repoLink relativePath`: validate a repository file and link to the actual
-  checkout using `mkOutOfStoreSymlink`.
-- `repoEntries relativeDirectory`: enumerate a directory into a target/source
-  map. Only explicitly selected asset directories are enumerated.
-- `repoTree name entries`: assemble a store directory of links, rejecting unsafe
-  target paths and file/directory target conflicts. Generated Nix files may also
-  be supplied as entries.
+`lib/mutable-files.nix` provides these helpers:
 
-Evaluation checks use `repoRoot`; runtime links use the editable `projDir`
-string. Editing an existing native source is visible on application reload.
-Adding/removing a managed file or changing Nix-generated parameters requires a
-new build and activation. Directory roots retain their existing store-backed,
-read-only shape; mutable source contents are not restored by generation rollback.
-
-Applications register their scripts through `spreadconfig.scriptFiles`, using
-`repoEntries` on their `scripts/` directory. The shared script module assembles
-one tree at `~/scripts`. Runtime names, PATH entries and executable modes are
-preserved. Conflicting source definitions are errors.
-
-| Owner | Installed paths/content |
+| Helper | Result |
 | --- | --- |
-| niri | `niri/`, including compositor-specific terminal and screenshot workflows |
-| qutebrowser | `qutebrowser/translate`, also installed as a browser userscript |
-| nix-tools | `nix/`, shared maintenance commands and input exclusions |
-| zsh, fzf | Shell initialization and fzf preview entry under `config/` |
-| lf | `util/lf-wrapper*` |
-| waybar | Battery, brightness and recording/time helpers |
-| git | Git AI commands and their `util/lib` / `util/config` dependencies |
-| pass, wl-clipboard, wechat | Password menus, copy-file and WeChat launcher |
-| mpv, ffmpeg | Camera and video-to-audio helpers |
-| script-tools | Shared host context/preview and audio helper |
+| `repoLink path` | A checked link to a regular file in the editable checkout |
+| `repoEntries directory` | A target/source map for a repository directory |
+| `repoTree name entries` | A store directory of links with validated target paths |
+| `appSource app path` | The selected host or shared repository-relative file path |
+| `appEntries app directory` | Merged shared and host directory mappings |
 
-Scripts that need checkout-relative resources resolve their own source through
-installed symlinks and use the `modules/home/<app>/scripts/` layout to load
-`script-tools/scripts/config/host_context.sh`. This shared initializer locates a
-parent containing both `flake.nix` and `hosts/` once, exposes it as
-`SPREADCONFIG_SOURCE_ROOT`, and loads the generated host context from
-`${XDG_CONFIG_HOME:-$HOME/.config}/spreadconfig/host.sh`. No fixed parent depth is
-assumed. Maintenance commands preserve their explicit host/repository overrides;
-`nix_update` defaults to the source checkout. The skill resolver validates the
-host, then returns the shared nix-tools source.
+Validation uses `repoRoot`; runtime links use `projDir`. Existing file edits
+appear on application reload. Adding or removing files, or changing generated
+settings, needs a build and activation. Rolling back a generation does not undo
+edits in the checkout.
 
-## Validation
+Applications register `appEntries "<app>" "scripts"` with
+`spreadconfig.scriptFiles`. Home Manager assembles the maps into `~/scripts`;
+conflicting contributions from separate applications are errors. Keep installed
+names, executable modes and PATH order stable.
 
-Use path flakes while new files are untracked; normal Git-backed flakes require
-new sources to be tracked. Do not put plaintext private keys in any flake source.
+Scripts needing host or checkout data source
+`script-tools/scripts/config/host_context.sh`. It finds a parent containing
+`flake.nix` and `hosts/`, sets `SPREADCONFIG_SOURCE_ROOT`, and loads
+`${XDG_CONFIG_HOME:-$HOME/.config}/spreadconfig/host.sh`. Resolve installed
+symlinks before finding the source; do not assume a fixed directory depth.
+`SPREADCONFIG_HOST` selects another host for maintenance commands. Shared
+`sns` and `sns_until` belong in nix-tools, not individual host directories.
 
-```sh
-nixfmt flake.nix
-git diff --check
-nix eval --raw "path:$PWD#nixosConfigurations.desktop1.config.home-manager.users.spreadzhao.home.activationPackage.drvPath"
+## Add a host
+
+The flake discovers directories containing `host.nix`. Create
+`hosts/my-laptop/{home,nixos}` and use this Intel integrated-GPU example as a
+starting point for `host.nix`:
+
+```nix
+{
+  system = "x86_64-linux";
+  formFactor = "laptop";
+  cpu.vendor = "intel";
+  gpu.devices = [
+    { vendor = "intel"; kind = "integrated"; }
+  ];
+  capabilities = {
+    battery = true;
+    backlight = true;
+    bluetooth = null;
+  };
+  profile = {
+    nixos = import ./nixos/profile.nix;
+    home = import ./home/profile.nix;
+  };
+  modules = {
+    nixos = [ ./configuration.nix ];
+    home = [ ./home.nix ];
+  };
+}
 ```
 
-Evaluate the Home Manager activation package and system for all three hosts,
-using each host’s existing disk configuration. Build the affected asset/link-tree
-sources without activation, check their final destinations and permissions, and
-run `niri validate -c <built-tree>/config.kdl` on every Niri tree.
+Create `configuration.nix`:
 
-For changed Shell scripts, run syntax checks and ShellCheck.
+```nix
+{ host, ... }:
+{
+  imports = [ ./hardware-configuration.nix ];
+  networking.hostName = host.name;
+  hardware.graphics = {
+    enable = true;
+    enable32Bit = true;
+  };
+}
+```
+
+Start `home.nix` with `{ ... }: { }`, then explicitly import any host application
+modules. Start `home/profile.nix` with `{ }` and `nixos/profile.nix` with
+`{ proxy.enable = false; }` if no proxy is ready. Add
+`home/niri/files/host.kdl` when display or input settings are needed.
+
+Generate `hardware-configuration.nix` on the target machine as described in
+[installation](install.md#clone-and-select-the-host). Hardware declarations do
+not configure every driver: add NVIDIA options and PRIME addresses only when
+they match the actual devices.
+
+## Validate changes
+
+Use path flakes while files are untracked. Compare against the working tree
+before the change, including existing edits, and check ordered packages, MIME
+precedence, service dependencies and generated file contents when refactoring.
+
+```sh
+nixfmt path/to/changed-file.nix
+git diff --check
+nix eval --raw --no-write-lock-file \
+  "path:$PWD#nixosConfigurations.desktop1.config.home-manager.users.spreadzhao.home.activationPackage.drvPath"
+nix eval --raw --no-write-lock-file \
+  "path:$PWD#nixosConfigurations.desktop1.config.system.build.toplevel.drvPath"
+```
+
+Repeat for affected hosts. For shared changes, check all three. Build affected
+asset trees without activating them, inspect paths and modes, and validate Niri
+trees with `niri validate -c <built-tree>/config.kdl`. Check changed shell scripts
+with their parser and ShellCheck. Run switches manually after reviewing results.

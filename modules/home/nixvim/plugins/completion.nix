@@ -37,20 +37,12 @@
           };
           ghost_text = {
             enabled = true;
-            # show_with_menu = false;
           };
           trigger = {
             prefetch_on_insert = true;
             show_on_backspace = true;
-            # Disabled: Prefer manual completion control with <C-.>
-            # Uncomment to auto-show after typing these characters:
-            # show_on_x_blocked_trigger_characters = [
-            #   " "
-            #   ";"
-            # ];
           };
           menu = {
-            # border = "rounded";
             direction_priority.__raw = "require('spreadconfig.completion').direction_priority";
 
             draw = {

@@ -9,8 +9,8 @@
 
 let
   # c59305b boots but niri fails to create an EGL device on this GTX 1650.
-  # Keep Generation 47's compositor and driver stack together until a newer
-  # stack has passed a real boot test. Other hosts/packages use current nixpkgs.
+  # Keep this compositor and driver stack pinned until a newer stack passes
+  # a boot test. Other hosts and packages use current nixpkgs.
   graphicsPkgs = import inputs.nixpkgs-desktop1-graphics {
     system = pkgs.stdenv.hostPlatform.system;
     config = {
@@ -43,7 +43,7 @@ in
 
 {
   boot.kernelPackages = lib.mkForce baseline.boot.kernelPackages;
-  # All existing Home Manager niri references also resolve to this package.
+  # Home Manager uses the same niri build.
   nixpkgs.overlays = [ (_final: _prev: { inherit (graphicsPkgs) niri; }) ];
 
   hardware = {
@@ -55,8 +55,7 @@ in
       extraPackages32 = lib.mkForce baseline.hardware.graphics.extraPackages32;
     };
 
-    # Preserve the desktop's direct NVIDIA setup from nixos_desktop1.
-    # Zephyrus PRIME bus IDs, Dynamic Boost and ASUS services are laptop-specific.
+    # This desktop uses NVIDIA directly, without laptop PRIME or ASUS services.
     nvidia = {
       modesetting.enable = true;
       nvidiaSettings = true;

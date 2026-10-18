@@ -2,17 +2,11 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-PROMPT_OUTPUT="Select Output: "
+PROMPT_OUTPUT="Select output: "
 
-# ===============================
-#       User config
-# ===============================
 ENABLE_FREEZE=true
 HIDE_CURSOR=true
 
-# ===============================
-#       Globals
-# ===============================
 TMPFILE=""
 FREEZE_PID=""
 USE_OUTPUT_MODE=false
@@ -20,9 +14,6 @@ USE_WINDOW_MODE=false
 OUTPUT_NAME=""
 SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
 
-# ===============================
-#        Arg parsing
-# ===============================
 case "${1:-}" in
 -o)
     USE_OUTPUT_MODE=true
@@ -32,9 +23,6 @@ case "${1:-}" in
     ;;
 esac
 
-# ===============================
-#        Notify
-# ===============================
 notify() {
     notify-send \
         --app-name "screenshot" \
@@ -43,9 +31,6 @@ notify() {
         "$2"
 }
 
-# ===============================
-#        Cleanup
-# ===============================
 cleanup() {
     if [ -n "$TMPFILE" ]; then
         rm -f -- "$TMPFILE"
@@ -53,18 +38,12 @@ cleanup() {
 }
 trap cleanup EXIT
 
-# ===============================
-#        Init tempfile
-# ===============================
 TMPFILE=$(mktemp --suffix=.png)
 
-# ===============================
-#        Capture
-# ===============================
 if [ "$USE_OUTPUT_MODE" = true ]; then
-    # ----- Output selection mode -----
+    # Capture one output.
     if ! outputs_json=$(niri msg -j outputs); then
-        notify "Failed to query outputs ❌" ""
+        notify "Failed to query outputs" ""
         exit 1
     fi
 
@@ -77,7 +56,7 @@ if [ "$USE_OUTPUT_MODE" = true ]; then
     ' <<<"$outputs_json")
 
     if [ -z "$menu" ]; then
-        notify "No active outputs found ❌" ""
+        notify "No active outputs found" ""
         exit 1
     fi
 
@@ -87,44 +66,44 @@ if [ "$USE_OUTPUT_MODE" = true ]; then
     OUTPUT_NAME="${selected%%|*}"
 
     if ! grim -o "$OUTPUT_NAME" "$TMPFILE"; then
-        notify "Capture failed ❌" ""
+        notify "Capture failed" ""
         exit 1
     fi
 
 elif [ "$USE_WINDOW_MODE" = true ]; then
-    # ----- Window selection mode -----
+    # Capture the selected window.
 
     if ! win_json=$(niri msg -j pick-window); then
-        notify "Window selection failed ❌" ""
+        notify "Window selection failed" ""
         exit 1
     fi
 
     win_id=$(jq '.id' <<<"$win_json")
 
-    # 从窗口列表获取几何信息
+    # Read the selected window geometry.
     if ! rect=$(niri msg -j windows | jq -r "
         .[] | select(.id == $win_id) |
         .rect |
         \"\(.x),\(.y) \(.width)x\(.height)\"
     "); then
-        notify "Failed to get window geometry ❌" ""
+        notify "Failed to get window geometry" ""
         exit 1
     fi
 
     echo "rect: $rect"
 
     if [ -z "$rect" ]; then
-        notify "Window geometry not found ❌" ""
+        notify "Window geometry not found" ""
         exit 1
     fi
 
     if ! grim -g "$rect" "$TMPFILE"; then
-        notify "Capture failed ❌" ""
+        notify "Capture failed" ""
         exit 1
     fi
 
 else
-    # ----- Region selection mode -----
+    # Freeze the screen while selecting a region.
     if [ "$ENABLE_FREEZE" = true ]; then
         args=()
         [ "$HIDE_CURSOR" = true ] && args+=(--hide-cursor)
@@ -135,16 +114,16 @@ else
 
     if ! grim -g "$(slurp -d -b "#000000aa" -c "#ffffff")" "$TMPFILE"; then
         [ -n "$FREEZE_PID" ] && kill "$FREEZE_PID" 2>/dev/null
-        notify "Capture failed ❌" ""
+        notify "Capture failed" ""
         exit 1
     fi
 
     [ -n "$FREEZE_PID" ] && kill "$FREEZE_PID" 2>/dev/null
 fi
 
-# 确认文件存在
+# Reject an empty capture.
 if [ ! -s "$TMPFILE" ]; then
-    notify "Screenshot failed ❌" ""
+    notify "Screenshot failed" ""
     exit 1
 fi
 

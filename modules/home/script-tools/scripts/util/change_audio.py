@@ -60,7 +60,6 @@ def select_with_fuzzel(prompt, entries):
     return selected_id
 
 def main():
-    # Step 1: Ask whether to change Sink or Source
     choice_cmd = (
         "echo 'Sink (Output)\nSource (Input)' | "
             "fuzzel --dmenu --prompt 'Choose Type: '"

@@ -5,10 +5,6 @@ shopt -s nullglob
 
 DELIM=$'\034'
 
-########################################
-# 1️⃣ 获取 XDG applications 目录
-########################################
-
 get_desktop_dirs() {
     IFS=':' read -ra base <<<"${XDG_DATA_DIRS:-/run/current-system/sw/share}"
 
@@ -19,10 +15,6 @@ get_desktop_dirs() {
     [[ -d "$HOME/.local/share/applications" ]] &&
         echo "$HOME/.local/share/applications"
 }
-
-########################################
-# 2️⃣ 解析 desktop 文件
-########################################
 
 parse_desktop() {
     local file="$1"
@@ -63,10 +55,6 @@ parse_desktop() {
     ' "$file"
 }
 
-########################################
-# 3️⃣ 构建列表
-########################################
-
 build_list() {
     while read -r dir; do
         for f in "$dir"/*.desktop; do
@@ -74,10 +62,6 @@ build_list() {
         done
     done < <(get_desktop_dirs)
 }
-
-########################################
-# 4️⃣ 执行
-########################################
 
 clean_exec() {
     local cmd="$1"
@@ -107,10 +91,6 @@ run() {
             sh -c "$exec"
     fi
 }
-
-########################################
-# MAIN
-########################################
 
 if CHOICE=$(build_list | sort -u | fzf-popup --title 'Launcher' -- \
     --delimiter="$DELIM" --with-nth=1 --preview 'cat -- {4}'); then

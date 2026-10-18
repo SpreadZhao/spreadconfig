@@ -1,7 +1,5 @@
--- Compatibility root callback from this configuration's nvim-lspconfig-derived
--- implementation. See lsp/rust_analyzer.lua in neovim/nvim-lspconfig.
--- The locked upstream version additionally probes Rust sysroots; retain these
--- rules until that behavior change is explicitly wanted.
+-- Adapted from nvim-lspconfig/lsp/rust_analyzer.lua. This callback omits
+-- upstream sysroot probing; review that behavior before replacing it.
 return function(bufnr, on_dir)
 	if not require("spreadconfig.lsp").available("rust_analyzer") then
 		return

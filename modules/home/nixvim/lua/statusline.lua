@@ -145,14 +145,6 @@ return function()
 						return fmt(str, false)
 					end,
 				},
-				-- {
-				--   'filetype',
-				--   padding = 0,
-				--   icons_enabled = false,
-				--   fmt = function(str)
-				--     return fmt(str, false)
-				--   end,
-				-- },
 			},
 			lualine_z = {
 				{

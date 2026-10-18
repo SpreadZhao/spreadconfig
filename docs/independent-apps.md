@@ -1,41 +1,79 @@
-# Independent applications and packaging
+# Independent applications
 
-Third-party applications requiring personally maintained packaging belong to
-[SpreadZhao/nix-packages](https://github.com/SpreadZhao/nix-packages). Applications
-developed from scratch belong to independent repositories. spreadconfig consumes
-their flake packages and modules and owns desktop and host-specific policy.
+[SpreadZhao/nix-packages](https://github.com/SpreadZhao/nix-packages) maintains
+custom packaging for third-party applications. Applications developed here
+have their own repositories; spreadconfig consumes their locked packages and
+modules and supplies desktop integration.
 
-| Application | Repository | Integration here |
+| Input | Upstream | Local integration |
 | --- | --- | --- |
-| flake-input-watcher | [flake-input-watcher](https://github.com/SpreadZhao/flake-input-watcher) | Enabled service and checkout path |
-| notification-history | [notification-history](https://github.com/SpreadZhao/notification-history) | fnott enable policy, configured popup and Neovim dependencies, shortcut |
-| fzf-popup | [fzf-popup](https://github.com/SpreadZhao/fzf-popup) | Foot adapter, Niri floating rule, callers |
+| `flake-input-watcher` | [Repository](https://github.com/SpreadZhao/flake-input-watcher) | Checkout path, enabled service and timer |
+| `notification-history` | [Repository](https://github.com/SpreadZhao/notification-history) | fnott policy, Nixvim viewer, popup package and shortcut |
+| `fzf-popup` | [Repository](https://github.com/SpreadZhao/fzf-popup) | Foot launcher, Niri window rule and callers |
 
-All three inputs follow the root nixpkgs. notification-history's fzf-popup input follows the root fzf-popup. Update the corresponding input to adopt a new version.
-Local development can use `--override-input NAME path:/path/to/NAME` and
-`--no-write-lock-file` to avoid persisting local paths.
+These inputs follow the root nixpkgs; notification-history also follows the
+root fzf-popup input. Update the corresponding input to adopt a release. Test
+local work with `--override-input NAME path:/path/to/NAME --no-write-lock-file`.
 
-## Terminal and window manager boundary
+## Flake input watcher
 
-The standalone fzf-popup package depends on Bash, coreutils and fzf. It accepts
-candidates on stdin, arbitrary fzf arguments after `--`, and returns original
-selected rows and fzf's exit status. An external launcher receives argv, executes
-it and waits for completion; `FZF_POPUP_TITLE` provides the title. Without a
-launcher it uses the current terminal.
+`modules/home/flake-input-watcher/default.nix` enables checks against `projDir`.
+The default timer runs five minutes after graphical login and every six hours.
+Host modules can override `services.flake-input-watcher` for scheduling,
+input selection and hooks. Checks send fnott notifications and run matching
+hooks for pending updates, including previously reported updates. They do not
+change the lock file or rebuild the system.
 
-`modules/home/fzf-popup` wraps the external package with a default Foot launcher
-using `footclient --client-environment -a lick-foot`. Niri's existing `lick-foot`
-rule sets floating mode and dimensions. Override `FZF_POPUP_LAUNCHER` or use
-`--launcher EXECUTABLE` to choose another adapter. Changing the default terminal
-or window manager requires changing this integration, not the shared program.
+```sh
+flake-input-watcher list-inputs
+flake-input-watcher check --dry-run
+flake-input-watcher check
+systemctl --user status flake-input-watcher.timer
+journalctl --user -u flake-input-watcher.service
+```
+
+## Notification history
+
+The listener is enabled with fnott unless overridden. It starts with the
+graphical session, records incoming notifications and retains the newest 100
+by default. It cannot recover notifications sent before it started. Override
+`services.notification-history.maxEntries` with a positive number to change
+retention.
+
+Open `notification-history browse` or press `Mod+Ctrl+Shift+N`. Enter displays
+the title and body in read-only Nixvim with word wrapping; quitting closes the
+floating terminal. Escape cancels. Neither action changes the clipboard;
+copying is explicit:
+
+```sh
+notification-history preview ID
+notification-history view ID
+notification-history copy ID
+systemctl --user status notification-history.service
+journalctl --user -u notification-history.service
+```
+
+The database is at
+`${XDG_DATA_HOME:-$HOME/.local/share}/notification-history/history.sqlite3`.
+The package receives `programs.nixvim.build.package` and the configured
+`fzf-popup` through its Nix overrides. Program behavior and schema belong upstream.
+
+## fzf popups
+
+`fzf-popup` reads candidates from stdin, accepts fzf options after `--`, and
+returns the selected rows and fzf exit status. Its launcher receives an argument
+vector, runs it and waits for completion. `FZF_POPUP_TITLE` carries the title;
+without a launcher, the program uses the current terminal.
+
+`modules/home/fzf-popup` supplies `footclient --client-environment -a lick-foot`.
+Niri's `lick-foot` rule controls floating size. Override `FZF_POPUP_LAUNCHER`
+or pass `--launcher EXECUTABLE` for another terminal adapter.
 
 ```sh
 printf '%s\n' first second | fzf-popup --title 'Choose' -- --prompt='Pick> '
 ```
 
-The configured package is injected into notification-history through its Nix
-`override { fzf-popup = ...; neovim = ...; }` interface, with Neovim coming from
-`programs.nixvim.build.package`. Clipboard history and the Foot launcher
-use the same installed program. Preview and action logic stays with each caller:
-cliphist decoding and images here, notification database, viewing and copying in the
-notification-history repository. `fm` and `fm --dmenu` retain their current roles.
+Notification history, clipboard history and the Foot application launcher share
+this package. Each caller owns its previews and actions. Terminal and window
+manager changes belong in spreadconfig; the standalone program has no dependency
+on Foot or Niri.

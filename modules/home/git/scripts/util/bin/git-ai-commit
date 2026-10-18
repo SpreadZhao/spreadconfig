@@ -19,66 +19,22 @@ MAX_COMPACT_FILE_DIFF_LINES="${GIT_AI_MAX_COMPACT_FILE_DIFF_LINES:-120}"
 
 PROMPT=$(
     cat <<'EOF'
-Your task is to generate a commit message for the staged changes.
+Write a commit message for the staged changes only. Do not stage files or commit.
+Use the supplied summary, status and diff; large diffs may contain only excerpts.
+Do not invent changes missing from that context.
 
-The input may be either the full staged diff or a compact context generated from
-large staged changes. When the input is compact, use the file summary, name
-status, and diff excerpts to infer the intent. Do not invent changes that are
-not supported by the provided context.
+Return only an English commit message, without commentary or Markdown fences.
+Use type(scope): title, or type: title when no scope helps. Allowed types:
+feat, fix, chore, docs, refactor, test, style, perf.
 
-## Guidelines
+Keep the title lowercase, specific, at most 50 characters, with no final period.
+Add an optional body only to explain the reason or a consequence. Use concise
+bullets when several points are needed. Avoid vague titles and file-by-file lists.
 
-- Only generate the message for staged files/changes
-- Don't add any files using `git add`. The user will decide what to add.
-- Don't commit any files either. You can only generate commit messages.
-- Only generate text as described in `Example`, no other redundant words (including markdown symbols like ```).
-- Follow the rules below for the commit message.
+Example:
+fix(auth): reject expired tokens
 
-## Format
-
-<type>:<space><message title>
-
-<bullet points summarizing what was updated>
-
-## Example Titles
-
-feat(auth): add JWT login flow
-fix(ui): handle null pointer in sidebar
-refactor(api): split user controller logic
-docs(readme): add usage section
-
-## Example with Title and Body
-
-feat(auth): add JWT login flow
-
-- Implemented JWT token validation logic
-- Added documentation for the validation component
-
-## Rules
-
-* title is lowercase, no period at the end.
-* Title should be a clear summary, max 50 characters.
-* Use the body (optional) to explain *why*, not just *what*.
-* Bullet points should be concise and high-level.
-
-Avoid
-
-* Vague titles like: "update", "fix stuff"
-* Overly long or unfocused titles
-* Excessive detail in bullet points
-
-## Allowed Types
-
-| Type     | Description                           |
-| -------- | ------------------------------------- |
-| feat     | New feature                           |
-| fix      | Bug fix                               |
-| chore    | Maintenance (e.g., tooling, deps)     |
-| docs     | Documentation changes                 |
-| refactor | Code restructure (no behavior change) |
-| test     | Adding or refactoring tests           |
-| style    | Code formatting (no logic change)     |
-| perf     | Performance improvements              |
+- Prevent expired sessions from reaching protected routes.
 EOF
 )
 

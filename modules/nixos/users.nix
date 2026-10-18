@@ -5,13 +5,8 @@
     users.spreadzhao = {
       isNormalUser = true;
       extraGroups = [
-        "wheel" # Enable ‘sudo’ for the user.
-        # "ydotool"
+        "wheel" # Allow sudo.
       ];
-      # packages = with pkgs; [
-      #   tree
-      # ];
-      # shell = pkgs.zsh;
       hashedPasswordFile = config.sops.secrets."spreadzhao-password-hash".path;
     };
   };

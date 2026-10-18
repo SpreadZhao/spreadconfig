@@ -47,7 +47,7 @@
 
   swapDevices = [ ];
 
-  # only need when /data was mounted
+  # Create the user's directory on /data.
   systemd.tmpfiles.rules = [
     "d /data/spreadzhao 0755 spreadzhao users -"
   ];

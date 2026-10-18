@@ -55,7 +55,6 @@ style = 'theme_bright_dark'
 [time]
 disabled = false
 format = '[$time]($style)'
-# time_format = '%H:%M:%S%.3f'
 time_format = '%H:%M:%S'
 style = "bold theme_yellow"
 
@@ -65,9 +64,6 @@ impure_msg = ''
 style= 'theme_bright_blue'
 symbol = ''
 format = '[$symbol$state]($style) '
-# BUG: heuristic always returns true (depends on whether any value $PATH starts with /nix/store)
-# https://github.com/starship/starship/blob/master/src/modules/nix_shell.rs#L38
-# heuristic = true
 
 [shlvl]
 disabled = true

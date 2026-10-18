@@ -9,7 +9,7 @@ let
     name: entries.${name} == "directory" && builtins.pathExists (./. + "/${name}/default.nix")
   ) (builtins.attrNames entries);
   duplicates = lib.filter (name: builtins.elem "${name}.nix" fileNames) directoryNames;
-  # Keep the original alphabetical module order when app.nix becomes app/.
+  # Sort file and directory modules together to preserve import order.
   modulesByName = builtins.listToAttrs (
     map (name: lib.nameValuePair name (./. + "/${name}")) fileNames
     ++ map (name: lib.nameValuePair "${name}.nix" (./. + "/${name}")) directoryNames
