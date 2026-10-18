@@ -1,10 +1,6 @@
 { config, osConfig, ... }:
 
 {
-  # Cover login shells and applications started by the user systemd manager.
-  home.sessionVariables.GH_CONFIG_DIR = "${config.xdg.configHome}/gh";
-  systemd.user.sessionVariables.GH_CONFIG_DIR = config.home.sessionVariables.GH_CONFIG_DIR;
-
   programs.gh = {
     enable = true;
     settings.git_protocol = "https";
@@ -12,7 +8,7 @@
   };
 
   xdg.configFile = {
-    # Adopt files previously written by gh and the old activation script.
+    # Replace existing files with the managed GitHub CLI configuration.
     "gh/config.yml".force = true;
     "gh/hosts.yml" = {
       force = true;

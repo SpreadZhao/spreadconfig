@@ -72,6 +72,14 @@ Application-specific session variables belong in the owning module. Set user
 systemd variables when services also need them. Log out and back in after
 changing session variables.
 
+Codex uses one shared package with separate GUI and CLI launchers for each
+account. The launchers isolate `CODEX_HOME`, SQLite state, and Electron user
+data while preserving the desktop session's XDG directories for external tools.
+Runtime caches and desktop logs use upstream defaults. Browser helpers use the
+upstream `browser-proxy` feature. Desktop cloud WebSockets use a local SOCKS
+proxy patch in `codex/patches/`. GitHub CLI reads the shared login through the
+normal XDG path.
+
 Keep generic graphics variables local to the application or service. Btop uses
 the package's `cudaSupport` option on NVIDIA hosts. Qutebrowser's Intel Vulkan
 wrapper, Codex's profile and compatibility fixes, and JetBrains' plugin and

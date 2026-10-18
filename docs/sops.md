@@ -59,15 +59,14 @@ The optional include lets the first build succeed before the runtime file
 exists. Activate the initial configuration before updating private inputs.
 SSH remotes still use SSH keys.
 
-Home Manager sets `GH_CONFIG_DIR` to its `gh` configuration directory
-(`~/.config/gh`) for login shells and user systemd services. This keeps the
-managed login available when Codex uses isolated XDG directories. After changing
-the session environment, activate the configuration and log out of the desktop,
-then log back in before starting Codex. Individual commands can override
-`GH_CONFIG_DIR` to use a temporary configuration.
+GitHub CLI reads the managed login through the normal XDG configuration path
+(`~/.config/gh` in this configuration). Codex preserves the session's XDG
+directories, so it uses the same login.
 
 Check the managed login with `gh auth status`. Remove persistent `GH_TOKEN`,
-`GITHUB_TOKEN` or `GH_CONFIG_DIR` overrides if they select another login. Home Manager owns the linked credential file. Do not use `gh auth login`, `logout`, `switch` or `refresh` on the read-only file.
+`GITHUB_TOKEN` or `GH_CONFIG_DIR` overrides if they select another login. Home
+Manager owns the linked credential file. Do not use `gh auth login`, `logout`,
+`switch` or `refresh` on the read-only file.
 
 To replace the token, edit `github-token` in SOPS and deploy it to every host.
 If browser authorization is needed, use a temporary GitHub CLI configuration:
