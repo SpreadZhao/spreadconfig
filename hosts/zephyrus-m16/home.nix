@@ -5,6 +5,7 @@ args@{ pkgs, ... }:
 // {
   imports = [
     ./home/gaomon-tablet.nix
+    ./home/psst.nix
     ./home/qutebrowser
     ./home/waybar.nix
   ];

@@ -1,4 +1,4 @@
-{ config, ... }:
+{ ... }:
 
 {
   services.gpg-agent = {
@@ -6,9 +6,5 @@
     defaultCacheTtl = 86400;
     enableZshIntegration = true;
     maxCacheTtl = 86400;
-    pinentry = {
-      package = config.programs.wayprompt.package;
-      program = "pinentry-wayprompt";
-    };
   };
 }

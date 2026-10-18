@@ -84,7 +84,6 @@ let
     foot = 16;
     fuzzel = 18;
     swaylock = 30;
-    wayprompt = 26;
     fnott = {
       title = 20;
       summary = 19;
