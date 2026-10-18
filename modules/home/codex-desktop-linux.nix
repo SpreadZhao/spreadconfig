@@ -29,8 +29,8 @@ let
     // {
       NODE_USE_ENV_PROXY = "1";
     };
-  # Keep Codex's own profile isolated, but let shell tools use the user's
-  # existing configuration, credentials, data and caches.
+  # Configure user XDG directories through shell_environment_policy.
+  # The gh wrapper sets its default configuration directory independently.
   shellEnvironmentArgs = lib.escapeShellArgs (
     lib.concatLists (
       lib.mapAttrsToList

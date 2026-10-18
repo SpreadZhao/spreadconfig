@@ -59,6 +59,10 @@ The optional include lets the first build succeed before the runtime file
 exists. Activate the initial configuration before updating private inputs.
 SSH remotes still use SSH keys.
 
+The `gh` wrapper defaults `GH_CONFIG_DIR` to Home Manager's `gh` configuration
+directory (`~/.config/gh`), so Codex's isolated XDG directories do not hide the
+managed login. A nonempty `GH_CONFIG_DIR` overrides this default.
+
 Check the managed login with `gh auth status`. Remove persistent `GH_TOKEN`,
 `GITHUB_TOKEN` or `GH_CONFIG_DIR` overrides if they select another login. Home Manager owns the linked credential file. Do not use `gh auth login`, `logout`, `switch` or `refresh` on the read-only file.
 
