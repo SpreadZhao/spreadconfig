@@ -67,11 +67,6 @@ in
       isDefault = true;
       accountsOrder = map (account: account.name) enabledAccounts;
       settings = {
-        # 绕过 Outlook IMAP 在部分 IPv6 连接下的认证失败，仅影响 Thunderbird。
-        "network.dns.disableIPv6" = true;
-        "mailnews.display.html_as" = 0;
-        "mailnews.display.prefer_plaintext" = false;
-        "mail.inline_attachments" = true;
       };
     };
   };
