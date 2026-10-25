@@ -4,8 +4,6 @@
   lib,
   osConfig,
   pkgs,
-  repoLink,
-  appSource,
   ...
 }:
 
@@ -36,12 +34,7 @@ in
     ++ lib.optional browser.hasProxy "browser-proxy";
   };
 
-  xdg.dataFile = profiles.desktopFiles // {
-    "codex-desktop/profiles/spreadzhao/codex/themes/spreadzhao.tmTheme" = {
-      source = repoLink (appSource "codex" "files/themes/spreadzhao.tmTheme");
-      force = true;
-    };
-  };
+  xdg.dataFile = profiles.desktopFiles;
 
   dconf.settings."org/gnome/desktop/interface".toolkit-accessibility = true;
 
