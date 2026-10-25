@@ -13,7 +13,6 @@ config.bind('D', 'tab-only -p', mode = 'normal')
 config.bind('d0', 'tab-only -n', mode = 'normal')
 config.bind('dj', 'cmd-repeat 1 tab-close -n', mode = 'normal')
 config.bind('dk', 'cmd-repeat 1 tab-close -p', mode = 'normal')
-config.bind('td', 'config-cycle colors.webpage.darkmode.enabled True False')
 config.bind('<Ctrl-Shift-J>', 'tab-move +', mode = 'normal')
 config.bind('<Ctrl-Shift-K>', 'tab-move -', mode = 'normal')
 config.bind('gk', 'tab-focus stack-prev', mode = 'normal')
@@ -155,8 +154,9 @@ c.tabs.new_position.related = 'next';
 c.tabs.new_position.stacking = True;
 c.tabs.new_position.unrelated = 'last';
 
-c.url.default_page = 'about:blank'
-c.url.start_pages = ['about:blank']
+# The blank page is black; webpages without a background color default to white.
+c.url.default_page = 'data:text/html,<title>Blank</title><body style="background:black">'
+c.url.start_pages = [c.url.default_page]
 
 c.url.searchengines = {
     'DEFAULT': 'https://www.google.com/search?q={}'

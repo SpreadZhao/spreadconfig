@@ -20,11 +20,10 @@ def setup(c):
         "theme_bright_yellow": "#ffc66d",
     }
 
-    # background
-    c.colors.webpage.bg = palette["theme_background"];
-    c.colors.webpage.preferred_color_scheme = 'dark'
-    c.colors.webpage.darkmode.enabled = True
-    c.colors.webpage.darkmode.policy.images = 'never'
+    # Webpages
+    c.colors.webpage.bg = 'white'
+    c.colors.webpage.preferred_color_scheme = 'light'
+    c.colors.webpage.darkmode.enabled = False
 
     # completion {{{
     c.colors.completion.category.bg = palette["theme_background"]
