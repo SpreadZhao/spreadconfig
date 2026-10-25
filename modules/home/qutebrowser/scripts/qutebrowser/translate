@@ -3,7 +3,7 @@ set -euo pipefail
 
 qute_command() {
     if [ -n "${QUTE_FIFO:-}" ]; then
-        printf '%s\n' "$1" >> "$QUTE_FIFO"
+        printf '%s\n' "$1" >>"$QUTE_FIFO"
     else
         printf '%s\n' "$1" >&2
     fi
@@ -19,19 +19,7 @@ urlencode() {
 }
 
 resolve_codex_bin() {
-    local desktop_bin desktop_prefix bundled_codex
-
-    desktop_bin="$(command -v codex-desktop || true)"
-    if [ -n "$desktop_bin" ]; then
-        desktop_prefix="$(dirname "$(dirname "$(readlink -f "$desktop_bin")")")"
-        bundled_codex="$desktop_prefix/opt/codex-desktop/resources/codex"
-        if [ -x "$bundled_codex" ]; then
-            printf '%s\n' "$bundled_codex"
-            return 0
-        fi
-    fi
-
-    command -v codex
+    command -v codex-spreadzhao
 }
 
 usage() {
@@ -45,7 +33,6 @@ EOF
 provider="${QUTE_TRANS_PROVIDER:-codex}"
 source_lang="${QUTE_TRANS_SOURCE:-auto}"
 target_lang="${QUTE_TRANS_TARGET:-}"
-codex_home="${QUTE_TRANS_CODEX_HOME:-${CODEX_HOME:-$HOME/.codex}}"
 codex_model="${QUTE_TRANS_CODEX_MODEL:-${CODEX_MODEL:-}}"
 codex_reasoning_effort="${QUTE_TRANS_CODEX_REASONING_EFFORT:-medium}"
 
@@ -119,7 +106,7 @@ case "$provider" in
 
     codex)
         if ! codex_bin="$(resolve_codex_bin)"; then
-            qute_error "translate: Codex Desktop bundled CLI was not found"
+            qute_error "translate: codex-spreadzhao was not found"
             exit 1
         fi
 
@@ -134,7 +121,7 @@ case "$provider" in
             rm -rf "$tmpdir"
         }
 
-        printf '%s\n' "$selected_text" > "$context_file"
+        printf '%s\n' "$selected_text" >"$context_file"
 
         codex_target="${target_lang:-zh-CN}"
         codex_source_note=""
@@ -163,8 +150,8 @@ case "$provider" in
 
         codex_args+=("$codex_prompt")
 
-        if ! CODEX_HOME="$codex_home" "$codex_bin" "${codex_args[@]}" < "$context_file" > "$log_file" 2>&1; then
-            log_message="$(tail -n 3 "$log_file" 2> /dev/null | tr '\n' ' ' || true)"
+        if ! "$codex_bin" "${codex_args[@]}" <"$context_file" >"$log_file" 2>&1; then
+            log_message="$(tail -n 3 "$log_file" 2>/dev/null | tr '\n' ' ' || true)"
             cleanup_on_error
             qute_error "translate: Codex request failed${log_message:+: ${log_message}}"
             exit 1
@@ -184,9 +171,9 @@ case "$provider" in
             printf '===========\n\n'
             cat "$result_file"
             printf '\n'
-        } > "$output_file"
+        } >"$output_file"
 
-        cat > "$viewer_file" <<EOF
+        cat >"$viewer_file" <<EOF
 #!/usr/bin/env bash
 set -euo pipefail
 trap 'rm -rf "$tmpdir"' EXIT
