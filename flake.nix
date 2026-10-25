@@ -103,6 +103,12 @@
           - Evaluation, builds, formatting, and other checks that do not activate the configuration are allowed. When a switch is needed, provide the command for the user to run instead of executing it.
           - Requests to change, update, fix, or rebuild Nix configuration do not authorize an automatic switch. This repository-wide rule takes precedence over any skill or workflow that recommends running `switch`.
 
+          ## Application Configuration and Packaging
+
+          - Prefer standard NixOS/Home Manager options and application settings for environment variables, launch arguments, desktop entries, and services. Keep configuration in the owning application module and scope it to the processes that need it.
+          - Use a package's existing parameters through `override` for supported build features, dependency selection, and build flags before changing derivation attributes. Preserve the upstream package definition when its interfaces can express the requirement.
+          - Use `overrideAttrs`, patches, or wrappers only for demonstrated packaging/runtime defects or requirements that supported interfaces cannot express. Keep each exception small, explain the concrete need, and remove it when a supported configuration or upstream fix covers that need.
+
           ## Clean Delivery Policy
 
           - Deliver only the files, dependencies, configuration, and behavior needed for the requested result. Before finishing, actively review the working tree and clean up this task's temporary tests, fixtures, validation reports, logs, caches, intermediate outputs, and debug code or settings. Do not leave cleanup for the user.
