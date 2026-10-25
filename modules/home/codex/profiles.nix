@@ -57,6 +57,19 @@ let
           let
             root = "${config.xdg.dataHome}/codex-desktop/profiles/${name}";
             appId = "codex-desktop-${name}";
+            cliArgs = [
+              "-c"
+              "notify=${
+                builtins.toJSON [
+                  "${pkgs.python3}/bin/python3"
+                  "${./files/notify.py}"
+                  "${pkgs.libnotify}/bin/notify-send"
+                  name
+                ]
+              }"
+              "-c"
+              ''tui.notifications=["approval-requested"]''
+            ];
           in
           ''
             private_bin="$out/libexec/${name}/bin"
@@ -88,7 +101,9 @@ let
                 esac
                 set -- -c "shell_environment_policy.set.PATH=$PATH" "$@"
               ''}
-            ln -s "$private_bin/codex" "$out/bin/codex-${name}"
+            # Completion notifications include the response; approvals keep terminal alerts.
+            makeWrapper "$private_bin/codex" "$out/bin/codex-${name}" \
+              --add-flags ${lib.escapeShellArg (lib.escapeShellArgs cliArgs)}
 
             # Keep CLI browser helpers on the same runtime as the selected Desktop package.
             makeWrapper ${resources}/cua_node/bin/node_repl "$out/bin/codex-node-repl-${name}" \
