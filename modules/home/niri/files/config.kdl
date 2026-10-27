@@ -1,3 +1,0 @@
-// Load host rules before shared rules.
-include "host.kdl"
-include "common.kdl"

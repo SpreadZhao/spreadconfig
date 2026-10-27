@@ -1,6 +1,4 @@
 #!/usr/bin/env bash
 
-# Select WeChat's text-input-v3 plugin so niri positions the IME popup.
-# With QT_IM_MODULE=fcitx, WeChat 4.1.13+ exposes the candidate window as a
-# regular toplevel; niri tiles and focuses it, interrupting input.
+# Use text-input-v3 to position the IME popup through the compositor.
 exec env QT_IM_MODULE="text-input-unstable-v3" wechat "$@"

@@ -9,7 +9,7 @@ modules and supplies desktop integration.
 | --- | --- | --- |
 | `flake-input-watcher` | [Repository](https://github.com/SpreadZhao/flake-input-watcher) | Checkout path, enabled service and timer |
 | `notification-history` | [Repository](https://github.com/SpreadZhao/notification-history) | fnott policy, Nixvim viewer, popup package and shortcut |
-| `fzf-popup` | [Repository](https://github.com/SpreadZhao/fzf-popup) | Foot launcher, Niri window rule and callers |
+| `fzf-popup` | [Repository](https://github.com/SpreadZhao/fzf-popup) | Foot launcher, dwl window rule and callers |
 
 These inputs follow the root nixpkgs; notification-history also follows the
 root fzf-popup input. Update the corresponding input to adopt a release. Test
@@ -68,7 +68,7 @@ without a launcher, the program uses the current terminal.
 
 `modules/home/fzf-popup` installs the upstream package and sets
 `FZF_POPUP_LAUNCHER` in the login and user systemd environments. The launcher runs
-`footclient --client-environment -a lick-foot`. Niri's `lick-foot` rule controls
+`footclient --client-environment -a lick-foot`. dwl's `lick-foot` rule controls
 floating size. Override `FZF_POPUP_LAUNCHER` for one command or pass
 `--launcher EXECUTABLE` for another terminal adapter. Log out and back in after
 changing the session default.
@@ -77,7 +77,7 @@ changing the session default.
 printf '%s\n' first second | fzf-popup --title 'Choose' -- --prompt='Pick> '
 ```
 
-Notification history, clipboard history and the Foot application launcher share
-this package. Each caller owns its previews and actions. Terminal and window
-manager changes belong in spreadconfig; the standalone program has no dependency
-on Foot or Niri.
+Notification history uses this package for its selection menu. Each caller owns
+its previews and actions. Terminal and window manager integration belongs in
+spreadconfig; the standalone program has no dependency on Foot or a specific
+compositor.

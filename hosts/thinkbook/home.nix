@@ -2,6 +2,6 @@
 
 {
   imports = [
-    # ./home/waybar.nix
+    ./home/dwl.nix
   ];
 }

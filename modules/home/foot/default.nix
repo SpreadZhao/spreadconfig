@@ -1,4 +1,5 @@
 {
+  appEntries,
   theme_background,
   theme_red,
   theme_green,
@@ -20,14 +21,7 @@
     server.enable = true;
   };
 
-  # Disabled while using dwl instead of niri:
-  # xdg.desktopEntries.foot_new_tab = {
-  #   name = "Foot New Tab";
-  #   type = "Application";
-  #   exec = "${scriptsDir}/niri/foot_new_tab.sh";
-  #   icon = "";
-  #   terminal = false;
-  # };
+  spreadconfig.scriptFiles = appEntries "foot" "scripts";
 
   xdg.configFile."foot/foot.ini".text = ''
     [main]

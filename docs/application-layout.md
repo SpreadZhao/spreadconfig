@@ -20,8 +20,8 @@ infrastructure, directory conventions and desktop-wide MIME fallback order.
 aliases in the shell module.
 
 Preserve ordering where it affects behavior. Script PATH groups use priorities
-100 for dwl, 200 for shared tools and 300 for Nix tools, followed by the default
-`.local/bin` entry.
+200 for shared tools and 300 for Nix tools, followed by the default `.local/bin`
+entry.
 
 ## Host configuration
 
@@ -47,9 +47,10 @@ files and conflicting file/directory paths are errors.
 
 Current examples:
 
-- `dwl` loads `files/host.sh` before shared rules. Hosts supply display settings;
-  the shared fallback is empty. Zephyrus maps its GAOMON tablet to `DP-1` through
-  `spreadconfig.dwl.tabletRules` in `home/gaomon-tablet.nix`.
+- dwl uses `wayland.windowManager.dwl.settings` from spread-dwl's Home Manager
+  module for compile-time macros. Each host supplies
+  `spreadconfig.dwl.startupCommands` in `home/dwl.nix` to apply its display layout
+  once at startup. Zephyrus sets `SDWL_TABLET_RULES` in `home/gaomon-tablet.nix`.
 - Qutebrowser loads `files/host.py` after shared settings and before the theme.
   Zephyrus also selects its Intel Vulkan package in its Home Manager module.
 - Psst uses `services.gpg-agent.pinentry.package`. Zephyrus sets
@@ -63,8 +64,28 @@ to Password Store. Do not replace the entire configuration directory.
 
 `modules/nixos/dwl.nix` sets `XDG_CURRENT_DESKTOP`, `XDG_SESSION_TYPE` and
 `XDG_SESSION_DESKTOP` in greetd's environment before dwl starts.
-`dwl_session.sh` imports the session environment into systemd and D-Bus, starts
-`dwl-session.target`, and applies the host's output layout.
+The session launcher feeds `slstatus -s` into dwl. Its startup hook imports the
+session environment into systemd and D-Bus, starts `dwl-session.target`, and
+runs the host's display commands. Output configuration is applied once; a missing
+connector does not prevent the session from starting. Exiting dwl stops slstatus
+and the graphical session targets.
+
+`modules/home/slstatus.nix` configures the refresh interval and ordered components
+through `programs.slstatus`. The defaults show CPU and memory usage, battery
+charge when the host declares a battery, and time. The first CPU sample is `-`
+until the next interval. The bar shows status text on the selected output.
+
+`wayland.windowManager.dwl.settings` supplies `SDWL_*` macros through one generated
+`host.h`. Strings are quoted, booleans become `0` or `1`, and `{ raw = "..."; }`
+supplies a single-line C expression or initializer list. The module's read-only
+`finalPackage` is the configured package. Display commands live in the host's
+Nix module.
+
+`start_floating_foot.sh` belongs to Foot and is installed under `~/scripts/util`.
+It accepts one shell-command string and opens a `lick-foot` window. Qutebrowser
+and the zsh `ff` alias use it. `fzf-popup-foot` separately forwards an argument
+vector and the caller's environment through Foot's server. Both use the same
+floating window rule.
 
 Swayidle turns displays off after 600 seconds and locks after 605 seconds.
 Its resume command turns displays back on when input resumes. The Lock Policy
@@ -182,8 +203,8 @@ Create `configuration.nix`:
 Start `home.nix` with `{ ... }: { }`, then explicitly import any host application
 modules. Start `home/profile.nix` with `{ }` and `nixos/profile.nix` with
 `{ proxy.enable = false; }` if no proxy is ready. Add
-`home/dwl/files/host.sh` for display settings. Keep tablet mappings in the
-host's tablet module.
+`home/dwl.nix` for display startup commands and import it from `home.nix`. Keep
+tablet mappings in the host's tablet module.
 
 Generate `hardware-configuration.nix` on the target machine as described in
 [installation](install.md#clone-and-select-the-host). Hardware declarations do

@@ -42,12 +42,8 @@ let
   }) configuredBindings;
 in
 {
-  spreadconfig.dwl.tabletRules = [
-    {
-      name = deviceName;
-      output = "DP-1";
-    }
-  ];
+  wayland.windowManager.dwl.settings.SDWL_TABLET_RULES.raw =
+    "{ ${builtins.toJSON deviceName}, \"DP-1\" }";
 
   assertions = [
     {

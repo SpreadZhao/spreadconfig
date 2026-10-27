@@ -42,8 +42,6 @@ in
 
 {
   boot.kernelPackages = lib.mkForce baseline.boot.kernelPackages;
-  # Home Manager uses the same niri build when niri is enabled.
-  # nixpkgs.overlays = [ (_final: _prev: { inherit (graphicsPkgs) niri; }) ];
 
   hardware = {
     graphics = {

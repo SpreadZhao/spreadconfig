@@ -40,8 +40,7 @@ config.unbind('co', mode = 'normal')
 config.bind('da', 'tab-only', mode = 'normal')
 
 
-# startFloatingFoot = '/home/spreadzhao/scripts/niri/start_floating_foot.sh'
-startFloatingFoot = '/home/spreadzhao/scripts/dwl/start_floating_foot.sh'
+startFloatingFoot = '/home/spreadzhao/scripts/util/start_floating_foot.sh'
 
 c.content.pdfjs = True
 c.downloads.location.suggestion = 'both'

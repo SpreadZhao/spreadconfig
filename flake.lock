@@ -421,11 +421,11 @@
     "personal-skills": {
       "flake": false,
       "locked": {
-        "lastModified": 1791278658,
-        "narHash": "sha256-uR6eUqqIVMq6Q2/LEEwZArcNh+LcZEJLjoqmpmZjPAA=",
+        "lastModified": 1793124973,
+        "narHash": "sha256-HKWuvKwPQKLIjblFtxV53A86us1g07Rh4H+izif1068=",
         "owner": "SpreadZhao",
         "repo": "personal-skills",
-        "rev": "d0d640d68debdd5cd23b17ce71981b6b714af5f3",
+        "rev": "0426cfd046f79537d41a327c32ab7fc8e5375884",
         "type": "github"
       },
       "original": {
@@ -487,11 +487,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1793116627,
-        "narHash": "sha256-OVnzW46HdL4ZlFJMgBwauuVDyVhDg4l7APAJZSjG8/I=",
+        "lastModified": 1793124973,
+        "narHash": "sha256-NW+RXsliL0cxRyjIKR6Hbwe2D1KfFZ5LyTufUG4Secw=",
         "ref": "refs/heads/main",
-        "rev": "f98b47c650a4eb4bf780adf5df18fb34df87263f",
-        "revCount": 7,
+        "rev": "4b05b7fe470d8281b2f1a7c672a8937b7c38df5f",
+        "revCount": 8,
         "submodules": true,
         "type": "git",
         "url": "https://github.com/SpreadZhao/spread-dwl"

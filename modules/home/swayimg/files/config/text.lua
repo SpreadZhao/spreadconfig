@@ -1,5 +1,5 @@
 swayimg.text.timeout = 0
-swayimg.text.visible = swayimg.appid ~= "swayimg-pin"
+swayimg.text.visible = true
 swayimg.text.font = "SourceCodePro"
 swayimg.text.size = 20
 swayimg.text.padding = 2

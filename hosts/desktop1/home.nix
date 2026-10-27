@@ -1,1 +1,1 @@
-{ ... }: { }
+{ ... }: { imports = [ ./home/dwl.nix ]; }

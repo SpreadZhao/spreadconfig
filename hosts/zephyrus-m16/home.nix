@@ -6,6 +6,6 @@
     ./home/nvtop.nix
     ./home/psst.nix
     ./home/qutebrowser
-    # ./home/waybar.nix
+    ./home/dwl.nix
   ];
 }
