@@ -71,9 +71,11 @@ connector does not prevent the session from starting. Exiting dwl stops slstatus
 and the graphical session targets.
 
 `modules/home/slstatus.nix` configures the refresh interval and ordered components
-through `programs.slstatus`. The defaults show CPU and memory usage, battery
-charge when the host declares a battery, and time. The first CPU sample is `-`
-until the next interval. The bar shows status text on the selected output.
+through `programs.slstatus`. The defaults show CPU and memory usage, temperature,
+the default-route interface, speaker and microphone volume, battery charge when
+the host declares a battery, and time. `M` marks muted audio. slstatus queries
+temperature, network and PipeWire volume once per update. The first CPU sample
+is `-` until the next interval. The bar shows status text on the selected output.
 
 `wayland.windowManager.dwl.settings` supplies `SDWL_*` macros through one generated
 `host.h`. Strings are quoted, booleans become `0` or `1`, and `{ raw = "..."; }`
@@ -86,6 +88,19 @@ It accepts one shell-command string and opens a `lick-foot` window. Qutebrowser
 and the zsh `ff` alias use it. `fzf-popup-foot` separately forwards an argument
 vector and the caller's environment through Foot's server. Both use the same
 floating window rule.
+
+Screenshot tools belong to `modules/home/screenshot`. `Super+Shift+A` freezes
+the screen and selects a region; `Super+Ctrl+Shift+A` selects an output.
+`~/scripts/util/screenshot.sh -w` selects a window from a list for capture.
+All modes open the shared image action menu for clipboard copy, saving,
+Satty editing, a floating image viewer, or Chinese/English OCR. The menu saves
+images in `screenshot/` under the XDG Pictures directory. Satty is configured
+through `programs.satty` and saves in the `satty/` subdirectory.
+
+`Super+Shift+V` opens clipboard history in fzf-popup with file previews. Text
+entries are copied unchanged; image entries open the shared image action menu.
+Home Manager starts text and image clipboard watchers with the graphical
+session. `Super+Z` launches shmooz for screen zoom, spotlight and annotation.
 
 Swayidle turns displays off after 600 seconds and locks after 605 seconds.
 Its resume command turns displays back on when input resumes. The Lock Policy

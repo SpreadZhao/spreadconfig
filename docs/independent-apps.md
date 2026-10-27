@@ -77,7 +77,7 @@ changing the session default.
 printf '%s\n' first second | fzf-popup --title 'Choose' -- --prompt='Pick> '
 ```
 
-Notification history uses this package for its selection menu. Each caller owns
-its previews and actions. Terminal and window manager integration belongs in
-spreadconfig; the standalone program has no dependency on Foot or a specific
-compositor.
+Notification history and clipboard history use this package for their selection
+menus. Each caller owns its previews and actions. Terminal and window manager
+integration belongs in spreadconfig; the standalone program has no dependency
+on Foot or a specific compositor.

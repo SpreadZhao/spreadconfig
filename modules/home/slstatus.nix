@@ -7,6 +7,46 @@
 }:
 let
   cfg = config.programs.slstatus;
+  query = pkgs.writeShellApplication {
+    name = "slstatus-query";
+    runtimeInputs = [
+      pkgs.gawk
+      pkgs.iproute2
+      pkgs.wireplumber
+    ];
+    text = ''
+      case "$1" in
+      temperature)
+        for sensor in /sys/class/hwmon/hwmon*; do
+          [[ -r "$sensor/name" && -r "$sensor/temp1_input" ]] || continue
+          read -r name < "$sensor/name"
+          case "$name" in
+          coretemp|k10temp|zenpower|cpu_thermal)
+            awk '{ printf "%.0f°C", $1 / 1000 }' "$sensor/temp1_input"
+            exit 0
+            ;;
+          esac
+        done
+        printf -- '-'
+        ;;
+      network)
+        interface=$(ip -o route show default | awk 'NR == 1 { for (i = 1; i < NF; i++) if ($i == "dev") { print $(i + 1); exit } }')
+        if [[ -z "$interface" ]]; then
+          interface=$(ip -o -6 route show default | awk 'NR == 1 { for (i = 1; i < NF; i++) if ($i == "dev") { print $(i + 1); exit } }')
+        fi
+        printf '%s' "''${interface:--}"
+        ;;
+      sink|source)
+        if [[ "$1" == sink ]]; then node=@DEFAULT_AUDIO_SINK@; else node=@DEFAULT_AUDIO_SOURCE@; fi
+        if volume=$(wpctl get-volume "$node" 2>/dev/null); then
+          awk '{ printf "%.0f%%", $2 * 100; if ($0 ~ /MUTED/) printf " M" }' <<< "$volume"
+        else
+          printf -- '-'
+        fi
+        ;;
+      esac
+    '';
+  };
   conf = ''
     const unsigned int interval = ${toString cfg.interval};
     static const char unknown_str[] = "-";
@@ -58,6 +98,26 @@ in
         {
           function = "ram_perc";
           format = "RAM %s%% | ";
+        }
+        {
+          function = "run_command";
+          format = "TEMP %s | ";
+          argument = "${lib.getExe query} temperature";
+        }
+        {
+          function = "run_command";
+          format = "NET %s | ";
+          argument = "${lib.getExe query} network";
+        }
+        {
+          function = "run_command";
+          format = "VOL %s | ";
+          argument = "${lib.getExe query} sink";
+        }
+        {
+          function = "run_command";
+          format = "MIC %s | ";
+          argument = "${lib.getExe query} source";
         }
       ]
       ++ lib.optionals (host.capabilities.battery == true) [
