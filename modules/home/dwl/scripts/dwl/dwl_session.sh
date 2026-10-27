@@ -1,10 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-export XDG_CURRENT_DESKTOP="dwl"
-export XDG_SESSION_TYPE="wayland"
-export XDG_SESSION_DESKTOP="dwl"
-
 systemctl --user import-environment \
     WAYLAND_DISPLAY \
     DISPLAY \

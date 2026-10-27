@@ -42,6 +42,13 @@ let
   }) configuredBindings;
 in
 {
+  spreadconfig.dwl.tabletRules = [
+    {
+      name = deviceName;
+      output = "DP-1";
+    }
+  ];
+
   assertions = [
     {
       assertion = builtins.attrNames bindings == builtins.attrNames inputCombinations;

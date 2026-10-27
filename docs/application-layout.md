@@ -20,8 +20,8 @@ infrastructure, directory conventions and desktop-wide MIME fallback order.
 aliases in the shell module.
 
 Preserve ordering where it affects behavior. Script PATH groups use priorities
-100 for the active compositor (`dwl` or Niri), 200 for shared tools and 300 for
-Nix tools, followed by the default `.local/bin` entry.
+100 for dwl, 200 for shared tools and 300 for Nix tools, followed by the default
+`.local/bin` entry.
 
 ## Host configuration
 
@@ -47,19 +47,41 @@ files and conflicting file/directory paths are errors.
 
 Current examples:
 
-- `dwl` loads `files/host.sh` before shared rules (matching the retained Niri
-  `files/host.kdl` layout). Hosts supply display and input settings; the shared
-  fallback is empty.
+- `dwl` loads `files/host.sh` before shared rules. Hosts supply display settings;
+  the shared fallback is empty. Zephyrus maps its GAOMON tablet to `DP-1` through
+  `spreadconfig.dwl.tabletRules` in `home/gaomon-tablet.nix`.
 - Qutebrowser loads `files/host.py` after shared settings and before the theme.
   Zephyrus also selects its Intel Vulkan package in its Home Manager module.
 - Psst uses `services.gpg-agent.pinentry.package`. Zephyrus sets
   `ZED_DEVICE_ID=46a6` on the gpg-agent and Psst Polkit services to select Intel.
   Directly running the Psst binaries does not force a GPU.
-- Waybar host modules call the shared JSON/CSS constructor with their dimensions
-  and temperature path. Battery layout follows the declared capability.
 
 Keep qutebrowser's `autoconfig.yml` application-managed and its quickmarks linked
 to Password Store. Do not replace the entire configuration directory.
+
+## dwl session
+
+`modules/nixos/dwl.nix` sets `XDG_CURRENT_DESKTOP`, `XDG_SESSION_TYPE` and
+`XDG_SESSION_DESKTOP` in greetd's environment before dwl starts.
+`dwl_session.sh` imports the session environment into systemd and D-Bus, starts
+`dwl-session.target`, and applies the host's output layout.
+
+Swayidle turns displays off after 600 seconds and locks after 605 seconds.
+Its resume command turns displays back on when input resumes. The Lock Policy
+menu pauses swayidle by replacing its command with `sleep infinity` and restores
+it by removing that service override.
+
+Run `swaylock` to lock without turning displays off. The dwl lock shortcut runs
+`dwl_lock.sh`: it waits for `swaylock -f` to establish the lock, then runs
+`dpms-off`. Running `dpms-off` alone turns displays off without locking. It waits
+for input to turn displays back on, then exits. These manual actions also work
+while automatic locking is paused.
+
+Tablet rules match the exact input device name and select an output connector.
+The full tablet area maps to that output. With no rule, or while the named output
+is absent from the layout, the tablet maps to the whole layout. The compositor
+forwards pen pressure and tilt through tablet-v2 and emulates a pointer for
+clients without tablet support. GAOMON pad shortcuts remain in input-remapper.
 
 ## Package configuration
 
@@ -160,8 +182,8 @@ Create `configuration.nix`:
 Start `home.nix` with `{ ... }: { }`, then explicitly import any host application
 modules. Start `home/profile.nix` with `{ }` and `nixos/profile.nix` with
 `{ proxy.enable = false; }` if no proxy is ready. Add
-`home/dwl/files/host.sh` (and `home/niri/files/host.kdl`) when display or input
-settings are needed.
+`home/dwl/files/host.sh` for display settings. Keep tablet mappings in the
+host's tablet module.
 
 Generate `hardware-configuration.nix` on the target machine as described in
 [installation](install.md#clone-and-select-the-host). Hardware declarations do
@@ -184,6 +206,6 @@ nix eval --raw --no-write-lock-file \
 ```
 
 Repeat for affected hosts. For shared changes, check all three. Build affected
-asset trees without activating them, inspect paths and modes, and validate Niri
-trees with `niri validate -c <built-tree>/config.kdl`. Check changed shell scripts
-with their parser and ShellCheck. Run switches manually after reviewing results.
+asset trees without activating them and inspect paths and modes. Check changed
+shell scripts with their parser and ShellCheck. Run switches manually after
+reviewing results.

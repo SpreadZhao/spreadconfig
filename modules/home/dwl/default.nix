@@ -1,5 +1,7 @@
 {
   appEntries,
+  config,
+  lib,
   fontFamilies,
   inputs,
   pkgs,
@@ -17,6 +19,7 @@
 
 let
   spreadDwl = inputs.spread-dwl.packages.${pkgs.stdenv.hostPlatform.system}.spread-dwl.override {
+    tabletRules = config.spreadconfig.dwl.tabletRules;
     theme = {
       background = "#${theme_background}";
       border = "#${theme_bright_dark}";
@@ -41,31 +44,57 @@ in
     ./services.nix
   ];
 
-  home.packages = [
-    spreadDwl
-    dwlSession
-    pkgs.wlr-randr
-    pkgs.wlopm
-    pkgs.xwayland
-  ];
-
-  xdg.desktopEntries = {
-    toggle_monitor = {
-      name = "Toggle Monitor";
-      comment = "Toggle Monitor on and off";
-      exec = "${scriptsDir}/dwl/dwl_toggle_output.sh";
-      type = "Application";
-      icon = "";
-    };
-    lock_policy = {
-      name = "Lock Policy";
-      comment = "Control automatic locking and monitor power";
-      exec = "${scriptsDir}/dwl/lock_policy.sh";
-      type = "Application";
-      icon = "";
-      terminal = false;
-    };
+  options.spreadconfig.dwl.tabletRules = lib.mkOption {
+    type = lib.types.listOf (
+      lib.types.submodule {
+        options = {
+          name = lib.mkOption {
+            type = lib.types.str;
+            description = "Exact input device name to match.";
+          };
+          output = lib.mkOption {
+            type = lib.types.str;
+            description = "Output connector to map the full tablet area to, such as `DP-1`.";
+          };
+        };
+      }
+    );
+    default = [ ];
+    description = ''
+      Per-device tablet output mappings for dwl. Rules match exact device names.
+      Tablets with no matching rule, or whose output is absent from the layout,
+      map to the whole layout.
+    '';
   };
 
-  xdg.configFile."dwl".source = repoTree "dwl-config" (appEntries "dwl" "files");
+  config = {
+    home.packages = [
+      spreadDwl
+      dwlSession
+      pkgs.dpms-off
+      pkgs.wlr-randr
+      pkgs.wlopm
+      pkgs.xwayland
+    ];
+
+    xdg.desktopEntries = {
+      toggle_monitor = {
+        name = "Toggle Monitor";
+        comment = "Toggle Monitor on and off";
+        exec = "${scriptsDir}/dwl/dwl_toggle_output.sh";
+        type = "Application";
+        icon = "";
+      };
+      lock_policy = {
+        name = "Lock Policy";
+        comment = "Control automatic locking and monitor power";
+        exec = "${scriptsDir}/dwl/lock_policy.sh";
+        type = "Application";
+        icon = "";
+        terminal = false;
+      };
+    };
+
+    xdg.configFile."dwl".source = repoTree "dwl-config" (appEntries "dwl" "files");
+  };
 }

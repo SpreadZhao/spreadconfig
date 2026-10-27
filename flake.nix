@@ -63,7 +63,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     spread-dwl = {
-      url = "github:SpreadZhao/spread-dwl";
+      url = "git+https://github.com/SpreadZhao/spread-dwl?submodules=1";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.naw.follows = "naw";
     };
