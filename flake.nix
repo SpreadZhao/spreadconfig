@@ -62,6 +62,11 @@
       url = "github:nix-community/nix-jetbrains-plugins";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    spread-dwl = {
+      url = "github:SpreadZhao/spread-dwl";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.naw.follows = "naw";
+    };
     textbridge.url = "github:SpreadZhao/textbridge";
   };
 

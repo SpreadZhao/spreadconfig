@@ -12,7 +12,8 @@
         user = "greeter";
       };
       initial_session = {
-        command = "niri-session";
+        # command = "niri-session";
+        command = "dwl-session";
         user = "spreadzhao";
       };
     };

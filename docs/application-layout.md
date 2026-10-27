@@ -20,8 +20,8 @@ infrastructure, directory conventions and desktop-wide MIME fallback order.
 aliases in the shell module.
 
 Preserve ordering where it affects behavior. Script PATH groups use priorities
-100 for Niri, 200 for shared tools and 300 for Nix tools, followed by the default
-`.local/bin` entry.
+100 for the active compositor (`dwl` or Niri), 200 for shared tools and 300 for
+Nix tools, followed by the default `.local/bin` entry.
 
 ## Host configuration
 
@@ -47,8 +47,9 @@ files and conflicting file/directory paths are errors.
 
 Current examples:
 
-- Niri loads `files/host.kdl` before shared rules. Hosts supply input and display
-  settings; the shared fallback is empty. Preserve rule and output order.
+- `dwl` loads `files/host.sh` before shared rules (matching the retained Niri
+  `files/host.kdl` layout). Hosts supply display and input settings; the shared
+  fallback is empty.
 - Qutebrowser loads `files/host.py` after shared settings and before the theme.
   Zephyrus also selects its Intel Vulkan package in its Home Manager module.
 - Psst uses `services.gpg-agent.pinentry.package`. Zephyrus sets
@@ -159,7 +160,8 @@ Create `configuration.nix`:
 Start `home.nix` with `{ ... }: { }`, then explicitly import any host application
 modules. Start `home/profile.nix` with `{ }` and `nixos/profile.nix` with
 `{ proxy.enable = false; }` if no proxy is ready. Add
-`home/niri/files/host.kdl` when display or input settings are needed.
+`home/dwl/files/host.sh` (and `home/niri/files/host.kdl`) when display or input
+settings are needed.
 
 Generate `hardware-configuration.nix` on the target machine as described in
 [installation](install.md#clone-and-select-the-host). Hardware declarations do

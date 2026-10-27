@@ -10,7 +10,8 @@
       timeouts = [
         {
           timeout = 600;
-          command = "${pkgs.niri}/bin/niri msg action power-off-monitors";
+          # command = "${pkgs.niri}/bin/niri msg action power-off-monitors";
+          command = "${pkgs.wlopm}/bin/wlopm --off '*'";
         }
         {
           timeout = 605;

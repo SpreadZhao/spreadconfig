@@ -50,7 +50,8 @@
       mkdir = "mkdir -v";
       onefetch = "onefetch -T programming markup prose data";
       lf = "lfcd";
-      ff = "${scriptsDir}/niri/start_floating_foot.sh";
+      # ff = "${scriptsDir}/niri/start_floating_foot.sh";
+      ff = "${scriptsDir}/dwl/start_floating_foot.sh";
       ts = "gio trash";
       rsync = "rsync --progress";
       slurp = "slurp -b #0e1117aa -c #f5e0dc";

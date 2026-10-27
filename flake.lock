@@ -453,6 +453,7 @@
         "personal-packages": "personal-packages",
         "personal-skills": "personal-skills",
         "sops-nix": "sops-nix",
+        "spread-dwl": "spread-dwl",
         "textbridge": "textbridge"
       }
     },
@@ -473,6 +474,29 @@
       "original": {
         "owner": "Mic92",
         "repo": "sops-nix",
+        "type": "github"
+      }
+    },
+    "spread-dwl": {
+      "inputs": {
+        "naw": [
+          "naw"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1793106983,
+        "narHash": "sha256-Gjo3amuGziRtiSRIQ5Eds1nP3WRD1eBKH9/Pi2ev5jI=",
+        "owner": "SpreadZhao",
+        "repo": "spread-dwl",
+        "rev": "5e8c8751128438faec5d59c4473ed45d49e13587",
+        "type": "github"
+      },
+      "original": {
+        "owner": "SpreadZhao",
+        "repo": "spread-dwl",
         "type": "github"
       }
     },

@@ -26,8 +26,20 @@
     };
     portal = {
       enable = true;
-      configPackages = [ pkgs.xdg-desktop-portal-gnome ];
-      config.common.default = [ "gnome" ];
+      # configPackages = [ pkgs.xdg-desktop-portal-gnome ];
+      # config.common.default = [ "gnome" ];
+      extraPortals = [
+        pkgs.xdg-desktop-portal-wlr
+        pkgs.xdg-desktop-portal-gtk
+      ];
+      configPackages = [
+        pkgs.xdg-desktop-portal-wlr
+        pkgs.xdg-desktop-portal-gtk
+      ];
+      config.common.default = [
+        "wlr"
+        "gtk"
+      ];
     };
     userDirs = {
       enable = true;

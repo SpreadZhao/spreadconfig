@@ -11,7 +11,6 @@
   theme_bright_blue,
   fontFamilies,
   fontSizes,
-  scriptsDir,
   ...
 }:
 
@@ -21,13 +20,14 @@
     server.enable = true;
   };
 
-  xdg.desktopEntries.foot_new_tab = {
-    name = "Foot New Tab";
-    type = "Application";
-    exec = "${scriptsDir}/niri/foot_new_tab.sh";
-    icon = "";
-    terminal = false;
-  };
+  # Disabled while using dwl instead of niri:
+  # xdg.desktopEntries.foot_new_tab = {
+  #   name = "Foot New Tab";
+  #   type = "Application";
+  #   exec = "${scriptsDir}/niri/foot_new_tab.sh";
+  #   icon = "";
+  #   terminal = false;
+  # };
 
   xdg.configFile."foot/foot.ini".text = ''
     [main]

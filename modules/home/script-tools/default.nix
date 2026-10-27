@@ -8,7 +8,7 @@
 {
   imports = [ ./scripts.nix ];
 
-  # PATH groups keep their established precedence: niri, shared tools, Nix.
+  # PATH groups keep their established precedence: compositor (dwl/niri), shared tools, Nix.
   home.sessionPath = lib.mkOrder 200 [ "$SCRIPT_HOME/util/bin" ];
 
   xdg.desktopEntries.change_audio = {

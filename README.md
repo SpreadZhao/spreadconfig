@@ -1,7 +1,9 @@
 # spreadconfig
 
 Personal NixOS and Home Manager configuration for three machines. The desktop
-uses niri, Waybar, Foot, fuzzel and fnott, with shared dark colors and Noto fonts.
+uses `dwl` (from `spread-dwl`, with its built-in status bar), Foot, fuzzel and
+fnott, with shared dark colors and Noto fonts. Niri and Waybar modules remain
+in the repository for switching back.
 
 <img width="1920" height="1080" alt="niri desktop with the shared dark theme" src="https://github.com/user-attachments/assets/fddcf456-6f25-4798-89ab-ee930262a981" />
 

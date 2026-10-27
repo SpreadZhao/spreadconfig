@@ -1,5 +1,7 @@
 { ... }:
 
 {
-  imports = [ ./home/waybar.nix ];
+  imports = [
+    # ./home/waybar.nix
+  ];
 }

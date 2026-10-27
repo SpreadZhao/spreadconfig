@@ -181,7 +181,8 @@ nvim -R +"set wrap" "$output_file"
 EOF
         chmod +x "$viewer_file"
 
-        floating_foot="${QUTE_TRANSLATE_FLOATING_FOOT:-$HOME/scripts/niri/start_floating_foot.sh}"
+        # floating_foot="${QUTE_TRANSLATE_FLOATING_FOOT:-$HOME/scripts/niri/start_floating_foot.sh}"
+        floating_foot="${QUTE_TRANSLATE_FLOATING_FOOT:-$HOME/scripts/dwl/start_floating_foot.sh}"
         if [ ! -x "$floating_foot" ]; then
             cleanup_on_error
             qute_error "translate: floating terminal launcher not found"
