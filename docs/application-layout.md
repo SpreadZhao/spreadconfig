@@ -72,14 +72,20 @@ including `PATH` and `SCRIPT_HOME`, into systemd and D-Bus, then starts
 `xdg-desktop-autostart.target`. A missing connector does not prevent the session
 from starting. Exiting dwl stops slstatus and the graphical session targets.
 
-`modules/home/slstatus.nix` configures the refresh interval and ordered components
-through `programs.slstatus`. The defaults show CPU and memory usage, temperature,
-network connection type, speaker and microphone volume, battery charge when
-the host declares a battery, and `HH:MM` time. Values precede Nerd Font icons,
-without percent signs or separators between components. Audio icons identify
-the device type and mute state. Network icons distinguish Wi-Fi, wired
-connections and no default route. The first CPU sample is `-` until the next
-interval. The bar shows status text on the selected output.
+`modules/home/slstatus.nix` imports spread-slstatus's Home Manager module and
+sets `programs.slstatus.interval` to 9000 milliseconds. The components show CPU
+and memory usage, CPU temperature, network interface type, default audio output
+and input volume, battery charge when the host declares a battery, and `HH:MM`
+time, in that order. Values precede Nerd Font icons, without percent signs or
+separators between components. Audio icons identify the device type and mute
+state. Battery icons indicate charge level and distinguish charging,
+discharging, full and not charging.
+
+Native C components read the CPU temperature and default route; audio queries
+use `wpctl` through `run_command`. Network icons identify Wi-Fi and other
+default-route interfaces, or show a disconnected icon when no interface is
+found. The first CPU sample is `-` until the next interval. The bar shows the
+same status text on every output.
 
 The status formats use barcolors markup and the shared palette in
 `modules/home/vars.nix`.

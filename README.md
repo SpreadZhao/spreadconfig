@@ -2,7 +2,8 @@
 
 Personal NixOS and Home Manager configuration for three machines. The desktop
 uses `dwl` (from `spread-dwl`, with its built-in status bar), Foot, fuzzel and
-fnott, with shared dark colors and Noto fonts. Status text comes from slstatus.
+fnott, with shared dark colors and Noto fonts. Status text comes from
+`spread-slstatus`.
 
 ## Install
 

@@ -67,6 +67,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.naw.follows = "naw";
     };
+    spread-slstatus = {
+      url = "git+https://github.com/SpreadZhao/spread-slstatus?submodules=1";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.naw.follows = "naw";
+    };
     textbridge.url = "github:SpreadZhao/textbridge";
   };
 

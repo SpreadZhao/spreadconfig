@@ -454,6 +454,7 @@
         "personal-skills": "personal-skills",
         "sops-nix": "sops-nix",
         "spread-dwl": "spread-dwl",
+        "spread-slstatus": "spread-slstatus",
         "textbridge": "textbridge"
       }
     },
@@ -500,6 +501,31 @@
         "submodules": true,
         "type": "git",
         "url": "https://github.com/SpreadZhao/spread-dwl"
+      }
+    },
+    "spread-slstatus": {
+      "inputs": {
+        "naw": [
+          "naw"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1793211694,
+        "narHash": "sha256-zt2UVh2vJu21yighy2sW+kyvOep4goy+HH63EyDMEi0=",
+        "ref": "refs/heads/main",
+        "rev": "6551d06c7fc03fa24e464e38de05058f3893fe69",
+        "revCount": 1,
+        "submodules": true,
+        "type": "git",
+        "url": "https://github.com/SpreadZhao/spread-slstatus"
+      },
+      "original": {
+        "submodules": true,
+        "type": "git",
+        "url": "https://github.com/SpreadZhao/spread-slstatus"
       }
     },
     "systems": {
