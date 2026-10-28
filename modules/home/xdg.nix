@@ -26,8 +26,6 @@
     };
     portal = {
       enable = true;
-      # configPackages = [ pkgs.xdg-desktop-portal-gnome ];
-      # config.common.default = [ "gnome" ];
       extraPortals = [
         pkgs.xdg-desktop-portal-wlr
         pkgs.xdg-desktop-portal-gtk

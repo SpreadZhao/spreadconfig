@@ -3,10 +3,19 @@
   lib,
   pkgs,
   host,
+  theme_blue,
+  theme_bright_red,
+  theme_bright_yellow,
+  theme_green,
+  theme_magenta,
+  theme_purple,
+  theme_red,
+  theme_yellow,
   ...
 }:
 let
   cfg = config.programs.slstatus;
+  colored = color: format: "^fg(${color})${format}^fg()";
   query = pkgs.writeShellApplication {
     name = "slstatus-query";
     runtimeInputs = [
@@ -22,7 +31,18 @@ let
           read -r name < "$sensor/name"
           case "$name" in
           coretemp|k10temp|zenpower|cpu_thermal)
-            awk '{ printf "%.0f°C", $1 / 1000 }' "$sensor/temp1_input"
+            awk -v normal="${theme_green}" -v warning="${theme_yellow}" -v critical="${theme_bright_red}" '
+              NF != 1 || $1 !~ /^-?[0-9]+$/ { printf "-"; exit }
+              {
+                temperature = int($1 / 1000 + ($1 >= 0 ? 0.5 : -0.5))
+                color = temperature >= 80 ? critical : temperature >= 60 ? warning : normal
+                split("    ", icons, " ")
+                level = int(temperature / 20) + 1
+                if (level < 1) level = 1
+                if (level > 5) level = 5
+                printf "^fg(%s)%d%s^fg()", color, temperature, icons[level]
+              }
+            ' "$sensor/temp1_input"
             exit 0
             ;;
           esac
@@ -30,19 +50,44 @@ let
         printf -- '-'
         ;;
       network)
-        interface=$(ip -o route show default | awk 'NR == 1 { for (i = 1; i < NF; i++) if ($i == "dev") { print $(i + 1); exit } }')
+        interface=$(ip -o route show default | awk 'NR == 1 { for (i = 1; i < NF; i++) if ($i == "dev") { print $(i + 1); exit } }' || true)
         if [[ -z "$interface" ]]; then
-          interface=$(ip -o -6 route show default | awk 'NR == 1 { for (i = 1; i < NF; i++) if ($i == "dev") { print $(i + 1); exit } }')
+          interface=$(ip -o -6 route show default | awk 'NR == 1 { for (i = 1; i < NF; i++) if ($i == "dev") { print $(i + 1); exit } }' || true)
         fi
-        printf '%s' "''${interface:--}"
+        if [[ -z "$interface" ]]; then
+          printf '󰯡'
+        elif [[ -d "/sys/class/net/$interface/wireless" ]]; then
+          printf ''
+        else
+          printf '󰈀'
+        fi
         ;;
       sink|source)
         if [[ "$1" == sink ]]; then node=@DEFAULT_AUDIO_SINK@; else node=@DEFAULT_AUDIO_SOURCE@; fi
-        if volume=$(wpctl get-volume "$node" 2>/dev/null); then
-          awk '{ printf "%.0f%%", $2 * 100; if ($0 ~ /MUTED/) printf " M" }' <<< "$volume"
-        else
+        if ! volume=$(wpctl get-volume "$node" 2>/dev/null); then
           printf -- '-'
+          exit 0
         fi
+        if [[ "$1" == source ]]; then
+          icon='󰍬'
+          muted_icon='󰍭'
+        else
+          info=$(wpctl inspect "$node" 2>/dev/null || true)
+          case "''${info,,}" in
+          *blue*) icon='󰂯'; muted_icon='󰂲' ;;
+          *headphone*|*headset*) icon=''; muted_icon='󰟎' ;;
+          *) icon='󰕾'; muted_icon='󰖁' ;;
+          esac
+        fi
+        if [[ "$volume" == *'[MUTED]'* ]]; then icon=$muted_icon; fi
+        awk -v icon="$icon" '
+          $1 == "Volume:" && $2 ~ /^[0-9]+([.][0-9]+)?$/ {
+            printf "%.0f%s", $2 * 100, icon
+            found = 1
+            exit
+          }
+          END { if (!found) printf "-" }
+        ' <<< "$volume"
         ;;
       esac
     '';
@@ -50,7 +95,7 @@ let
   conf = ''
     const unsigned int interval = ${toString cfg.interval};
     static const char unknown_str[] = "-";
-    #define MAXLEN 240
+    #define MAXLEN 1024
     static const struct arg args[] = {
       ${lib.concatMapStringsSep "\n" (
         component:
@@ -93,45 +138,45 @@ in
       default = [
         {
           function = "cpu_perc";
-          format = "CPU %s%% | ";
+          format = colored theme_bright_yellow "%s";
         }
         {
           function = "ram_perc";
-          format = "RAM %s%% | ";
+          format = colored theme_purple "%s";
         }
         {
           function = "run_command";
-          format = "TEMP %s | ";
+          format = "%s";
           argument = "${lib.getExe query} temperature";
         }
         {
           function = "run_command";
-          format = "NET %s | ";
+          format = colored theme_magenta "%s";
           argument = "${lib.getExe query} network";
         }
         {
           function = "run_command";
-          format = "VOL %s | ";
+          format = colored theme_blue "%s";
           argument = "${lib.getExe query} sink";
         }
         {
           function = "run_command";
-          format = "MIC %s | ";
+          format = colored theme_blue "%s";
           argument = "${lib.getExe query} source";
         }
       ]
       ++ lib.optionals (host.capabilities.battery == true) [
         {
           function = "battery_perc";
-          format = "BAT %s%% | ";
+          format = colored theme_red "%s󰁹";
           argument = host.profile.home.devices.battery;
         }
       ]
       ++ [
         {
           function = "datetime";
-          format = "%s";
-          argument = "%F %T";
+          format = colored theme_green "%s";
+          argument = "%H:%M";
         }
       ];
       description = "Status components in display order.";

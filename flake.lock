@@ -487,11 +487,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1793130462,
-        "narHash": "sha256-wtusieayeSPtkGx7YXnotePGdD8xsRNNHh32BrWC8cc=",
+        "lastModified": 1793175135,
+        "narHash": "sha256-a33aBZli/REQysbw5do+j+VlWaW4CLjsxgq0iXwMRRE=",
         "ref": "refs/heads/main",
-        "rev": "0a5ee1e6a504edfeb88aa29e1c549e7189da0193",
-        "revCount": 9,
+        "rev": "e4c28d9796e4c82e2ca220758565d5dfe0f16acf",
+        "revCount": 14,
         "submodules": true,
         "type": "git",
         "url": "https://github.com/SpreadZhao/spread-dwl"

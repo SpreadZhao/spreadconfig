@@ -17,5 +17,5 @@ mime=$(file -b --mime-type -- "$decoded")
 if [[ "$mime" == image/* ]]; then
 	"$script_home/util/image_action_menu.sh" "$decoded" Clipboard
 else
-	wl-copy <"$decoded"
+	wl-copy --type 'text/plain;charset=utf-8' <"$decoded"
 fi

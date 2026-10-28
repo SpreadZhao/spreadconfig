@@ -26,6 +26,9 @@ let
     ${config.spreadconfig.dwl.startupCommands}
   '';
   dwlSession = pkgs.writeShellScriptBin "dwl-session" ''
+    if [[ -f "${config.home.profileDirectory}/etc/profile.d/hm-session-vars.sh" ]]; then
+      source "${config.home.profileDirectory}/etc/profile.d/hm-session-vars.sh"
+    fi
     status_pid=
     compositor_pid=
     cleanup() {
@@ -68,6 +71,15 @@ in
   config = {
     wayland.windowManager.dwl = {
       enable = true;
+      systemd.variables = [
+        "WAYLAND_DISPLAY"
+        "DISPLAY"
+        "XDG_CURRENT_DESKTOP"
+        "XDG_SESSION_TYPE"
+        "XDG_SESSION_DESKTOP"
+        "PATH"
+        "SCRIPT_HOME"
+      ];
       settings = {
         SDWL_ROOTCOLOR = color theme_background;
         SDWL_NORM_FG = color theme_white;
@@ -79,7 +91,16 @@ in
         SDWL_URG_FG = color "ffffff";
         SDWL_URG_BG = color theme_bright_red;
         SDWL_URG_BORDER = color theme_bright_red;
-        SDWL_FONT = "${fontFamilies.mono}:size=14";
+        SDWL_FONT = "${fontFamilies.sans}:size=14";
+        SDWL_FONT_FALLBACKS.raw = lib.concatStringsSep ", " (
+          map builtins.toJSON [
+            "Noto Sans CJK SC:size=14"
+            "Symbols Nerd Font:size=14"
+            "${fontFamilies.emoji}:size=14"
+          ]
+        );
+        SDWL_BAR_HPAD = 2;
+        SDWL_STATUS_RPAD = 2;
       };
     };
     programs.slstatus.enable = true;

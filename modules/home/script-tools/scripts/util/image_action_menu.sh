@@ -44,7 +44,7 @@ Pin)
 OCR)
 	text=$(tesseract "$image" stdout -l chi_sim+eng -c preserve_interword_spaces=1)
 	if [[ -n "${text//[[:space:]]/}" ]]; then
-		printf '%s' "$text" | wl-copy
+		printf '%s' "$text" | wl-copy --type 'text/plain;charset=utf-8'
 		notify-send --app-name screenshot 'OCR text copied'
 	else
 		notify-send --app-name screenshot 'No text found'

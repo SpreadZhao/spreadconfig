@@ -9,7 +9,10 @@
         "graphical-session-pre.target"
         "xdg-desktop-autostart.target"
       ];
-      Before = [ "graphical-session.target" ];
+      Before = [
+        "graphical-session.target"
+        "xdg-desktop-autostart.target"
+      ];
       After = [ "graphical-session-pre.target" ];
     };
   };

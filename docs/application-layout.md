@@ -64,24 +64,38 @@ to Password Store. Do not replace the entire configuration directory.
 
 `modules/nixos/dwl.nix` sets `XDG_CURRENT_DESKTOP`, `XDG_SESSION_TYPE` and
 `XDG_SESSION_DESKTOP` in greetd's environment before dwl starts.
-The session launcher feeds `slstatus -s` into dwl. Its startup hook imports the
-session environment into systemd and D-Bus, starts `dwl-session.target`, and
-runs the host's display commands. Output configuration is applied once; a missing
-connector does not prevent the session from starting. Exiting dwl stops slstatus
-and the graphical session targets.
+The `dwl-session` launcher loads Home Manager's session variables and feeds
+`slstatus -s` into dwl. Its startup hook imports the session environment,
+including `PATH` and `SCRIPT_HOME`, into systemd and D-Bus, then starts
+`dwl-session.target` and runs the host's display commands once. Systemd orders
+`dwl-session.target` before `graphical-session.target` and
+`xdg-desktop-autostart.target`. A missing connector does not prevent the session
+from starting. Exiting dwl stops slstatus and the graphical session targets.
 
 `modules/home/slstatus.nix` configures the refresh interval and ordered components
 through `programs.slstatus`. The defaults show CPU and memory usage, temperature,
-the default-route interface, speaker and microphone volume, battery charge when
-the host declares a battery, and time. `M` marks muted audio. slstatus queries
-temperature, network and PipeWire volume once per update. The first CPU sample
-is `-` until the next interval. The bar shows status text on the selected output.
+network connection type, speaker and microphone volume, battery charge when
+the host declares a battery, and `HH:MM` time. Values precede Nerd Font icons,
+without percent signs or separators between components. Audio icons identify
+the device type and mute state. Network icons distinguish Wi-Fi, wired
+connections and no default route. The first CPU sample is `-` until the next
+interval. The bar shows status text on the selected output.
+
+The status formats use barcolors markup and the shared palette in
+`modules/home/vars.nix`.
+CPU is bright yellow, memory uses `theme_purple`, network is red, audio is blue,
+and temperature and time are green. Temperature turns yellow at 60°C and
+red at 80°C. The bar uses Noto Sans at Fontconfig `size=14`, with Chinese,
+Nerd Font symbols and emoji fallbacks at the same size. Tags, layout and title
+text have 2 logical pixels of padding on each side; the status has 2 at its right
+edge.
 
 `wayland.windowManager.dwl.settings` supplies `SDWL_*` macros through one generated
 `host.h`. Strings are quoted, booleans become `0` or `1`, and `{ raw = "..."; }`
 supplies a single-line C expression or initializer list. The module's read-only
 `finalPackage` is the configured package. Display commands live in the host's
-Nix module.
+Nix module. `SDWL_FONT` selects the primary font, `SDWL_FONT_FALLBACKS` supplies
+the fallback list, and `SDWL_BAR_HPAD` and `SDWL_STATUS_RPAD` set the padding.
 
 `start_floating_foot.sh` belongs to Foot and is installed under `~/scripts/util`.
 It accepts one shell-command string and opens a `lick-foot` window. Qutebrowser
@@ -89,8 +103,10 @@ and the zsh `ff` alias use it. `fzf-popup-foot` separately forwards an argument
 vector and the caller's environment through Foot's server. Both use the same
 floating window rule.
 
-Screenshot tools belong to `modules/home/screenshot`. `Super+Shift+A` freezes
-the screen and selects a region; `Super+Ctrl+Shift+A` selects an output.
+The shared `screenshot.sh` and `image_action_menu.sh` scripts live in
+`modules/home/script-tools/scripts/util`. Grim, slurp, lswt and Tesseract are
+installed by their own application modules. `Super+Shift+A` freezes the screen
+and selects a region; `Super+Ctrl+Shift+A` selects an output.
 `~/scripts/util/screenshot.sh -w` selects a window from a list for capture.
 All modes open the shared image action menu for clipboard copy, saving,
 Satty editing, a floating image viewer, or Chinese/English OCR. The menu saves

@@ -158,7 +158,8 @@ cmd touch-save-file ${{
     fi
 
     if touch -- "$FILE_CHOOSER_SAVE_FILE_NAME"; then
-        lf -remote "send $id select $FILE_CHOOSER_SAVE_FILE_NAME"
+        target="$(printf '%s' "$FILE_CHOOSER_SAVE_FILE_NAME" | sed 's/\\/\\\\/g;s/"/\\"/g')"
+        lf -remote "send $id select \"$target\""
     fi
 }}
 
@@ -178,8 +179,8 @@ cmd save ${{
     fi
 
     if touch -- "$FILE_CHOOSER_SAVE_FILE_NAME"; then
-        lf -remote "send $id select $FILE_CHOOSER_SAVE_FILE_NAME"
-        lf -remote "send $id open"
+        printf '%s\n' "$PWD/$FILE_CHOOSER_SAVE_FILE_NAME" > "$lf_flag_selection_path"
+        lf -remote "send $id quit"
     fi
 }}
 
