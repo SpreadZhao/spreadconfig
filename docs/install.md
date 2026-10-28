@@ -182,6 +182,10 @@ the display startup commands in `home/dwl.nix`.
 
 The shared proxy defaults to `http://127.0.0.1:7897` and installs Clash Verge.
 It will work only after Clash has a configuration and is listening on that port.
+Home Manager starts Clash Verge at graphical login. Disable Clash Verge's
+automatic update checks (`auto_check_update: false`); Nix manages its package
+updates.
+
 Choose the first-boot policy before installing:
 
 - For direct access, set `proxy.enable = false;` in the host's
