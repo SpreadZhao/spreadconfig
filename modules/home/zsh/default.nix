@@ -1,13 +1,15 @@
 {
   config,
   lib,
-  pkgs,
   scriptsDir,
   ...
 }:
 
 {
-  imports = [ ./scripts.nix ];
+  imports = [
+    ./scripts.nix
+    ./init.nix
+  ];
 
   programs.zsh = {
     enable = true;
@@ -55,28 +57,5 @@
       rsync = "rsync --progress";
     };
     shellGlobalAliases = { };
-    initContent = lib.mkOrder 2000 ''
-      source ${scriptsDir}/config/config_zsh_nix.sh
-      source ${scriptsDir}/config/color_output.sh
-      eval "$(starship init zsh)"
-
-      lfcd () {
-          # `command` is needed in case `lfcd` is aliased to `lf`
-          cd "$(command lf -print-last-dir "$@")"
-      }
-
-      function vi-yank-wlclip {
-          zle vi-yank
-          print -rn -- "$CUTBUFFER" | wl-copy
-      }
-
-      zle -N vi-yank-wlclip
-      bindkey -M vicmd 'y' vi-yank-wlclip
-
-      # plugins
-      source ${pkgs.zsh-fzf-tab}/share/fzf-tab/fzf-tab.plugin.zsh
-      source ${pkgs.zsh-autosuggestions}/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.plugin.zsh
-      source ${pkgs.zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-    '';
   };
 }

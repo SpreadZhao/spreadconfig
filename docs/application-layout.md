@@ -146,6 +146,19 @@ is absent from the layout, the tablet maps to the whole layout. The compositor
 forwards pen pressure and tilt through tablet-v2 and emulates a pointer for
 clients without tablet support. GAOMON pad shortcuts remain in input-remapper.
 
+## Zsh initialization
+
+`modules/home/zsh/init.nix` defines the custom initialization order at priority
+2000, after Home Manager's generated initialization. Shell behavior, completion
+preferences and command colors load first, followed by Starship and custom
+widgets. Starship runs after the cursor-mode ZLE hooks so its prompt tracks vi
+mode. Plugins load in this order: fzf-tab, autosuggestions, syntax highlighting.
+
+`zsh/scripts/config/config_zsh_nix.sh` configures cursor hooks, editing widgets,
+fzf, completion preferences, terminal integration and tdl completion.
+`zsh/scripts/config/widgets.zsh` defines `lfcd` and the Wayland clipboard widget.
+Both files are sourced into the interactive shell.
+
 ## Package configuration
 
 Use application settings, desktop entries and service environments before
