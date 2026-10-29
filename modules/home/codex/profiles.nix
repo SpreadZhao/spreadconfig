@@ -12,14 +12,12 @@ let
     "spreadzhao"
     "supazodiac"
   ];
-  environmentArgs = lib.escapeShellArgs (
-    lib.concatLists (
-      lib.mapAttrsToList (name: value: [
-        "--set"
-        name
-        value
-      ]) environment
-    )
+  environmentFlags = lib.concatLists (
+    lib.mapAttrsToList (name: value: [
+      "--set"
+      name
+      value
+    ]) environment
   );
   desktopId = name: if name == "spreadzhao" then "codex-desktop" else "codex-desktop-${name}";
   desktopItem =
@@ -37,6 +35,58 @@ let
       ];
       startupWMClass = "codex-desktop-${name}";
     };
+  profileDefinitions = map (
+    name:
+    let
+      root = "${config.xdg.dataHome}/codex-desktop/profiles/${name}";
+      cliArgs = [
+        "-c"
+        "notify=${
+          builtins.toJSON [
+            "${pkgs.python3}/bin/python3"
+            "${./files/notify.py}"
+            "${pkgs.libnotify}/bin/notify-send"
+            name
+          ]
+        }"
+        "-c"
+        ''tui.notifications=["approval-requested"]''
+      ];
+    in
+    pkgs.writeText "codex-profile-${name}.sh" (
+      lib.toShellVars {
+        PROFILE_NAME = name;
+        PROFILE_ROOT = root;
+        PROFILE_DESKTOP_ID = desktopId name;
+        PROFILE_DESKTOP_FILE = "${desktopItem name}/share/applications/${desktopId name}.desktop";
+        PROFILE_SETUP = "umask 077; mkdir -p -- ${
+          lib.escapeShellArgs [
+            "${root}/codex"
+            "${root}/config/Codex-Community"
+          ]
+        }";
+        PROFILE_CLI_FLAGS = lib.escapeShellArgs cliArgs;
+        PROFILE_DESKTOP_FLAGS = lib.escapeShellArgs [
+          "--user-data-dir=${root}/config/Codex-Community"
+          "--password-store=basic"
+        ];
+        PROFILE_TRUSTED_SERVICES = builtins.toJSON {
+          browser = "${resources}/plugins/openai-bundled/plugins/browser/scripts/browser-service.mjs";
+        };
+      }
+    )
+  ) names;
+  buildSettings = pkgs.writeText "codex-profile-build.sh" (
+    lib.toShellVars {
+      DESKTOP_PACKAGE = toString desktopPackage;
+      DESKTOP_VERSION = desktopPackage.version;
+      CODEX_RESOURCES = resources;
+      PROFILE_DEFINITIONS = map toString profileDefinitions;
+      ENVIRONMENT_FLAGS = environmentFlags;
+      BUBBLEWRAP_PATH = lib.makeBinPath [ pkgs.bubblewrap ];
+      CLI_ENVIRONMENT_SCRIPT = "${./scripts/runtime/cli-environment.sh}";
+    }
+  );
   package =
     pkgs.runCommand "codex-desktop-profiles-${desktopPackage.version}"
       {
@@ -50,116 +100,8 @@ let
         passthru.desktopBase = desktopPackage;
       }
       ''
-        mkdir -p "$out/bin" "$out/share/applications" "$out/share/icons"
-        cp -rs ${desktopPackage}/share/icons/. "$out/share/icons/"
-        ${lib.concatMapStringsSep "\n" (
-          name:
-          let
-            root = "${config.xdg.dataHome}/codex-desktop/profiles/${name}";
-            appId = "codex-desktop-${name}";
-            cliArgs = [
-              "-c"
-              "notify=${
-                builtins.toJSON [
-                  "${pkgs.python3}/bin/python3"
-                  "${./files/notify.py}"
-                  "${pkgs.libnotify}/bin/notify-send"
-                  name
-                ]
-              }"
-              "-c"
-              ''tui.notifications=["approval-requested"]''
-            ];
-          in
-          ''
-            private_bin="$out/libexec/${name}/bin"
-            mkdir -p "$private_bin"
-            profile_flags=(
-              --set CODEX_HOME ${lib.escapeShellArg "${root}/codex"}
-              --unset CODEX_SQLITE_HOME
-              --set CODEX_CLI_PATH "$private_bin/codex"
-              --unset CODEX_LINUX_APP_SERVER_BRIDGE_SOCKET
-              --unset CODEX_REMOTE_CONTROL_APP_SERVER_PROXY_SOCKET
-              --run ${lib.escapeShellArg "umask 077; mkdir -p -- ${
-                lib.escapeShellArgs [
-                  "${root}/codex"
-                  "${root}/config/Codex-Community"
-                ]
-              }"}
-            )
-
-            # Preserve the selected profile when Desktop starts a CLI with a filtered environment.
-            makeWrapper ${resources}/codex "$private_bin/codex" \
-              "''${profile_flags[@]}" \
-              --prefix PATH : "$out/bin" \
-              --suffix PATH : ${lib.makeBinPath [ pkgs.bubblewrap ]} \
-              --run ${lib.escapeShellArg ''
-                profile_bin="''${CODEX_CLI_PATH%/*}"
-                case "''${PATH:-}" in
-                  "$profile_bin"|"$profile_bin":*) ;;
-                  *) export PATH="$profile_bin''${PATH:+:$PATH}" ;;
-                esac
-                set -- -c "shell_environment_policy.set.PATH=$PATH" "$@"
-              ''}
-            # Completion notifications include the response; approvals keep terminal alerts.
-            makeWrapper "$private_bin/codex" "$out/bin/codex-${name}" \
-              --add-flags ${lib.escapeShellArg (lib.escapeShellArgs cliArgs)}
-
-            # Keep CLI browser helpers on the same runtime as the selected Desktop package.
-            makeWrapper ${resources}/cua_node/bin/node_repl "$out/bin/codex-node-repl-${name}" \
-              "''${profile_flags[@]}" \
-              ${environmentArgs} \
-              --set NODE_REPL_NATIVE_PIPE_CONNECT_TIMEOUT_MS '1000' \
-              --set NODE_REPL_NODE_MODULE_DIRS ${resources}/cua_node/lib/node_modules \
-              --set NODE_REPL_NODE_PATH ${resources}/cua_node/bin/node \
-              --set NODE_REPL_TRUSTED_CODE_PATHS ${lib.escapeShellArg "${root}/codex:${resources}/cua_node/lib/node_modules:${resources}/plugins/openai-bundled/plugins/browser/scripts"} \
-              --set NODE_REPL_TRUSTED_SERVICES ${
-                lib.escapeShellArg (
-                  builtins.toJSON {
-                    browser = "${resources}/plugins/openai-bundled/plugins/browser/scripts/browser-service.mjs";
-                  }
-                )
-              } \
-              --set BROWSER_USE_AVAILABLE_BACKENDS 'chrome,iab,mcpapps' \
-              --set BROWSER_USE_TINYSKY_ENABLED '1' \
-              --set NODE_REPL_INSTRUCTIONS_USE_CASE_BROWSER "" \
-              --set NODE_REPL_INSTRUCTIONS_USE_CASE_CHROME "" \
-              --set BROWSER_USE_CODEX_APP_BUILD_FLAVOR 'prod' \
-              --set BROWSER_USE_CODEX_APP_VERSION ${lib.escapeShellArg desktopPackage.version}
-
-            makeWrapper ${desktopPackage}/bin/codex-desktop "$out/bin/${appId}" \
-              "''${profile_flags[@]}" \
-              --prefix PATH : "$private_bin" \
-              --set NIXOS_OZONE_WL '1' \
-              --set CODEX_LINUX_APP_ID ${lib.escapeShellArg appId} \
-              --set CODEX_LINUX_APP_DISPLAY_NAME ${lib.escapeShellArg "Codex — ${name}"} \
-              --set CODEX_ELECTRON_USER_DATA_PATH ${lib.escapeShellArg "${root}/config/Codex-Community"} \
-              --set CHROME_DESKTOP ${lib.escapeShellArg "${desktopId name}.desktop"} \
-              --set BAMF_DESKTOP_FILE_HINT "$out/share/applications/${desktopId name}.desktop" \
-              ${environmentArgs} \
-              --append-flags ${
-                lib.escapeShellArg (
-                  lib.escapeShellArgs [
-                    "--user-data-dir=${root}/config/Codex-Community"
-                    "--password-store=basic"
-                  ]
-                )
-              }
-
-            cp ${desktopItem name}/share/applications/*.desktop "$out/share/applications/"
-            substituteInPlace "$out/share/applications/${desktopId name}.desktop" \
-              --replace-fail 'Exec=${appId}' "Exec=$out/bin/${appId}"
-          ''
-        ) names}
-        ln -s codex-desktop-spreadzhao "$out/bin/codex-desktop"
-
-        export CODEX_HOME="$TMPDIR/completion-home"
-        mkdir -p "$CODEX_HOME"
-        ${resources}/codex completion zsh > "$TMPDIR/_codex"
-        substituteInPlace "$TMPDIR/_codex" \
-          --replace-fail '#compdef codex' '#compdef codex-spreadzhao codex-supazodiac' \
-          --replace-fail 'compdef _codex codex' 'compdef _codex codex-spreadzhao codex-supazodiac'
-        installShellCompletion --zsh "$TMPDIR/_codex"
+        source ${buildSettings}
+        source ${./scripts/build/profiles.sh} "$out"
       '';
 in
 {

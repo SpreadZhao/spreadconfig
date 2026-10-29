@@ -163,6 +163,11 @@ upstream `browser-proxy` feature. Desktop cloud WebSockets use a local SOCKS
 proxy patch in `codex/patches/`. GitHub CLI reads the shared login through the
 normal XDG path.
 
+Codex build scripts live in `codex/scripts/build/`. Nix supplies package paths,
+profile settings and environment variables. The CLI wrapper sources
+`codex/scripts/runtime/cli-environment.sh` to put the profile's private bin
+directory first on `PATH` and pass that `PATH` to spawned shells.
+
 Keep generic graphics variables local to the application or service. Btop uses
 the package's `cudaSupport` option on NVIDIA hosts.
 
