@@ -64,11 +64,12 @@ to Password Store. Do not replace the entire configuration directory.
 
 `modules/nixos/dwl.nix` sets `XDG_CURRENT_DESKTOP`, `XDG_SESSION_TYPE` and
 `XDG_SESSION_DESKTOP` in greetd's environment before dwl starts.
-The `dwl-session` launcher loads Home Manager's session variables and feeds
-`slstatus -s` into dwl. Its startup hook imports the session environment,
-including `PATH` and `SCRIPT_HOME`, into systemd and D-Bus, then starts
-`dwl-session.target` and runs the host's display commands once. Systemd orders
-`dwl-session.target` before `graphical-session.target` and
+The `dwl-session` launcher is built from
+`modules/home/dwl/scripts/dwl/dwl-session.sh`. It loads Home Manager's session
+variables and feeds `slstatus -s` into dwl. Its startup hook imports the session
+environment, including `PATH` and `SCRIPT_HOME`, into systemd and D-Bus. It then
+starts `dwl-session.target` and runs the host's display commands once. Systemd
+orders `dwl-session.target` before `graphical-session.target` and
 `xdg-desktop-autostart.target`. A missing connector does not prevent the session
 from starting. Exiting dwl stops slstatus and the graphical session targets.
 

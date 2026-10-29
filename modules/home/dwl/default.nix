@@ -16,44 +16,21 @@
 }:
 let
   color = value: { raw = "0x${value}ff"; };
-  sessionVariables = "WAYLAND_DISPLAY DISPLAY XDG_CURRENT_DESKTOP XDG_SESSION_TYPE XDG_SESSION_DESKTOP";
-  importVariables = lib.escapeShellArgs config.wayland.windowManager.dwl.systemd.variables;
-  systemctl = "${pkgs.systemd}/bin/systemctl";
-  startup = pkgs.writeShellScript "dwl-startup" ''
-    ${systemctl} --user import-environment ${importVariables} || true
-    ${pkgs.dbus}/bin/dbus-update-activation-environment --systemd ${importVariables} || true
-    ${systemctl} --user start dwl-session.target || true
-    ${config.spreadconfig.dwl.startupCommands}
-  '';
-  dwlSession = pkgs.writeShellScriptBin "dwl-session" ''
-    if [[ -f "${config.home.profileDirectory}/etc/profile.d/hm-session-vars.sh" ]]; then
-      source "${config.home.profileDirectory}/etc/profile.d/hm-session-vars.sh"
-    fi
-    status_pid=
-    compositor_pid=
-    cleanup() {
-      for pid in "$compositor_pid" "$status_pid"; do
-        if [[ -n "$pid" ]]; then
-          kill "$pid" 2>/dev/null || true
-          wait "$pid" 2>/dev/null || true
-        fi
-      done
-      ${systemctl} --user stop dwl-session.target graphical-session.target || true
-      ${systemctl} --user unset-environment ${sessionVariables} || true
-    }
-    trap 'cleanup' EXIT
-    trap 'exit 130' INT
-    trap 'exit 143' TERM
-    exec {status_fd}< <(exec ${lib.getExe config.programs.slstatus.finalPackage} -s)
-    status_pid=$!
-    ${lib.getExe config.wayland.windowManager.dwl.finalPackage} -s ${startup} "$@" <&"$status_fd" {status_fd}<&- &
-    compositor_pid=$!
-    exec {status_fd}<&-
-    wait "$compositor_pid"
-    result=$?
-    compositor_pid=
-    exit "$result"
-  '';
+  dwlSession = pkgs.writeShellApplication {
+    name = "dwl-session";
+    runtimeInputs = [
+      config.wayland.windowManager.dwl.finalPackage
+      config.programs.slstatus.finalPackage
+      pkgs.systemd
+      pkgs.dbus
+    ];
+    runtimeEnv = {
+      DWL_SESSION_PROFILE = config.home.profileDirectory;
+      DWL_IMPORT_VARIABLES = lib.concatStringsSep " " config.wayland.windowManager.dwl.systemd.variables;
+      DWL_HOST_STARTUP = pkgs.writeShellScript "dwl-host-startup" config.spreadconfig.dwl.startupCommands;
+    };
+    text = builtins.readFile ./scripts/dwl/dwl-session.sh;
+  };
 in
 {
   imports = [
