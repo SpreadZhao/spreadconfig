@@ -47,8 +47,8 @@ files and conflicting file/directory paths are errors.
 
 Current examples:
 
-- dwl uses `wayland.windowManager.dwl.settings` from spread-dwl's Home Manager
-  module for compile-time macros. Each host supplies
+- The dwl Home Manager module in `spreadless` exposes compile-time macros through
+  `wayland.windowManager.dwl.settings`. Each host supplies
   `spreadconfig.dwl.startupCommands` in `home/dwl.nix` to apply its display layout
   once at startup. Zephyrus sets `SDWL_TABLET_RULES` in `home/gaomon-tablet.nix`.
 - Qutebrowser loads `files/host.py` after shared settings and before the theme.
@@ -72,14 +72,14 @@ including `PATH` and `SCRIPT_HOME`, into systemd and D-Bus, then starts
 `xdg-desktop-autostart.target`. A missing connector does not prevent the session
 from starting. Exiting dwl stops slstatus and the graphical session targets.
 
-`modules/home/slstatus.nix` imports spread-slstatus's Home Manager module and
-sets `programs.slstatus.interval` to 9000 milliseconds. The components show CPU
-and memory usage, CPU temperature, network interface type, default audio output
-and input volume, battery charge when the host declares a battery, and `HH:MM`
-time, in that order. Values precede Nerd Font icons, without percent signs or
-separators between components. Audio icons identify the device type and mute
-state. Battery icons indicate charge level and distinguish charging,
-discharging, full and not charging.
+`modules/home/slstatus.nix` imports the slstatus Home Manager module from
+`spreadless` and sets `programs.slstatus.interval` to 9000 milliseconds. The
+components show CPU and memory usage, CPU temperature, network interface type,
+default audio output and input volume, battery charge when the host declares a
+battery, and `HH:MM` time, in that order. Values precede Nerd Font icons,
+without percent signs or separators between components. Audio icons identify
+the device type and mute state. Battery icons indicate charge level and
+distinguish charging, discharging, full and not charging.
 
 Native C components read the CPU temperature and default route; audio queries
 use `wpctl` through `run_command`. Network icons identify Wi-Fi and other
@@ -123,6 +123,9 @@ through `programs.satty` and saves in the `satty/` subdirectory.
 entries are copied unchanged; image entries open the shared image action menu.
 Home Manager starts text and image clipboard watchers with the graphical
 session. `Super+Z` launches shmooz for screen zoom, spotlight and annotation.
+
+`modules/home/i18n.nix` disables Fcitx preedit by default. `Ctrl+Alt+P`
+toggles preedit during the session.
 
 Swayidle turns displays off after 600 seconds and locks after 605 seconds.
 Its resume command turns displays back on when input resumes. The Lock Policy

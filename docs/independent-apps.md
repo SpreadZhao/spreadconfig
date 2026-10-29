@@ -10,10 +10,12 @@ modules and supplies desktop integration.
 | `flake-input-watcher` | [Repository](https://github.com/SpreadZhao/flake-input-watcher) | Checkout path, enabled service and timer |
 | `notification-history` | [Repository](https://github.com/SpreadZhao/notification-history) | fnott policy, Nixvim viewer, popup package and shortcut |
 | `fzf-popup` | [Repository](https://github.com/SpreadZhao/fzf-popup) | Foot launcher, dwl window rule and callers |
+| `spreadless` | [Repository](https://github.com/SpreadZhao/spreadless) | dwl settings and session launcher; slstatus components, colors and refresh interval |
 
-These inputs follow the root nixpkgs; notification-history also follows the
-root fzf-popup input. Update the corresponding input to adopt a release. Test
-local work with `--override-input NAME path:/path/to/NAME --no-write-lock-file`.
+These inputs follow the root `nixpkgs`. `notification-history` also follows the
+root `fzf-popup` input; `spreadless` follows `naw`. Update the corresponding
+input to adopt a release. Test local work with
+`--override-input NAME path:/path/to/NAME --no-write-lock-file`.
 
 ## Flake input watcher
 

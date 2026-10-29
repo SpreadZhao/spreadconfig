@@ -1,9 +1,8 @@
 # spreadconfig
 
 Personal NixOS and Home Manager configuration for three machines. The desktop
-uses `dwl` (from `spread-dwl`, with its built-in status bar), Foot, fuzzel and
-fnott, with shared dark colors and Noto fonts. Status text comes from
-`spread-slstatus`.
+uses dwl with its built-in status bar, Foot, fuzzel and fnott, with shared dark
+colors and Noto fonts. The `spreadless` input supplies dwl and slstatus.
 
 ## Install
 

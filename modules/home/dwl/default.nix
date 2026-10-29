@@ -57,7 +57,7 @@ let
 in
 {
   imports = [
-    inputs.spread-dwl.homeManagerModules.default
+    inputs.spreadless.homeManagerModules.dwl
     ./scripts.nix
     ./services.nix
   ];

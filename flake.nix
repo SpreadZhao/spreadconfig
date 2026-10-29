@@ -62,13 +62,8 @@
       url = "github:nix-community/nix-jetbrains-plugins";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    spread-dwl = {
-      url = "git+https://github.com/SpreadZhao/spread-dwl?submodules=1";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.naw.follows = "naw";
-    };
-    spread-slstatus = {
-      url = "git+https://github.com/SpreadZhao/spread-slstatus?submodules=1";
+    spreadless = {
+      url = "git+https://github.com/SpreadZhao/spreadless?submodules=1";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.naw.follows = "naw";
     };

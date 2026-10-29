@@ -453,8 +453,7 @@
         "personal-packages": "personal-packages",
         "personal-skills": "personal-skills",
         "sops-nix": "sops-nix",
-        "spread-dwl": "spread-dwl",
-        "spread-slstatus": "spread-slstatus",
+        "spreadless": "spreadless",
         "textbridge": "textbridge"
       }
     },
@@ -478,7 +477,7 @@
         "type": "github"
       }
     },
-    "spread-dwl": {
+    "spreadless": {
       "inputs": {
         "naw": [
           "naw"
@@ -488,44 +487,19 @@
         ]
       },
       "locked": {
-        "lastModified": 1793175135,
-        "narHash": "sha256-a33aBZli/REQysbw5do+j+VlWaW4CLjsxgq0iXwMRRE=",
+        "lastModified": 1793254403,
+        "narHash": "sha256-ssFWzCGk+04KY2NbdQyAzCwjN4inNTnVn9MY05L09lA=",
         "ref": "refs/heads/main",
-        "rev": "e4c28d9796e4c82e2ca220758565d5dfe0f16acf",
-        "revCount": 14,
+        "rev": "35be1424b47528df13af0030f7f444ee19e910d1",
+        "revCount": 2,
         "submodules": true,
         "type": "git",
-        "url": "https://github.com/SpreadZhao/spread-dwl"
+        "url": "https://github.com/SpreadZhao/spreadless"
       },
       "original": {
         "submodules": true,
         "type": "git",
-        "url": "https://github.com/SpreadZhao/spread-dwl"
-      }
-    },
-    "spread-slstatus": {
-      "inputs": {
-        "naw": [
-          "naw"
-        ],
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1793211694,
-        "narHash": "sha256-zt2UVh2vJu21yighy2sW+kyvOep4goy+HH63EyDMEi0=",
-        "ref": "refs/heads/main",
-        "rev": "6551d06c7fc03fa24e464e38de05058f3893fe69",
-        "revCount": 1,
-        "submodules": true,
-        "type": "git",
-        "url": "https://github.com/SpreadZhao/spread-slstatus"
-      },
-      "original": {
-        "submodules": true,
-        "type": "git",
-        "url": "https://github.com/SpreadZhao/spread-slstatus"
+        "url": "https://github.com/SpreadZhao/spreadless"
       }
     },
     "systems": {

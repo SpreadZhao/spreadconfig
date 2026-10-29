@@ -55,7 +55,7 @@ let
   };
 in
 {
-  imports = [ inputs.spread-slstatus.homeManagerModules.default ];
+  imports = [ inputs.spreadless.homeManagerModules.slstatus ];
   programs.slstatus = {
     interval = 9000;
     settings = {
