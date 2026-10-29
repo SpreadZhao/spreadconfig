@@ -73,7 +73,7 @@ orders `dwl-session.target` before `graphical-session.target` and
 `xdg-desktop-autostart.target`. A missing connector does not prevent the session
 from starting. Exiting dwl stops slstatus and the graphical session targets.
 
-`modules/home/slstatus.nix` imports the slstatus Home Manager module from
+`modules/home/slstatus/default.nix` imports the slstatus Home Manager module from
 `spreadless` and sets `programs.slstatus.interval` to 9000 milliseconds. The
 components show CPU and memory usage, CPU temperature, network interface type,
 default audio output and input volume, battery charge when the host declares a
@@ -82,11 +82,12 @@ without percent signs or separators between components. Audio icons identify
 the device type and mute state. Battery icons indicate charge level and
 distinguish charging, discharging, full and not charging.
 
-Native C components read the CPU temperature and default route; audio queries
-use `wpctl` through `run_command`. Network icons identify Wi-Fi and other
-default-route interfaces, or show a disconnected icon when no interface is
-found. The first CPU sample is `-` until the next interval. The bar shows the
-same status text on every output.
+Native C components read the CPU temperature and default route. Audio queries
+use `wpctl` and `awk` through the `slstatus-query` helper, built from
+`modules/home/slstatus/scripts/slstatus/slstatus-query.sh` and called by
+`run_command`. Network icons identify Wi-Fi and other default-route interfaces,
+or show a disconnected icon when no interface is found. The first CPU sample is
+`-` until the next interval. The bar shows the same status text on every output.
 
 The status formats use barcolors markup and the shared palette in
 `modules/home/vars.nix`.
