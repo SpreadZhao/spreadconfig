@@ -1,4 +1,10 @@
-{ pkgs, lib, ... }:
+{
+  pkgs,
+  lib,
+  repoLink,
+  appSource,
+  ...
+}:
 
 {
   home.packages = [ pkgs.xournalpp ];
@@ -17,19 +23,9 @@
       mainfile=main.lua
     '';
 
-    "xournalpp/plugins/LaserPointerShortcut/main.lua".text = ''
-      function initUi()
-        app.registerUi({
-          menu = "Laser pointer",
-          callback = "selectLaserPointer",
-          accelerator = "XF86Tools",
-        })
-      end
-
-      function selectLaserPointer()
-        app.changeActionState("select-tool", app.C.Tool_laserPointerPen)
-      end
-    '';
+    "xournalpp/plugins/LaserPointerShortcut/main.lua".source = repoLink (
+      appSource "xournalpp" "files/LaserPointerShortcut/main.lua"
+    );
   };
 
   xdg.mimeApps.defaultApplications = lib.genAttrs [
