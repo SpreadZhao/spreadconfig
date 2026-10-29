@@ -1,6 +1,7 @@
 {
   lib,
   pkgs,
+  utils,
   ...
 }:
 
@@ -12,20 +13,6 @@ let
   presetName = "gaomon-m5";
   bindingsHash = builtins.hashString "sha256" (builtins.toJSON bindings);
 
-  loadPreset = pkgs.writeShellScript "gaomon-input-remapper-load-preset" ''
-    # Force the unit to change when the declarative bindings change: ${bindingsHash}
-    export USER=spreadzhao
-    export HOME=/home/spreadzhao
-    export XDG_CONFIG_HOME="$HOME/.config"
-
-    if ! ${pkgs.input-remapper}/bin/input-remapper-control \
-      --command start \
-      --device ${lib.escapeShellArg deviceName} \
-      --preset ${lib.escapeShellArg presetName} \
-      --config-dir "$XDG_CONFIG_HOME/input-remapper-2"; then
-      echo "Warning: failed to load the GAOMON M5 input-remapper preset" >&2
-    fi
-  '';
 in
 {
   services.input-remapper = {
@@ -43,10 +30,28 @@ in
     after = [ "input-remapper.service" ];
     wants = [ "input-remapper.service" ];
     unitConfig.ConditionPathExists = devicePath;
+    restartTriggers = [ bindingsHash ];
+    environment = {
+      USER = "spreadzhao";
+      HOME = "/home/spreadzhao";
+      XDG_CONFIG_HOME = "/home/spreadzhao/.config";
+    };
     serviceConfig = {
       Type = "oneshot";
-      # A tablet mapping problem must never block a NixOS switch.
-      ExecStart = "-${loadPreset}";
+      # Ignore loader failures so an unavailable tablet cannot block activation.
+      ExecStart = "-${
+        utils.escapeSystemdExecArgs [
+          "${pkgs.input-remapper}/bin/input-remapper-control"
+          "--command"
+          "start"
+          "--device"
+          deviceName
+          "--preset"
+          presetName
+          "--config-dir"
+          "/home/spreadzhao/.config/input-remapper-2"
+        ]
+      }";
     };
   };
 }
