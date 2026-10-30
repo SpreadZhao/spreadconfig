@@ -35,9 +35,10 @@ such as `host.gpu.hasNvidia`. CPU and GPU vendors are independent; hybrid system
 can have several GPU predicates. Unknown capabilities are `null`.
 
 Put application defaults in their own modules and overrides in host application
-modules, using standard NixOS or Home Manager options. Profiles hold shared
-policy such as font scaling and device paths. Host leaf modules hold drivers,
-PCI addresses, fan curves and hardware-specific services.
+modules, using standard NixOS or Home Manager options. Profiles hold host-wide
+policy such as font scaling and device paths. Omit profile imports when the
+shared defaults suffice. Host leaf modules hold drivers, PCI addresses, fan curves
+and hardware-specific services.
 
 Native defaults live at `modules/home/<app>/files/`; host replacements use the
 same relative path under `hosts/<host>/home/<app>/files/`. Scripts follow the
@@ -237,7 +238,6 @@ starting point for `host.nix`:
   };
   profile = {
     nixos = import ./nixos/profile.nix;
-    home = import ./home/profile.nix;
   };
   modules = {
     nixos = [ ./configuration.nix ];
@@ -261,8 +261,9 @@ Create `configuration.nix`:
 ```
 
 Start `home.nix` with `{ ... }: { }`, then explicitly import any host application
-modules. Start `home/profile.nix` with `{ }` and `nixos/profile.nix` with
-`{ proxy.enable = false; }` if no proxy is ready. Add
+modules. For host-specific Home Manager policy, add `home/profile.nix` and set
+`profile.home = import ./home/profile.nix;` in `host.nix`.
+Start `nixos/profile.nix` with `{ proxy.enable = false; }` if no proxy is ready. Add
 `home/dwl.nix` for display startup commands and import it from `home.nix`. Keep
 tablet mappings in the host's tablet module.
 

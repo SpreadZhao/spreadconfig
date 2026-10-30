@@ -77,15 +77,15 @@ let
     ];
   };
   baseFontSizes = {
-    gtk = 16;
-    qt = 16;
-    foot = 16;
-    fuzzel = 18;
-    swaylock = 30;
+    gtk = 12;
+    qt = 12;
+    foot = 12;
+    fuzzel = 14;
+    swaylock = 26;
     fnott = {
-      title = 20;
-      summary = 19;
-      body = 18;
+      title = 16;
+      summary = 15;
+      body = 14;
     };
   };
   fontScalePercent = hostHomeProfile.fontScalePercent or 100;

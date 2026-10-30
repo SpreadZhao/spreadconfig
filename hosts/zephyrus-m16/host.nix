@@ -19,7 +19,6 @@
   };
   profile = {
     nixos = import ./nixos/profile.nix;
-    home = import ./home/profile.nix;
   };
   modules = {
     nixos = [ ./configuration.nix ];
