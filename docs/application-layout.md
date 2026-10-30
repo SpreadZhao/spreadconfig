@@ -175,9 +175,9 @@ Codex uses one shared package with separate GUI and CLI launchers for each
 account. The launchers isolate `CODEX_HOME`, SQLite state, and Electron user
 data while preserving the desktop session's XDG directories for external tools.
 Runtime caches and desktop logs use upstream defaults. Browser helpers use the
-upstream `browser-proxy` feature. Desktop cloud WebSockets use a local SOCKS
-proxy patch in `codex/patches/`. GitHub CLI reads the shared login through the
-normal XDG path.
+upstream `browser-proxy` feature. Desktop cloud WebSockets use the launcher's
+HTTP/HTTPS proxy environment with `NODE_USE_ENV_PROXY=1`. GitHub CLI reads the
+shared login through the normal XDG path.
 
 Codex build scripts live in `codex/scripts/build/`. Nix supplies package paths,
 profile settings and environment variables. The CLI wrapper sources
