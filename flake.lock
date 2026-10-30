@@ -8,11 +8,11 @@
         "systems": "systems"
       },
       "locked": {
-        "lastModified": 1793134901,
-        "narHash": "sha256-thSjW2BhZFECtNX152v67/dbR0vKYnCfFRTQq4JINCo=",
+        "lastModified": 1793325708,
+        "narHash": "sha256-ZRcT5b1ZeYyvldoamBTDlfnpDdtNVmNfUde24E43WzM=",
         "owner": "sadjow",
         "repo": "claude-code-nix",
-        "rev": "1ce054c09e8a10c4480c281178ff7e2a737aec17",
+        "rev": "4ce701aac994817823a05576fa3eb0ab06406e2f",
         "type": "github"
       },
       "original": {
@@ -29,11 +29,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1793290828,
-        "narHash": "sha256-cv7CzHzUEMtoVVBmSnMtQGlwiY53f40JYcyMvvx6jYg=",
+        "lastModified": 1793314629,
+        "narHash": "sha256-PDa/ueQmljhD+BiLNqmdppQ5xVNjMnxd37wGuqMEB9s=",
         "owner": "ilysenko",
         "repo": "codex-desktop-linux",
-        "rev": "97f03ecfc54ec75c8e1491764276f1dd3202665e",
+        "rev": "f9b973bc03ea60fc971bd227948541fe84bce635",
         "type": "github"
       },
       "original": {
@@ -487,11 +487,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1793264506,
-        "narHash": "sha256-oUsvNNsTXd5bvzlXIp1zYIRQqa7sKQ1qs/oPStCMx4I=",
+        "lastModified": 1793345616,
+        "narHash": "sha256-EWo1uRn5inHCMPHbDIAOMNXRI3LqmiERCwujeJmyLV8=",
         "ref": "refs/heads/main",
-        "rev": "23ed75b77ea6ad9267a4c46e14f0f2f379759a0e",
-        "revCount": 3,
+        "rev": "6425d901ecc4aea9b13f671d20e10dcc1b46ed2b",
+        "revCount": 7,
         "submodules": true,
         "type": "git",
         "url": "https://github.com/SpreadZhao/spreadless"
