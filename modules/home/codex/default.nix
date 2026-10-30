@@ -27,6 +27,7 @@ in
     enable = true;
     package = profiles.package;
     linuxFeatures = [
+      "computer-use-linux"
       "frameless-titlebar"
       "remote-control-ui"
       "remote-mobile-control"
