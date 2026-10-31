@@ -1,1 +1,1 @@
-{ ... }: { imports = [ ./home/dwl.nix ]; }
+{ ... }: { imports = [ ./home/kanshi.nix ]; }

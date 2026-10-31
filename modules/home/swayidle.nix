@@ -1,11 +1,7 @@
-{
-  config,
-  pkgs,
-  ...
-}:
+{ pkgs, ... }:
 
 let
-  restoreDisplays = "${config.home.profileDirectory}/bin/dwl-display-restore";
+  restoreDisplays = "${pkgs.wlopm}/bin/wlopm --on '*'";
 in
 
 {

@@ -9,15 +9,15 @@ override_dir="$systemd_user_dir/$unit_name.d"
 override_file="$override_dir/lock-policy-disabled.conf"
 
 write_disabled_override() {
-    local swayidle_bin restore_bin
+    local swayidle_bin wlopm_bin
     swayidle_bin="$(command -v swayidle)"
-    restore_bin="$(command -v dwl-display-restore)"
+    wlopm_bin="$(command -v wlopm)"
 
     mkdir -p "$override_dir"
     rm -f "$override_file"
     {
         printf '[Service]\nExecStart=\n'
-        printf 'ExecStart=%s -w after-resume %s\n' "$swayidle_bin" "$restore_bin"
+        printf 'ExecStart=%s -w after-resume "%s"\n' "$swayidle_bin" "$wlopm_bin --on '*'"
     } >"$override_file"
 }
 
@@ -38,7 +38,7 @@ case "$choice" in
     write_disabled_override
     systemctl --user daemon-reload
     systemctl --user restart "$unit_name"
-    dwl-display-restore
+    wlopm --on '*'
     notify-send --app-name "lock policy" "Idle lock disabled" "Automatic screen blanking and locking are disabled."
     ;;
 "")

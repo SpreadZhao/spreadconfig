@@ -7,5 +7,6 @@
     ./home/psst.nix
     ./home/qutebrowser
     ./home/dwl.nix
+    ./home/kanshi.nix
   ];
 }

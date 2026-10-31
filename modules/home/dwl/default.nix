@@ -16,17 +16,6 @@
 }:
 let
   color = value: { raw = "0x${value}ff"; };
-  restoreDisplays = pkgs.writeShellApplication {
-    name = "dwl-display-restore";
-    runtimeInputs = [
-      pkgs.wlopm
-      pkgs.wlr-randr
-    ];
-    text = ''
-      wlopm --on '*' || true
-      ${config.spreadconfig.dwl.displayCommands}
-    '';
-  };
   dwlSession = pkgs.writeShellApplication {
     name = "dwl-session";
     runtimeInputs = [
@@ -34,7 +23,7 @@ let
       config.programs.slstatus.finalPackage
       pkgs.systemd
       pkgs.dbus
-      restoreDisplays
+      pkgs.wlopm
     ];
     runtimeEnv = {
       DWL_SESSION_PROFILE = config.home.profileDirectory;
@@ -49,12 +38,6 @@ in
     ./scripts.nix
     ./services.nix
   ];
-
-  options.spreadconfig.dwl.displayCommands = lib.mkOption {
-    type = lib.types.lines;
-    default = "";
-    description = "Host wlr-randr commands run at login and after waking the displays.";
-  };
 
   config = {
     wayland.windowManager.dwl = {
@@ -94,9 +77,7 @@ in
     programs.slstatus.enable = true;
     home.packages = [
       dwlSession
-      restoreDisplays
       pkgs.dpms-off
-      pkgs.wlr-randr
       pkgs.wlopm
     ];
     xdg.desktopEntries.lock_policy = {
