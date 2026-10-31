@@ -139,17 +139,26 @@ annotation.
 `modules/home/i18n.nix` disables Fcitx preedit by default. `Ctrl+Alt+P`
 toggles preedit during the session.
 
-Swayidle turns displays off after 600 seconds and locks after 605 seconds.
+`modules/home/dwl/swayidle.nix` starts `swayidle.service` with
+`dwl-session.target`. It turns displays off after 600 seconds of inactivity and
+locks after 605 seconds. The service restores display power after resume and
+when stopped.
+
 The Lock Policy menu disables automatic screen blanking and locking through
 `swayidle.service.d/lock-policy-disabled.conf` in the user systemd configuration.
-With this override, swayidle listens only for system resume events. Restoring
+The override uses `timeout 0` so `SIGUSR1` can still turn displays off. Restoring
 idle lock removes the override.
 
-Run `swaylock` to lock without turning displays off. The dwl lock shortcut runs
-`dwl_lock.sh`: it waits for `swaylock -f` to establish the lock, then runs
-`dpms-off`. Running `dpms-off` alone turns displays off without locking. It waits
-for input to turn displays back on, then exits. These manual actions also work
-while automatic locking is paused.
+Run `swaylock` to lock without turning displays off. `Super+Ctrl+Shift+L` runs
+`dwl_lock.sh`: it ensures `swayidle.service` is running, waits for
+`swaylock -f` to establish the lock, then delays 0.5 seconds before sending
+`SIGUSR1` to the service. The delay reduces immediate wakeups from releasing the
+shortcut.
+
+`SIGUSR1` triggers the service's timeout commands even when an application
+inhibits idle. The lock command starts `swaylock` only if it is not already running
+for the current user. `wlopm` turns displays off, and the next input turns them
+back on while the screen remains locked.
 
 Tablet rules match the exact input device name and select an output connector.
 The full tablet area maps to that output. With no rule, or while the named output

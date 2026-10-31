@@ -37,6 +37,7 @@ in
     inputs.spreadless.homeManagerModules.dwl
     ./scripts.nix
     ./services.nix
+    ./swayidle.nix
   ];
 
   config = {
@@ -77,7 +78,6 @@ in
     programs.slstatus.enable = true;
     home.packages = [
       dwlSession
-      pkgs.dpms-off
       pkgs.wlopm
     ];
     xdg.desktopEntries.lock_policy = {

@@ -17,7 +17,8 @@ write_disabled_override() {
     rm -f "$override_file"
     {
         printf '[Service]\nExecStart=\n'
-        printf 'ExecStart=%s -w after-resume "%s"\n' "$swayidle_bin" "$wlopm_bin --on '*'"
+        printf 'ExecStart=%s -C /dev/null -w timeout 0 "%s" resume "%s" after-resume "%s"\n' \
+            "$swayidle_bin" "$wlopm_bin --off '*'" "$wlopm_bin --on '*'" "$wlopm_bin --on '*'"
     } >"$override_file"
 }
 
