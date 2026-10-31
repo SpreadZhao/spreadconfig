@@ -49,9 +49,9 @@ files and conflicting file/directory paths are errors.
 Current examples:
 
 - The dwl Home Manager module in `spreadless` exposes compile-time macros through
-  `wayland.windowManager.dwl.settings`. Each host supplies
-  `spreadconfig.dwl.displayCommands` in `home/dwl.nix` as ordinary `wlr-randr`
-  commands. Zephyrus sets `SDWL_TABLET_RULES` in `home/gaomon-tablet.nix`.
+  `wayland.windowManager.dwl.settings`. Each host configures output scale, mode
+  and position with `services.kanshi` in `home/kanshi.nix`. Zephyrus sets
+  `SDWL_TABLET_RULES` in `home/gaomon-tablet.nix`.
 - Qutebrowser loads `files/host.py` after shared settings and before the theme.
   Zephyrus also selects its Intel Vulkan package in its Home Manager module.
 - Psst uses `services.gpg-agent.pinentry.package`. Zephyrus sets
@@ -69,15 +69,20 @@ The `dwl-session` launcher is built from
 `modules/home/dwl/scripts/dwl/dwl-session.sh`. It loads Home Manager's session
 variables and feeds `slstatus -s` into dwl. Its startup hook imports the session
 environment, including `PATH` and `SCRIPT_HOME`, into systemd and D-Bus. It then
-starts `dwl-session.target` and runs `dwl-display-restore`. Systemd
+starts `dwl-session.target` and turns on display power with `wlopm`. Systemd
 orders `dwl-session.target` before `graphical-session.target` and
 `xdg-desktop-autostart.target`. A missing connector does not prevent the session
 from starting. Exiting dwl stops slstatus and the graphical session targets.
 
-`dwl-display-restore` turns on display power with `wlopm` and runs the host's
-`wlr-randr` commands once. The manual screen-off shortcut calls it after
-`dpms-off` returns. Swayidle calls it when activity resumes after idle screen
-blanking and when the system resumes from sleep.
+Kanshi runs with `dwl-session.target` and applies the host's output profile at
+login and when displays connect or disconnect. Desktop1 and Zephyrus have
+profiles for all nonempty combinations of their three connectors. Zephyrus
+uses its internal display when undocked and disables it when an external display
+is connected. Thinkbook uses its internal display at scale 2.
+
+The manual screen-off shortcut and swayidle restore display power with `wlopm`
+after blanking or suspend. Output profiles configure the display layout
+separately from power management.
 
 `modules/home/slstatus/default.nix` imports the slstatus Home Manager module from
 `spreadless` and sets `programs.slstatus.interval` to 9000 milliseconds. The
@@ -97,7 +102,7 @@ or show a disconnected icon when no interface is found. The first CPU sample is
 
 The status formats use barcolors markup and the shared palette in
 `modules/home/vars.nix`.
-CPU is bright yellow, memory uses `theme_purple`, network is red, audio is blue,
+CPU is bright yellow, memory uses `theme_purple`, network is magenta, audio is blue,
 and temperature and time are green. Temperature turns yellow at 60°C and
 red at 80°C. The bar uses Noto Sans at Fontconfig `size=14`, with Chinese,
 Nerd Font symbols and emoji fallbacks at the same size. Tags, layout and title
@@ -107,8 +112,8 @@ edge.
 `wayland.windowManager.dwl.settings` supplies `SDWL_*` macros through one generated
 `host.h`. Strings are quoted, booleans become `0` or `1`, and `{ raw = "..."; }`
 supplies a single-line C expression or initializer list. The module's read-only
-`finalPackage` is the configured package. Display commands live in the host's
-Nix module. `SDWL_FONT` selects the primary font, `SDWL_FONT_FALLBACKS` supplies
+`finalPackage` is the configured package. Output profiles live in the host's
+Kanshi module. `SDWL_FONT` selects the primary font, `SDWL_FONT_FALLBACKS` supplies
 the fallback list, and `SDWL_BAR_HPAD` and `SDWL_STATUS_RPAD` set the padding.
 
 `start_floating_foot.sh` belongs to Foot and is installed under `~/scripts/util`.
@@ -120,8 +125,8 @@ floating window rule.
 The shared `screenshot.sh` and `image_action_menu.sh` scripts live in
 `modules/home/script-tools/scripts/util`. Grim, slurp, lswt and Tesseract are
 installed by their own application modules. `Super+Shift+A` freezes the screen
-and selects a region; `Super+Ctrl+Shift+A` selects an output.
-`~/scripts/util/screenshot.sh -w` selects a window from a list for capture.
+for region selection. `Super+Ctrl+Shift+A` uses slurp to select an output with a
+click. `~/scripts/util/screenshot.sh -w` selects a window from a list for capture.
 All modes open the shared image action menu for clipboard copy, saving,
 Satty editing, a floating image viewer, or Chinese/English OCR. The menu saves
 images in `screenshot/` under the XDG Pictures directory. Satty is configured
@@ -275,7 +280,7 @@ Start `home.nix` with `{ ... }: { }`, then explicitly import any host applicatio
 modules. For host-specific Home Manager policy, add `home/profile.nix` and set
 `profile.home = import ./home/profile.nix;` in `host.nix`.
 Start `nixos/profile.nix` with `{ proxy.enable = false; }` if no proxy is ready. Add
-`home/dwl.nix` for display startup commands and import it from `home.nix`. Keep
+`home/kanshi.nix` for output profiles and import it from `home.nix`. Keep
 tablet mappings in the host's tablet module.
 
 Generate `hardware-configuration.nix` on the target machine as described in

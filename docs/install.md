@@ -176,7 +176,7 @@ cp /mnt/etc/nixos/hardware-configuration.nix \
 Check root, EFI, swap and encrypted-device UUIDs against the mounted filesystems.
 Keep the repository's `configuration.nix`; do not replace it with the generated
 one. Review the host's drivers, PRIME addresses, machine-specific services and
-the display startup commands in `home/dwl.nix`.
+the output profiles in `home/kanshi.nix`.
 
 ### Network after the first boot
 
