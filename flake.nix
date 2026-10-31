@@ -45,10 +45,6 @@
       url = "git+https://github.com/Agents365-ai/drawio-skill.git?ref=main";
       flake = false;
     };
-    figma-mcp-server-guide = {
-      url = "git+https://github.com/figma/mcp-server-guide.git?ref=main";
-      flake = false;
-    };
     fzf-popup = {
       url = "github:SpreadZhao/fzf-popup/main";
       inputs.nixpkgs.follows = "nixpkgs";

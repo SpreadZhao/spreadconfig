@@ -80,23 +80,6 @@
         "url": "https://github.com/Agents365-ai/drawio-skill.git"
       }
     },
-    "figma-mcp-server-guide": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1793197089,
-        "narHash": "sha256-IA80DGitVBXxaaMBUvv3ZLrNKfTbxBCpQ3B1zSH0nbs=",
-        "ref": "main",
-        "rev": "f3f264d9cbae059d9b96289ee33ce444b5c8e7e6",
-        "revCount": 88,
-        "type": "git",
-        "url": "https://github.com/figma/mcp-server-guide.git"
-      },
-      "original": {
-        "ref": "main",
-        "type": "git",
-        "url": "https://github.com/figma/mcp-server-guide.git"
-      }
-    },
     "flake-compat": {
       "flake": false,
       "locked": {
@@ -475,7 +458,6 @@
         "claude-code-nix": "claude-code-nix",
         "codex-desktop-linux": "codex-desktop-linux",
         "drawio-skill": "drawio-skill",
-        "figma-mcp-server-guide": "figma-mcp-server-guide",
         "fzf-popup": "fzf-popup",
         "home-manager": "home-manager",
         "naw": "naw",
