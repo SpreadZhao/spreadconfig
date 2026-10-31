@@ -2,6 +2,7 @@
   config,
   host,
   inputs,
+  lib,
   ...
 }:
 
@@ -25,5 +26,13 @@
       && host.capabilities.bluetooth != false
       && host.profile.nixos.textbridge.bluetooth.enable;
     channel = 22;
+  };
+
+  # Restrict these shared user units to spreadzhao, who owns the Fcitx socket.
+  systemd.user.services = {
+    textbridge-server.unitConfig.ConditionUser = "spreadzhao";
+    textbridge-bluetooth-server = lib.mkIf config.services.textbridge.bluetooth.enable {
+      unitConfig.ConditionUser = "spreadzhao";
+    };
   };
 }
