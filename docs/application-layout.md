@@ -93,11 +93,11 @@ between components. Audio icons identify the device type and mute state. Battery
 icons indicate charge level and distinguish charging, discharging, full and not
 charging.
 
-The native `cpu_temp` component reads CPU temperature. Audio queries use `wpctl`
-and `awk` through the `slstatus-query` helper, built from
-`modules/home/slstatus/scripts/slstatus/slstatus-query.sh` and called by
-`run_command`. The first CPU sample is `-` until the next interval. The bar shows
-the same status text on every output.
+The native `cpu_temp` and `battery_icon` components read CPU temperature and
+battery state. `run_command` calls the `slstatus-query` helper, built from
+`modules/home/slstatus/scripts/slstatus/slstatus-query.sh`, to query audio with
+`wpctl` and `awk`. The first CPU sample is `-` until the next interval. The bar
+shows the same status text on every output.
 
 The status formats use barcolors markup and the shared palette in
 `modules/home/vars.nix`.
@@ -156,9 +156,9 @@ Run `swaylock` to lock without turning displays off. `Super+Ctrl+Shift+L` runs
 shortcut.
 
 `SIGUSR1` triggers the service's timeout commands even when an application
-inhibits idle. The lock command starts `swaylock` only if it is not already running
-for the current user. `wlopm` turns displays off, and the next input turns them
-back on while the screen remains locked.
+inhibits idle. The service starts `swaylock` only if it is not already running for
+the current user. `wlopm` turns displays off, and the next input turns them back on
+while the screen remains locked.
 
 Tablet rules match the exact input device name and select an output connector.
 The full tablet area maps to that output. With no rule, or while the named output
