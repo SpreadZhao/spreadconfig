@@ -1,5 +1,26 @@
 {
   "nodes": {
+    "antigravity-nix": {
+      "inputs": {
+        "flake-utils": "flake-utils_2",
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1793344257,
+        "narHash": "sha256-uehPzucJWe0N+LxzlvgOqyMmea59R1DeV+HXXqanV74=",
+        "owner": "jacopone",
+        "repo": "antigravity-nix",
+        "rev": "1b5a9ab6739d2bbf7f3bd63980d21c3ae848ebb4",
+        "type": "github"
+      },
+      "original": {
+        "owner": "jacopone",
+        "repo": "antigravity-nix",
+        "type": "github"
+      }
+    },
     "claude-code-nix": {
       "inputs": {
         "nixpkgs": [
@@ -57,6 +78,23 @@
         "ref": "main",
         "type": "git",
         "url": "https://github.com/Agents365-ai/drawio-skill.git"
+      }
+    },
+    "figma-mcp-server-guide": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1793197089,
+        "narHash": "sha256-IA80DGitVBXxaaMBUvv3ZLrNKfTbxBCpQ3B1zSH0nbs=",
+        "ref": "main",
+        "rev": "f3f264d9cbae059d9b96289ee33ce444b5c8e7e6",
+        "revCount": 88,
+        "type": "git",
+        "url": "https://github.com/figma/mcp-server-guide.git"
+      },
+      "original": {
+        "ref": "main",
+        "type": "git",
+        "url": "https://github.com/figma/mcp-server-guide.git"
       }
     },
     "flake-compat": {
@@ -120,6 +158,24 @@
     "flake-utils": {
       "inputs": {
         "systems": "systems_2"
+      },
+      "locked": {
+        "lastModified": 1731533236,
+        "narHash": "sha256-l0KFg5HjrsfsO/JpG+r7fRrqm12kzFHyUHqHCVpMMbI=",
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "rev": "11707dc2f618dd54ca8739b309ec4fc024de578b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "type": "github"
+      }
+    },
+    "flake-utils_2": {
+      "inputs": {
+        "systems": "systems_5"
       },
       "locked": {
         "lastModified": 1731533236,
@@ -436,9 +492,11 @@
     },
     "root": {
       "inputs": {
+        "antigravity-nix": "antigravity-nix",
         "claude-code-nix": "claude-code-nix",
         "codex-desktop-linux": "codex-desktop-linux",
         "drawio-skill": "drawio-skill",
+        "figma-mcp-server-guide": "figma-mcp-server-guide",
         "flake-input-watcher": "flake-input-watcher",
         "fzf-popup": "fzf-popup",
         "home-manager": "home-manager",
@@ -560,6 +618,21 @@
       "original": {
         "owner": "nix-systems",
         "ref": "future-26.11",
+        "repo": "default",
+        "type": "github"
+      }
+    },
+    "systems_5": {
+      "locked": {
+        "lastModified": 1681028828,
+        "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
+        "owner": "nix-systems",
+        "repo": "default",
+        "rev": "da67096a3b9bf56a91d16901293e51ba5b49a27e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-systems",
         "repo": "default",
         "type": "github"
       }

@@ -2,6 +2,10 @@
   description = "NixOS configuration";
 
   inputs = {
+    antigravity-nix = {
+      url = "github:jacopone/antigravity-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     naw = {
       url = "github:SpreadZhao/NAW";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -39,6 +43,10 @@
     };
     drawio-skill = {
       url = "git+https://github.com/Agents365-ai/drawio-skill.git?ref=main";
+      flake = false;
+    };
+    figma-mcp-server-guide = {
+      url = "git+https://github.com/figma/mcp-server-guide.git?ref=main";
       flake = false;
     };
     fzf-popup = {

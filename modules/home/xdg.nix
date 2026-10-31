@@ -20,9 +20,6 @@
         rnote
         xournalpp
       ];
-      # Keep the handler for this externally installed application.
-      defaultApplications."x-scheme-handler/antigravity" = "antigravity.desktop";
-      associations.added."x-scheme-handler/antigravity" = "antigravity.desktop";
     };
     portal = {
       enable = true;
