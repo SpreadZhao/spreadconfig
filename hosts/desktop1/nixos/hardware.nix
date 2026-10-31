@@ -43,6 +43,11 @@ in
 {
   boot.kernelPackages = lib.mkForce baseline.boot.kernelPackages;
 
+  # The module aggregator must match the pinned kernel's certificate format.
+  nixpkgs.overlays = [
+    (_final: _prev: { inherit (graphicsPkgs) aggregateModules; })
+  ];
+
   hardware = {
     graphics = {
       enable = true;
