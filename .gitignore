@@ -1,5 +1,7 @@
 # Local development and agent workspace state, at any directory depth.
 .direnv/
+/result
+/result-*
 .agents/
 .claude/
 .codex/

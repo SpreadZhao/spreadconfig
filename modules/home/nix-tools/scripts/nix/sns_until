@@ -5,35 +5,27 @@ action="${1:-switch}"
 max_attempts="${NIX_RETRY_ATTEMPTS:-3}"
 retry_delay="${NIX_RETRY_DELAY:-1}"
 
-if [[ "$action" != "switch" && "$action" != "boot" ]]; then
-	echo "Usage: sns_until [switch|boot]" >&2
-	exit 1
-fi
 if [[ ! "$max_attempts" =~ ^[1-9][0-9]*$ ]] || [[ ! "$retry_delay" =~ ^[0-9]+([.][0-9]+)?$ ]]; then
 	echo "sns_until: NIX_RETRY_ATTEMPTS must be a positive integer and NIX_RETRY_DELAY a non-negative number" >&2
 	exit 1
 fi
 
-# Installed symlinks resolve to the application-owned source tree.
-spreadconfig_script_source=$(readlink -f "${BASH_SOURCE[0]}")
-spreadconfig_script_root=${spreadconfig_script_source%/modules/home/*}
-[[ "$spreadconfig_script_root" != "$spreadconfig_script_source" ]] || spreadconfig_script_root=${spreadconfig_script_source%/hosts/*}
-# shellcheck source=modules/home/script-tools/scripts/config/host_context.sh
-source "${spreadconfig_script_root}/modules/home/script-tools/scripts/config/host_context.sh" || exit 1
-unset spreadconfig_script_source spreadconfig_script_root
-spreadconfig_resolve_host
+script_path=$(readlink -f "${BASH_SOURCE[0]}")
+script_dir=$(dirname "$script_path")
+source "${script_path%/modules/home/*}/modules/home/script-tools/scripts/config/host_context.sh"
+spreadconfig_validate_action "$action"
 
 attempt=1
 while true; do
-	echo "sns_until: running nh os $action for $SPREADCONFIG_TARGET_HOST (attempt $attempt/$max_attempts)"
-	if nh os "$action" -d always -t "path://$SPREADCONFIG_TARGET_REPO#$SPREADCONFIG_TARGET_HOST"; then
+	echo "sns_until: running sns $action (attempt $attempt/$max_attempts)"
+	if "$script_dir/sns" "$action"; then
 		break
 	fi
 	if ((attempt >= max_attempts)); then
-		echo "sns_until: nh os $action failed after $max_attempts attempts" >&2
+		echo "sns_until: sns $action failed after $max_attempts attempts" >&2
 		exit 1
 	fi
 	attempt=$((attempt + 1))
-	echo "sns_until: retrying nh os $action in $retry_delay seconds" >&2
+	echo "sns_until: retrying sns $action in $retry_delay seconds" >&2
 	sleep "$retry_delay"
 done

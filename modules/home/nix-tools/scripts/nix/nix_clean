@@ -3,8 +3,8 @@ set -euo pipefail
 
 action="${1:-switch}"
 
-if [[ "$action" != "switch" && "$action" != "boot" ]]; then
-  echo "Usage: nix_clean [switch|boot]" >&2
+if [[ "$action" != "switch" && "$action" != "boot" && "$action" != "build" ]]; then
+  echo "Usage: nix_clean [switch|boot|build]" >&2
   exit 1
 fi
 

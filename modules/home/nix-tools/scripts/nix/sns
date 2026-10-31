@@ -2,11 +2,6 @@
 set -euo pipefail
 
 action="${1:-switch}"
-if [[ "$action" != "switch" && "$action" != "boot" ]]; then
-	echo "Usage: sns [switch|boot]" >&2
-	exit 1
-fi
-
 # Installed symlinks resolve to the application-owned source tree.
 spreadconfig_script_source=$(readlink -f "${BASH_SOURCE[0]}")
 spreadconfig_script_root=${spreadconfig_script_source%/modules/home/*}
@@ -14,6 +9,7 @@ spreadconfig_script_root=${spreadconfig_script_source%/modules/home/*}
 # shellcheck source=modules/home/script-tools/scripts/config/host_context.sh
 source "${spreadconfig_script_root}/modules/home/script-tools/scripts/config/host_context.sh" || exit 1
 unset spreadconfig_script_source spreadconfig_script_root
+spreadconfig_validate_action "$action"
 spreadconfig_resolve_host
 
-exec nh os "$action" -d always -t "path://$SPREADCONFIG_TARGET_REPO#$SPREADCONFIG_TARGET_HOST"
+exec nh os "$action" --diff always "path:$SPREADCONFIG_TARGET_REPO#$SPREADCONFIG_TARGET_HOST"

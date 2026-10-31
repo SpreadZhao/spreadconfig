@@ -48,9 +48,9 @@ To update inputs and prepare the next boot:
 ```
 
 `sns`, `sns_until` and `nix_clean` default to `switch`; `nix_update` and
-`nix_full_update` default to `boot`. Agents must never execute a switch, including
-through wrapper defaults. Use evaluation or `build` for checks; the user performs
-every switch.
+`nix_full_update` default to `boot`. Pass `build` to run them without activation.
+Agents must never execute `switch`, including through wrapper defaults. The user
+performs every switch.
 
 ## Configuration layout
 

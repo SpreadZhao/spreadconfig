@@ -37,9 +37,9 @@ declare -ar core_inputs=(
 
 usage() {
 	cat <<'EOF'
-Usage: nix_update [switch|boot] [OPTIONS]
+Usage: nix_update [switch|boot|build] [OPTIONS]
 
-Update flake inputs and prepare the next boot (default), or switch if requested.
+Update flake inputs, then build, prepare the next boot (default), or switch.
 
 Options:
   -e, --exclude INPUT[,INPUT...]  Exclude one or more flake inputs for this run
@@ -163,7 +163,7 @@ run_flake_update_once() {
 
 while (($# > 0)); do
 	case "$1" in
-	switch | boot)
+	switch | boot | build)
 		if ((action_set)); then
 			die "action specified more than once"
 		fi

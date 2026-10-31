@@ -40,3 +40,10 @@ spreadconfig_resolve_host() {
 	fi
 	SPREADCONFIG_TARGET_REPO=$(cd "$SPREADCONFIG_TARGET_REPO" && pwd -P)
 }
+
+spreadconfig_validate_action() {
+  if [[ "$1" != switch && "$1" != boot && "$1" != build ]]; then
+    printf 'Usage: %s [switch|boot|build]\n' "${0##*/}" >&2
+    return 1
+  fi
+}
