@@ -8,11 +8,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1793344257,
-        "narHash": "sha256-uehPzucJWe0N+LxzlvgOqyMmea59R1DeV+HXXqanV74=",
+        "lastModified": 1793430542,
+        "narHash": "sha256-JFdtE8/NXJrzzHUPfm4Y46KFHugr469G/Om9xck/7Vg=",
         "owner": "jacopone",
         "repo": "antigravity-nix",
-        "rev": "1b5a9ab6739d2bbf7f3bd63980d21c3ae848ebb4",
+        "rev": "c6065473cf8bb7ba2a43dd198d2a06963e55ce8c",
         "type": "github"
       },
       "original": {
@@ -68,16 +68,16 @@
       "locked": {
         "lastModified": 1791717773,
         "narHash": "sha256-2y5bTL3ALoS9QTExPBWMacz8JhyLlNU++NqE4zpJm94=",
-        "ref": "main",
+        "owner": "Agents365-ai",
+        "repo": "drawio-skill",
         "rev": "57270820d3cd71cbdf4fb6b2f7091d4fb37bb019",
-        "revCount": 291,
-        "type": "git",
-        "url": "https://github.com/Agents365-ai/drawio-skill.git"
+        "type": "github"
       },
       "original": {
+        "owner": "Agents365-ai",
         "ref": "main",
-        "type": "git",
-        "url": "https://github.com/Agents365-ai/drawio-skill.git"
+        "repo": "drawio-skill",
+        "type": "github"
       }
     },
     "flake-compat": {
@@ -245,11 +245,11 @@
         "systems": "systems_4"
       },
       "locked": {
-        "lastModified": 1792830821,
-        "narHash": "sha256-EOJtunxXDQ2XIR5/Hc3MgtHTFmm/afdQ2x3W9T68LI0=",
+        "lastModified": 1793448635,
+        "narHash": "sha256-fo5cEqZp/y6MyR9+7ktayGdIv50VcXtH2Pv/uLdAfQc=",
         "owner": "nix-community",
         "repo": "nix-jetbrains-plugins",
-        "rev": "cd38ad74d3716d1be3f6e84270486452136a2e38",
+        "rev": "2564a112ec5fa4183da7281a1001e7e58c15a597",
         "type": "github"
       },
       "original": {
@@ -263,16 +263,16 @@
       "locked": {
         "lastModified": 1772846587,
         "narHash": "sha256-jKdSnasUZcX1LBYBXu2bM3Cv6F/McgkByxvzwVire8w=",
-        "ref": "main",
+        "owner": "lihaoze123",
+        "repo": "my-claude-code",
         "rev": "03a65e39a21137a5091738b79d3731ee83bda13a",
-        "revCount": 9,
-        "type": "git",
-        "url": "https://github.com/lihaoze123/my-claude-code.git"
+        "type": "github"
       },
       "original": {
+        "owner": "lihaoze123",
         "ref": "main",
-        "type": "git",
-        "url": "https://github.com/lihaoze123/my-claude-code.git"
+        "repo": "my-claude-code",
+        "type": "github"
       }
     },
     "nixos-hardware": {

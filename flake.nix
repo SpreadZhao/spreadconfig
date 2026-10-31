@@ -38,11 +38,11 @@
       url = "github:nix-community/nixvim";
     };
     nixos-best-practices-skill = {
-      url = "git+https://github.com/lihaoze123/my-claude-code.git?ref=main";
+      url = "github:lihaoze123/my-claude-code/main";
       flake = false;
     };
     drawio-skill = {
-      url = "git+https://github.com/Agents365-ai/drawio-skill.git?ref=main";
+      url = "github:Agents365-ai/drawio-skill/main";
       flake = false;
     };
     fzf-popup = {
