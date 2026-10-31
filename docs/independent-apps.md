@@ -7,7 +7,6 @@ modules and supplies desktop integration.
 
 | Input | Upstream | Local integration |
 | --- | --- | --- |
-| `flake-input-watcher` | [Repository](https://github.com/SpreadZhao/flake-input-watcher) | Checkout path, enabled service and timer |
 | `notification-history` | [Repository](https://github.com/SpreadZhao/notification-history) | fnott policy, Nixvim viewer, popup package and shortcut |
 | `fzf-popup` | [Repository](https://github.com/SpreadZhao/fzf-popup) | Foot launcher, dwl window rule and callers |
 | `spreadless` | [Repository](https://github.com/SpreadZhao/spreadless) | dwl settings and session launcher; slstatus components, colors and refresh interval |
@@ -16,23 +15,6 @@ These inputs follow the root `nixpkgs`. `notification-history` also follows the
 root `fzf-popup` input; `spreadless` follows `naw`. Update the corresponding
 input to adopt a release. Test local work with
 `--override-input NAME path:/path/to/NAME --no-write-lock-file`.
-
-## Flake input watcher
-
-`modules/home/flake-input-watcher/default.nix` enables checks against `projDir`.
-The default timer runs five minutes after graphical login and every six hours.
-Host modules can override `services.flake-input-watcher` for scheduling,
-input selection and hooks. Checks send fnott notifications and run matching
-hooks for pending updates, including previously reported updates. They do not
-change the lock file or rebuild the system.
-
-```sh
-flake-input-watcher list-inputs
-flake-input-watcher check --dry-run
-flake-input-watcher check
-systemctl --user status flake-input-watcher.timer
-journalctl --user -u flake-input-watcher.service
-```
 
 ## Notification history
 

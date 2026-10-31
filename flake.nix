@@ -53,10 +53,6 @@
       url = "github:SpreadZhao/fzf-popup/main";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    flake-input-watcher = {
-      url = "github:SpreadZhao/flake-input-watcher/main";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     notification-history = {
       url = "github:SpreadZhao/notification-history/main";
       inputs.nixpkgs.follows = "nixpkgs";
