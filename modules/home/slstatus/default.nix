@@ -8,7 +8,6 @@
   theme_bright_red,
   theme_bright_yellow,
   theme_green,
-  theme_magenta,
   theme_purple,
   theme_red,
   theme_yellow,
@@ -48,10 +47,6 @@ in
         {
           function = "cpu_temp";
           format = "%s";
-        }
-        {
-          function = "network_icon";
-          format = colored theme_magenta "%s";
         }
         {
           function = "run_command";

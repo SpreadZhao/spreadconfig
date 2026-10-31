@@ -86,28 +86,26 @@ separately from power management.
 
 `modules/home/slstatus/default.nix` imports the slstatus Home Manager module from
 `spreadless` and sets `programs.slstatus.interval` to 9000 milliseconds. The
-components show CPU and memory usage, CPU temperature, network interface type,
-default audio output and input volume, battery charge when the host declares a
-battery, and `HH:MM` time, in that order. Values precede Nerd Font icons,
-without percent signs or separators between components. Audio icons identify
-the device type and mute state. Battery icons indicate charge level and
-distinguish charging, discharging, full and not charging.
+components show CPU and memory usage, CPU temperature, default audio output and
+input volume, battery charge when the host declares a battery, and `HH:MM` time,
+in that order. Values precede Nerd Font icons, without percent signs or separators
+between components. Audio icons identify the device type and mute state. Battery
+icons indicate charge level and distinguish charging, discharging, full and not
+charging.
 
-Native C components read the CPU temperature and default route. Audio queries
-use `wpctl` and `awk` through the `slstatus-query` helper, built from
+The native `cpu_temp` component reads CPU temperature. Audio queries use `wpctl`
+and `awk` through the `slstatus-query` helper, built from
 `modules/home/slstatus/scripts/slstatus/slstatus-query.sh` and called by
-`run_command`. Network icons identify Wi-Fi and other default-route interfaces,
-or show a disconnected icon when no interface is found. The first CPU sample is
-`-` until the next interval. The bar shows the same status text on every output.
+`run_command`. The first CPU sample is `-` until the next interval. The bar shows
+the same status text on every output.
 
 The status formats use barcolors markup and the shared palette in
 `modules/home/vars.nix`.
-CPU is bright yellow, memory uses `theme_purple`, network is magenta, audio is blue,
-and temperature and time are green. Temperature turns yellow at 60°C and
-red at 80°C. The bar uses Noto Sans at Fontconfig `size=14`, with Chinese,
-Nerd Font symbols and emoji fallbacks at the same size. Tags, layout and title
-text have 2 logical pixels of padding on each side; the status has 2 at its right
-edge.
+CPU is bright yellow, memory uses `theme_purple`, audio is blue, and temperature
+and time are green. Temperature turns yellow at 60°C and red at 80°C. The bar uses
+Noto Sans at Fontconfig `size=14`, with Chinese, Nerd Font symbols and emoji
+fallbacks at the same size. Tags, layout and title text have 2 logical pixels of
+padding on each side; the status has 2 at its right edge.
 
 `wayland.windowManager.dwl.settings` supplies `SDWL_*` macros through one generated
 `host.h`. Strings are quoted, booleans become `0` or `1`, and `{ raw = "..."; }`
@@ -135,7 +133,8 @@ through `programs.satty` and saves in the `satty/` subdirectory.
 `Super+Shift+V` opens clipboard history in fzf-popup with file previews. Text
 entries are copied unchanged; image entries open the shared image action menu.
 Home Manager starts text and image clipboard watchers with the graphical
-session. `Super+Z` launches shmooz for screen zoom, spotlight and annotation.
+session. `Super+Backspace` launches shmooz for screen zoom, spotlight and
+annotation.
 
 `modules/home/i18n.nix` disables Fcitx preedit by default. `Ctrl+Alt+P`
 toggles preedit during the session.
