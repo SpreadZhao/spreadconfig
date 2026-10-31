@@ -16,6 +16,17 @@
 }:
 let
   color = value: { raw = "0x${value}ff"; };
+  restoreDisplays = pkgs.writeShellApplication {
+    name = "dwl-display-restore";
+    runtimeInputs = [
+      pkgs.wlopm
+      pkgs.wlr-randr
+    ];
+    text = ''
+      wlopm --on '*' || true
+      ${config.spreadconfig.dwl.displayCommands}
+    '';
+  };
   dwlSession = pkgs.writeShellApplication {
     name = "dwl-session";
     runtimeInputs = [
@@ -23,11 +34,11 @@ let
       config.programs.slstatus.finalPackage
       pkgs.systemd
       pkgs.dbus
+      restoreDisplays
     ];
     runtimeEnv = {
       DWL_SESSION_PROFILE = config.home.profileDirectory;
       DWL_IMPORT_VARIABLES = lib.concatStringsSep " " config.wayland.windowManager.dwl.systemd.variables;
-      DWL_HOST_STARTUP = pkgs.writeShellScript "dwl-host-startup" config.spreadconfig.dwl.startupCommands;
     };
     text = builtins.readFile ./scripts/dwl/dwl-session.sh;
   };
@@ -39,10 +50,10 @@ in
     ./services.nix
   ];
 
-  options.spreadconfig.dwl.startupCommands = lib.mkOption {
+  options.spreadconfig.dwl.displayCommands = lib.mkOption {
     type = lib.types.lines;
     default = "";
-    description = "Host shell commands run once after dwl creates its Wayland socket.";
+    description = "Host wlr-randr commands run at login and after waking the displays.";
   };
 
   config = {
@@ -83,6 +94,7 @@ in
     programs.slstatus.enable = true;
     home.packages = [
       dwlSession
+      restoreDisplays
       pkgs.dpms-off
       pkgs.wlr-randr
       pkgs.wlopm

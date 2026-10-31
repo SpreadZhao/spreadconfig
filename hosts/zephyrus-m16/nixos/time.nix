@@ -8,8 +8,6 @@ let
   ];
 in
 {
-  time.hardwareClockInLocalTime = true;
-
   networking.timeServers = lib.mkForce timeServers;
 
   services.timesyncd = {

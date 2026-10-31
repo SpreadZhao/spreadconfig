@@ -1,4 +1,12 @@
-{ pkgs, ... }:
+{
+  config,
+  pkgs,
+  ...
+}:
+
+let
+  restoreDisplays = "${config.home.profileDirectory}/bin/dwl-display-restore";
+in
 
 {
   services.swayidle =
@@ -11,7 +19,7 @@
         {
           timeout = 600;
           command = "${pkgs.wlopm}/bin/wlopm --off '*'";
-          resumeCommand = "${pkgs.wlopm}/bin/wlopm --on '*'";
+          resumeCommand = restoreDisplays;
         }
         {
           timeout = 605;
@@ -20,6 +28,7 @@
       ];
       events = {
         "before-sleep" = lock;
+        "after-resume" = restoreDisplays;
       };
     };
 }

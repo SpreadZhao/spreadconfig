@@ -39,19 +39,6 @@ let
     name:
     let
       root = "${config.xdg.dataHome}/codex-desktop/profiles/${name}";
-      cliArgs = [
-        "-c"
-        "notify=${
-          builtins.toJSON [
-            "${pkgs.python3}/bin/python3"
-            "${./files/notify.py}"
-            "${pkgs.libnotify}/bin/notify-send"
-            name
-          ]
-        }"
-        "-c"
-        ''tui.notifications=["approval-requested"]''
-      ];
     in
     pkgs.writeText "codex-profile-${name}.sh" (
       lib.toShellVars {
@@ -65,7 +52,6 @@ let
             "${root}/config/Codex-Community"
           ]
         }";
-        PROFILE_CLI_FLAGS = lib.escapeShellArgs cliArgs;
         PROFILE_DESKTOP_FLAGS = lib.escapeShellArgs [
           "--user-data-dir=${root}/config/Codex-Community"
           "--password-store=basic"

@@ -2,24 +2,22 @@
 set -euo pipefail
 
 restore_label="Restore idle lock (screen off at 600s, lock at 605s)"
-disable_label="Disable idle lock and keep the screen on"
+disable_label="Disable automatic screen blanking and locking"
 unit_name="swayidle.service"
 systemd_user_dir="${XDG_CONFIG_HOME:-$HOME/.config}/systemd/user"
 override_dir="$systemd_user_dir/$unit_name.d"
 override_file="$override_dir/lock-policy-disabled.conf"
 
 write_disabled_override() {
-    local sleep_bin="/run/current-system/sw/bin/sleep"
-
-    if [[ ! -x "$sleep_bin" ]]; then
-        sleep_bin="$(command -v sleep)"
-    fi
+    local swayidle_bin restore_bin
+    swayidle_bin="$(command -v swayidle)"
+    restore_bin="$(command -v dwl-display-restore)"
 
     mkdir -p "$override_dir"
+    rm -f "$override_file"
     {
-        printf '[Service]\n'
-        printf 'ExecStart=\n'
-        printf 'ExecStart=%s infinity\n' "$sleep_bin"
+        printf '[Service]\nExecStart=\n'
+        printf 'ExecStart=%s -w after-resume %s\n' "$swayidle_bin" "$restore_bin"
     } >"$override_file"
 }
 
@@ -40,8 +38,8 @@ case "$choice" in
     write_disabled_override
     systemctl --user daemon-reload
     systemctl --user restart "$unit_name"
-    wlopm --on '*' >/dev/null 2>&1 || true
-    notify-send --app-name "lock policy" "Idle lock disabled" "The screen will stay on until idle lock is restored."
+    dwl-display-restore
+    notify-send --app-name "lock policy" "Idle lock disabled" "Automatic screen blanking and locking are disabled."
     ;;
 "")
     exit 0

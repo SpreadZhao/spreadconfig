@@ -6,7 +6,7 @@ if [[ "${1:-}" == --startup ]]; then
     systemctl --user import-environment "${import_variables[@]}" || true
     dbus-update-activation-environment --systemd "${import_variables[@]}" || true
     systemctl --user start dwl-session.target || true
-    "$DWL_HOST_STARTUP"
+    dwl-display-restore
     exit 0
 fi
 

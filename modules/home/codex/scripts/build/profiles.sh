@@ -26,9 +26,7 @@ for profile_definition in "${PROFILE_DEFINITIONS[@]}"; do
         --suffix PATH : "$BUBBLEWRAP_PATH" \
         --run "source \"$CLI_ENVIRONMENT_SCRIPT\""
 
-    # Completion notifications include the response; approvals keep terminal alerts.
-    makeWrapper "$private_bin/codex" "$output/bin/codex-$PROFILE_NAME" \
-        --add-flags "$PROFILE_CLI_FLAGS"
+    ln -s "$private_bin/codex" "$output/bin/codex-$PROFILE_NAME"
 
     # Keep browser helpers on the selected Desktop package's runtime.
     makeWrapper "$CODEX_RESOURCES/cua_node/bin/node_repl" "$output/bin/codex-node-repl-$PROFILE_NAME" \

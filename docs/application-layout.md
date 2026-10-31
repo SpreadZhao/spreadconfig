@@ -50,8 +50,8 @@ Current examples:
 
 - The dwl Home Manager module in `spreadless` exposes compile-time macros through
   `wayland.windowManager.dwl.settings`. Each host supplies
-  `spreadconfig.dwl.startupCommands` in `home/dwl.nix` to apply its display layout
-  once at startup. Zephyrus sets `SDWL_TABLET_RULES` in `home/gaomon-tablet.nix`.
+  `spreadconfig.dwl.displayCommands` in `home/dwl.nix` as ordinary `wlr-randr`
+  commands. Zephyrus sets `SDWL_TABLET_RULES` in `home/gaomon-tablet.nix`.
 - Qutebrowser loads `files/host.py` after shared settings and before the theme.
   Zephyrus also selects its Intel Vulkan package in its Home Manager module.
 - Psst uses `services.gpg-agent.pinentry.package`. Zephyrus sets
@@ -69,10 +69,15 @@ The `dwl-session` launcher is built from
 `modules/home/dwl/scripts/dwl/dwl-session.sh`. It loads Home Manager's session
 variables and feeds `slstatus -s` into dwl. Its startup hook imports the session
 environment, including `PATH` and `SCRIPT_HOME`, into systemd and D-Bus. It then
-starts `dwl-session.target` and runs the host's display commands once. Systemd
+starts `dwl-session.target` and runs `dwl-display-restore`. Systemd
 orders `dwl-session.target` before `graphical-session.target` and
 `xdg-desktop-autostart.target`. A missing connector does not prevent the session
 from starting. Exiting dwl stops slstatus and the graphical session targets.
+
+`dwl-display-restore` turns on display power with `wlopm` and runs the host's
+`wlr-randr` commands once. The manual screen-off shortcut calls it after
+`dpms-off` returns. Swayidle calls it when activity resumes after idle screen
+blanking and when the system resumes from sleep.
 
 `modules/home/slstatus/default.nix` imports the slstatus Home Manager module from
 `spreadless` and sets `programs.slstatus.interval` to 9000 milliseconds. The
@@ -131,9 +136,10 @@ session. `Super+Z` launches shmooz for screen zoom, spotlight and annotation.
 toggles preedit during the session.
 
 Swayidle turns displays off after 600 seconds and locks after 605 seconds.
-Its resume command turns displays back on when input resumes. The Lock Policy
-menu pauses swayidle by replacing its command with `sleep infinity` and restores
-it by removing that service override.
+The Lock Policy menu disables automatic screen blanking and locking through
+`swayidle.service.d/lock-policy-disabled.conf` in the user systemd configuration.
+With this override, swayidle listens only for system resume events. Restoring
+idle lock removes the override.
 
 Run `swaylock` to lock without turning displays off. The dwl lock shortcut runs
 `dwl_lock.sh`: it waits for `swaylock -f` to establish the lock, then runs
@@ -183,6 +189,11 @@ Codex build scripts live in `codex/scripts/build/`. Nix supplies package paths,
 profile settings and environment variables. The CLI wrapper sources
 `codex/scripts/runtime/cli-environment.sh` to put the profile's private bin
 directory first on `PATH` and pass that `PATH` to spawned shells.
+
+`modules/nixos/codex.nix` configures CLI and Desktop notifications through
+`/etc/codex/config.toml`. Completion alerts appear only when the terminal or
+app is unfocused. Approval and question alerts are enabled. The CLI uses the
+terminal bell, which Foot displays as a desktop notification.
 
 Keep generic graphics variables local to the application or service. Btop uses
 the package's `cudaSupport` option on NVIDIA hosts.

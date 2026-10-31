@@ -2,4 +2,5 @@
 set -euo pipefail
 
 swaylock -f
-exec dpms-off
+dpms-off
+exec dwl-display-restore
