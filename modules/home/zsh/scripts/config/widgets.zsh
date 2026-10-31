@@ -5,7 +5,7 @@ lfcd() {
 
 function vi-yank-wlclip {
     zle vi-yank
-    print -rn -- "$CUTBUFFER" | wl-copy
+    print -rn -- "$CUTBUFFER" | wl-copy --type 'text/plain;charset=utf-8'
 }
 
 zle -N vi-yank-wlclip

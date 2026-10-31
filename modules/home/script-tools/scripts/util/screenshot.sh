@@ -34,13 +34,10 @@ case "${1:-}" in
 	grim -g "$geometry" "$temporary_image"
 	;;
 -o)
-	outputs=$(wlr-randr --json | jq -r '.[] | select(.enabled) | "\(.name)\t\(.make // "") \(.model // "")"')
-	[[ -n "$outputs" ]] || exit 0
-	if ! selected=$(fuzzel --dmenu --prompt 'Capture output: ' --cache /dev/null <<<"$outputs"); then
+	if ! output=$(slurp -o -r -f '%o'); then
 		exit 0
 	fi
-	[[ -n "$selected" ]] || exit 0
-	output=${selected%%$'\t'*}
+	[[ -n "$output" ]] || exit 0
 	grim -o "$output" "$temporary_image"
 	prefix="Screenshot_$output"
 	;;
