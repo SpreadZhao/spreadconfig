@@ -28,11 +28,12 @@
     font=${fontFamilies.mono}:size=${toString fontSizes.foot}, ${fontFamilies.nerdMono}:size=${toString fontSizes.foot}
     font-size-adjustment=0.5
     bold-text-in-bright=yes
+    resize-by-cells=no
 
     [bell]
     system=yes
     urgent=yes
-    notify=yes
+    notify=no
 
     [scrollback]
     lines=1000
@@ -89,11 +90,13 @@
 
     [key-bindings]
     unicode-input=none
-    scrollback-up-half-page=Control+u
-    scrollback-down-half-page=Control+d
-    scrollback-home=Control+Home
-    scrollback-end=Control+End
-    search-start=Control+slash
+    scrollback-up-page=Control+Shift+Page_Up Control+Shift+KP_Page_Up
+    scrollback-down-page=Control+Shift+Page_Down Control+Shift+KP_Page_Down
+    scrollback-up-half-page=Shift+Page_Up Shift+KP_Page_Up
+    scrollback-down-half-page=Shift+Page_Down Shift+KP_Page_Down
+    scrollback-home=Shift+Home
+    scrollback-end=Shift+End
+    search-start=Control+Shift+f
     font-increase=Control+plus Control+equal Control+KP_Add
     font-decrease=Control+minus Control+KP_Subtract
     font-reset=Control+0 Control+KP_0
