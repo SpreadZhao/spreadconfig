@@ -90,6 +90,7 @@ Android SDK and C/C++ tools scoped to their launchers.
 - [SOPS](docs/sops.md): shared age identity, GitHub authentication and Claude Code's GLM settings.
 - [Password Store](docs/password-store.md): GPG recovery, Secret Service and shared browser bookmarks.
 - [Independent applications](docs/independent-apps.md): notification history, fzf popups, system tray watcher and spreadless.
+- [CLI agents](docs/cli-agents.md): Codex account profiles, Antigravity CLI and Playwright browser access.
 
 Fcitx5 preferences, proxy subscriptions and application logins are configured
 through their applications after the first boot.

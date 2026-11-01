@@ -1,0 +1,6 @@
+{
+  "model": "Gemini 4 Argon (High)",
+  "toolPermission": "always-proceed",
+  "allowNonWorkspaceAccess": true,
+  "enableTerminalSandbox": false
+}

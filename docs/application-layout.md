@@ -190,23 +190,21 @@ Application-specific session variables belong in the owning module. Set user
 systemd variables when services also need them. Log out and back in after
 changing session variables.
 
-Codex uses one shared package with separate GUI and CLI launchers for each
-account. The launchers isolate `CODEX_HOME`, SQLite state, and Electron user
-data while preserving the desktop session's XDG directories for external tools.
-Runtime caches and desktop logs use upstream defaults. Browser helpers use the
-upstream `browser-proxy` feature. Desktop cloud WebSockets use the launcher's
-HTTP/HTTPS proxy environment with `NODE_USE_ENV_PROXY=1`. GitHub CLI reads the
-shared login through the normal XDG path.
+The `llm-agents` input supplies Codex, Antigravity CLI (`agy`) and Claude Code
+(`claude`) from `numtide/llm-agents.nix`, using its pinned nixpkgs and the
+Numtide binary cache in `modules/nixos/nix.nix`.
 
-Codex build scripts live in `codex/scripts/build/`. Nix supplies package paths,
-profile settings and environment variables. The CLI wrapper sources
-`codex/scripts/runtime/cli-environment.sh` to put the profile's private bin
-directory first on `PATH` and pass that `PATH` to spawned shells.
-
-`modules/nixos/codex.nix` configures CLI and Desktop notifications through
-`/etc/codex/config.toml`. Completion alerts appear only when the terminal or
-app is unfocused. Approval and question alerts are enabled. The CLI uses the
-terminal bell, which Foot displays as a desktop notification.
+`modules/home/codex/profiles.nix` builds the `codex-spreadzhao` and
+`codex-supazodiac` launchers and shell completions around the shared Codex
+engine. Each launcher sets `CODEX_HOME` to
+`${XDG_DATA_HOME:-$HOME/.local/share}/codex/profiles/<account>` while keeping
+the session's XDG paths for external tools. `modules/home/codex/default.nix`
+and `modules/home/antigravity/default.nix` seed writable settings files on
+activation without overwriting existing regular files. `modules/nixos/chromium.nix`
+installs the Playwright MCP Bridge extension used by Codex, and
+`modules/home/foot/default.nix` disables ordinary bell notifications so Codex
+OSC 9 alerts handle unfocused terminal notifications. See
+[CLI agents](cli-agents.md) for account paths, notifications and browser setup.
 
 Keep generic graphics variables local to the application or service. Btop uses
 the package's `cudaSupport` option on NVIDIA hosts.

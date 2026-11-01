@@ -7,7 +7,7 @@
 }:
 
 let
-  claudeCodePackage = inputs.claude-code-nix.packages.${pkgs.stdenv.hostPlatform.system}.default;
+  claudeCodePackage = inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.claude-code;
 in
 {
   home.packages = [ claudeCodePackage ];

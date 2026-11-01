@@ -7,6 +7,7 @@ in
 {
   programs.chromium = {
     enable = true;
+    extensions = [ "mmlmfjhmonkocbjadbfplnigmagldckm" ];
     extraOptsRecommended.BookmarkBarEnabled = true;
     initialPrefs.vertical_tabs.enabled = true;
   };

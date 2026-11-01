@@ -2,10 +2,7 @@
   description = "NixOS configuration";
 
   inputs = {
-    antigravity-nix = {
-      url = "github:jacopone/antigravity-nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    llm-agents.url = "github:numtide/llm-agents.nix";
     naw = {
       url = "github:SpreadZhao/NAW";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -17,14 +14,6 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     # Pinned graphics packages for desktop1's GTX 1650.
     nixpkgs-desktop1-graphics.url = "github:nixos/nixpkgs/e158d9ed9b51c98974c5e66e1ba1c9e0255fecaa";
-    codex-desktop-linux = {
-      url = "github:ilysenko/codex-desktop-linux";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    claude-code-nix = {
-      url = "github:sadjow/claude-code-nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     home-manager = {
       url = "github:nix-community/home-manager/master";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -191,7 +180,6 @@
                 };
                 users.spreadzhao = {
                   imports = [
-                    inputs.codex-desktop-linux.homeManagerModules.default
                     inputs.nixvim.homeModules.nixvim
                     ./modules/home
                   ]

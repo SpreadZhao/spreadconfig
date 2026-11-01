@@ -55,6 +55,10 @@
           "https://mirrors.ustc.edu.cn/nix-channels/store"
           "https://mirrors.tuna.tsinghua.edu.cn/nix-channels/store"
           "https://cache.nixos.org"
+          "https://cache.numtide.com"
+        ];
+        trusted-public-keys = [
+          "niks3.numtide.com-1:DTx8wZduET09hRmMtKdQDxNNthLQETkc/yaX7M4qK0g="
         ];
         download-attempts = 10;
         connect-timeout = 60;
