@@ -13,5 +13,5 @@ c.content.webgl = True
 c.fonts.web.size.default = 12
 c.fonts.web.size.default_fixed = 9
 c.fonts.web.size.minimum_logical = 2
-c.fonts.default_size = '8pt'
-c.zoom.default = '70%'
+c.fonts.default_size = '12pt'
+c.zoom.default = '105%'

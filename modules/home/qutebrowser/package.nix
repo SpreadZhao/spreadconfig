@@ -1,12 +1,10 @@
 {
   lib,
   pkgs,
-  scaleFactor ? 1.5,
   intelVulkan ? false,
 }:
 
 let
-  scale = builtins.toJSON scaleFactor;
   qutebrowserBasePackage = pkgs.qutebrowser.override {
     enableWideVine = true;
   };
@@ -23,7 +21,6 @@ let
         buildInputs = [ pkgs.makeWrapper ];
         postBuild = ''
           wrapProgram $out/bin/qutebrowser \
-            --set QT_SCALE_FACTOR ${lib.escapeShellArg scale} \
             --set VK_ICD_FILENAMES ${lib.escapeShellArg intelVkIcd} \
             --set VK_LOADER_ICD_FILENAMES ${lib.escapeShellArg intelVkIcd}
         '';

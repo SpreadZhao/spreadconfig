@@ -22,7 +22,7 @@ def setup(c):
 
     # Webpages
     c.colors.webpage.bg = 'white'
-    c.colors.webpage.preferred_color_scheme = 'light'
+    c.colors.webpage.preferred_color_scheme = 'dark'
     c.colors.webpage.darkmode.enabled = False
 
     # completion {{{

@@ -1,1 +1,1 @@
-c.zoom.default = '67%'
+c.zoom.default = '100%'

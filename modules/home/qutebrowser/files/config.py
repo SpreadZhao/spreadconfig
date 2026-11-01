@@ -1,7 +1,7 @@
 import themes
 
 config.load_autoconfig()
-config.bind('tt', 'config-cycle tabs.width 0% 18 44 10% 20%')
+config.bind('tt', 'config-cycle tabs.width 0% 27 66 10% 20%')
 config.unbind('M', mode = 'normal')
 config.unbind('m', mode = 'normal')
 config.unbind('d')
@@ -74,7 +74,7 @@ config.set(
 
 c.fonts.completion.category = 'bold default_size default_family'
 c.fonts.completion.entry = 'default_size default_family'
-c.fonts.contextmenu = None
+c.fonts.contextmenu = 'default_size default_family'
 c.fonts.debug_console = 'default_size default_family'
 c.fonts.downloads = 'default_size default_family'
 c.fonts.hints = 'bold default_size default_family'
@@ -86,7 +86,7 @@ c.fonts.prompts = 'default_size sans-serif'
 c.fonts.statusbar = 'default_size default_family'
 c.fonts.tabs.selected = 'default_size default_family'
 c.fonts.tabs.unselected = 'default_size default_family'
-c.fonts.tooltip = None
+c.fonts.tooltip = 'default_size default_family'
 c.fonts.web.family.cursive = ''
 c.fonts.web.family.fantasy = ''
 c.fonts.web.family.fixed = ''
@@ -107,7 +107,7 @@ c.fonts.default_family = [
     'Symbols Nerd Font Mono',
     'Noto Color Emoji',
 ]
-c.fonts.default_size = '12pt'
+c.fonts.default_size = '18pt'
 
 c.statusbar.position = 'top'
 c.statusbar.widgets = [
@@ -165,7 +165,7 @@ c.url.searchengines = {
 c.search.incremental = False;
 
 
-c.zoom.default = '100%'
+c.zoom.default = '150%'
 c.zoom.levels = [
     '25%',
     '33%',

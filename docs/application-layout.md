@@ -183,8 +183,7 @@ Both files are sourced into the interactive shell.
 
 Use application settings, desktop entries and service environments before
 adding package wrappers. QQ and scrcpy supply desktop entries with the upstream
-IDs. Qutebrowser installs a higher-priority desktop file in the user profile,
-preserving upstream translations and actions.
+IDs.
 
 Application-specific session variables belong in the owning module. Set user
 systemd variables when services also need them. Log out and back in after
