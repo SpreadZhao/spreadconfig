@@ -29,10 +29,12 @@ in
   spreadconfig.scriptFiles = appEntries "slstatus" "scripts";
   programs.slstatus = {
     interval = 9000;
-    settings = {
-      SLSTATUS_TEMP_COLOR_NORMAL = theme_green;
-      SLSTATUS_TEMP_COLOR_WARNING = theme_yellow;
-      SLSTATUS_TEMP_COLOR_CRITICAL = theme_bright_red;
+    unknownStr = "-";
+    maxLen = 1024;
+    tempColors = {
+      normal = theme_green;
+      warning = theme_yellow;
+      critical = theme_bright_red;
     };
     components = lib.mkDefault (
       [

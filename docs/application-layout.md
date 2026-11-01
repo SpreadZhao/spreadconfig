@@ -48,10 +48,10 @@ files and conflicting file/directory paths are errors.
 
 Current examples:
 
-- The dwl Home Manager module in `spreadless` exposes compile-time macros through
-  `wayland.windowManager.dwl.settings`. Each host configures output scale, mode
+- The dwl Home Manager module in `spreadless` renders a complete `config.h` from
+  `wayland.windowManager.dwl` options. Each host configures output scale, mode
   and position with `services.kanshi` in `home/kanshi.nix`. Zephyrus sets
-  `SDWL_TABLET_RULES` in `home/gaomon-tablet.nix`.
+  `wayland.windowManager.dwl.tabletRules` in `home/gaomon-tablet.nix`.
 - Qutebrowser loads `files/host.py` after shared settings and before the theme.
   Zephyrus also selects its Intel Vulkan package in its Home Manager module.
 - Psst uses `services.gpg-agent.pinentry.package`. Zephyrus sets
@@ -107,12 +107,11 @@ Noto Sans at Fontconfig `size=14`, with Chinese, Nerd Font symbols and emoji
 fallbacks at the same size. Tags, layout and title text have 2 logical pixels of
 padding on each side; the status has 2 at its right edge.
 
-`wayland.windowManager.dwl.settings` supplies `SDWL_*` macros through one generated
-`host.h`. Strings are quoted, booleans become `0` or `1`, and `{ raw = "..."; }`
-supplies a single-line C expression or initializer list. The module's read-only
+`wayland.windowManager.dwl` renders `config.h` at evaluation time from options
+for `modkey`, `rootcolor`, `colors`, `fonts`, `barHpad`, `statusRpad`, `rules`,
+`touchpad`, `tabletRules`, `binds` and `buttons`. The module's read-only
 `finalPackage` is the configured package. Output profiles live in the host's
-Kanshi module. `SDWL_FONT` selects the primary font, `SDWL_FONT_FALLBACKS` supplies
-the fallback list, and `SDWL_BAR_HPAD` and `SDWL_STATUS_RPAD` set the padding.
+Kanshi module.
 
 `start_floating_foot.sh` belongs to Foot and is installed under `~/scripts/util`.
 It accepts one shell-command string and opens a `lick-foot` window. Qutebrowser
@@ -133,7 +132,7 @@ through `programs.satty` and saves in the `satty/` subdirectory.
 `Super+Shift+V` opens clipboard history in fzf-popup with file previews. Text
 entries are copied unchanged; image entries open the shared image action menu.
 Home Manager starts text and image clipboard watchers with the graphical
-session. `Super+Backspace` launches shmooz for screen zoom, spotlight and
+session. `Super+Z` launches shmooz for screen zoom, spotlight and
 annotation.
 
 `modules/home/i18n.nix` disables Fcitx preedit by default. `Ctrl+Alt+P`
