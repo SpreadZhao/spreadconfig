@@ -470,9 +470,31 @@
         "notification-history": "notification-history",
         "personal-packages": "personal-packages",
         "personal-skills": "personal-skills",
+        "sni-watcher": "sni-watcher",
         "sops-nix": "sops-nix",
         "spreadless": "spreadless",
         "textbridge": "textbridge"
+      }
+    },
+    "sni-watcher": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1793515751,
+        "narHash": "sha256-npDQLMPJBHBRkCQQlDl6TAGIcu6wgCH18IbRlRanoXk=",
+        "owner": "SpreadZhao",
+        "repo": "sni-watcher",
+        "rev": "aa2282ab7946e00d650eb26b3daf047a67d07f40",
+        "type": "github"
+      },
+      "original": {
+        "owner": "SpreadZhao",
+        "ref": "main",
+        "repo": "sni-watcher",
+        "type": "github"
       }
     },
     "sops-nix": {

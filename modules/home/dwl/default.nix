@@ -37,6 +37,7 @@ in
     ./scripts.nix
     ./services.nix
     ./swayidle.nix
+    ./tray.nix
   ];
 
   config = {
@@ -122,6 +123,7 @@ in
           ''spawn, SHCMD("\"''${SCRIPT_HOME:-$HOME/scripts}/util/screenshot.sh\" -o")'';
         "MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_v" =
           ''spawn, SHCMD("\"''${SCRIPT_HOME:-$HOME/scripts}/util/clipboard_history.sh\"")'';
+        "MODKEY, XKB_KEY_t" = ''spawn, SHCMD("\"''${SCRIPT_HOME:-$HOME/scripts}/dwl/tray.sh\"")'';
         "MODKEY|WLR_MODIFIER_CTRL|WLR_MODIFIER_SHIFT, XKB_KEY_n" =
           ''spawn, SHCMD("notification-history browse")'';
         "MODKEY, XKB_KEY_z" = ''spawn, SHCMD("shmooz")'';

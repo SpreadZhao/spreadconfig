@@ -9,6 +9,7 @@ modules and supplies desktop integration.
 | --- | --- | --- |
 | `notification-history` | [Repository](https://github.com/SpreadZhao/notification-history) | fnott policy, Nixvim viewer, popup package and shortcut |
 | `fzf-popup` | [Repository](https://github.com/SpreadZhao/fzf-popup) | Foot launcher, dwl window rule and callers |
+| `sni-watcher` | [Repository](https://github.com/SpreadZhao/sni-watcher) | dwl session daemon, fuzzel tray menu script and shortcut |
 | `spreadless` | [Repository](https://github.com/SpreadZhao/spreadless) | dwl settings and session launcher; slstatus components, colors and refresh interval |
 
 These inputs follow the root `nixpkgs`. `notification-history` also follows the
@@ -65,3 +66,21 @@ Notification history and clipboard history use this package for their selection
 menus. Each caller owns its previews and actions. Terminal and window manager
 integration belongs in spreadconfig; the standalone program has no dependency
 on Foot or a specific compositor.
+
+## System tray
+
+`modules/home/dwl/tray.nix` imports `sni-watcher` and starts
+`sni-watcher.service` with `dwl-session.target`. The daemon claims
+`org.kde.StatusNotifierWatcher` and `org.freedesktop.StatusNotifierWatcher` on
+the user bus and reports `IsStatusNotifierHostRegistered = true`, keeping
+tray-aware applications running in the background when their windows close.
+
+Press `Super+T` or run `~/scripts/dwl/tray.sh` to open the system tray menu in
+fuzzel. Selecting an application queries its `StatusNotifierItem` properties and
+flattens its `com.canonical.dbusmenu` layout into a second fuzzel menu, with an
+`Activate window` entry when `ItemIsMenu` is false.
+
+```sh
+systemctl --user status sni-watcher.service
+journalctl --user -u sni-watcher.service
+```

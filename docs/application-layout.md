@@ -132,8 +132,10 @@ through `programs.satty` and saves in the `satty/` subdirectory.
 `Super+Shift+V` opens clipboard history in fzf-popup with file previews. Text
 entries are copied unchanged; image entries open the shared image action menu.
 Home Manager starts text and image clipboard watchers with the graphical
-session. `Super+Z` launches shmooz for screen zoom, spotlight and
-annotation.
+session. `Super+T` runs `~/scripts/dwl/tray.sh` to select registered
+`StatusNotifierItem` applications and their menus in fuzzel, backed by
+`sni-watcher.service` in `modules/home/dwl/tray.nix`. `Super+Z` launches shmooz
+for screen zoom, spotlight and annotation.
 
 `modules/home/i18n.nix` disables Fcitx preedit by default. `Ctrl+Alt+P`
 toggles preedit during the session.

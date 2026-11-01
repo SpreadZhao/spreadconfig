@@ -54,6 +54,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.fzf-popup.follows = "fzf-popup";
     };
+    sni-watcher = {
+      url = "github:SpreadZhao/sni-watcher/main";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     personal-packages = {
       url = "github:SpreadZhao/nix-packages";
       inputs.nixpkgs.follows = "nixpkgs";
