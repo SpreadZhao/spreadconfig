@@ -22,11 +22,12 @@ session's XDG paths for external tools.
 profile's `$CODEX_HOME/config.toml` on activation.
 `modules/home/antigravity/default.nix` seeds
 `~/.gemini/antigravity-cli/settings.json` from
-`modules/home/antigravity/files/settings.json`. Because Codex appends project
-trust and runtime settings to `config.toml` and Antigravity rewrites
+`modules/home/antigravity/files/settings.json` and links
+`~/.gemini/config/skills` to the global NAW skill bundle. Because Codex appends
+project trust and runtime settings to `config.toml` and Antigravity rewrites
 `settings.json` at runtime, activation writes each file only when it is missing
-or a symlink and never overwrites an existing regular file. Delete the target
-file and activate again to re-seed it.
+or a symlink, preserving existing regular files. Delete the target file and
+activate again to re-seed it.
 
 Codex's colored status line shows the model and reasoning level, current
 directory, context usage, weekly limit, token usage and project name, in that
@@ -34,10 +35,12 @@ order.
 
 ## Notifications
 
-Codex uses OSC 9 for desktop notifications when the terminal is unfocused.
-A completion alert previews the final response once Codex is waiting for input.
-Approval requests, questions and plan prompts also trigger alerts; progress
-messages do not. Foot's ordinary bell notifications are disabled.
+Codex uses OSC 9 for desktop notifications regardless of terminal focus, with
+tmux passthrough enabled across all windows and Foot notifications allowed
+while focused. A completion alert previews the final response once Codex is
+waiting for input. Approval requests, questions and plan prompts also trigger
+alerts; progress messages do not. Foot's ordinary bell notifications are
+disabled.
 
 ## Browser access
 

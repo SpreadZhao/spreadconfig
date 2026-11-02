@@ -15,6 +15,7 @@ let
     approval_policy = "never";
 
     tui = {
+      copy_on_select = "never";
       status_line = [
         "model-with-reasoning"
         "current-dir"
@@ -30,7 +31,7 @@ let
         "async-question"
         "plan-mode-prompt"
       ];
-      notification_condition = "unfocused";
+      notification_condition = "always";
       notification_method = "osc9";
     };
 

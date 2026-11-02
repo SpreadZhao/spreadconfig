@@ -1,5 +1,6 @@
 {
   appSource,
+  config,
   inputs,
   lib,
   pkgs,
@@ -15,6 +16,11 @@ let
 in
 {
   home.packages = [ packages.antigravity-cli ];
+
+  home.file.".gemini/config/skills" = lib.mkIf config.programs.naw.globalSkills.enable {
+    inherit (config.home.file.".agents/skills") source;
+    recursive = true;
+  };
 
   # Antigravity rewrites settings.json at runtime, so activation seeds the
   # file only when it is missing or a symlink, and never overwrites an

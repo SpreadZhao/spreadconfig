@@ -86,7 +86,7 @@
     [desktop-notifications]
     command=notify-send --wait --app-name ${"$"}{app-id} --icon ${"$"}{app-id} --category ${"$"}{category} --urgency ${"$"}{urgency} --expire-time ${"$"}{expire-time} --hint STRING:image-path:${"$"}{icon} --hint BOOLEAN:suppress-sound:${"$"}{muted} --hint STRING:sound-name:${"$"}{sound-name} --replace-id ${"$"}{replace-id} ${"$"}{action-argument} --print-id -- ${"$"}{title} ${"$"}{body}
     command-action-argument=--action ${"$"}{action-name}=${"$"}{action-label}
-    inhibit-when-focused=yes
+    inhibit-when-focused=no
 
     [key-bindings]
     unicode-input=none
