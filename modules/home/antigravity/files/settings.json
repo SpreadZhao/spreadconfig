@@ -1,5 +1,9 @@
 {
   "model": "Gemini 4 Argon (High)",
+  "title": {
+    "command": "jq -r 'if (.conversation_title // \"\") != \"\" then .conversation_title else \"agy\" end'",
+    "enabled": true
+  },
   "toolPermission": "always-proceed",
   "allowNonWorkspaceAccess": true,
   "enableTerminalSandbox": false
