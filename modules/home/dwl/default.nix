@@ -110,9 +110,9 @@ in
       ];
       binds = {
         # Applications and external scripts
-        "MODKEY, XKB_KEY_Return" = ''spawn, {.v = (const char*[]){ "footclient", NULL }}'';
         "MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_Return" =
-          ''spawn, {.v = (const char*[]){ "footclient", "tmux", NULL }}'';
+          ''spawn, {.v = (const char*[]){ "footclient", NULL }}'';
+        "MODKEY, XKB_KEY_Return" = ''spawn, {.v = (const char*[]){ "footclient", "tmux", NULL }}'';
         "MODKEY|WLR_MODIFIER_CTRL, XKB_KEY_Return" = ''spawn, SHCMD("footclient -a dropdown-foot")'';
         "MODKEY, XKB_KEY_space" = ''spawn, {.v = (const char*[]){ "fuzzel", NULL }}'';
         "MODKEY, XKB_KEY_b" = "togglebar, {0}";
