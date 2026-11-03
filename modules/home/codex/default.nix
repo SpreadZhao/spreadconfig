@@ -16,6 +16,19 @@ let
 
     tui = {
       copy_on_select = "never";
+      mouse_scroll_speed = 3.0;
+      keymap.pager = {
+        scroll_up = [
+          "up"
+          "k"
+          "ctrl-y"
+        ];
+        scroll_down = [
+          "down"
+          "j"
+          "ctrl-e"
+        ];
+      };
       status_line = [
         "model-with-reasoning"
         "current-dir"

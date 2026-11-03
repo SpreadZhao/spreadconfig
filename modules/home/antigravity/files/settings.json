@@ -1,7 +1,7 @@
 {
   "model": "Gemini 4 Argon (High)",
   "title": {
-    "command": "jq -r 'if (.conversation_title // \"\") != \"\" then .conversation_title else \"agy\" end'",
+    "command": "eval \"$(jq -r '@sh \"t=\\(.conversation_title // \"\") id=\\(.conversation_id // \"\")\"')\"; if [ -z \"$t\" ] && [ -n \"$id\" ] && [ -r \"$HOME/.gemini/antigravity-cli/annotations/$id.pbtxt\" ]; then t=$(jq -Rr 'capture(\"title:\\\\s*(?<q>\\\"(?:\\\\\\\\.|[^\\\"\\\\\\\\])*\\\")\").q | fromjson' \"$HOME/.gemini/antigravity-cli/annotations/$id.pbtxt\" 2>/dev/null); fi; printf '%s\\n' \"${t:-agy}\"",
     "enabled": true
   },
   "toolPermission": "always-proceed",
