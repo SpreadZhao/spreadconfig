@@ -9,7 +9,7 @@ installs these commands:
 | --- | --- |
 | `codex-spreadzhao` | `~/.local/share/codex/profiles/spreadzhao` |
 | `codex-supazodiac` | `~/.local/share/codex/profiles/supazodiac` |
-| `agy` | `~/.gemini/antigravity-cli` and shared Gemini authentication |
+| `agy` | `~/.gemini/antigravity-cli` |
 | `claude` | Claude Code's standard paths and SOPS-managed settings |
 
 The Codex profile paths follow `XDG_DATA_HOME` when set.
@@ -21,10 +21,12 @@ session's XDG paths for external tools.
 `modules/home/codex/default.nix` seeds each profile's `$CODEX_HOME/config.toml`
 from `modules/home/codex/files/config.toml` on activation.
 
-`modules/home/antigravity/default.nix` seeds
+`modules/home/antigravity/default.nix` wraps `agy` with `WSL_INTEROP=1` so OAuth
+tokens are stored in `~/.gemini/antigravity-cli/antigravity-oauth-token` instead of
+the D-Bus Secret Service keyring. It also links `~/.gemini/config/skills` to
+the global NAW skill bundle and seeds
 `~/.gemini/antigravity-cli/settings.json` from
-`modules/home/antigravity/files/settings.json` and links
-`~/.gemini/config/skills` to the global NAW skill bundle. Because Codex appends
+`modules/home/antigravity/files/settings.json`. Because Codex appends
 project trust and runtime settings to `config.toml` and Antigravity rewrites
 `settings.json` at runtime, activation writes each file only when it is missing
 or a symlink, preserving existing regular files. Delete the target file and
