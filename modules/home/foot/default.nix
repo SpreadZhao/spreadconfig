@@ -21,6 +21,12 @@
     server.enable = true;
   };
 
+  systemd.user.services.foot.Service = {
+    # foot --server exits with 230 (-EPIPE) when the compositor closes WAYLAND_DISPLAY on shutdown.
+    SuccessExitStatus = 230;
+    TimeoutStopSec = 3;
+  };
+
   spreadconfig.scriptFiles = appEntries "foot" "scripts";
 
   xdg.configFile."foot/foot.ini".text = ''

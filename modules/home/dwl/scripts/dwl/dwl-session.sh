@@ -24,13 +24,13 @@ compositor_pid=
 # shellcheck disable=SC2329 # Invoked by the EXIT trap.
 cleanup() {
     local pid
+    systemctl --user stop dwl-session.target graphical-session.target || true
     for pid in "$compositor_pid" "$status_pid"; do
         if [[ -n "$pid" ]]; then
             kill "$pid" 2>/dev/null || true
             wait "$pid" 2>/dev/null || true
         fi
     done
-    systemctl --user stop dwl-session.target graphical-session.target || true
     systemctl --user unset-environment WAYLAND_DISPLAY DISPLAY XDG_CURRENT_DESKTOP XDG_SESSION_TYPE XDG_SESSION_DESKTOP || true
 }
 trap cleanup EXIT
