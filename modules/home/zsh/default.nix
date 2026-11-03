@@ -21,8 +21,8 @@
       extended = true;
       findNoDups = true;
       share = true;
-      save = 10000;
-      size = 10000;
+      save = 50000;
+      size = 50000;
     };
     shellAliases = {
       cat = "bat";

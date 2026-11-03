@@ -28,6 +28,7 @@
     splitbelow = true;
     list = true;
     cursorline = true;
+    scrollback = 50000;
     scrolloff = 10;
     confirm = true;
     wrap = false;

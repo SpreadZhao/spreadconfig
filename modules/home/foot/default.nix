@@ -42,7 +42,7 @@
     notify=no
 
     [scrollback]
-    lines=1000
+    lines=50000
     multiplier=3.0
     indicator-position=relative
 
