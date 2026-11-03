@@ -1,21 +1,9 @@
 { pkgs, scriptsDir, ... }:
 
-let
-  wechat = pkgs.callPackage "${pkgs.path}/pkgs/by-name/we/wechat/linux.nix" {
-    pname = "wechat";
-    version = "4.1.13";
-    meta = pkgs.wechat.meta;
-    src = pkgs.fetchurl {
-      url = "https://dldir1v6.qq.com/weixin/Universal/Linux/WeChatLinux_x86_64.AppImage";
-      hash = "sha256-RSYYC8qYASh5FZmvEi/0eVACpXFaUQ9qZUgOK+aHQkQ=";
-    };
-  };
-in
-
 {
   imports = [ ./scripts.nix ];
 
-  home.packages = [ wechat ];
+  home.packages = [ pkgs.wechat ];
 
   xdg.desktopEntries.wechat = {
     name = "wechat";
