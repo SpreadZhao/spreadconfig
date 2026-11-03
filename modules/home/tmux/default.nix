@@ -1,8 +1,10 @@
 {
+  appEntries,
   appSource,
   pkgs,
   projDir,
   repoLink,
+  scriptsDir,
   theme_background,
   theme_bright_background,
   theme_bright_blue,
@@ -14,7 +16,18 @@
 }:
 
 {
+  spreadconfig.scriptFiles = appEntries "tmux" "scripts";
+
   xdg.configFile."tmux/scrollback.lua".source = repoLink (appSource "tmux" "files/scrollback.lua");
+
+  xdg.desktopEntries.tmux_attach = {
+    name = "Tmux Attach";
+    comment = "Attach to an unattached tmux session";
+    exec = "${scriptsDir}/util/tmux_attach.sh";
+    type = "Application";
+    icon = "";
+    terminal = false;
+  };
 
   programs.tmux = {
     enable = true;
