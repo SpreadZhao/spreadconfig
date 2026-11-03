@@ -1,6 +1,6 @@
 {
   "title": {
-    "command": "eval \"$(jq -r '@sh \"t=\\(.conversation_title // \"\") id=\\(.conversation_id // \"\")\"')\"; if [ -z \"$t\" ] && [ -n \"$id\" ] && [ -r \"$HOME/.gemini/antigravity-cli/annotations/$id.pbtxt\" ]; then t=$(jq -Rr 'capture(\"title:\\\\s*(?<q>\\\"(?:\\\\\\\\.|[^\\\"\\\\\\\\])*\\\")\").q | fromjson' \"$HOME/.gemini/antigravity-cli/annotations/$id.pbtxt\" 2>/dev/null); fi; printf '%s\\n' \"${t:-agy}\"",
+    "command": "t=\"\"; id=\"\"; s=\"\"; p=\"\"; pfx=\"\"; eval \"$(jq -r '@sh \"t=\\(.conversation_title // \"\") id=\\(.conversation_id // \"\") s=\\(.agent_state // \"idle\") p=\\(.tool_confirmation_pending // false)\"')\"; if [ -z \"$t\" ] && [ -n \"$id\" ] && [ -r \"$HOME/.gemini/antigravity-cli/annotations/$id.pbtxt\" ]; then t=$(jq -Rr 'capture(\"title:\\\\s*(?<q>\\\"(?:\\\\\\\\.|[^\\\"\\\\\\\\])*\\\")\").q | fromjson' \"$HOME/.gemini/antigravity-cli/annotations/$id.pbtxt\" 2>/dev/null); fi; if [ \"$p\" = true ] || [ \"$s\" = reviewing ] || [ \"$s\" = authenticating ]; then pfx=\"● \"; elif [ \"$s\" = working ] || [ \"$s\" = tool_use ] || [ \"$s\" = initializing ] || [ \"$s\" = merging ]; then set -- ⠋ ⠙ ⠹ ⠸ ⠼ ⠴ ⠦ ⠧ ⠇ ⠏; shift $(( ($(date +%s%3N) / 300) % 10 )); pfx=\"$1 \"; fi; printf '%s%s\\n' \"$pfx\" \"${t:-agy}\"",
     "enabled": true
   },
   "toolPermission": "always-proceed",
