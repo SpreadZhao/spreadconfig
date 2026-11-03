@@ -12,7 +12,10 @@ let
       command = "codex-${profile}";
       launcher = pkgs.writeShellApplication {
         name = command;
-        runtimeInputs = [ pkgs.coreutils ];
+        runtimeInputs = [
+          pkgs.coreutils
+          pkgs.playwright-mcp
+        ];
         text = ''
           data_home="''${XDG_DATA_HOME:-$HOME/.local/share}"
           profile_home="$data_home/codex/profiles/${profile}"

@@ -1,0 +1,32 @@
+default_permissions = ":danger-full-access"
+approval_policy = "never"
+
+[tui]
+copy_on_select = "never"
+mouse_scroll_speed = 3.0
+status_line = [
+  "model-with-reasoning",
+  "current-dir",
+  "context-used",
+  "weekly-limit",
+  "used-tokens",
+  "project-name",
+]
+status_line_use_colors = true
+notifications = [
+  "agent-turn-complete",
+  "approval-requested",
+  "async-question",
+  "plan-mode-prompt",
+]
+notification_condition = "always"
+notification_method = "osc9"
+
+[tui.keymap.pager]
+scroll_up = ["up", "k", "ctrl-y"]
+scroll_down = ["down", "j", "ctrl-e"]
+
+[mcp_servers.playwright]
+command = "playwright-mcp"
+args = ["--extension"]
+startup_timeout_sec = 30

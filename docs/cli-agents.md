@@ -18,8 +18,9 @@ and zsh completions around the shared Codex binary. Each profile isolates its
 login, conversations, SQLite state, skills and plugins while keeping the
 session's XDG paths for external tools.
 
-`modules/home/codex/default.nix` generates shared Codex defaults and seeds each
-profile's `$CODEX_HOME/config.toml` on activation.
+`modules/home/codex/default.nix` seeds each profile's `$CODEX_HOME/config.toml`
+from `modules/home/codex/files/config.toml` on activation.
+
 `modules/home/antigravity/default.nix` seeds
 `~/.gemini/antigravity-cli/settings.json` from
 `modules/home/antigravity/files/settings.json` and links

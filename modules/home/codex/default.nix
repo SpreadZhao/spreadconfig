@@ -1,7 +1,9 @@
 {
+  appSource,
   inputs,
   lib,
   pkgs,
+  repoRoot,
   ...
 }:
 
@@ -10,50 +12,9 @@ let
     "spreadzhao"
     "supazodiac"
   ];
-  sharedSettings = (pkgs.formats.toml { }).generate "codex-config.toml" {
-    default_permissions = ":danger-full-access";
-    approval_policy = "never";
-
-    tui = {
-      copy_on_select = "never";
-      mouse_scroll_speed = 3.0;
-      keymap.pager = {
-        scroll_up = [
-          "up"
-          "k"
-          "ctrl-y"
-        ];
-        scroll_down = [
-          "down"
-          "j"
-          "ctrl-e"
-        ];
-      };
-      status_line = [
-        "model-with-reasoning"
-        "current-dir"
-        "context-used"
-        "weekly-limit"
-        "used-tokens"
-        "project-name"
-      ];
-      status_line_use_colors = true;
-      notifications = [
-        "agent-turn-complete"
-        "approval-requested"
-        "async-question"
-        "plan-mode-prompt"
-      ];
-      notification_condition = "always";
-      notification_method = "osc9";
-    };
-
-    mcp_servers.playwright = {
-      command = "${pkgs.playwright-mcp}/bin/playwright-mcp";
-      args = [ "--extension" ];
-      startup_timeout_sec = 30;
-    };
-  };
+  sharedSettings = pkgs.writeText "codex-config.toml" (
+    lib.fileContents (repoRoot + "/${appSource "codex" "files/config.toml"}")
+  );
   profiles = import ./profiles.nix {
     inherit lib pkgs;
     names = profileNames;
