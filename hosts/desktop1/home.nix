@@ -1,1 +1,7 @@
-{ ... }: { imports = [ ./home/kanshi.nix ]; }
+{ ... }:
+
+{
+  disabledModules = [ ../../modules/home/jetbrains ];
+
+  imports = [ ./home/kanshi.nix ];
+}

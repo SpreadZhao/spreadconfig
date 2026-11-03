@@ -1,6 +1,7 @@
 # JetBrains IDEs
 
-This module installs Android Studio, IntelliJ IDEA and CLion. `default.nix`
+All hosts disable this module through `disabledModules` in their `home.nix`.
+When enabled, it installs Android Studio, IntelliJ IDEA and CLion. `default.nix`
 selects the IDEs, `plugins.nix` lists plugins, `sdk.nix` selects Android components,
 and `settings.nix` manages shared settings. Assets live in `files/`. Launchers
 come from `personal-packages.lib.mkJetBrainsIde` in nix-packages.

@@ -1,6 +1,8 @@
 { ... }:
 
 {
+  disabledModules = [ ../../modules/home/jetbrains ];
+
   imports = [
     ./home/gaomon-tablet.nix
     ./home/nvtop.nix
