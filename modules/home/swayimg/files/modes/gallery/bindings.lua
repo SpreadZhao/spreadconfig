@@ -70,15 +70,15 @@ end)
 swayimg.gallery.on_key("a", toggle_antialiasing)
 swayimg.gallery.on_key("t", swayimg.gallery.mark_image)
 
-swayimg.gallery.on_mouse("ScrollUp", function()
-  swayimg.gallery.select("down")
-end)
-swayimg.gallery.on_mouse("ScrollDown", function()
-  swayimg.gallery.select("up")
-end)
-swayimg.gallery.on_mouse("ScrollLeft", function()
-  swayimg.gallery.select("right")
-end)
-swayimg.gallery.on_mouse("ScrollRight", function()
-  swayimg.gallery.select("left")
+swayimg.gallery.on_scroll(function(_, horizontal, vertical)
+  if vertical < 0 then
+    swayimg.gallery.select("down")
+  elseif vertical > 0 then
+    swayimg.gallery.select("up")
+  end
+  if horizontal < 0 then
+    swayimg.gallery.select("right")
+  elseif horizontal > 0 then
+    swayimg.gallery.select("left")
+  end
 end)

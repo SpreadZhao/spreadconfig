@@ -159,15 +159,15 @@ swayimg.viewer.on_key("Shift+f", function()
 end)
 swayimg.viewer.on_key("t", swayimg.viewer.mark_image)
 
-swayimg.viewer.on_mouse("ScrollUp", function()
-  pan_vertical(touchpad_pan_step)
-end)
-swayimg.viewer.on_mouse("ScrollDown", function()
-  pan_vertical(-touchpad_pan_step)
-end)
-swayimg.viewer.on_mouse("ScrollLeft", function()
-  pan_horizontal(touchpad_pan_step)
-end)
-swayimg.viewer.on_mouse("ScrollRight", function()
-  pan_horizontal(-touchpad_pan_step)
+swayimg.viewer.on_scroll(function(_, horizontal, vertical)
+  if vertical < 0 then
+    pan_vertical(touchpad_pan_step)
+  elseif vertical > 0 then
+    pan_vertical(-touchpad_pan_step)
+  end
+  if horizontal < 0 then
+    pan_horizontal(touchpad_pan_step)
+  elseif horizontal > 0 then
+    pan_horizontal(-touchpad_pan_step)
+  end
 end)
