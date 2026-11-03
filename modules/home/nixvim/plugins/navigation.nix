@@ -65,6 +65,7 @@
         };
       };
     };
+    tmux-navigator.enable = true;
   };
 
 }

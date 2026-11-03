@@ -44,7 +44,7 @@ in
           };
           "Hotkey/ActivateKeys"."0" = "Hangul_Hanja";
           "Hotkey/DeactivateKeys"."0" = "Hangul_Romaja";
-          "Hotkey/EnumerateForwardKeys"."0" = "Control+space";
+          "Hotkey/EnumerateForwardKeys"."0" = "Control+Alt+space";
           "Hotkey/PrevPage"."0" = "Up";
           "Hotkey/NextPage"."0" = "Down";
           "Hotkey/PrevCandidate"."0" = "Shift+Tab";
