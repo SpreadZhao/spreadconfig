@@ -3,8 +3,7 @@
 {
   programs.nh = {
     enable = true;
-    clean.enable = true;
-    clean.extraArgs = "--no-direnv";
+    clean.enable = false;
     flake = "/home/spreadzhao/workspaces/spreadconfig";
   };
 }

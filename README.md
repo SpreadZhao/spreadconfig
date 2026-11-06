@@ -52,6 +52,9 @@ To update inputs and prepare the next boot:
 Agents must never execute `switch`, including through wrapper defaults. The user
 performs every switch.
 
+Nix garbage collection and generation cleanup run only when requested manually.
+Use `~/scripts/nix/nix_clean build` to clean and rebuild without activation.
+
 ## Configuration layout
 
 | Path | Purpose |

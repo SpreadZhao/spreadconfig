@@ -42,6 +42,7 @@
       envVars = goEnvVars // proxyEnvVars;
 
       settings = {
+        min-free = 0;
         # Enable flakes and the nix CLI.
         experimental-features = [
           "nix-command"
@@ -69,6 +70,7 @@
       };
       # Disable channels.
       channel.enable = false;
+      gc.automatic = false;
 
       # Match the registry to the locked flake inputs.
       registry = lib.mapAttrs (_: flake: { inherit flake; }) flakeInputs;
