@@ -1,4 +1,6 @@
 {
+  config,
+  pkgs,
   theme_background,
   theme_yellow,
   theme_bright_white,
@@ -14,6 +16,12 @@
 {
   services.fnott = {
     enable = true;
+    # The package activation file duplicates Home Manager's and has the wrong name.
+    package = pkgs.fnott.overrideAttrs (old: {
+      postInstall = (old.postInstall or "") + ''
+        rm "$out/share/dbus-1/services/fnott.service"
+      '';
+    });
     settings = {
       main = {
         layer = "overlay";
@@ -52,5 +60,15 @@
         border-color = "${theme_red}ff";
       };
     };
+  };
+
+  xdg.dataFile = {
+    "dbus-1/services/fnott.service".enable = false;
+    "dbus-1/services/org.freedesktop.Notifications.service".text = ''
+      [D-BUS Service]
+      Name=org.freedesktop.Notifications
+      Exec=${config.services.fnott.package}/bin/fnott
+      SystemdService=fnott.service
+    '';
   };
 }
