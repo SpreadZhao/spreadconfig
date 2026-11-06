@@ -8,11 +8,6 @@
 let
   bindings = import ../gaomon-bindings.nix;
   hasBindings = lib.any (action: action != null) (lib.attrValues bindings);
-  deviceName = "GAOMON M5 V2 Pen";
-  devicePath = "/dev/input/by-id/usb-GAOMON_M5_V2-if02-event-kbd";
-  presetName = "gaomon-m5";
-  bindingsHash = builtins.hashString "sha256" (builtins.toJSON bindings);
-
 in
 {
   services.input-remapper = {
@@ -29,8 +24,8 @@ in
     wantedBy = [ "graphical.target" ];
     after = [ "input-remapper.service" ];
     wants = [ "input-remapper.service" ];
-    unitConfig.ConditionPathExists = devicePath;
-    restartTriggers = [ bindingsHash ];
+    unitConfig.ConditionPathExists = "/dev/input/by-id/usb-GAOMON_M5_V2-if02-event-kbd";
+    restartTriggers = [ (builtins.hashString "sha256" (builtins.toJSON bindings)) ];
     environment = {
       USER = "spreadzhao";
       HOME = "/home/spreadzhao";
@@ -45,9 +40,9 @@ in
           "--command"
           "start"
           "--device"
-          deviceName
+          "GAOMON M5 V2 Pen"
           "--preset"
-          presetName
+          "gaomon-m5"
           "--config-dir"
           "/home/spreadzhao/.config/input-remapper-2"
         ]

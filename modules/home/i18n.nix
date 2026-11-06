@@ -5,8 +5,6 @@
 }:
 
 let
-  system = pkgs.stdenv.hostPlatform.system;
-
   disabledFcitxAutostart = pkgs.writeTextDir "share/applications/org.fcitx.Fcitx5.desktop" ''
     [Desktop Entry]
     Type=Application
@@ -28,7 +26,7 @@ in
           ];
         })
         fcitx5-mozc
-        inputs.textbridge.packages.${system}.fcitx5-textbridge
+        inputs.textbridge.packages.${pkgs.stdenv.hostPlatform.system}.fcitx5-textbridge
       ];
       settings = {
         globalOptions = {

@@ -15,14 +15,15 @@ let
   sharedSettings = pkgs.writeText "codex-config.toml" (
     lib.fileContents (repoRoot + "/${appSource "codex" "files/config.toml"}")
   );
-  profiles = import ./profiles.nix {
-    inherit lib pkgs;
-    names = profileNames;
-    codexPackage = inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.codex;
-  };
 in
 {
-  home.packages = builtins.attrValues profiles;
+  home.packages = builtins.attrValues (
+    import ./profiles.nix {
+      inherit lib pkgs;
+      names = profileNames;
+      codexPackage = inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.codex;
+    }
+  );
 
   # Codex appends project trust and other runtime settings to config.toml, so
   # activation seeds the file only when it is missing or a symlink, and never

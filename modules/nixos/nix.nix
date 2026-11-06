@@ -11,11 +11,13 @@
       flakeInputs = lib.filterAttrs (name: input: name != "self" && lib.isType "flake" input) inputs;
       proxy = config.networking.proxy.default or "";
       noProxy = config.networking.proxy.noProxy or "";
-      goEnvVars = {
+    in
+    {
+      envVars = {
         GOPROXY = "https://goproxy.cn,https://proxy.golang.org,direct";
         GOSUMDB = "sum.golang.org";
-      };
-      proxyEnvVars = lib.optionalAttrs (proxy != null && proxy != "") {
+      }
+      // lib.optionalAttrs (proxy != null && proxy != "") {
         all_proxy = proxy;
         ftp_proxy = proxy;
         http_proxy = proxy;
@@ -37,9 +39,6 @@
         NPM_CONFIG_HTTPS_PROXY = proxy;
         NPM_CONFIG_NOPROXY = noProxy;
       };
-    in
-    {
-      envVars = goEnvVars // proxyEnvVars;
 
       settings = {
         min-free = 0;

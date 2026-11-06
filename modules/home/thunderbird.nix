@@ -4,7 +4,7 @@ let
   # Set address to enable an account; an empty realName uses the email address.
   # The first configured account is the default sender.
   # Thunderbird stores passwords, 163 app passwords and OAuth credentials.
-  mailAccounts = [
+  enabledAccounts = builtins.filter (account: account.address != "") [
     {
       name = "Outlook SpreadZhao";
       address = "spreadzhao@outlook.com";
@@ -58,7 +58,6 @@ let
       };
     }
   ];
-  enabledAccounts = builtins.filter (account: account.address != "") mailAccounts;
 in
 {
   programs.thunderbird = {

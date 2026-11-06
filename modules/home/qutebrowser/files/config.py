@@ -53,11 +53,10 @@ fileChooser = [
     startFloatingFoot,
     'lf -selection-path={}'
 ]
-folderChooser = [
+c.fileselect.folder.command = [
     startFloatingFoot,
     'env LF_SELECTED_DIR_PATH={} lf'
 ]
-c.fileselect.folder.command = folderChooser
 c.fileselect.handler = 'external'
 c.fileselect.multiple_files.command = fileChooser
 c.fileselect.single_file.command = fileChooser

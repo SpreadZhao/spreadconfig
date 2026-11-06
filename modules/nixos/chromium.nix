@@ -2,7 +2,6 @@
 
 let
   quickmarksPath = "/home/spreadzhao/.password-store/qutebrowser/qutebrowser_quickmarks";
-  policyPath = "/etc/chromium/policies/managed/qutebrowser-bookmarks.json";
 in
 {
   programs.chromium = {
@@ -20,7 +19,7 @@ in
     text = ''
       if [ -f ${lib.escapeShellArg quickmarksPath} ]; then
         if ! ${pkgs.python3}/bin/python3 ${./chromium-bookmarks.py} \
-          ${lib.escapeShellArg quickmarksPath} ${lib.escapeShellArg policyPath}; then
+          ${lib.escapeShellArg quickmarksPath} ${lib.escapeShellArg "/etc/chromium/policies/managed/qutebrowser-bookmarks.json"}; then
           echo "Warning: Chromium bookmark refresh failed; keeping the previous policy." >&2
         fi
       fi

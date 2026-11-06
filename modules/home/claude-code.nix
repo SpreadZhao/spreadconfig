@@ -6,11 +6,8 @@
   ...
 }:
 
-let
-  claudeCodePackage = inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.claude-code;
-in
 {
-  home.packages = [ claudeCodePackage ];
+  home.packages = [ inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.claude-code ];
 
   home.file.".claude/settings.json" = {
     source = config.lib.file.mkOutOfStoreSymlink osConfig.sops.templates."claude-settings.json".path;

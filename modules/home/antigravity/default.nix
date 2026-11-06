@@ -9,14 +9,13 @@
 }:
 
 let
-  packages = inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system};
   # auth.NewCLITokenStorage hardcodes useFile = false and queries
   # org.freedesktop.secrets at startup, triggering pass-secret-service GPG prompts.
   # WSL_INTEROP=1 makes shouldBypassKeyring() select
   # ~/.gemini/antigravity-cli/antigravity-oauth-token for token storage.
   antigravityCli = pkgs.symlinkJoin {
     name = "antigravity-cli-wrapped";
-    paths = [ packages.antigravity-cli ];
+    paths = [ inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.antigravity-cli ];
     buildInputs = [ pkgs.makeWrapper ];
     postBuild = ''
       wrapProgram $out/bin/agy \

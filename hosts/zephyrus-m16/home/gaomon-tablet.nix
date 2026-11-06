@@ -3,7 +3,6 @@
 let
   bindings = import ../gaomon-bindings.nix;
   deviceName = "GAOMON M5 V2 Pen";
-  presetName = "gaomon-m5";
 
   key = code: {
     type = 1;
@@ -33,13 +32,6 @@ let
       74 # KEY_KPMINUS
     ];
   };
-
-  configuredBindings = lib.filterAttrs (_: action: action != null) bindings;
-  mappings = lib.mapAttrsToList (name: action: {
-    input_combination = inputCombinations.${name};
-    target_uinput = "keyboard";
-    output_symbol = action;
-  }) configuredBindings;
 in
 {
   wayland.windowManager.dwl.tabletRules = [
@@ -71,6 +63,12 @@ in
     # Bindings use Linux evdev names, so no session-specific X11 symbols are needed.
     "input-remapper-2/xmodmap.json".text = "{}";
 
-    "input-remapper-2/presets/${deviceName}/${presetName}.json".text = builtins.toJSON mappings;
+    "input-remapper-2/presets/${deviceName}/gaomon-m5.json".text = builtins.toJSON (
+      lib.mapAttrsToList (name: action: {
+        input_combination = inputCombinations.${name};
+        target_uinput = "keyboard";
+        output_symbol = action;
+      }) (lib.filterAttrs (_: action: action != null) bindings)
+    );
   };
 }

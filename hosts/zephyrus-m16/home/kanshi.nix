@@ -15,46 +15,48 @@ let
       position = "4288,500";
     };
   };
-  connectedSets = [
-    [
-      "HDMI-A-1"
-      "DP-1"
-      "eDP-1"
-    ]
-    [
-      "HDMI-A-1"
-      "DP-1"
-    ]
-    [
-      "HDMI-A-1"
-      "eDP-1"
-    ]
-    [
-      "DP-1"
-      "eDP-1"
-    ]
-    [ "HDMI-A-1" ]
-    [ "DP-1" ]
-    [ "eDP-1" ]
-  ];
 in
 {
   services.kanshi = {
     enable = true;
     systemdTarget = "dwl-session.target";
-    settings = map (names: {
-      profile = {
-        name = lib.concatStringsSep "-" names;
-        outputs = map (
-          name:
-          displays.${name}
-          // {
-            criteria = name;
-            status = if name == "eDP-1" && builtins.length names > 1 then "disable" else "enable";
-            position = if names == [ "eDP-1" ] then "0,0" else displays.${name}.position;
-          }
-        ) names;
-      };
-    }) connectedSets;
+    settings =
+      map
+        (names: {
+          profile = {
+            name = lib.concatStringsSep "-" names;
+            outputs = map (
+              name:
+              displays.${name}
+              // {
+                criteria = name;
+                status = if name == "eDP-1" && builtins.length names > 1 then "disable" else "enable";
+                position = if names == [ "eDP-1" ] then "0,0" else displays.${name}.position;
+              }
+            ) names;
+          };
+        })
+        [
+          [
+            "HDMI-A-1"
+            "DP-1"
+            "eDP-1"
+          ]
+          [
+            "HDMI-A-1"
+            "DP-1"
+          ]
+          [
+            "HDMI-A-1"
+            "eDP-1"
+          ]
+          [
+            "DP-1"
+            "eDP-1"
+          ]
+          [ "HDMI-A-1" ]
+          [ "DP-1" ]
+          [ "eDP-1" ]
+        ];
   };
 }

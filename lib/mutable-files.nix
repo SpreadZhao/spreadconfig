@@ -77,10 +77,9 @@ let
     let
       shared = "modules/home/${app}/${relative}";
       local = "hosts/${hostName}/home/${app}/${relative}";
-      sharedPath = checkedPath shared;
       localPath = checkedPath local;
     in
-    if !lib.pathIsRegularFile sharedPath then
+    if !lib.pathIsRegularFile (checkedPath shared) then
       throw "Missing shared application file: ${shared}"
     else if builtins.pathExists localPath then
       if lib.pathIsRegularFile localPath then
@@ -95,10 +94,10 @@ let
     let
       shared = "modules/home/${app}/${relative}";
       local = "hosts/${hostName}/home/${app}/${relative}";
-      localPath = checkedPath local;
     in
     checkedEntries "${app}/${relative}" (
-      repoEntries shared // lib.optionalAttrs (builtins.pathExists localPath) (repoEntries local)
+      repoEntries shared
+      // lib.optionalAttrs (builtins.pathExists (checkedPath local)) (repoEntries local)
     );
 
   repoTree =

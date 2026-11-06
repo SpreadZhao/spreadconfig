@@ -107,6 +107,11 @@
           - When the package itself must change, use its existing parameters through `override` for supported build features, dependency selection, and build flags before changing derivation attributes. Preserve the upstream package definition when its interfaces can express the requirement.
           - Use `overrideAttrs`, patches, or wrappers (`symlinkJoin`, `makeWrapper`, `wrapProgram`) only for demonstrated packaging/runtime defects or requirements that module options and `override` parameters cannot express. Keep each exception small, explain the concrete need, and remove it when a supported configuration or upstream fix covers that need.
 
+          ## Local Variables
+
+          - Inline values used only once when the expression is clear at the use site. Do not introduce a local variable just to name a literal, list, attribute set, or simple expression.
+          - Keep bindings that are reused, recursive, or make a complex expression easier to read. Check actual references before inlining; do not duplicate shared values or change evaluation behavior.
+
           ## Clean Delivery Policy
 
           - Deliver only the files, dependencies, configuration, and behavior needed for the requested result. Before finishing, actively review the working tree and clean up this task's temporary tests, fixtures, validation reports, logs, caches, intermediate outputs, and debug code or settings. Do not leave cleanup for the user.
