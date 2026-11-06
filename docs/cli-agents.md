@@ -34,7 +34,9 @@ activate again to re-seed it.
 
 Codex's colored status line shows the model and reasoning level, current
 directory, context usage, weekly limit, token usage and project name, in that
-order.
+order. Antigravity stacks a custom status line below its built-in bar showing
+the current directory, context window usage, 5-hour and weekly remaining quota
+for the active model group, and session token usage.
 
 ## Notifications
 
