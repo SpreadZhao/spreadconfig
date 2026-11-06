@@ -85,8 +85,7 @@ the global Draw.io skill separately in `modules/home/naw-global-skills.nix`.
 
 Each software project supplies its own language toolchain through a devShell.
 [Nixvim](modules/home/nixvim/README.md) uses that environment for Go, Rust, C/C++
-and Python. [JetBrains IDEs](modules/home/jetbrains/README.md) have private JDK,
-Android SDK and C/C++ tools scoped to their launchers.
+and Python.
 
 ## Credentials and integrations
 

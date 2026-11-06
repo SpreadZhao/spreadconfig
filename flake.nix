@@ -55,10 +55,6 @@
       url = "github:SpreadZhao/nix-packages";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nix-jetbrains-plugins = {
-      url = "github:nix-community/nix-jetbrains-plugins";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     spreadless = {
       url = "git+https://github.com/SpreadZhao/spreadless?submodules=1";
       inputs.nixpkgs.follows = "nixpkgs";

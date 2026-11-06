@@ -102,11 +102,6 @@ in
           appId = "satty";
           isFloating = true;
         }
-        {
-          appId = "jetbrains";
-          title = "Welcome";
-          isFloating = true;
-        }
       ];
       binds = {
         # Applications and external scripts
