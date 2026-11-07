@@ -6,8 +6,6 @@
 }:
 
 {
-  home.packages = [ pkgs.xdg-desktop-portal-termfilechooser ];
-
   xdg.configFile."xdg-desktop-portal-termfilechooser".source =
     repoTree "xdg-desktop-portal-termfilechooser" (
       appEntries "xdg-desktop-portal-termfilechooser" "files"

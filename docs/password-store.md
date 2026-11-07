@@ -51,6 +51,13 @@ systemctl --user is-active pass-secret-service.service
 busctl --user status org.freedesktop.secrets
 ```
 
+`pass-secret-portal` provides the Secret portal for applications that use
+`org.freedesktop.portal.Secret`. It stores each application's master key through
+pass-secret-service in the existing password store. Back up the encrypted entries
+and their `.properties` metadata together. Set up the password store and GPG
+identity before using the portal. D-Bus starts it on demand during a graphical
+session. Requests fail if the Secret Service cannot read or save the key.
+
 GPG agent starts on demand through its sockets; an inactive process alone does
 not indicate a fault. Password menus are available as `~/scripts/util/bin/pmenu`
 and `pmenu_last`.

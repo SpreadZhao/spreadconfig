@@ -47,6 +47,10 @@
       url = "github:SpreadZhao/sni-watcher/main";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    pass-secret-portal = {
+      url = "github:SpreadZhao/pass-secret-portal/main";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     personal-packages = {
       url = "github:SpreadZhao/nix-packages";
       inputs.nixpkgs.follows = "nixpkgs";

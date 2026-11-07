@@ -409,6 +409,27 @@
         "type": "github"
       }
     },
+    "pass-secret-portal": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1794033731,
+        "narHash": "sha256-cJJk5l23sPpXywZ5/lFDKU3P0m2uGl7YirVg4Ai53/E=",
+        "owner": "SpreadZhao",
+        "repo": "pass-secret-portal",
+        "rev": "716665b338114b66e2f9ff7d28eaf8dbef384f47",
+        "type": "github"
+      },
+      "original": {
+        "owner": "SpreadZhao",
+        "ref": "main",
+        "repo": "pass-secret-portal",
+        "type": "github"
+      }
+    },
     "personal-packages": {
       "inputs": {
         "naw": "naw_2",
@@ -460,6 +481,7 @@
         "nixpkgs-desktop1-graphics": "nixpkgs-desktop1-graphics",
         "nixvim": "nixvim",
         "notification-history": "notification-history",
+        "pass-secret-portal": "pass-secret-portal",
         "personal-packages": "personal-packages",
         "personal-skills": "personal-skills",
         "sni-watcher": "sni-watcher",

@@ -14,6 +14,14 @@ implementations own their backend registrations. System services belong in
 NixOS; for example, `psst.nix` supplies the user Polkit agent while
 `modules/nixos/polkit.nix` enables authorization.
 
+The Linux portal stack selects wlr for screenshots and screen sharing,
+termfilechooser with lf for file selection, darkman for a fixed dark appearance,
+and pass-secret-portal for application master keys. Other backend interfaces are
+disabled by default, including portal-based URI opening, access dialogs,
+notifications and printing. Native MIME handlers and fnott remain available to
+applications that use them directly. Application fonts and GTK themes are
+configured separately from portal backends.
+
 `home-core.nix` holds user identity and session defaults. `xdg.nix` holds XDG
 infrastructure, directory conventions and desktop-wide MIME fallback order.
 `vars.nix` provides shared colors, fonts, paths and file helpers. Keep shell
