@@ -62,6 +62,15 @@
     };
   };
 
+  xdg.desktopEntries.clear_notifications = {
+    name = "Clear Notifications";
+    comment = "Dismiss all active notifications";
+    exec = "${config.services.fnott.package}/bin/fnottctl dismiss all";
+    type = "Application";
+    terminal = false;
+    icon = "";
+  };
+
   xdg.dataFile = {
     "dbus-1/services/fnott.service".enable = false;
     "dbus-1/services/org.freedesktop.Notifications.service".text = ''
