@@ -51,18 +51,19 @@
         flake-registry = "";
         # Keep the search path aligned with the flake registry.
         nix-path = lib.mapAttrsToList (n: _: "${n}=flake:${n}") flakeInputs;
-        substituters = [
-          "https://mirrors.ustc.edu.cn/nix-channels/store"
-          "https://mirrors.tuna.tsinghua.edu.cn/nix-channels/store"
-          "https://cache.nixos.org"
-          "https://cache.numtide.com"
+        # Try the NixOS mirrors and cache before Numtide.
+        substituters = lib.mkForce [
+          "https://mirrors.ustc.edu.cn/nix-channels/store?priority=10"
+          "https://mirrors.tuna.tsinghua.edu.cn/nix-channels/store?priority=20"
+          "https://cache.nixos.org?priority=40"
+          "https://cache.numtide.com?priority=50"
         ];
         trusted-public-keys = [
           "niks3.numtide.com-1:DTx8wZduET09hRmMtKdQDxNNthLQETkc/yaX7M4qK0g="
         ];
-        download-attempts = 10;
-        connect-timeout = 60;
-        stalled-download-timeout = 600;
+        download-attempts = 3;
+        connect-timeout = 10;
+        stalled-download-timeout = 90;
         http-connections = 10;
         max-jobs = 2;
         cores = 4;
