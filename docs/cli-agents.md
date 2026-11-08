@@ -50,11 +50,21 @@ disabled.
 ## Browser access
 
 The shared Codex configuration runs the Nix-packaged `playwright-mcp` executable
-with `--extension`, and `modules/nixos/chromium.nix` installs the Playwright MCP
-Bridge extension through Chromium policy. After activation, restart Chromium and
-check `chrome://extensions` for the extension. Start a Codex profile, check the
-server with `/mcp`, then request a browser action. When prompted in Chromium,
-approve the connection and choose a tab.
+with `--extension`. Its MCP environment selects `chromium` from `PATH`, sets the
+user data directory to `/home/spreadzhao/.config/chromium`, and disables isolated
+mode. The explicit user data directory prevents the Nix launcher from enabling
+isolation at startup.
+
+`modules/nixos/chromium.nix` installs the Playwright MCP Bridge extension through
+Chromium policy. After activation, restart Chromium and check
+`chrome://extensions` for the extension. Start a Codex profile, check the server
+with `/mcp`, then request a browser action. When prompted in Chromium, approve
+the connection and choose a tab.
+
+For an existing Codex profile, apply the `[mcp_servers.playwright]` and
+`[mcp_servers.playwright.env]` settings from
+`modules/home/codex/files/config.toml` to `$CODEX_HOME/config.toml`, then restart
+Codex.
 
 The extension uses the running browser's tabs and login sessions. See the
 [Playwright extension instructions](https://github.com/microsoft/playwright/tree/main/packages/extension).

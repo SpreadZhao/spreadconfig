@@ -30,3 +30,8 @@ scroll_down = ["down", "j", "ctrl-e"]
 command = "playwright-mcp"
 args = ["--extension"]
 startup_timeout_sec = 30
+
+[mcp_servers.playwright.env]
+PLAYWRIGHT_MCP_EXECUTABLE_PATH = "chromium"
+PLAYWRIGHT_MCP_ISOLATED = "false"
+PLAYWRIGHT_MCP_USER_DATA_DIR = "/home/spreadzhao/.config/chromium"
