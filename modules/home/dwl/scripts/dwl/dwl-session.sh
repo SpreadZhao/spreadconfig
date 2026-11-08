@@ -5,9 +5,6 @@ if [[ "${1:-}" == --startup ]]; then
     read -r -a import_variables <<<"$DWL_IMPORT_VARIABLES"
     systemctl --user import-environment "${import_variables[@]}" || true
     dbus-update-activation-environment --systemd "${import_variables[@]}" || true
-    if ! systemctl --user start dwl-shutdown.service; then
-        echo 'dwl-session: shutdown coordination is unavailable' >&2
-    fi
     systemctl --user start dwl-session.target || true
     wlopm --on '*' || true
     exit 0
@@ -28,7 +25,6 @@ compositor_pid=
 cleanup() {
     local pid
     systemctl --user stop dwl-session.target graphical-session.target || true
-    systemctl --user stop dwl-shutdown.service || true
     for pid in "$compositor_pid" "$status_pid"; do
         if [[ -n "$pid" ]]; then
             kill "$pid" 2>/dev/null || true
