@@ -1,8 +1,6 @@
 {
   appEntries,
   appSource,
-  config,
-  lib,
   pkgs,
   projDir,
   repoLink,
@@ -29,20 +27,6 @@
     type = "Application";
     icon = "";
     terminal = false;
-  };
-
-  systemd.user.services.tmux = {
-    Unit = {
-      Description = "tmux terminal multiplexer server";
-      Documentation = "man:tmux(1)";
-    };
-    Service = {
-      ExecStart = "${lib.getExe config.programs.tmux.package} -D";
-      Restart = "on-failure";
-    };
-    Install = {
-      WantedBy = [ "default.target" ];
-    };
   };
 
   programs.tmux = {
