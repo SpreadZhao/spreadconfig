@@ -134,14 +134,18 @@
           - Remove descriptions of deleted settings, abandoned workarounds, superseded designs, and completed migrations. Do not document their absence or removal merely to record what changed. Keep history in Git or an explicitly requested changelog; retain background only when it explains a current requirement or an active migration.
           - During review, check affected prose against the current code and configuration. Remove stale historical context and duplicate explanations. Keep only what helps a new reader use or maintain the repository as it stands.
 
-          ## Final Writing Review
+          ## Final Review
 
-          - Before completing a repository task, finish the main work and its checks, then launch a separate writing-review agent. Self-review alone does not satisfy this step.
-          - Ask the reviewer to read [anti-vibe-writing](https://github.com/weijt606/anti-vibe-writing), including its `SKILL.md`, English patterns reference, and final-pass checklist. Use its default clean style for technical writing.
-          - Review documentation, comments, help text, prompts, and other wording affected by the task. Keep repository prose in English and apply the Current-State Documentation policy against the final implementation.
-          - Have the reviewer edit unclear or repetitive text, remove outdated claims and obsolete commented-out code, and merge duplicate explanations. Prefer concrete language, short sentences, and only the headings or lists readers need.
-          - Preserve technical meaning, behavior, identifiers, paths, commands, and license notices. Limit edits to the task and directly related documentation; report when no changes are needed.
-          - The reviewer must not launch another writing-review agent. The primary agent reviews its diff, reruns checks affected by the edits, and completes cleanup before the final response. Both agents follow the Nix Switch Policy and Clean Delivery Policy.
+          - Launch a separate review agent only when the task modifies code, configuration, or documentation in the current repository. Skip this step for tasks that leave repository files unchanged, such as research, investigation, answering questions, or committing existing work.
+          - Before launching the reviewer, finish the main work and its checks. Self-review alone does not satisfy this step when repository files change.
+          - Have the reviewer check all modified code, configuration, and documentation against the repository policies above:
+            - Application Configuration and Packaging: use native Nix expressions and standard NixOS/Home Manager module options instead of unnecessary package overrides (`override`, `overrideAttrs`, patches, or wrappers).
+            - Local Variables: inline single-use values when clear at the use site and keep only bindings that are reused, recursive, or clarify complex expressions.
+            - Current-State Implementation and Clean Delivery: implement the final state directly, update affected callers, and remove superseded code, compatibility branches, and temporary test or debug artifacts.
+            - Current-State Documentation: keep repository prose in English and describe only the current implementation, without intermediate states, migration narratives, or change summaries.
+          - When the task modifies documentation, comments, help text, or prompts, ask the reviewer to read [anti-vibe-writing](https://github.com/weijt606/anti-vibe-writing), including its `SKILL.md`, English patterns reference, and final-pass checklist, and apply its default clean technical style. Edit unclear or repetitive text, remove outdated claims and obsolete commented-out code, and merge duplicate explanations while preserving technical meaning, behavior, identifiers, paths, commands, and license notices.
+          - Limit review edits to the task's scope and directly affected files; report when no changes are needed.
+          - The reviewer must not launch another review agent. The primary agent reviews the reviewer's diff, reruns checks affected by the edits, and completes cleanup before the final response. Both agents follow the Nix Switch Policy and Clean Delivery Policy.
         '';
         packages =
           pkgs: with pkgs; [
