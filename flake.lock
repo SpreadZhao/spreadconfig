@@ -400,11 +400,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1793703421,
-        "narHash": "sha256-yX6BWSh/el2UPNpvBQhqLBL9+QYqzNecaJbf1vV7b+U=",
+        "lastModified": 1794296416,
+        "narHash": "sha256-wdUQwSVgFOThByNjPerQaMqDl7R9DV+JLfGHRaqDqK4=",
         "owner": "SpreadZhao",
         "repo": "nix-packages",
-        "rev": "75681030428bf19208a6964e3dfe3bebe6beeae8",
+        "rev": "fb27298231fb781902e62d78ad32784cc8140284",
         "type": "github"
       },
       "original": {
