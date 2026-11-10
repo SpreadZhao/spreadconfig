@@ -86,10 +86,11 @@ nonempty and valid. Revoke the old token after deploying its replacement.
 ## Claude Code
 
 `claude-settings.json` in `modules/nixos/secrets.nix` sets the Anthropic-compatible
-GLM endpoint, model aliases and context limits. The current model is `glm-5.3`;
-`glm-api-key` supplies its encrypted credential. Home Manager links the rendered
-file to `~/.claude/settings.json`, owned by `spreadzhao:users`, mode `0400`.
+GLM endpoint, `glm-api-key` credential and request flags.
+`modules/home/claude-code.nix` copies the rendered template to
+`~/.claude/settings.json` with mode `0600` when the file is missing or a symlink,
+leaving existing regular files writable for runtime model selection.
 
-Change persistent settings in the template or SOPS, then build, manually activate
-and restart Claude Code. Check `/status` for the active model. Onboarding and
-other mutable state remain in `~/.claude.json`.
+After rotating `glm-api-key` or editing the template, build the configuration,
+delete `~/.claude/settings.json`, manually activate and restart Claude Code.
+Onboarding and other mutable state remain in `~/.claude.json`.

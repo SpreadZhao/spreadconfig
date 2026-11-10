@@ -34,7 +34,7 @@ provider="${QUTE_TRANS_PROVIDER:-codex}"
 source_lang="${QUTE_TRANS_SOURCE:-auto}"
 target_lang="${QUTE_TRANS_TARGET:-}"
 codex_model="${QUTE_TRANS_CODEX_MODEL:-${CODEX_MODEL:-}}"
-codex_reasoning_effort="${QUTE_TRANS_CODEX_REASONING_EFFORT:-medium}"
+codex_reasoning_effort="${QUTE_TRANS_CODEX_REASONING_EFFORT:-}"
 
 while [ "$#" -gt 0 ]; do
     case "$1" in

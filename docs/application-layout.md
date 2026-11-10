@@ -206,9 +206,10 @@ Numtide binary cache in `modules/nixos/nix.nix`.
 `codex-supazodiac` launchers and shell completions around the shared Codex
 engine. Each launcher sets `CODEX_HOME` to
 `${XDG_DATA_HOME:-$HOME/.local/share}/codex/profiles/<account>` while keeping
-the session's XDG paths for external tools. `modules/home/codex/default.nix`
-and `modules/home/antigravity/default.nix` seed writable settings files on
-activation without overwriting existing regular files. `modules/nixos/chromium.nix`
+the session's XDG paths for external tools. `modules/home/codex/default.nix`,
+`modules/home/antigravity/default.nix` and `modules/home/claude-code.nix` seed
+writable settings files on activation without overwriting existing regular
+files. `modules/nixos/chromium.nix`
 installs the Playwright MCP Bridge extension used by Codex, and
 `modules/home/foot/default.nix` disables ordinary bell notifications so Codex
 OSC 9 alerts handle unfocused terminal notifications. See

@@ -47,19 +47,17 @@
         owner = "spreadzhao";
         group = "users";
         mode = "0400";
-        content = builtins.toJSON {
-          model = "glm-5.3";
-          env = {
-            ANTHROPIC_AUTH_TOKEN = config.sops.placeholder."glm-api-key";
-            ANTHROPIC_BASE_URL = "https://open.bigmodel.cn/api/anthropic";
-            ANTHROPIC_DEFAULT_OPUS_MODEL = "glm-5.3";
-            ANTHROPIC_DEFAULT_SONNET_MODEL = "glm-5.3";
-            ANTHROPIC_DEFAULT_HAIKU_MODEL = "glm-5.3";
-            CLAUDE_CODE_DISABLE_1M_CONTEXT = "1";
-            CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC = "1";
-            API_TIMEOUT_MS = "3000000";
-          };
-        };
+        content = ''
+          {
+            "env": {
+              "ANTHROPIC_AUTH_TOKEN": "${config.sops.placeholder."glm-api-key"}",
+              "ANTHROPIC_BASE_URL": "https://open.bigmodel.cn/api/anthropic",
+              "CLAUDE_CODE_DISABLE_1M_CONTEXT": "1",
+              "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC": "1",
+              "API_TIMEOUT_MS": "3000000"
+            }
+          }
+        '';
       };
     };
 

@@ -10,27 +10,32 @@ installs these commands:
 | `codex-spreadzhao` | `~/.local/share/codex/profiles/spreadzhao` |
 | `codex-supazodiac` | `~/.local/share/codex/profiles/supazodiac` |
 | `agy` | `~/.gemini/antigravity-cli` |
-| `claude` | Claude Code's standard paths and SOPS-managed settings |
+| `claude` | `~/.claude` and `~/.claude.json` |
 
 The Codex profile paths follow `XDG_DATA_HOME` when set.
 `modules/home/codex/profiles.nix` builds both launchers and their bash, fish
 and zsh completions around the shared Codex binary. Each profile isolates its
 login, conversations, SQLite state, skills and plugins while keeping the
-session's XDG paths for external tools.
-
-`modules/home/codex/default.nix` seeds each profile's `$CODEX_HOME/config.toml`
-from `modules/home/codex/files/config.toml` on activation.
+session's XDG paths for external tools. `modules/home/codex/default.nix` seeds
+each profile's `$CODEX_HOME/config.toml` from
+`modules/home/codex/files/config.toml`.
 
 `modules/home/antigravity/default.nix` wraps `agy` with `WSL_INTEROP=1` so OAuth
-tokens are stored in `~/.gemini/antigravity-cli/antigravity-oauth-token` instead of
-the D-Bus Secret Service keyring. It also links `~/.gemini/config/skills` to
-the global NAW skill bundle and seeds
-`~/.gemini/antigravity-cli/settings.json` from
-`modules/home/antigravity/files/settings.json`. Because Codex appends
-project trust and runtime settings to `config.toml` and Antigravity rewrites
-`settings.json` at runtime, activation writes each file only when it is missing
-or a symlink, preserving existing regular files. Delete the target file and
-activate again to re-seed it.
+tokens are stored in `~/.gemini/antigravity-cli/antigravity-oauth-token` instead
+of the D-Bus Secret Service keyring. It links `~/.gemini/config/skills` to the
+global NAW skill bundle and seeds `~/.gemini/antigravity-cli/settings.json` from
+`modules/home/antigravity/files/settings.json`.
+
+`modules/home/claude-code.nix` seeds `~/.claude/settings.json` from the
+SOPS-rendered [`claude-settings.json`](sops.md#claude-code) template, which sets
+the Anthropic-compatible GLM endpoint, `glm-api-key` credential and request
+flags.
+
+Models and effort levels are selected at runtime, and the clients write those
+choices, project trust and other mutable settings back to their configuration
+files. Activation copies each template with mode `0600` only when the target is
+missing or a symlink, preserving existing regular files. Delete the target file
+and activate again to re-seed it.
 
 Codex's colored status line shows the model and reasoning level, current
 directory, context usage, weekly limit, token usage and project name, in that

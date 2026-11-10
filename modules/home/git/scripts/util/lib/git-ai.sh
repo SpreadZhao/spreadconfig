@@ -10,17 +10,26 @@ GIT_AI_LIB_DIR="$(cd -- "$(dirname -- "$GIT_AI_LIB_PATH")" && pwd -P)"
 # shellcheck source=modules/home/git/scripts/util/config/git-ai.sh
 source "$GIT_AI_LIB_DIR/../config/git-ai.sh"
 
+git_ai_format_details() {
+    local model="$1"
+    local effort="$2"
+
+    if [[ -n "$model" && -n "$effort" ]]; then
+        printf ' (%s, %s)' "$model" "$effort"
+    elif [[ -n "$model" ]]; then
+        printf ' (%s)' "$model"
+    elif [[ -n "$effort" ]]; then
+        printf ' (%s)' "$effort"
+    fi
+}
+
 git_ai_backend_description() {
     case "$GIT_AI_AGENT" in
     codex-spreadzhao | codex-supazodiac)
-        if [[ -n "$GIT_AI_CODEX_MODEL" ]]; then
-            printf 'Codex %s (%s, %s)' "${GIT_AI_AGENT#codex-}" "$GIT_AI_CODEX_MODEL" "$GIT_AI_CODEX_REASONING_EFFORT"
-        else
-            printf 'Codex %s (configured default, %s)' "${GIT_AI_AGENT#codex-}" "$GIT_AI_CODEX_REASONING_EFFORT"
-        fi
+        printf 'Codex %s%s' "${GIT_AI_AGENT#codex-}" "$(git_ai_format_details "$GIT_AI_CODEX_MODEL" "$GIT_AI_CODEX_REASONING_EFFORT")"
         ;;
     claude)
-        printf 'Claude Code (%s, %s)' "$GIT_AI_CLAUDE_MODEL" "$GIT_AI_CLAUDE_EFFORT"
+        printf 'Claude Code%s' "$(git_ai_format_details "$GIT_AI_CLAUDE_MODEL" "$GIT_AI_CLAUDE_EFFORT")"
         ;;
     *)
         printf '%s' "$GIT_AI_AGENT"
@@ -38,12 +47,15 @@ git_ai_run() {
     codex-spreadzhao | codex-supazodiac)
         local -a args=(
             exec
-            --config "model_reasoning_effort=\"$GIT_AI_CODEX_REASONING_EFFORT\""
             --sandbox "$GIT_AI_CODEX_SANDBOX"
         )
 
         if [[ -n "$GIT_AI_CODEX_MODEL" ]]; then
             args+=(--model "$GIT_AI_CODEX_MODEL")
+        fi
+
+        if [[ -n "$GIT_AI_CODEX_REASONING_EFFORT" ]]; then
+            args+=(--config "model_reasoning_effort=\"$GIT_AI_CODEX_REASONING_EFFORT\"")
         fi
 
         if [[ "$GIT_AI_CODEX_EPHEMERAL" == "1" || "$GIT_AI_CODEX_EPHEMERAL" == "true" ]]; then
@@ -60,11 +72,18 @@ git_ai_run() {
     claude)
         local -a args=(
             -p
-            --model "$GIT_AI_CLAUDE_MODEL"
-            --effort "$GIT_AI_CLAUDE_EFFORT"
             --output-format text
-            "$prompt"
         )
+
+        if [[ -n "$GIT_AI_CLAUDE_MODEL" ]]; then
+            args+=(--model "$GIT_AI_CLAUDE_MODEL")
+        fi
+
+        if [[ -n "$GIT_AI_CLAUDE_EFFORT" ]]; then
+            args+=(--effort "$GIT_AI_CLAUDE_EFFORT")
+        fi
+
+        args+=("$prompt")
 
         claude "${args[@]}" <"$context_file" >"$output_file" 2>"$log_file"
         ;;
