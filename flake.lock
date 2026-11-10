@@ -502,11 +502,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1793544218,
-        "narHash": "sha256-X8TJqXLEzEc9eI9a/vgz0hwLYH59hy+3ImTIYKt1V0s=",
+        "lastModified": 1794298357,
+        "narHash": "sha256-CgEzC4s878llQUAmNxqFTgRfwywd9ow1pLWwb3mPk3o=",
         "ref": "refs/heads/main",
-        "rev": "d0ac9d50d774752e3f462de1881afafea817192f",
-        "revCount": 17,
+        "rev": "48462b2324ff1d9fe197bb88708496df613d0308",
+        "revCount": 18,
         "submodules": true,
         "type": "git",
         "url": "https://github.com/SpreadZhao/spreadless"
