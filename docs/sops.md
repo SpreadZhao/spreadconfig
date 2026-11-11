@@ -85,11 +85,12 @@ nonempty and valid. Revoke the old token after deploying its replacement.
 
 ## Claude Code
 
-`claude-settings.json` in `modules/nixos/secrets.nix` sets the Anthropic-compatible
-GLM endpoint, `glm-api-key` credential and request flags.
-`modules/home/claude-code.nix` copies the rendered template to
-`~/.claude/settings.json` with mode `0600` when the file is missing or a symlink,
-leaving existing regular files writable for runtime model selection.
+`modules/nixos/secrets.nix` renders `claude-settings.json` (`spreadzhao:users`,
+mode `0400`) with the GLM endpoint, `glm-api-key` credential and request flags.
+`modules/home/claude-code.nix` copies it to `~/.claude/settings.json` with mode
+`0600` when the target is missing or a symlink. Claude Code updates model,
+permission and other runtime settings in that regular file, and activation
+preserves it.
 
 After rotating `glm-api-key` or editing the template, build the configuration,
 delete `~/.claude/settings.json`, manually activate and restart Claude Code.

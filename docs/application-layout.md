@@ -209,11 +209,11 @@ engine. Each launcher sets `CODEX_HOME` to
 the session's XDG paths for external tools. `modules/home/codex/default.nix`,
 `modules/home/antigravity/default.nix` and `modules/home/claude-code.nix` seed
 writable settings files on activation without overwriting existing regular
-files. `modules/nixos/chromium.nix`
-installs the Playwright MCP Bridge extension used by Codex, and
-`modules/home/foot/default.nix` disables ordinary bell notifications so Codex
-OSC 9 alerts handle unfocused terminal notifications. See
-[CLI agents](cli-agents.md) for account paths, notifications and browser setup.
+files. `modules/nixos/chromium.nix` installs the Playwright MCP Bridge
+extension used by Codex, and `modules/home/foot/default.nix` disables ordinary
+bell notifications so Codex OSC 9 alerts handle unfocused terminal
+notifications. See [CLI agents](cli-agents.md) for account paths, notifications
+and browser setup.
 
 Keep generic graphics variables local to the application or service. Btop uses
 the package's `cudaSupport` option on NVIDIA hosts.
