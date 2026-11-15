@@ -6,7 +6,7 @@ let
       scale = 1.25;
       position = "0,0";
     };
-    "DP-1" = {
+    "DP-3" = {
       scale = 1.1;
       position = "2752,180";
     };
@@ -39,23 +39,23 @@ in
         [
           [
             "HDMI-A-1"
-            "DP-1"
+            "DP-3"
             "eDP-1"
           ]
           [
             "HDMI-A-1"
-            "DP-1"
+            "DP-3"
           ]
           [
             "HDMI-A-1"
             "eDP-1"
           ]
           [
-            "DP-1"
+            "DP-3"
             "eDP-1"
           ]
           [ "HDMI-A-1" ]
-          [ "DP-1" ]
+          [ "DP-3" ]
           [ "eDP-1" ]
         ];
   };

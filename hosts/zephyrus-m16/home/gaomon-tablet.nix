@@ -37,7 +37,7 @@ in
   wayland.windowManager.dwl.tabletRules = [
     {
       name = deviceName;
-      output = "DP-1";
+      output = "DP-3";
     }
   ];
 
