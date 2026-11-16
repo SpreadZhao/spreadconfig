@@ -11,6 +11,11 @@
     inputs.nixos-hardware.nixosModules.asus-zephyrus-gu603h
   ];
 
+  boot = {
+    loader.systemd-boot.consoleMode = "2";
+    kernelParams = [ "video=efifb:auto" ];
+  };
+
   hardware = {
     graphics = {
       enable = true;

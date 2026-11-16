@@ -1,10 +1,15 @@
 { host, ... }:
 
 {
+  boot = {
+    loader.systemd-boot.consoleMode = "2";
+    kernelParams = [ "video=efifb:auto" ];
+  };
+
   hardware = {
     amdgpu = {
       opencl.enable = true;
-      initrd.enable = false;
+      initrd.enable = true;
     };
 
     graphics = {
