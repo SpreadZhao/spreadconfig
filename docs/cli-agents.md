@@ -9,8 +9,8 @@ installs these commands:
 | --- | --- |
 | `codex-spreadzhao` | `~/.local/share/codex/profiles/spreadzhao` |
 | `codex-supazodiac` | `~/.local/share/codex/profiles/supazodiac` |
-| `agy-spreadzhao` | `~/.gemini/antigravity-cli-spreadzhao` |
-| `agy-supazodiac` | `~/.gemini/antigravity-cli-supazodiac` |
+| `agy-spreadzhao` | `~/.local/share/antigravity/profiles/spreadzhao` |
+| `agy-supazodiac` | `~/.local/share/antigravity/profiles/supazodiac` |
 | `claude` | `~/.claude` and `~/.claude.json` |
 
 The Codex profile paths follow `XDG_DATA_HOME` when set.
@@ -25,18 +25,20 @@ seeds `~/.claude/settings.json` from the SOPS-rendered
 [`claude-settings.json`](sops.md#claude-code) template, which supplies the GLM
 endpoint, `glm-api-key` credential and request flags.
 
-`modules/home/antigravity/default.nix` wraps `agy` as `agy-spreadzhao` and
-`agy-supazodiac` with `--app_data_dir=antigravity-cli-<profile>` so each profile
-isolates its credentials, conversations, annotations and settings under
-`~/.gemini/antigravity-cli-<profile>`. Each launcher sets `WSL_INTEROP=1` so
-OAuth tokens are stored in
-`~/.gemini/antigravity-cli-<profile>/antigravity-oauth-token` instead of the
-D-Bus Secret Service keyring. The module also links `~/.gemini/config/skills`
-to the global NAW skill bundle, registers per-profile
-`antigravity-remote-control-<profile>` user systemd services running
-`agy-<profile> remote-control serve` when that profile's OAuth token exists,
-and seeds each profile's `~/.gemini/antigravity-cli-<profile>/settings.json`
-from `modules/home/antigravity/files/settings.json`.
+`modules/home/antigravity/default.nix` launches each Antigravity account with
+`--gemini_dir=<profile-root>`. The profile root follows Home Manager's
+`xdg.dataHome` and contains personal customizations in `config/` and application
+data in `antigravity-cli/`, including credentials, conversations, annotations
+and settings. The launcher exports `ANTIGRAVITY_GEMINI_DIR` for the title command.
+Launchers preserve the session's XDG paths for external tools. Antigravity's
+`antigravity/credential-user-scope` file remains in the shared XDG config directory.
+Each launcher sets `WSL_INTEROP=1` to store OAuth tokens in the profile's
+`antigravity-cli/antigravity-oauth-token` rather than the Secret Service keyring.
+The module links each profile's `config/skills` to the NAW skill bundle and
+registers `antigravity-remote-control-<profile>` user services, which run when
+the profile's OAuth token exists. Activation seeds
+`<profile-root>/antigravity-cli/settings.json` from
+`modules/home/antigravity/files/settings.json`.
 
 Codex appends project trust and runtime settings to `config.toml`, Claude Code
 updates model and permission settings in `~/.claude/settings.json`, and

@@ -19,15 +19,17 @@ let
   # auth.NewCLITokenStorage hardcodes useFile = false and queries
   # org.freedesktop.secrets at startup, triggering pass-secret-service GPG prompts.
   # WSL_INTEROP=1 makes shouldBypassKeyring() select file-based token storage, and
-  # --app_data_dir isolates each profile's credentials and sessions.
+  # --gemini_dir isolates application data and personal customizations.
   profiles = lib.genAttrs profileNames (
     profile:
     pkgs.writeShellApplication {
       name = "agy-${profile}";
       text = ''
         export WSL_INTEROP=1
-        export ANTIGRAVITY_PROFILE_DIR="antigravity-cli-${profile}"
-        exec ${antigravityPackage}/bin/agy --app_data_dir="antigravity-cli-${profile}" "$@"
+        umask 077
+        export ANTIGRAVITY_GEMINI_DIR="${config.xdg.dataHome}/antigravity/profiles/${profile}"
+        mkdir -p -- "$ANTIGRAVITY_GEMINI_DIR"
+        exec ${antigravityPackage}/bin/agy --gemini_dir="$ANTIGRAVITY_GEMINI_DIR" "$@"
       '';
       meta = {
         description = "Antigravity CLI with the ${profile} account profile";
@@ -50,7 +52,7 @@ in
         Unit = {
           Description = "Antigravity remote-control daemon (${profile})";
           After = [ "network.target" ];
-          ConditionPathExists = "%h/.gemini/antigravity-cli-${profile}/antigravity-oauth-token";
+          ConditionPathExists = "${config.xdg.dataHome}/antigravity/profiles/${profile}/antigravity-cli/antigravity-oauth-token";
           StartLimitIntervalSec = 0;
         };
         Service = {
@@ -66,10 +68,14 @@ in
     }) profileNames
   );
 
-  home.file.".gemini/config/skills" = lib.mkIf config.programs.naw.globalSkills.enable {
-    inherit (config.home.file.".agents/skills") source;
-    recursive = true;
-  };
+  home.file = lib.mkIf config.programs.naw.globalSkills.enable (
+    lib.genAttrs
+      (map (profile: "${config.xdg.dataHome}/antigravity/profiles/${profile}/config/skills") profileNames)
+      (_: {
+        inherit (config.home.file.".agents/skills") source;
+        recursive = true;
+      })
+  );
 
   # Antigravity rewrites settings.json at runtime, so activation seeds each
   # profile only when the file is missing or a symlink, and never overwrites an
@@ -77,11 +83,11 @@ in
   # to re-seed it.
   home.activation.seedAntigravitySettings = lib.hm.dag.entryAfter [ "linkGeneration" ] ''
     ${lib.concatMapStringsSep "\n" (profile: ''
-      dest="$HOME/.gemini/antigravity-cli-${profile}/settings.json"
+      dest="${config.xdg.dataHome}/antigravity/profiles/${profile}/antigravity-cli/settings.json"
       if [ -f "$dest" ] && [ ! -L "$dest" ]; then
         :
       else
-        run ${pkgs.coreutils}/bin/mkdir -p -- "$HOME/.gemini/antigravity-cli-${profile}"
+        run ${pkgs.coreutils}/bin/mkdir -p -- "${config.xdg.dataHome}/antigravity/profiles/${profile}/antigravity-cli"
         run ${pkgs.coreutils}/bin/rm -f -- "$dest"
         run ${pkgs.coreutils}/bin/install -m 600 -- ${settings} "$dest"
       fi
