@@ -9,7 +9,8 @@ installs these commands:
 | --- | --- |
 | `codex-spreadzhao` | `~/.local/share/codex/profiles/spreadzhao` |
 | `codex-supazodiac` | `~/.local/share/codex/profiles/supazodiac` |
-| `agy` | `~/.gemini/antigravity-cli` |
+| `agy-spreadzhao` | `~/.gemini/antigravity-cli-spreadzhao` |
+| `agy-supazodiac` | `~/.gemini/antigravity-cli-supazodiac` |
 | `claude` | `~/.claude` and `~/.claude.json` |
 
 The Codex profile paths follow `XDG_DATA_HOME` when set.
@@ -24,15 +25,22 @@ seeds `~/.claude/settings.json` from the SOPS-rendered
 [`claude-settings.json`](sops.md#claude-code) template, which supplies the GLM
 endpoint, `glm-api-key` credential and request flags.
 
-`modules/home/antigravity/default.nix` wraps `agy` with `WSL_INTEROP=1` so OAuth
-tokens are stored in `~/.gemini/antigravity-cli/antigravity-oauth-token` instead
-of the D-Bus Secret Service keyring. It also links `~/.gemini/config/skills` to
-the global NAW skill bundle and seeds `~/.gemini/antigravity-cli/settings.json`
+`modules/home/antigravity/default.nix` wraps `agy` as `agy-spreadzhao` and
+`agy-supazodiac` with `--app_data_dir=antigravity-cli-<profile>` so each profile
+isolates its credentials, conversations, annotations and settings under
+`~/.gemini/antigravity-cli-<profile>`. Each launcher sets `WSL_INTEROP=1` so
+OAuth tokens are stored in
+`~/.gemini/antigravity-cli-<profile>/antigravity-oauth-token` instead of the
+D-Bus Secret Service keyring. The module also links `~/.gemini/config/skills`
+to the global NAW skill bundle, registers per-profile
+`antigravity-remote-control-<profile>` user systemd services running
+`agy-<profile> remote-control serve` when that profile's OAuth token exists,
+and seeds each profile's `~/.gemini/antigravity-cli-<profile>/settings.json`
 from `modules/home/antigravity/files/settings.json`.
 
 Codex appends project trust and runtime settings to `config.toml`, Claude Code
 updates model and permission settings in `~/.claude/settings.json`, and
-Antigravity rewrites `~/.gemini/antigravity-cli/settings.json` at runtime.
+Antigravity rewrites each profile's `settings.json` at runtime.
 Activation installs each seeded file with mode `0600` only when the target is
 missing or a symlink, preserving existing regular files. Delete the target file
 and activate again to re-seed it.

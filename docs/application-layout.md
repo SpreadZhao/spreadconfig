@@ -204,7 +204,10 @@ Numtide binary cache in `modules/nixos/nix.nix`.
 
 `modules/home/codex/profiles.nix` builds the `codex-spreadzhao` and
 `codex-supazodiac` launchers and shell completions around the shared Codex
-engine. Each launcher sets `CODEX_HOME` to
+engine, and `modules/home/antigravity/default.nix` builds the `agy-spreadzhao`
+and `agy-supazodiac` launchers and `antigravity-remote-control-<profile>` user
+systemd services around the shared Antigravity CLI package. Each Codex launcher
+sets `CODEX_HOME` to
 `${XDG_DATA_HOME:-$HOME/.local/share}/codex/profiles/<account>` while keeping
 the session's XDG paths for external tools. `modules/home/codex/default.nix`,
 `modules/home/antigravity/default.nix` and `modules/home/claude-code.nix` seed
