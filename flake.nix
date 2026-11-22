@@ -62,7 +62,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.naw.follows = "naw";
     };
-    textbridge.url = "github:SpreadZhao/textbridge";
+    textbridge = {
+      url = "github:SpreadZhao/textbridge";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
