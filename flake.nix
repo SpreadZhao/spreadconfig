@@ -24,6 +24,10 @@
     nixvim = {
       url = "github:nix-community/nixvim";
     };
+    log-highlight = {
+      url = "github:fei6409/log-highlight.nvim";
+      flake = false;
+    };
     nixos-best-practices-skill = {
       url = "github:lihaoze123/my-claude-code/main";
       flake = false;

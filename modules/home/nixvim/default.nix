@@ -1,4 +1,9 @@
-{ lib, pkgs, ... }:
+{
+  inputs,
+  lib,
+  pkgs,
+  ...
+}:
 let
   editorMimeTypes = [
     "application/json"
@@ -98,7 +103,7 @@ in
       ./core.nix
       ./keymaps.nix
       ./ui
-      ./plugins
+      (import ./plugins inputs.log-highlight)
       ./lsp
     ];
   };
