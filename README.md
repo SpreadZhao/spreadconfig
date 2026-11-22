@@ -16,7 +16,7 @@ Packages and skills are fetched through flake inputs; they need no local clones.
 
 | Host | Hardware and host-specific configuration |
 | --- | --- |
-| `desktop1` | Intel i5-10400F, GTX 1650; pinned graphics stack |
+| `desktop1` | Intel i5-10400F, GTX 1650 |
 | `thinkbook` | AMD CPU and integrated GPU; LACT and TLP |
 | `zephyrus-m16` | ASUS GU603H, Intel/NVIDIA hybrid graphics; PRIME offload, asusd, supergfxd and TLP |
 
