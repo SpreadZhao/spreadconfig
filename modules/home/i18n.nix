@@ -82,6 +82,10 @@ in
             Name = "mozc";
             Layout = "";
           };
+          "Groups/0/Items/2" = {
+            Name = "keyboard-us";
+            Layout = "";
+          };
           GroupOrder."0" = "Default";
         };
         addons = {
