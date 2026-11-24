@@ -35,6 +35,7 @@
       la = "eza -la --git --icons";
       l = "eza -lah --git --icons";
       n = "nvim .";
+      nh = "env -u TMUX nh";
       lg = "lazygit";
       c = "clear";
       wk = "cd ${config.xdg.userDirs.extraConfig.WORKSPACE}";

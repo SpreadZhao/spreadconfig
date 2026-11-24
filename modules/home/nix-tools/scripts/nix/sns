@@ -12,4 +12,5 @@ unset spreadconfig_script_source spreadconfig_script_root
 spreadconfig_validate_action "$action"
 spreadconfig_resolve_host
 
-exec nh os "$action" --diff always "path:$SPREADCONFIG_TARGET_REPO#$SPREADCONFIG_TARGET_HOST"
+# Unset TMUX so nh keeps rom live build progress enabled inside tmux.
+exec env -u TMUX nh os "$action" --diff always "path:$SPREADCONFIG_TARGET_REPO#$SPREADCONFIG_TARGET_HOST"
