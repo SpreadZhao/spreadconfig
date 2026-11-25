@@ -7,6 +7,7 @@ tui_workspace = true
 [tui]
 alternate_screen = "always"
 fullscreen_transcript = true
+collapse_turn_details = true
 copy_on_select = "never"
 mouse_scroll_speed = 3.0
 status_line = [
