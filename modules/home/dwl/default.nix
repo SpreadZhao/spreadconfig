@@ -84,7 +84,7 @@ in
           appId = "dropdown-foot";
           isFloating = true;
           floatW = 0.80;
-          floatH = 0.50;
+          floatH = 0.75;
           floatY = 0;
         }
         {
