@@ -12,6 +12,5 @@
   "toolPermission": "always-proceed",
   "allowNonWorkspaceAccess": true,
   "enableTerminalSandbox": false,
-  "altScreenMode": "always",
-  "verbosity": "high"
+  "altScreenMode": "always"
 }
